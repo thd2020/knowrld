@@ -16,7 +16,7 @@ nodes:
         choices:
           - Browsers parse it permissively and fix bad markup
           - HTML has no syntax rules
-          - Editors refuse to save invalid HTML
+          - The server corrects the markup before sending it
         answer: 0
         explain: Browsers have built-in rules for interpreting badly-formed markup, so the page still displays.
       - prompt: Where do you see the HTML the browser actually built?
@@ -27,7 +27,7 @@ nodes:
         choices:
           - The browser's guess is not always what you meant
           - Fixed pages load more slowly
-          - Validators email site owners about it
+          - Search engines refuse to index invalid HTML
         answer: 0
         explain: You always get something running, but the browser doesn't always get it right. It is better to write correct markup.
 
@@ -51,7 +51,7 @@ nodes:
         answer: 1
         explain: Several errors are often caused by a single problem, so fixing an early one can clear others.
       - prompt: What helps you find each reported error?
-        choices: ["The CSS rules applied to the element", "A line and column number", "The page title"]
+        choices: ["The CSS rules applied to the element", "A line and column number", "The browser that would fail on it"]
         answer: 1
         explain: Each message comes with a line and column number.
 
@@ -82,11 +82,11 @@ nodes:
           - It isn't; only the title matters for search
         answer: 0
         explain: Search engines give more importance to keywords inside headings and links than inside non-semantic divs.
-      - prompt: A legacy page is full of bad markup you cannot all replace. What does MDN advise?
+      - prompt: A legacy page is full of bad markup you cannot all replace. What is the best approach?
         choices:
           - Improve what you can; every improvement helps
-          - Leave it all; partial fixes make things worse
-          - Rewrite the whole site before touching any of it
+          - Wait until the whole page can be rebuilt at once
+          - Keep the markup and add role attributes everywhere
         answer: 0
         explain: The goal isn't all or nothing; every improvement you can make helps the cause of accessibility.
 
@@ -101,6 +101,7 @@ nodes:
       - accessible-html#text-structure
       - accessible-html#screen-reader-navigation
       - accessible-html#bad-semantics
+      - accessible-html#bad-semantics-result
     check:
       - prompt: What can many screen readers do with a page's headings?
         choices:
@@ -128,11 +129,11 @@ nodes:
       - accessible-html#clear-language
       - el-abbr#expand-first
     check:
-      - prompt: How does MDN advise rewriting "5–7 Jan" for a page?
+      - prompt: An events page says "5–7 Jan". Which version reads most clearly for everyone?
         choices:
-          - Keep it; screen readers expand dates themselves
+          - 5–7 Jan; screen readers expand dates themselves
           - 5 to 7 January
-          - 5 – 7 Jan., with spaces around the dash
+          - 5–7 Jan., with a full stop after the abbreviation
         answer: 1
         explain: Avoid dashes where you can, and expand abbreviations such as Jan.
       - prompt: Who benefits from clear language?
@@ -152,12 +153,13 @@ nodes:
     says: nav, article, footer and their kin give a screen reader extra clues. And the order in the source is the order it is read. Get that right first; CSS can move things later.
     cites:
       - accessible-html#sectioning
+      - accessible-html#sectioning-example
       - accessible-html#source-order
     check:
       - prompt: Why should content make sense in source order?
         choices:
           - Screen readers read it out in source order
-          - Browsers sort elements alphabetically
+          - Browsers always render elements in source order
           - CSS cannot move elements around the page
         answer: 0
         explain: You can place content with CSS later, but the source order is what screen reader users get read out.
@@ -177,10 +179,10 @@ nodes:
     requires: [semantic-html-accessibility]
     says: Buttons, links and form controls work with the keyboard out of the box. A div dressed as a button needs tabindex, a role and script to fake it. Use the real thing.
     cites:
-      - accessible-html#keyboard-default
       - accessible-html#div-buttons
       - accessible-html#fake-button-fix
       - accessible-html#tabindex
+      - accessible-html#fake-button-enter
     check:
       - prompt: What does tabindex="0" do?
         choices:
@@ -212,6 +214,7 @@ nodes:
     requires: [native-controls, hyperlinks]
     says: An anchor with href="#" and a click handler lies to assistive technology and breaks copying, new tabs and bookmarks. A link navigates to a real URL; an action is a button. Either way its label must make sense read alone.
     cites:
+      - accessible-html#keyboard-default
       - accessible-html#fake-button-links
       - accessible-html#meaningful-labels
     check:
@@ -230,7 +233,7 @@ nodes:
         choices:
           - Screen reader users may list all controls out of context
           - Browsers cut off button labels after a few words, so only short ones work
-          - Search engines index button text
+          - Screen readers read out only a button's first word
         answer: 0
         explain: Screen reader users sometimes bring up a list of buttons and form controls, so a label like "Click here" tells them nothing.
 
@@ -239,7 +242,7 @@ nodes:
     title: Skip links
     region: semantic-html
     tier: road
-    requires: [document-fragments, main-element]
+    requires: [sectioning-elements, document-fragments]
     says: The first thing in body can be a link that jumps past the header and navigation to the main content, which carries the matching id. Keyboard, switch and voice users skip the same links on every page.
     cites:
       - accessible-html#skip-link
@@ -250,7 +253,7 @@ nodes:
         choices:
           - At the start of body, pointing to the main content
           - In the footer, pointing to the top
-          - In the head, pointing to the title
+          - Inside nav, pointing to the home page
         answer: 0
         explain: A skip link sits as close as possible to the opening body tag and links to the beginning of the main content.
       - prompt: What makes <main> the target of a skip link?
@@ -264,7 +267,7 @@ nodes:
         choices:
           - People moving by keyboard, switch or voice control
           - Search engine crawlers indexing the page
-          - People on fast connections
+          - Mouse users on large screens
         answer: 0
         explain: Skip links help people who navigate with switch control, voice command or other aids, for whom repeated links are laborious.
 
@@ -273,8 +276,8 @@ nodes:
     title: Text alternatives for images
     region: semantic-html
     tier: road
-    requires: [attributes, semantic-html-accessibility]
-    says: An image a reader cannot see must speak through its alt, briefly, with only what the picture adds to the text around it. A decorative image gets an empty alt so it is skipped, not spelled out. An image that is the whole of a link names that link.
+    requires: [hyperlinks, semantic-html-accessibility]
+    says: An image a reader cannot see must speak through its alt, briefly, with only what the picture adds to the text around it. A decorative image gets an empty alt, so a screen reader notes an image without trying to describe it. An image that is the whole of a link names that link.
     cites:
       - accessible-html#missing-alt
       - accessible-html#alt-content
@@ -283,11 +286,11 @@ nodes:
     check:
       - prompt: A decorative icon sits beside a heading. What alt should it have?
         choices:
-          - alt="" so screen readers skip it
+          - alt="" so screen readers don't try to describe it
           - No alt attribute at all, since the image has no meaning
-          - alt="icon"
+          - alt="icon" so screen readers know what it is
         answer: 0
-        explain: Use an empty alt for decoration. Without any alt, many screen readers announce the whole image URL.
+        explain: An empty alt makes a screen reader recognise the image without describing it; it just says "image" or similar. Without any alt, many read out the file name or URL.
       - prompt: What may a screen reader do with an image that has no alt?
         choices:
           - Skip it silently, as if the image were not on the page

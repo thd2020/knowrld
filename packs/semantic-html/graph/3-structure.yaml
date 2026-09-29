@@ -23,7 +23,7 @@ nodes:
       - prompt: Why mark up page sections by what they do?
         choices:
           - So the page downloads faster
-          - Because CSS cannot select div elements at all
+          - So the layout still works when CSS fails to load
           - So assistive technology can find the navigation or the main content
         answer: 2
         explain: Screen readers can recognize the elements that represent sections and help with tasks like "find the main navigation".
@@ -108,7 +108,7 @@ nodes:
           - div is block level, span inline; neither has meaning
         answer: 2
         explain: span is an inline non-semantic element; div is a block level non-semantic element.
-      - prompt: A shopping cart widget can be opened from any page and is not part of the main content. What does MDN use?
+      - prompt: A shopping cart widget can be opened from any page and is not part of the main content. Which element should wrap it?
         choices:
           - <aside>, since it is related to the page
           - <div>, with a heading
@@ -166,10 +166,10 @@ nodes:
         choices: ["Only through the site's search box", "From the main navigation", "Only from links in the footer"]
         answer: 1
         explain: Most of the pages in a small site should be available from the main navigation, with some exceptions.
-      - prompt: Which of these is noted down as common to every page?
+      - prompt: You are planning a travel site. Which content belongs on every page?
         choices:
           - The navigation menu and the footer
           - This week's special offers and holiday deals
-          - Search results for one query
+          - The latest reviews of the most popular hotel
         answer: 0
         explain: Elements such as the navigation menu and the footer content are common to most, if not all, pages.

@@ -7,7 +7,7 @@ nodes:
     kind: problem
     title: The Skeleton Wight
     region: semantic-html
-    tier: road
+    tier: country
     requires: [title-quality, language-tags, viewport-meta, meta-kinds, head-resources]
     intent: Give a bare page its full frame, doctype, html with lang, a head with the charset first, a viewport, a purpose-first title, author and description meta and a stylesheet link, and a body.
     planned: true
@@ -44,9 +44,9 @@ nodes:
     problem: wall-golem
     cites:
       - headings-and-paragraphs#six-levels
-      - headings-and-paragraphs#why-structure
       - lists#unordered
       - lists#nesting
+      - lists#nesting-example
 
   - id: false-herald
     kind: problem
@@ -119,6 +119,7 @@ nodes:
     problem: almanac-imp
     cites:
       - el-abbr#expand-first
+      - advanced-text-features#time
       - advanced-text-features#time-formats
       - advanced-text-features#sup-sub
       - advanced-text-features#address-scope
@@ -172,7 +173,7 @@ nodes:
     kind: problem
     title: The Click-Here Ghost
     region: semantic-html
-    tier: road
+    tier: country
     requires: [anchor-attributes, navigation-menus, text-alternatives]
     intent: Rewrite vague and URL link text into descriptive text, give an image link alt text that names its destination, flag downloads and new tabs, and build a list-based menu with no working link to the current page.
     planned: true
@@ -188,7 +189,7 @@ nodes:
     title: The Mimic
     region: semantic-html
     tier: country
-    requires: [links-vs-buttons, skip-links, accessibility-tree]
+    requires: [links-vs-buttons, skip-links, main-element, accessibility-tree]
     intent: Replace div and href="#" fake buttons with real buttons and add a skip link to an id on main as the first thing in body.
     planned: true
     problem: mimic-button

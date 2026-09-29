@@ -422,7 +422,7 @@ nodes:
         explain: This is the recommended setting. It sets the viewport to match the device's width.
       - prompt: Without a viewport meta, what might a narrow phone do?
         choices:
-          - Refuse to open the page until the user rotates the phone
+          - Switch the page to a simplified, text-only view
           - Show the page at full size but hide everything past the screen edge
           - Render into a wider virtual viewport, then shrink it to fit
         answer: 2
@@ -430,7 +430,7 @@ nodes:
       - prompt: Why not set user-scalable=no?
         choices:
           - It stops people with low vision from zooming to read
-          - It forces the browser to load the page at a far lower speed
+          - It stops the page from responding when the phone is rotated
           - Browsers treat it as an error and drop the whole viewport meta
         answer: 0
         explain: Disabling zoom prevents people with low vision from reading the page. WCAG requires at least 2x scaling.

@@ -21,7 +21,7 @@ nodes:
         choices:
           - Yes; wrap the heading in an a element
           - No; only inline text can be linked
-          - Only an h1 can be a link
+          - Only if the heading has an id
         answer: 0
         explain: Almost any content can be made into a link, even block-level elements such as a heading.
       - prompt: Why shouldn't vital information live only in a link's title?
@@ -57,7 +57,7 @@ nodes:
         answer: 1
         explain: A leading slash makes the path start in the site's root directory, so moving the linking file does not break the link.
       - prompt: In the top-level index.html, which path reaches contacts.html in the same folder?
-        choices: ["contacts.html", "../contacts.html", "/root/contacts.html"]
+        choices: ["contacts.html", "../contacts.html", "index.html/contacts.html"]
         answer: 0
         explain: A file in the same directory is reached by its file name alone, or with ./ in front.
 
@@ -84,14 +84,14 @@ nodes:
       - prompt: Why can't a link to another site use /pdfs/brief.pdf?
         choices:
           - The browser needs the other site's domain to find it
-          - Slashes are banned in external links
-          - External links must end in .html
+          - The path needs ../ in front to leave the site
+          - It works, if the other site uses the same folders
         answer: 0
         explain: Paths like /pdfs/project-brief.pdf are relative to your own site; the browser needs the website's domain name to find a page elsewhere.
       - prompt: The link projects/index.html sits in pdfs/index.html on www.example.com. Where does it go?
         choices:
           - https://www.example.com/projects/index.html
-          - Nowhere; the link is refused
+          - https://projects.example.com/index.html
           - https://www.example.com/pdfs/projects/index.html
         answer: 2
         explain: All links resolve relative to the current document's URL, so from pdfs/index.html the link lands on /pdfs/projects/index.html, which doesn't exist.
@@ -163,7 +163,7 @@ nodes:
         choices:
           - Yes, if the colour is bright enough
           - No; colour should not be the only way links stand out
-          - Yes, links never need anything but colour
+          - Yes, as long as the colour is not red or green
         answer: 1
         explain: Colour should not be used as the sole method of distinguishing links from the text around them.
 
@@ -194,7 +194,7 @@ nodes:
       - prompt: Which is a reason not to open a link in a new tab?
         choices:
           - It breaks the back button that many users rely on
-          - New tabs can't load other sites
+          - Screen readers cannot follow links that open new tabs
           - Search engines ignore links with a target
         answer: 0
         explain: Opening links in a new tab can disorient users who are used to the back button, and screen reader users may lose their place.
@@ -261,8 +261,8 @@ nodes:
       - prompt: Why use the same menu on every page?
         choices:
           - It feels like staying in one place while content changes
-          - Browsers cache only identical menus
-          - Search engines require it
+          - Screen readers skip a menu they have heard before
+          - Search engines rank sites higher for it
         answer: 0
         explain: The same structure and menu on every page gives the impression of staying in the same place while different content comes up.
 

@@ -52,9 +52,12 @@ sources:
           Another common navigation technique for users of screen reading software is to generate a list of [sectioning content](/en-US/docs/Web/HTML/Reference/Elements#content_sectioning) and use it to determine the page's layout.
 
           Sectioning content can be labeled using a combination of the [`aria-labelledby`](/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby) and [`id`](/en-US/docs/Web/HTML/Reference/Global_attributes/id) attributes, with the label concisely describing the purpose of the section. This technique is useful for situations where there is more than one sectioning element on the same page.
-
-          #### Sectioning content examples
-
+        verbatim: true
+        lines:
+          - 189
+          - 191
+      - id: labeled-sections-example
+        text: |-
           ```html
           <header>
             <nav aria-labelledby="primary-navigation">
@@ -78,7 +81,7 @@ sources:
           In this example, screen reading technology would announce that there are two {{HTMLElement("nav")}} sections, one called "Primary navigation" and one called "Footer navigation". If labels were not provided, the person using screen reading software may have to investigate each `nav` element's contents to determine their purpose.
         verbatim: true
         lines:
-          - 189
+          - 195
           - 215
   - id: el-header
     title: <header> HTML header element

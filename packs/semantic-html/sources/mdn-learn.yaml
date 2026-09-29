@@ -582,6 +582,8 @@ sources:
           - 106
       - id: h1-semantic
         text: |-
+          Semantics are relied on everywhere around us—we rely on previous experience to tell us what the function of an everyday object is; when we see something, we know what its function will be. So, for example, we expect a red traffic light to mean "stop," and a green traffic light to mean "go." Things can get tricky very quickly if the wrong semantics are applied. (Do any countries use red to mean "go"? We hope not.)
+
           In a similar way, we need to make sure we are using the correct elements, giving our content the correct meaning, function, or appearance. In this context, the `{{htmlelement("Heading_Elements", "&lt;h1>")}}` element is also a semantic element, which gives the text it wraps around the role (or meaning) of "a top level heading on your page."
 
           ```html
@@ -591,7 +593,7 @@ sources:
           By default, the browser will give it a large font size to make it look like a heading (although you could style it to look like anything you wanted using CSS). More importantly, its semantic value will be used in multiple ways, for example by search engines and screen readers (as mentioned above).
         verbatim: true
         lines:
-          - 151
+          - 149
           - 157
       - id: span-no-semantics
         text: |-
@@ -775,7 +777,12 @@ sources:
             <li>If you want a smooth hummus, process it for a longer time.</li>
           </ol>
           ```
-
+        verbatim: true
+        lines:
+          - 179
+          - 190
+      - id: nesting-example
+        text: |-
           Since the last two bullets are very closely related to the one before them (they read like sub-instructions or choices that fit below that bullet), it might make sense to nest them inside their own unordered list and put that list inside the current fourth bullet. This would look like so:
 
           ```html
@@ -796,7 +803,7 @@ sources:
           ```
         verbatim: true
         lines:
-          - 179
+          - 192
           - 209
       - id: description-purpose
         text: |-
@@ -815,13 +822,13 @@ sources:
           - 215
           - 224
       - id: dl-dt-dd
+        text: Description lists use a different wrapper than the other list types — {{htmlelement("dl")}}; in addition each term is wrapped in a {{htmlelement("dt")}} (description term) element, and each description is wrapped in a {{htmlelement("dd")}} (description definition) element.
+        verbatim: true
+        lines:
+          - 226
+          - 226
+      - id: dl-example
         text: |-
-          Description lists use a different wrapper than the other list types — {{htmlelement("dl")}}; in addition each term is wrapped in a {{htmlelement("dt")}} (description term) element, and each description is wrapped in a {{htmlelement("dd")}} (description definition) element.
-
-          ### Description list example
-
-          Let's finish marking up our example:
-
           ```html
           <dl>
             <dt>soliloquy</dt>
@@ -845,7 +852,7 @@ sources:
           ```
         verbatim: true
         lines:
-          - 226
+          - 232
           - 252
       - id: multiple-descriptions
         text: |-
@@ -1032,7 +1039,12 @@ sources:
             </ul>
           </address>
           ```
-
+        verbatim: true
+        lines:
+          - 255
+          - 277
+      - id: address-link
+        text: |-
           Note that something like this would also be OK, if the linked page contained the contact information:
 
           ```html
@@ -1042,7 +1054,7 @@ sources:
           ```
         verbatim: true
         lines:
-          - 255
+          - 279
           - 285
       - id: address-scope
         text: |-
@@ -1342,6 +1354,8 @@ sources:
           - 302
       - id: common-to-every-page
         text: |-
+          The process might look like this:
+
           1. You'll have a few elements common to most (if not all) pages — such as the navigation menu, and the footer content. If your site is for a business, for example, it's a good idea to have your contact information available in the footer on each page. Note down what you want to have common to every page. For example:
              - Header:
                - Title and logo
@@ -1350,16 +1364,48 @@ sources:
              - Footer:
                - Copyright notice
                - Link to terms and conditions, contact details, and accessibility policy
+
+          2. Next, draw a rough sketch of what you might want the structure of each page to look like (it might look like our simple website above). Note what each block is going to be.![A simple diagram of a sample site structure, with a header, main content area, two optional sidebars, and footer](/shared-assets/images/diagrams/learn/structuring-documents/site-structure.svg)
+          3. Now, brainstorm all the other (not common to every page) content you want to have on your website. For example:
+             - Flights
+             - Accommodation
+             - Transport
+             - Things to do
+             - Special offers
+             - Popular holiday packages, for example winter sun, skiing
+             - Search results
+             - Reviews
+             - Visa/entry requirements
+             - Currency
+             - Languages and culture
+             - Buy holidays
         verbatim: true
         lines:
-          - 308
-          - 315
+          - 306
+          - 330
       - id: sort-into-groups
-        text: 4. Next, try to sort all these content items into groups, to give you an idea of what parts might live together on different pages. This is very similar to a technique called {{glossary("Card sorting")}}.
+        text: |-
+          4. Next, try to sort all these content items into groups, to give you an idea of what parts might live together on different pages. This is very similar to a technique called {{glossary("Card sorting")}}.
+             - Search
+               - Flights
+               - Accommodation
+               - Transport
+               - Things to do
+             - Special offers
+               - Popular holidays
+               - Winter sun
+               - Skiing
+             - Search results
+               - Reviews
+               - Country-specific info
+                 - Visa/entry requirements
+                 - Currency
+                 - Languages and culture
+             - Buy holidays
         verbatim: true
         lines:
           - 332
-          - 332
+          - 348
       - id: sitemap
         text: 5. Now try to sketch a rough sitemap — have a box for each page on your site, and draw lines to show the typical workflow between pages. The homepage will probably be in the top or at the center, and link to most if not all of the others. Most of the pages in a small site should be available from the main navigation, although there are exceptions. You might also want to include notes about how things might be presented.![A map of the site showing the homepage, country page, search results, specials page, and checkout and purchase flow](/shared-assets/images/diagrams/learn/structuring-documents/site-map.svg)
         verbatim: true
@@ -1961,11 +2007,15 @@ sources:
           This is the second subsection of my content. I think is more interesting than
           the last one.
           ```
-
-          If you try our longer version out with a screen reader (see [bad-semantics.html](https://mdn.github.io/learning-area/accessibility/html/bad-semantics.html)), you'll not have a very good experience — the screen reader hasn't got anything to use as signposts, so you can't retrieve a useful table of contents, and the whole page is seen as a single giant block, so it is just read out in one go, all at once.
         verbatim: true
         lines:
           - 109
+          - 132
+      - id: bad-semantics-result
+        text: If you try our longer version out with a screen reader (see [bad-semantics.html](https://mdn.github.io/learning-area/accessibility/html/bad-semantics.html)), you'll not have a very good experience — the screen reader hasn't got anything to use as signposts, so you can't retrieve a useful table of contents, and the whole page is seen as a single giant block, so it is just read out in one go, all at once.
+        verbatim: true
+        lines:
+          - 134
           - 134
       - id: clear-language
         text: |-
@@ -1979,9 +2029,13 @@ sources:
           - 140
           - 144
       - id: sectioning
+        text: You should use appropriate [sectioning elements](/en-US/docs/Web/HTML/Reference/Elements#content_sectioning) to structure your webpages, for example navigation ({{htmlelement("nav")}}), footer ({{htmlelement("footer")}}), and repeating content units ({{htmlelement("article")}}). These provide extra semantics for screen readers (and other tools) to give users extra clues about the content they are navigating.
+        verbatim: true
+        lines:
+          - 148
+          - 148
+      - id: sectioning-example
         text: |-
-          You should use appropriate [sectioning elements](/en-US/docs/Web/HTML/Reference/Elements#content_sectioning) to structure your webpages, for example navigation ({{htmlelement("nav")}}), footer ({{htmlelement("footer")}}), and repeating content units ({{htmlelement("article")}}). These provide extra semantics for screen readers (and other tools) to give users extra clues about the content they are navigating.
-
           For example, a modern content structure could look something like this:
 
           ```html
@@ -2017,7 +2071,7 @@ sources:
           ```
         verbatim: true
         lines:
-          - 148
+          - 150
           - 182
       - id: source-order
         text: In addition to having good semantics and an attractive layout, your content should make logical sense in its source order — you can always place it where you want using CSS later on, but you should get the source order right to start with, so what screen reader users get read out to them will make sense.
@@ -2061,12 +2115,22 @@ sources:
             And me!
           </div>
           ```
-
+        verbatim: true
+        lines:
+          - 258
+          - 270
+      - id: tabindex
+        text: |-
           Basically, the [`tabindex`](/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex) attribute is primarily intended to allow tabbable elements to have a custom tab order (specified in positive numerical order), instead of just being tabbed through in their default source order. This is nearly always a bad idea, as it can cause major confusion. Use it only if you really need to, for example, if the layout shows things in a very different visual order to the source code, and you want to make things work more logically. There are two other options for `tabindex`:
 
           - `tabindex="0"` — as indicated above, this value allows elements that are not normally tabbable to become tabbable. This is the most useful value of `tabindex`.
           - `tabindex="-1"` — this allows not normally tabbable elements to receive focus programmatically, e.g., via JavaScript, or as the target of links.
-
+        verbatim: true
+        lines:
+          - 272
+          - 275
+      - id: fake-button-enter
+        text: |-
           While the above addition allows us to tab to the buttons, it does not allow us to activate them via the <kbd>Enter</kbd>/<kbd>Return</kbd> key. To do that, we had to add the following bit of JavaScript:
 
           ```js
@@ -2083,18 +2147,8 @@ sources:
           This is a lot of extra hassle to build the functionality back in. And there's bound to be other problems with it. **Better to just use the right element for the right job in the first place.**
         verbatim: true
         lines:
-          - 258
+          - 277
           - 290
-      - id: tabindex
-        text: |-
-          Basically, the [`tabindex`](/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex) attribute is primarily intended to allow tabbable elements to have a custom tab order (specified in positive numerical order), instead of just being tabbed through in their default source order. This is nearly always a bad idea, as it can cause major confusion. Use it only if you really need to, for example, if the layout shows things in a very different visual order to the source code, and you want to make things work more logically. There are two other options for `tabindex`:
-
-          - `tabindex="0"` — as indicated above, this value allows elements that are not normally tabbable to become tabbable. This is the most useful value of `tabindex`.
-          - `tabindex="-1"` — this allows not normally tabbable elements to receive focus programmatically, e.g., via JavaScript, or as the target of links.
-        verbatim: true
-        lines:
-          - 272
-          - 275
       - id: meaningful-labels
         text: |-
           UI control text labels are very useful to all users, but getting them right is particularly important to users with disabilities.
@@ -2129,14 +2183,33 @@ sources:
           - 316
       - id: missing-alt
         text: |-
-          The first image, when viewed by a screen reader, doesn't really offer the user much help — VoiceOver for example reads out "/dinosaur.png, image". It reads out the filename to try to provide some help. In this example the user will at least know it is a dinosaur of some kind, but often files may be uploaded with machine-generated file names (e.g., from a digital camera) and these file names would likely provide no context to the image's content.
+          We have a simple example written up, [accessible-image.html](https://mdn.github.io/learning-area/accessibility/html/accessible-image.html), which features four copies of the same image:
 
-          > [!NOTE]
-          > This is why you should never include text content inside an image — screen readers can't access it. There are other disadvantages too — you can't select it and copy/paste it. Just don't do it!
+          ```html
+          <img src="dinosaur.png" />
+
+          <img
+            src="dinosaur.png"
+            alt="A red Tyrannosaurus Rex: A two legged dinosaur standing upright like a human, with small arms, and a large head with lots of sharp teeth." />
+
+          <img
+            src="dinosaur.png"
+            alt="A red Tyrannosaurus Rex: A two legged dinosaur standing upright like a human, with small arms, and a large head with lots of sharp teeth."
+            title="The Mozilla red dinosaur" />
+
+          <img src="dinosaur.png" aria-labelledby="dino-label" />
+
+          <p id="dino-label">
+            The Mozilla red Tyrannosaurus Rex: A two legged dinosaur standing upright like
+            a human, with small arms, and a large head with lots of sharp teeth.
+          </p>
+          ```
+
+          The first image, when viewed by a screen reader, doesn't really offer the user much help — VoiceOver for example reads out "/dinosaur.png, image". It reads out the filename to try to provide some help. In this example the user will at least know it is a dinosaur of some kind, but often files may be uploaded with machine-generated file names (e.g., from a digital camera) and these file names would likely provide no context to the image's content.
         verbatim: true
         lines:
+          - 394
           - 416
-          - 419
       - id: alt-content
         text: |-
           Note that the contents of the `alt` attribute should always provide a direct representation of the image and what it conveys visually. The alt should be brief and concise and include all the information conveyed in the image that is not duplicated in the surrounding text.

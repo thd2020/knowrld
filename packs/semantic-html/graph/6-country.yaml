@@ -90,7 +90,7 @@ nodes:
       - prompt: What does <main> give assistive technology?
         choices:
           - A landmark users can jump to
-          - A faster speaking rate for the text inside it
+          - A heading announced as the page's title
           - A list of the page's links
         answer: 0
         explain: main behaves like a main landmark, which assistive technology can use to quickly identify and navigate to the main content.
@@ -105,6 +105,7 @@ nodes:
     cites:
       - el-nav#usage
       - el-headings#labeled-sections
+      - el-headings#labeled-sections-example
     check:
       - prompt: Must every group of links be inside a <nav>?
         choices:
@@ -234,7 +235,7 @@ nodes:
         choices:
           - Yes, if it should look bold
           - No; use a heading element
-          - Only in a sidebar
+          - Only when the title is a single line
         answer: 1
         explain: Do not mark titles and headings with b; use the h1 to h6 elements.
       - prompt: '"Warning! This is very dangerous." Which element fits "Warning!"?'
@@ -297,7 +298,7 @@ nodes:
         answer: 0
         explain: dfn indicates a term to be defined, inside a complete definition statement.
       - prompt: Which element fits a copyright line?
-        choices: ["<sub>", "<mark>", "<small>"]
+        choices: ["<cite>", "<mark>", "<small>"]
         answer: 2
         explain: small represents side-comments and small print, like copyright and legal text.
 
@@ -495,8 +496,8 @@ nodes:
       - el-title#guidelines
       - el-title#assistive
     check:
-      - prompt: Which title follows MDN's advice for a bakery's contact page?
-        choices: ["Harbour Bakery - Contact us", "Home", "Contact us - Harbour Bakery"]
+      - prompt: Which title is best for a bakery's contact page?
+        choices: ["Harbour Bakery - Contact us", "Contact us", "Contact us - Harbour Bakery"]
         answer: 2
         explain: Titles should be unique and surface the page's primary purpose first, followed by the name of the website.
       - prompt: What happens to HTML tags inside <title>?
@@ -530,7 +531,7 @@ nodes:
       - prompt: Without a lang on <html>, what do screen readers typically do?
         choices:
           - Detect the language perfectly from the words
-          - Refuse to read the page aloud until a language is chosen
+          - Guess the language from the first word on the page
           - Fall back to the OS language and may mispronounce
         answer: 2
         explain: Without it, screen readers typically default to the operating system's language, which may cause mispronunciations.

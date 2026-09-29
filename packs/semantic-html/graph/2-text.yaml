@@ -59,11 +59,11 @@ nodes:
           - Only the title counts; headings are ignored for search
         answer: 0
         explain: Search engines consider the contents of headings as important keywords. Without headings a page performs poorly for SEO.
-      - prompt: What is the technical side of SEO, as MDN's glossary puts it?
+      - prompt: A shop wants its pages to be found in search. Which habit helps most?
         choices:
-          - Buying links to your pages from other, popular sites
-          - Repeating keywords in hidden text
-          - Tagging content with semantic HTML
+          - Repeating the shop's name in text hidden with CSS
+          - Adding a long keywords meta element to every page
+          - Marking content up with fitting semantic elements
         answer: 2
         explain: Technical SEO means tagging the content with semantic HTML, so crawlers find the content you want indexed.
 
@@ -179,6 +179,7 @@ nodes:
       - lists#unordered
       - lists#ordered
       - lists#nesting
+      - lists#nesting-example
     check:
       - prompt: Which list fits a set of directions?
         choices: ["<ul>", "A <p> with <br> between the lines", "<ol>"]
@@ -206,6 +207,7 @@ nodes:
     cites:
       - lists#description-purpose
       - lists#dl-dt-dd
+      - lists#dl-example
       - lists#multiple-descriptions
     check:
       - prompt: Which elements mark up a glossary of terms and definitions?
@@ -286,6 +288,7 @@ nodes:
     says: address holds the contact details for its page or its nearest article, a name, an email, a phone, a street address. Not any address you happen to mention, and not a publication date; that goes in time.
     cites:
       - advanced-text-features#address
+      - advanced-text-features#address-link
       - advanced-text-features#address-scope
       - el-address#usage
     check:
@@ -336,7 +339,7 @@ nodes:
         answer: 1
         explain: Ordinal numbers are a use case for sup. A raised wordmark should use CSS vertical-align instead.
       - prompt: How is x squared marked up?
-        choices: ["x<sup>2</sup>", "x<sub>2</sub>", "x<big>2</big>"]
+        choices: ["x<sup>2</sup>", "x<sub>2</sub>", "x<span class=\"sup\">2</span>"]
         answer: 0
         explain: Exponents are raised, so they use sup.
 
@@ -383,7 +386,7 @@ nodes:
         choices:
           - It formats every date for the reader's locale
           - It adds a machine-readable date that software can use
-          - It shows a live clock on the page
+          - It lets search engines hide outdated pages
         answer: 1
         explain: Human date formats vary and computers cannot easily recognize them; time attaches an unambiguous machine-readable form.
       - prompt: Which datetime value is valid for 7.30pm on 20 January 2016?

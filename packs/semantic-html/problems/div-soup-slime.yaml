@@ -1,0 +1,434 @@
+id: div-soup-slime
+statement: |
+  The Div-Soup Slime is a page made of nothing but boxes. The climbing club's blog looks fine, but every part of it is a `div`, so a screen reader cannot offer "skip to the main content" or "go to the navigation", and the sidebar is read out before the site's own name.
+
+  Rebuild the page with elements that say what each part is:
+
+  - the site's header, holding the site name and the main navigation menu;
+  - the page's main content: the blog post, which stands on its own, with its two parts and its comments section, each part starting with its heading;
+  - each comment, which also stands on its own inside the post;
+  - the related climbs, which sit beside the post rather than in it;
+  - the site's footer.
+
+  Put the parts in a sensible reading order: header, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Up the Grey Spire – High Paths</title>
+      </head>
+      <body>
+        <div class="page-width">
+          <div class="sidebar">
+            <h2>Related climbs</h2>
+            <ul>
+              <li><a href="/climbs/black-tooth.html">Black Tooth by the east ridge</a></li>
+              <li><a href="/climbs/widows-stair.html">The Widow's Stair in winter</a></li>
+            </ul>
+          </div>
+          <div class="header">
+            <h1>High Paths</h1>
+            <div id="nav">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/climbs/">Climbs</a></li>
+                <li><a href="/about.html">About the club</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="content">
+            <div class="post">
+              <h2>Up the Grey Spire</h2>
+              <p>We left the hut at four, with head torches and too much coffee.</p>
+              <div class="part">
+                <h3>The climb</h3>
+                <p>The first pitch was wet, the second was worse, and the third was the best climbing of the summer.</p>
+              </div>
+              <div class="part">
+                <h3>The view</h3>
+                <p>From the top we could see three valleys and, far off, the sea.</p>
+              </div>
+              <div class="comments">
+                <h3>Comments</h3>
+                <div class="comment">
+                  <h4>Ana</h4>
+                  <p>Was the third pitch still loose after the rockfall?</p>
+                </div>
+                <div class="comment">
+                  <h4>Bram</h4>
+                  <p>Great write-up. We are going next weekend.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <p>© 2027 High Paths, the blog of the Spire Club.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Up the Grey Spire – High Paths</title>
+      </head>
+      <body>
+        <div class="page-width">
+          <header>
+            <h1>High Paths</h1>
+            <nav>
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/climbs/">Climbs</a></li>
+                <li><a href="/about.html">About the club</a></li>
+              </ul>
+            </nav>
+          </header>
+          <main>
+            <article>
+              <h2>Up the Grey Spire</h2>
+              <p>We left the hut at four, with head torches and too much coffee.</p>
+              <section>
+                <h3>The climb</h3>
+                <p>The first pitch was wet, the second was worse, and the third was the best climbing of the summer.</p>
+              </section>
+              <section>
+                <h3>The view</h3>
+                <p>From the top we could see three valleys and, far off, the sea.</p>
+              </section>
+              <section>
+                <h3>Comments</h3>
+                <article>
+                  <h4>Ana</h4>
+                  <p>Was the third pitch still loose after the rockfall?</p>
+                </article>
+                <article>
+                  <h4>Bram</h4>
+                  <p>Great write-up. We are going next weekend.</p>
+                </article>
+              </section>
+            </article>
+            <aside>
+              <h2>Related climbs</h2>
+              <ul>
+                <li><a href="/climbs/black-tooth.html">Black Tooth by the east ridge</a></li>
+                <li><a href="/climbs/widows-stair.html">The Widow's Stair in winter</a></li>
+              </ul>
+            </aside>
+          </main>
+          <footer>
+            <p>© 2027 High Paths, the blog of the Spire Club.</p>
+          </footer>
+        </div>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: banner
+      says: There is one site header landmark, and it holds the site name
+      selector: 'header:has(h1)'
+      role: banner
+      count: { min: 1, max: 1 }
+      text: { matches: 'High Paths' }
+      concepts: [header-nav-footer, header-footer-context, landmarks]
+    - id: one-banner
+      says: There is only one site header landmark
+      role: banner
+      count: { min: 1, max: 1 }
+      concepts: [landmarks]
+    - id: navigation
+      says: The main navigation menu is a navigation landmark holding the list of links
+      selector: 'nav'
+      role: navigation
+      count: { min: 1, max: 1 }
+      text: { matches: 'Home[\s\S]*Climbs[\s\S]*About the club' }
+      concepts: [nav-element, landmarks]
+    - id: menu-list
+      says: The menu is still a list of links
+      selector: 'nav ul > li > a'
+      count: { min: 3 }
+      concepts: [nav-element]
+    - id: one-main
+      says: There is exactly one main element
+      selector: main
+      count: { min: 1, max: 1 }
+      concepts: [main-element]
+    - id: main-landmark
+      says: The main content is the page's one main landmark
+      role: main
+      count: { min: 1, max: 1 }
+      text: { matches: 'Up the Grey Spire' }
+      concepts: [main-element, landmarks]
+    - id: main-not-nested
+      says: Main is not inside an article, aside, header, footer or nav
+      selector: ':is(article, aside, footer, header, nav) main'
+      count: { max: 0 }
+      concepts: [main-element]
+    - id: post
+      says: The blog post is an article with a heading
+      selector: 'article:not(article article)'
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*Up the Grey Spire' }
+      concepts: [sectioning-elements, choosing-sections]
+    - id: comments
+      says: Each comment is an article nested in the post
+      selector: 'article article'
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: 'Ana|Bram' }
+      concepts: [choosing-sections]
+    - id: articles-headed
+      says: Every article starts with a heading
+      selector: 'article:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6)))'
+      count: { max: 0 }
+      concepts: [sectioning-elements]
+    - id: sections
+      says: The post's two parts and its comments are sections
+      selector: 'article section'
+      count: { min: 3 }
+      concepts: [sectioning-elements, choosing-sections]
+    - id: sections-headed
+      says: Every section starts with a heading
+      selector: 'section:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6)))'
+      count: { max: 0 }
+      concepts: [sectioning-elements]
+    - id: related
+      says: The related climbs are one complementary landmark beside the post
+      role: complementary
+      count: { min: 1, max: 1 }
+      text: { matches: 'Black Tooth[\s\S]*Widow' }
+      concepts: [sectioning-elements, landmarks]
+    - id: footer
+      says: The site's footer is the page's one contentinfo landmark
+      role: contentinfo
+      count: { min: 1, max: 1 }
+      text: { matches: 'Spire Club' }
+      concepts: [header-nav-footer, header-footer-context, landmarks]
+    - id: styling-wrapper
+      says: The page-width wrapper, there only for styling, is still a div
+      selector: 'div.page-width'
+      count: { min: 1, max: 1 }
+      concepts: [non-semantic-wrappers]
+    - id: no-div-regions
+      says: No part of the page that has its own element is still a div
+      selector: 'div:is(.header, .content, .post, .part, .comments, .comment, .sidebar, .footer), div#nav'
+      count: { max: 0 }
+      concepts: [non-semantic-wrappers, page-regions]
+    - id: order-header
+      says: The header comes before the main content
+      selector: 'header:has(h1)'
+      precedes: main
+      concepts: [source-order]
+    - id: order-post
+      says: The post comes before the related climbs
+      selector: 'article:not(article article)'
+      precedes: aside
+      concepts: [source-order]
+    - id: order-footer
+      says: The main content comes before the site's footer
+      selector: main
+      precedes: 'footer:not(:is(article, aside, main, nav, section) footer)'
+      concepts: [source-order]
+fixtures:
+  pass:
+    - name: navigation beside the header, related climbs after main
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Up the Grey Spire – High Paths</title>
+          </head>
+          <body>
+            <div class="page-width">
+              <header>
+                <h1>High Paths</h1>
+              </header>
+              <nav aria-label="Main">
+                <ul>
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/climbs/">Climbs</a></li>
+                  <li><a href="/about.html">About the club</a></li>
+                </ul>
+              </nav>
+              <main>
+                <article>
+                  <header>
+                    <h2>Up the Grey Spire</h2>
+                    <p>By the Spire Club</p>
+                  </header>
+                  <p>We left the hut at four, with head torches and too much coffee.</p>
+                  <section>
+                    <h3>The climb</h3>
+                    <p>The first pitch was wet, the second was worse, and the third was the best climbing of the summer.</p>
+                  </section>
+                  <section>
+                    <h3>The view</h3>
+                    <p>From the top we could see three valleys and, far off, the sea.</p>
+                  </section>
+                  <section aria-labelledby="comments-heading">
+                    <h3 id="comments-heading">Comments</h3>
+                    <article><h4>Ana</h4><p>Was the third pitch still loose after the rockfall?</p></article>
+                    <article><h4>Bram</h4><p>Great write-up. We are going next weekend.</p></article>
+                  </section>
+                </article>
+              </main>
+              <aside>
+                <h2>Related climbs</h2>
+                <ul>
+                  <li><a href="/climbs/black-tooth.html">Black Tooth by the east ridge</a></li>
+                  <li><a href="/climbs/widows-stair.html">The Widow's Stair in winter</a></li>
+                </ul>
+              </aside>
+              <footer>
+                <p><small>© 2027 High Paths, the blog of the Spire Club.</small></p>
+              </footer>
+            </div>
+          </body>
+        </html>
+    - name: the related climbs as a labelled aside at the end of the post
+      edits:
+        - find: |-
+            </section>
+                  </article>
+                  <aside>
+                    <h2>Related climbs</h2>
+          replace: |-
+            </section>
+                    <aside aria-labelledby="related">
+                      <h3 id="related">Related climbs</h3>
+        - find: |-
+            </ul>
+                  </aside>
+                </main>
+          replace: |-
+            </ul>
+                    </aside>
+                  </article>
+                </main>
+    - name: comments with their own headers and footers, and a styling div inside a part
+      edits:
+        - find: |-
+            <article>
+                      <h4>Ana</h4>
+                      <p>Was the third pitch still loose after the rockfall?</p>
+                    </article>
+          replace: |-
+            <article>
+                      <header><h4>Ana</h4></header>
+                      <p>Was the third pitch still loose after the rockfall?</p>
+                      <footer><p>Posted on the day of the climb</p></footer>
+                    </article>
+        - find: <p>From the top we could see three valleys and, far off, the sea.</p>
+          replace: <div class="photo-frame"><p>From the top we could see three valleys and, far off, the sea.</p></div>
+  fail:
+    - name: the related climbs in a second main
+      edits:
+        - find: |-
+            <aside>
+                    <h2>Related climbs</h2>
+          replace: |-
+            </main>
+                  <main>
+                    <h2>Related climbs</h2>
+        - find: |-
+            </ul>
+                  </aside>
+          replace: |-
+            </ul>
+      fails: [one-main, main-landmark, related]
+      because: A page has one main; the related links are complementary, not main content.
+    - name: the whole page inside the article
+      edits:
+        - { find: <main>, replace: <article class="page"><main> }
+        - { find: </main>, replace: </main></article> }
+      fails: [main-not-nested]
+      because: main holds the page's unique content and should not sit inside an article.
+    - name: the footer tucked inside main
+      edits:
+        - find: |-
+            </aside>
+                </main>
+                <footer>
+                  <p>© 2027 High Paths, the blog of the Spire Club.</p>
+                </footer>
+          replace: |-
+            </aside>
+                  <footer>
+                    <p>© 2027 High Paths, the blog of the Spire Club.</p>
+                  </footer>
+                </main>
+      fails: [footer]
+      because: A footer inside main is not the page's contentinfo landmark.
+    - name: the sidebar still read out first
+      edits:
+        - find: |-
+            <header>
+                  <h1>High Paths</h1>
+          replace: |-
+            <aside>
+                  <h2>Related climbs</h2>
+                  <ul>
+                    <li><a href="/climbs/black-tooth.html">Black Tooth by the east ridge</a></li>
+                    <li><a href="/climbs/widows-stair.html">The Widow's Stair in winter</a></li>
+                  </ul>
+                </aside>
+                <header>
+                  <h1>High Paths</h1>
+        - find: |-
+            <aside>
+                    <h2>Related climbs</h2>
+                    <ul>
+                      <li><a href="/climbs/black-tooth.html">Black Tooth by the east ridge</a></li>
+                      <li><a href="/climbs/widows-stair.html">The Widow's Stair in winter</a></li>
+                    </ul>
+                  </aside>
+                </main>
+          replace: </main>
+      fails: [order-post]
+      because: Screen reader users hear the source order; the related links should follow the post.
+    - name: the comments left as divs
+      edits:
+        - find: |-
+            <article>
+                      <h4>Ana</h4>
+          replace: |-
+            <div class="comment">
+                      <h4>Ana</h4>
+        - find: |-
+            rockfall?</p>
+                    </article>
+          replace: |-
+            rockfall?</p>
+                    </div>
+        - find: |-
+            <article>
+                      <h4>Bram</h4>
+          replace: |-
+            <div class="comment">
+                      <h4>Bram</h4>
+        - find: |-
+            next weekend.</p>
+                    </article>
+          replace: |-
+            next weekend.</p>
+                    </div>
+      fails: [comments, no-div-regions]
+      because: Each comment makes sense on its own, so it is an article, not an anonymous box.
+    - name: the styling wrapper turned into a section
+      edits:
+        - { find: <div class="page-width">, replace: <section class="page-width"> }
+        - find: |-
+            </footer>
+              </div>
+          replace: |-
+            </footer>
+              </section>
+      fails: [styling-wrapper, banner, footer]
+      because: The wrapper exists only for styling, which is what div is for; as a section it also turns the site's header and footer into the section's own, so the page loses its banner and contentinfo landmarks.

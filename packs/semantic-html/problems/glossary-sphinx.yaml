@@ -1,0 +1,213 @@
+id: glossary-sphinx
+statement: |
+  The Glossary Sphinx asks riddles in terms and meanings, and the herbalists' glossary has lost its shape: terms and definitions run together as bold lines and paragraphs, so nothing ties a term to what it means.
+
+  Mark the glossary up as a description list, with each term and each description in its own element:
+
+  - **Tincture** and **Poultice** each have one description;
+  - **Decoction** has two descriptions, one for the cook and one for the herbalist;
+  - **Simple** and **Single-herb remedy** mean the same thing, so they share one description.
+
+  You may wrap each group of terms and descriptions in a `div`, for styling; HTML allows that inside a description list.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Glossary – Herbalists' Hall</title>
+      </head>
+      <body>
+        <h1>Glossary</h1>
+        <p><b>Tincture</b></p>
+        <p>A remedy made by steeping herbs in alcohol for several weeks.</p>
+        <p><b>Decoction</b></p>
+        <p>In cooking, a broth made by boiling something down to its essence.</p>
+        <p>In herbalism, a remedy made by simmering tough roots or bark in water.</p>
+        <p><b>Simple</b></p>
+        <p><b>Single-herb remedy</b></p>
+        <p>A remedy made from one herb alone.</p>
+        <p><b>Poultice</b></p>
+        <p>A warm, soft mass of herbs laid on the skin and held with a cloth.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Glossary – Herbalists' Hall</title>
+      </head>
+      <body>
+        <h1>Glossary</h1>
+        <dl>
+          <dt>Tincture</dt>
+          <dd>A remedy made by steeping herbs in alcohol for several weeks.</dd>
+          <dt>Decoction</dt>
+          <dd>In cooking, a broth made by boiling something down to its essence.</dd>
+          <dd>In herbalism, a remedy made by simmering tough roots or bark in water.</dd>
+          <dt>Simple</dt>
+          <dt>Single-herb remedy</dt>
+          <dd>A remedy made from one herb alone.</dd>
+          <dt>Poultice</dt>
+          <dd>A warm, soft mass of herbs laid on the skin and held with a cloth.</dd>
+        </dl>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: one-dl
+      says: The glossary is one description list
+      selector: dl
+      count: { min: 1, max: 1 }
+      concepts: [description-lists]
+    - id: terms
+      says: The five terms are description terms
+      selector: dt
+      count: { min: 5, max: 5 }
+      every: true
+      text: { matches: '^\s*(Tincture|Decoction|Simple|Single-herb remedy|Poultice)\s*$' }
+      concepts: [description-lists]
+    - id: descriptions
+      says: The five descriptions are description details
+      selector: dd
+      count: { min: 5, max: 5 }
+      concepts: [description-lists]
+    - id: groups-in-dl
+      says: Terms and descriptions sit directly in the list, or in a div that groups them
+      selector: ':is(dt, dd):not(dl > *):not(dl > div > *)'
+      count: { max: 0 }
+      concepts: [list-rules, list-attributes]
+    - id: decoction
+      says: Decoction is followed by its two descriptions, and no third
+      selector: dt
+      text: { matches: '^\s*Decoction\s*$' }
+      next: [{ is: dd, text: { matches: cooking } }, { is: dd, text: { matches: herbalism } }, { is: dd, absent: true }]
+      concepts: [description-lists]
+    - id: synonyms
+      says: Simple and Single-herb remedy come together and share one description
+      selector: dt
+      text: { matches: '^\s*(Simple|Single-herb remedy)\s*$' }
+      next: [{ is: dt, text: { matches: '^\s*(Simple|Single-herb remedy)\s*$' } }, { is: dd, text: { matches: one herb alone } }, { is: dd, absent: true }]
+      concepts: [list-rules]
+    - id: tincture
+      says: Tincture is followed by its one description
+      selector: dt
+      text: { matches: '^\s*Tincture\s*$' }
+      next: [{ is: dd, text: { matches: alcohol } }, { is: dd, absent: true }]
+      concepts: [description-lists]
+    - id: poultice
+      says: Poultice is followed by its one description
+      selector: dt
+      text: { matches: '^\s*Poultice\s*$' }
+      next: [{ is: dd, text: { matches: 'on the skin' } }, { is: dd, absent: true }]
+      concepts: [description-lists]
+fixtures:
+  pass:
+    - name: every group wrapped in a div
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Glossary – Herbalists' Hall</title>
+          </head>
+          <body>
+            <h1>Glossary</h1>
+            <dl class="glossary">
+              <div>
+                <dt>Tincture</dt>
+                <dd>A remedy made by steeping herbs in alcohol for several weeks.</dd>
+              </div>
+              <div>
+                <dt>Decoction</dt>
+                <dd>In cooking, a broth made by boiling something down to its essence.</dd>
+                <dd>In herbalism, a remedy made by simmering tough roots or bark in water.</dd>
+              </div>
+              <div id="simples">
+                <dt>Simple</dt>
+                <dt>Single-herb remedy</dt>
+                <dd>A remedy made from one herb alone.</dd>
+              </div>
+              <div>
+                <dt>Poultice</dt>
+                <dd>A warm, soft mass of herbs laid on the skin and held with a cloth.</dd>
+              </div>
+            </dl>
+          </body>
+        </html>
+    - name: synonyms in the other order, terms marked as defined terms
+      edits:
+        - find: |-
+            <dt>Simple</dt>
+                  <dt>Single-herb remedy</dt>
+          replace: |-
+            <dt><dfn>Single-herb remedy</dfn></dt>
+                  <dt><dfn>Simple</dfn></dt>
+        - { find: <dt>Tincture</dt>, replace: <dt><dfn>Tincture</dfn></dt> }
+    - name: end tags of dt and dd left to the parser, a paragraph inside one description
+      edits:
+        - { find: <dt>Poultice</dt>, replace: <dt>Poultice }
+        - find: <dd>A warm, soft mass of herbs laid on the skin and held with a cloth.</dd>
+          replace: <dd><p>A warm, soft mass of herbs laid on the skin and held with a cloth.</p>
+        - { find: <dt>Tincture</dt>, replace: <dt>Tincture }
+  fail:
+    - name: each synonym given its own copy of the description
+      edits:
+        - find: |-
+            <dt>Simple</dt>
+                  <dt>Single-herb remedy</dt>
+                  <dd>A remedy made from one herb alone.</dd>
+          replace: |-
+            <dt>Simple</dt>
+                  <dd>A remedy made from one herb alone.</dd>
+                  <dt>Single-herb remedy</dt>
+                  <dd>A remedy made from one herb alone.</dd>
+      fails: [synonyms, descriptions]
+      because: Two terms in a row share the next description; repeating it makes two separate entries.
+    - name: decoction split into two entries with the same term
+      edits:
+        - find: |-
+            <dd>In cooking, a broth made by boiling something down to its essence.</dd>
+                  <dd>In herbalism,
+          replace: |-
+            <dd>In cooking, a broth made by boiling something down to its essence.</dd>
+                  <dt>Decoction</dt>
+                  <dd>In herbalism,
+      fails: [terms, decoction]
+      because: One term may have several descriptions; repeating the term splits it in two.
+    - name: both senses of decoction in one description
+      edits:
+        - find: |-
+            essence.</dd>
+                  <dd>In herbalism,
+          replace: |-
+            essence.
+                  In herbalism,
+      fails: [descriptions, decoction]
+      because: Two meanings run together in one description cannot be told apart.
+    - name: a bulleted list with bold terms
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head><meta charset="utf-8"><title>Glossary – Herbalists' Hall</title></head>
+          <body>
+            <h1>Glossary</h1>
+            <ul>
+              <li><b>Tincture</b>: a remedy made by steeping herbs in alcohol for several weeks.</li>
+              <li><b>Decoction</b>: in cooking, a broth made by boiling something down to its essence; in herbalism, a remedy made by simmering tough roots or bark in water.</li>
+              <li><b>Simple</b> or <b>Single-herb remedy</b>: a remedy made from one herb alone.</li>
+              <li><b>Poultice</b>: a warm, soft mass of herbs laid on the skin and held with a cloth.</li>
+            </ul>
+          </body>
+        </html>
+      fails: [one-dl, terms, descriptions]
+      because: A list of bold lines does not tie each term to its description.
+    - name: a description marked up as another term
+      edits:
+        - find: <dd>A remedy made by steeping herbs in alcohol for several weeks.</dd>
+          replace: <dt>A remedy made by steeping herbs in alcohol for several weeks.</dt>
+      fails: [terms, descriptions, tincture]
+      because: A description in a dt is announced as a term, so Tincture is left without a meaning.

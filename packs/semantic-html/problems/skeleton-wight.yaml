@@ -1,0 +1,196 @@
+id: skeleton-wight
+statement: |
+  The Skeleton Wight is a page with no bones: text lying loose, with no doctype, no root, no head and no body. The browser props it up with guesses, but search engines, screen readers and phones have nothing to go on.
+
+  The harbourmaster of Port-Brume wants this notice, written **in French**, published as `/marees.html`. Give it its full frame:
+
+  - the doctype, and a root element that declares the page's language;
+  - a head that **starts** with the UTF-8 character-set declaration, so it falls within the first bytes the browser reads;
+  - a viewport setting that matches the device's width and leaves zooming alone;
+  - a title that puts the page's purpose first, **Horaires des marées**, and the site's name last, **Port-Brume**;
+  - the author, **Maëlle Kerbrat**, and a one-sentence description of the page, as metadata;
+  - the stylesheet `styles/marees.css`, which sits in a `styles` folder next to the page;
+  - a body holding the notice, unchanged.
+path: /marees.html
+files:
+  - path: /styles/marees.css
+  - path: /index.html
+starter:
+  html: |
+    <h1>Horaires des marées</h1>
+    <p>Les marées de la semaine au port de Port-Brume. Les heures sont données à l'heure locale.</p>
+    <ul>
+      <li>Lundi : pleine mer à 6 h 12, basse mer à 12 h 25</li>
+      <li>Mardi : pleine mer à 6 h 58, basse mer à 13 h 10</li>
+      <li>Mercredi : pleine mer à 7 h 41, basse mer à 13 h 54</li>
+    </ul>
+    <p>Par gros temps, la passe nord reste fermée.</p>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="fr">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Horaires des marées – Port-Brume</title>
+        <meta name="author" content="Maëlle Kerbrat">
+        <meta name="description" content="Les heures de pleine mer et de basse mer de la semaine au port de Port-Brume.">
+        <link rel="stylesheet" href="styles/marees.css">
+      </head>
+      <body>
+        <h1>Horaires des marées</h1>
+        <p>Les marées de la semaine au port de Port-Brume. Les heures sont données à l'heure locale.</p>
+        <ul>
+          <li>Lundi : pleine mer à 6 h 12, basse mer à 12 h 25</li>
+          <li>Mardi : pleine mer à 6 h 58, basse mer à 13 h 10</li>
+          <li>Mercredi : pleine mer à 7 h 41, basse mer à 13 h 54</li>
+        </ul>
+        <p>Par gros temps, la passe nord reste fermée.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: doctype
+      says: The page starts with <!doctype html>
+      doctype: true
+      concepts: [document-skeleton]
+    - id: html-lang
+      says: The root element says the page is in French, with a well-formed language tag
+      selector: html
+      attr: { name: lang, matches: '^fr(-[a-z0-9]{1,8})*$' }
+      concepts: [document-language, language-tags]
+    - id: charset-first
+      says: The head starts with the UTF-8 character-set declaration
+      selector: 'head > meta[charset]:first-child'
+      attr: { name: charset, matches: '^\s*utf-8\s*$' }
+      concepts: [character-encoding]
+    - id: one-charset
+      says: There is exactly one character-set declaration
+      selector: 'meta[charset]'
+      count: { min: 1, max: 1 }
+      concepts: [character-encoding, meta-kinds]
+    - id: viewport
+      says: A viewport meta sets the width to the device's width
+      selector: 'head meta[name="viewport" i]'
+      attr: { name: content, matches: 'width\s*=\s*device-width' }
+      concepts: [viewport-meta]
+    - id: viewport-zoom
+      says: The viewport setting does not stop people zooming in
+      selector: 'meta[name="viewport" i]'
+      count: { min: 0 }
+      every: true
+      attr: { name: content, matches: '^(?!.*user-scalable\s*=\s*(no|0)\b)' }
+      concepts: [viewport-meta]
+    - id: title
+      says: One title, with the page's purpose first and the site's name last
+      selector: 'head > title'
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*Horaires des marées\b.*\bPort-Brume\s*$' }
+      concepts: [page-title, title-quality]
+    - id: author
+      says: The author is given in a meta element
+      selector: 'head meta[name="author" i]'
+      attr: { name: content, matches: 'Maëlle Kerbrat' }
+      concepts: [head-and-metadata, meta-kinds]
+    - id: description
+      says: A description meta says what the page holds in a few words
+      selector: 'head meta[name="description" i]'
+      attr: { name: content, matches: '\S+(\s+\S+){3,}' }
+      concepts: [head-and-metadata, meta-kinds]
+    - id: stylesheet
+      says: The stylesheet styles/marees.css is linked from the head
+      selector: 'head link[rel~="stylesheet" i]'
+      attr: { name: href, matches: 'marees\.css$' }
+      resolves: true
+      concepts: [head-resources]
+    - id: body
+      says: The notice is in the body, with its heading and list intact
+      selector: 'body > h1 + p + ul'
+      concepts: [document-skeleton]
+fixtures:
+  pass:
+    - name: regional language tag, upper-case charset, void-element slashes and initial-scale
+      html: |
+        <!DOCTYPE html>
+        <html lang="fr-FR">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="description" content="Horaires de pleine mer et de basse mer, semaine en cours, port de Port-Brume." />
+            <meta name="author" content="Maëlle Kerbrat" />
+            <title>Horaires des marées · Port-Brume</title>
+            <link rel="stylesheet" href="./styles/marees.css" />
+          </head>
+          <body>
+            <h1>Horaires des marées</h1>
+            <p>Les marées de la semaine au port de Port-Brume. Les heures sont données à l'heure locale.</p>
+            <ul>
+              <li>Lundi : pleine mer à 6 h 12, basse mer à 12 h 25</li>
+              <li>Mardi : pleine mer à 6 h 58, basse mer à 13 h 10</li>
+              <li>Mercredi : pleine mer à 7 h 41, basse mer à 13 h 54</li>
+            </ul>
+            <p>Par gros temps, la passe nord reste fermée.</p>
+          </body>
+        </html>
+    - name: root-relative stylesheet, a favicon and a deferred script, a longer title
+      edits:
+        - find: '<title>Horaires des marées – Port-Brume</title>'
+          replace: '<title>Horaires des marées de la semaine | Port-Brume</title>'
+        - find: '<link rel="stylesheet" href="styles/marees.css">'
+          replace: |-
+            <link rel="icon" href="/favicon.ico">
+                <link rel="stylesheet" href="/styles/marees.css">
+                <script src="/scripts/horloge.js" defer></script>
+    - name: head and body tags left for the parser to infer
+      html: |
+        <!doctype html>
+        <html lang="fr-BE">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Horaires des marées - Port-Brume</title>
+        <meta name="author" content="Maëlle Kerbrat">
+        <meta name="description" content="Pleines mers et basses mers de la semaine à Port-Brume.">
+        <link rel="stylesheet" href="styles/marees.css">
+        <h1>Horaires des marées</h1>
+        <p>Les marées de la semaine au port de Port-Brume. Les heures sont données à l'heure locale.</p>
+        <ul>
+          <li>Lundi : pleine mer à 6 h 12, basse mer à 12 h 25</li>
+          <li>Mardi : pleine mer à 6 h 58, basse mer à 13 h 10</li>
+          <li>Mercredi : pleine mer à 7 h 41, basse mer à 13 h 54</li>
+        </ul>
+        <p>Par gros temps, la passe nord reste fermée.</p>
+        </html>
+  fail:
+    - name: the language copied from an English template
+      edits: [{ find: '<html lang="fr">', replace: '<html lang="en">' }]
+      fails: [html-lang]
+      because: The notice is in French; a screen reader told "en" reads it with English pronunciation.
+    - name: the charset declared after the title
+      edits:
+        - find: |-
+            <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width">
+                <title>Horaires des marées – Port-Brume</title>
+          replace: |-
+            <title>Horaires des marées – Port-Brume</title>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width">
+      fails: [charset-first]
+      because: The statement asks for the encoding first in the head.
+    - name: zooming switched off
+      edits: [{ find: 'content="width=device-width"', replace: 'content="width=device-width, user-scalable=no"' }]
+      fails: [viewport-zoom]
+      because: Disabling zoom locks out people with low vision.
+    - name: the site name first in the title
+      edits: [{ find: '<title>Horaires des marées – Port-Brume</title>', replace: '<title>Port-Brume – Horaires des marées</title>' }]
+      fails: [title]
+      because: A screen reader user hears the site name before what the page is for, on every page.
+    - name: the stylesheet linked without its folder
+      edits: [{ find: 'href="styles/marees.css"', replace: 'href="marees.css"' }]
+      fails: [stylesheet]
+      because: The file is in the styles folder; marees.css next to the page does not exist.
+    - name: author given as keywords instead of an author meta
+      edits: [{ find: '<meta name="author" content="Maëlle Kerbrat">', replace: '<meta name="keywords" content="marées, Port-Brume, Maëlle Kerbrat">' }]
+      fails: [author]
+      because: Search engines ignore the keywords meta, and it does not name an author.

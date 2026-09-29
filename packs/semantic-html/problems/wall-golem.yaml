@@ -1,0 +1,266 @@
+id: wall-golem
+statement: |
+  The Wall-of-Text Golem is a recipe with no structure. The cook of the Mill Kitchen pressed Enter between the lines, but the browser ignores line breaks in the source and shows one solid block. A reader skimming for the ingredients, a search engine weighing the headings, and a screen reader user asking for the list of headings all hit the same wall.
+
+  Give the recipe its structure:
+
+  - the recipe's name is the page's single top-level heading;
+  - **Ingredients**, **Method** and **Storing it** are the three subheadings;
+  - the introduction and the storage advice are paragraphs;
+  - the ingredients are a list whose order does not matter;
+  - the method is a list whose order does;
+  - the last two lines of the method are two ways of doing step four, so they belong in their own list inside step four.
+
+  Leave no text lying loose in the body.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Quick hummus – Mill Kitchen</title>
+      </head>
+      <body>
+        Quick hummus
+
+        A smooth dip for travellers, ready in ten minutes and good for three days on the road.
+
+        Ingredients
+
+        1 tin (400g) of chickpeas
+        2 tablespoons of tahini
+        1 clove of garlic
+        Juice of half a lemon
+        2 tablespoons of olive oil
+        A pinch of salt
+        3 tablespoons of cold water
+
+        Method
+
+        Peel the garlic and chop it coarsely.
+        Drain the chickpeas, keeping a little of the liquid.
+        Put everything except the water into a food processor.
+        Blend it into a paste, adding the water a spoonful at a time.
+        For a coarse, chunky dip, blend it only briefly.
+        For a smooth dip, blend it for a full two minutes.
+
+        Storing it
+
+        Keep it in a sealed jar somewhere cool, and eat it within three days.
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Quick hummus – Mill Kitchen</title>
+      </head>
+      <body>
+        <h1>Quick hummus</h1>
+        <p>A smooth dip for travellers, ready in ten minutes and good for three days on the road.</p>
+        <h2>Ingredients</h2>
+        <ul>
+          <li>1 tin (400g) of chickpeas</li>
+          <li>2 tablespoons of tahini</li>
+          <li>1 clove of garlic</li>
+          <li>Juice of half a lemon</li>
+          <li>2 tablespoons of olive oil</li>
+          <li>A pinch of salt</li>
+          <li>3 tablespoons of cold water</li>
+        </ul>
+        <h2>Method</h2>
+        <ol>
+          <li>Peel the garlic and chop it coarsely.</li>
+          <li>Drain the chickpeas, keeping a little of the liquid.</li>
+          <li>Put everything except the water into a food processor.</li>
+          <li>
+            Blend it into a paste, adding the water a spoonful at a time.
+            <ul>
+              <li>For a coarse, chunky dip, blend it only briefly.</li>
+              <li>For a smooth dip, blend it for a full two minutes.</li>
+            </ul>
+          </li>
+        </ol>
+        <h2>Storing it</h2>
+        <p>Keep it in a sealed jar somewhere cool, and eat it within three days.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: one-h1
+      says: The recipe's name is the single top-level heading
+      selector: h1
+      count: { min: 1, max: 1 }
+      name: { matches: '^\s*Quick hummus\s*$' }
+      concepts: [headings]
+    - id: subheadings
+      says: Ingredients, Method and Storing it are the three subheadings
+      selector: h2
+      count: { min: 3, max: 3 }
+      every: true
+      name: { matches: '^\s*(Ingredients|Method|Storing it)\s*$' }
+      concepts: [headings, why-structure]
+    - id: outline
+      says: The headings go down one level at a time
+      selector: body
+      outline: { start: 1 }
+      concepts: [headings]
+    - id: paragraphs
+      says: The introduction and the storage advice are paragraphs
+      selector: p
+      count: { min: 2 }
+      text: { matches: 'travellers|sealed jar' }
+      concepts: [headings]
+    - id: ingredients
+      says: The seven ingredients are items of an unordered list
+      selector: 'ul:not(li ul) > li'
+      count: { min: 7, max: 7 }
+      concepts: [lists]
+    - id: ingredients-list
+      says: The ingredients list holds the chickpeas
+      selector: 'ul:not(li ul)'
+      count: { min: 1, max: 1 }
+      text: { matches: 'chickpeas[\s\S]*cold water' }
+      concepts: [lists]
+    - id: method
+      says: The method is an ordered list of four steps
+      selector: 'ol:not(li ol) > li'
+      count: { min: 4, max: 4 }
+      concepts: [lists]
+    - id: method-order
+      says: The steps keep their order, starting with the garlic
+      selector: 'ol:not(li ol) > li:first-child'
+      text: { matches: '^\s*Peel the garlic' }
+      concepts: [lists]
+    - id: nested
+      says: The two ways of blending are a list inside step four
+      selector: 'ol:not(li ol) > li:nth-child(4) > ul > li'
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: 'blend it (only briefly|for a full two minutes)' }
+      concepts: [lists]
+    - id: no-loose-text
+      says: No text lies loose in the body or in a bare wrapper
+      selector: 'body, body div'
+      count: { min: 1 }
+      every: true
+      text: { own: true, not: '\S' }
+      concepts: [why-structure]
+fixtures:
+  pass:
+    - name: the recipe wrapped in an article with a header and sections
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Quick hummus – Mill Kitchen</title>
+          </head>
+          <body>
+            <article>
+              <header>
+                <h1>Quick hummus</h1>
+                <p>A smooth dip for travellers, ready in ten minutes and good for three days on the road.</p>
+              </header>
+              <section>
+                <h2>Ingredients</h2>
+                <ul>
+                  <li>1 tin (400g) of chickpeas</li><li>2 tablespoons of tahini</li><li>1 clove of garlic</li>
+                  <li>Juice of half a lemon</li><li>2 tablespoons of olive oil</li><li>A pinch of salt</li>
+                  <li>3 tablespoons of cold water</li>
+                </ul>
+              </section>
+              <section>
+                <h2>Method</h2>
+                <ol>
+                  <li>Peel the garlic and chop it coarsely.</li>
+                  <li>Drain the chickpeas, keeping a little of the liquid.</li>
+                  <li>Put everything except the water into a food processor.</li>
+                  <li>Blend it into a paste, adding the water a spoonful at a time.
+                    <ul>
+                      <li>For a coarse, chunky dip, blend it only briefly.</li>
+                      <li>For a smooth dip, blend it for a full two minutes.</li>
+                    </ul>
+                  </li>
+                </ol>
+              </section>
+              <section>
+                <h2>Storing it</h2>
+                <p>Keep it in a sealed jar somewhere cool, and eat it within three days.</p>
+              </section>
+            </article>
+          </body>
+        </html>
+    - name: step four's text in a paragraph of its own, li end tags left out
+      edits:
+        - find: |-
+            <li>
+                    Blend it into a paste, adding the water a spoonful at a time.
+                    <ul>
+          replace: |-
+            <li>
+                    <p>Blend it into a paste, adding the water a spoonful at a time.</p>
+                    <ul>
+        - find: <li>Peel the garlic and chop it coarsely.</li>
+          replace: <li>Peel the garlic and chop it coarsely.
+        - find: <li>A pinch of salt</li>
+          replace: <li>A pinch of salt
+    - name: a styling div around the page and the note split into two paragraphs
+      edits:
+        - find: <h1>Quick hummus</h1>
+          replace: <div class="card"><h1>Quick hummus</h1>
+        - find: <p>Keep it in a sealed jar somewhere cool, and eat it within three days.</p>
+          replace: <p>Keep it in a sealed jar somewhere cool.</p><p>Eat it within three days.</p></div>
+  fail:
+    - name: the method's options left as steps five and six
+      edits:
+        - find: |-
+            <li>
+                    Blend it into a paste, adding the water a spoonful at a time.
+                    <ul>
+                      <li>For a coarse, chunky dip, blend it only briefly.</li>
+                      <li>For a smooth dip, blend it for a full two minutes.</li>
+                    </ul>
+                  </li>
+          replace: |-
+            <li>Blend it into a paste, adding the water a spoonful at a time.</li>
+                  <li>For a coarse, chunky dip, blend it only briefly.</li>
+                  <li>For a smooth dip, blend it for a full two minutes.</li>
+      fails: [method, nested]
+      because: The two options are alternatives within step four, not steps of their own.
+    - name: every heading made a top-level heading
+      edits:
+        - { find: <h2>Ingredients</h2>, replace: <h1>Ingredients</h1> }
+        - { find: <h2>Method</h2>, replace: <h1>Method</h1> }
+        - { find: <h2>Storing it</h2>, replace: <h1>Storing it</h1> }
+      fails: [one-h1, subheadings]
+      because: The subheadings sit below the recipe's name; a page should have one h1.
+    - name: the method as numbered lines with line breaks
+      edits:
+        - find: |-
+            <ol>
+                  <li>Peel the garlic and chop it coarsely.</li>
+                  <li>Drain the chickpeas, keeping a little of the liquid.</li>
+                  <li>Put everything except the water into a food processor.</li>
+          replace: |-
+            <p>1. Peel the garlic and chop it coarsely.<br>
+                  2. Drain the chickpeas, keeping a little of the liquid.<br>
+                  3. Put everything except the water into a food processor.</p>
+                <ol start="4">
+      fails: [method, method-order, nested]
+      because: Line breaks and typed numbers look like a list but are not one to a screen reader.
+    - name: the ingredients as an ordered list
+      edits:
+        - { find: "<ul>\n      <li>1 tin", replace: "<ol>\n      <li>1 tin" }
+        - { find: "<li>3 tablespoons of cold water</li>\n    </ul>", replace: "<li>3 tablespoons of cold water</li>\n    </ol>" }
+      fails: [ingredients, ingredients-list, method]
+      because: The ingredients can be gathered in any order; an ordered list claims otherwise.
+    - name: the introduction left as loose text
+      edits:
+        - find: <p>A smooth dip for travellers, ready in ten minutes and good for three days on the road.</p>
+          replace: A smooth dip for travellers, ready in ten minutes and good for three days on the road.
+      fails: [no-loose-text]
+      because: Text outside any element has no role; it is not a paragraph.

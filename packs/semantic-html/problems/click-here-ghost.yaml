@@ -1,0 +1,250 @@
+id: click-here-ghost
+statement: |
+  The Click-Here Ghost haunts the Ferrymen's Guild timetable page. Its links say nothing about where they go: "click here", a bare address, "link to…". Read aloud in a list of links, out of context, they are no help at all. Here is the site:
+
+  ```
+  (site root)
+  ├── index.html            the Guild's home page
+  ├── timetables.html       this page
+  ├── routes.html           the ferry routes
+  ├── downloads/
+  │   └── winter-timetable.pdf   a 2 MB PDF
+  └── images/
+      └── guild-logo.svg
+  ```
+
+  Lay the ghost to rest:
+
+  - Every link's text says where it leads. No "click here" or "here", no URLs, and no "link" or "link to" in the text.
+  - The logo is the only content of the link to the home page, so its alt text must name that destination.
+  - The winter timetable link downloads a file. Mark it as a download, and warn readers in the link text that it is a PDF of 2 MB.
+  - The storm warnings link opens in a new tab. Either say so in the link, or let it open in the same tab.
+  - Turn the menu into a list of links. This page is the timetables page, so the menu must not offer a working link to it. Remove that link, or keep it and mark it as the current page.
+path: /timetables.html
+files:
+  - path: /index.html
+  - path: /routes.html
+  - path: /downloads/winter-timetable.pdf
+  - path: /images/guild-logo.svg
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Timetables – The Ferrymen's Guild</title>
+      </head>
+      <body>
+        <header>
+          <a href="index.html"><img src="images/guild-logo.svg" alt="logo"></a>
+          <nav>
+            <a href="index.html">Home</a> |
+            <a href="timetables.html">Timetables</a> |
+            <a href="routes.html">Routes</a>
+          </nav>
+        </header>
+        <main>
+          <h1>Ferry timetables</h1>
+          <p>For the winter timetable, <a href="downloads/winter-timetable.pdf">click here</a>.</p>
+          <p>Every crossing we sail is listed at <a href="routes.html">routes.html</a>.</p>
+          <p>Before you sail, read the <a href="https://harbourwatch.example/warnings" target="_blank">link to the Harbour Watch storm warnings</a>.</p>
+        </main>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Timetables – The Ferrymen's Guild</title>
+      </head>
+      <body>
+        <header>
+          <a href="index.html"><img src="images/guild-logo.svg" alt="The Ferrymen's Guild home page"></a>
+          <nav>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="routes.html">Routes</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <h1>Ferry timetables</h1>
+          <p><a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>.</p>
+          <p>Every crossing we sail is listed on our <a href="routes.html">ferry routes</a> page.</p>
+          <p>Before you sail, read the <a href="https://harbourwatch.example/warnings" target="_blank">Harbour Watch storm warnings (opens in a new tab)</a>.</p>
+        </main>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: no-vague-text
+      says: No link reads "click here", "here" or another label that means nothing out of context
+      selector: 'a[href]'
+      every: true
+      name: { not: '^\W*(click|click here|here|this|this link|link|more|read more|go)\W*$|click here' }
+      concepts: [link-text]
+    - id: no-url-text
+      says: No link's text is a URL or a file name
+      selector: 'a[href]'
+      every: true
+      name: { not: 'https?:|www\.|\.(html?|pdf|svg)\b|\w\.example\b' }
+      concepts: [link-text]
+    - id: no-word-link
+      says: No link says "link" or "link to" in its text
+      selector: 'a[href]'
+      every: true
+      name: { not: '\blinks?\b' }
+      concepts: [link-text]
+    - id: logo-alt
+      says: The logo's alt text names where its link leads
+      selector: 'header a[href] img'
+      every: true
+      attr: { name: alt, matches: '\b(home|ferrymen|guild)\b' }
+      name: { not: '\blogo\b|\.svg|^\s*(image|picture|icon)\b' }
+      concepts: [text-alternatives]
+    - id: logo-link
+      says: The logo still leads to the home page
+      selector: 'header a[href]:has(img)'
+      name: { matches: '\b(home|ferrymen|guild)\b' }
+      resolves: true
+      concepts: [text-alternatives]
+    - id: download
+      says: The winter timetable link is marked as a download
+      selector: 'a[href$="winter-timetable.pdf"]'
+      attr: { name: download, present: true }
+      concepts: [anchor-attributes, link-signposts]
+    - id: download-signposted
+      says: The download link warns that it is a 2 MB PDF, and names the winter timetable
+      selector: 'a[href$="winter-timetable.pdf"]'
+      name: { matches: '^(?=[\s\S]*winter[\s\S]*timetable)(?=[\s\S]*\bPDF\b)(?=[\s\S]*\b2\s*MB\b)' }
+      concepts: [link-signposts]
+    - id: warnings
+      says: The storm warnings still link to the Harbour Watch
+      selector: 'a[href^="https://harbourwatch.example"]'
+      name: { matches: 'storm\s+warnings' }
+      concepts: [absolute-urls, link-text]
+    - id: new-tab
+      says: A link that opens a new tab says so in its text
+      selector: 'a[target="_blank" i]'
+      count: { min: 0 }
+      every: true
+      name: { matches: 'new\s+(tab|window)' }
+      concepts: [link-signposts, anchor-attributes]
+    - id: menu-list
+      says: The menu is a list of links
+      selector: 'nav :is(ul, ol) > li > a[href]'
+      count: { min: 2 }
+      concepts: [navigation-menus]
+    - id: menu-no-loose-links
+      says: Every link in the menu sits in a list item
+      selector: 'nav a:not(li a)'
+      count: { max: 0 }
+      concepts: [navigation-menus]
+    - id: menu-home
+      says: The menu leads to the home page
+      selector: 'nav li a[href]'
+      name: { matches: '^\s*home\s*$' }
+      resolves: true
+      concepts: [navigation-menus]
+    - id: menu-routes
+      says: The menu leads to the routes page
+      selector: 'nav li a[href]'
+      name: { matches: '^\s*routes\s*$' }
+      attr: { name: href, matches: 'routes\.html$' }
+      resolves: true
+      concepts: [navigation-menus]
+    - id: no-self-link
+      says: The menu has no working link to this page, unless it is marked as the current page
+      selector: 'nav a[href*="timetables" i]:not([aria-current="page"]), nav a[href=""]:not([aria-current="page"]), nav a[href="#"]:not([aria-current="page"])'
+      count: { max: 0 }
+      concepts: [navigation-menus]
+    - id: links-resolve
+      says: Every link within the site leads to a file that exists
+      selector: 'a[href]:not([href*="://"])'
+      count: { min: 4 }
+      every: true
+      resolves: true
+      concepts: [relative-paths]
+fixtures:
+  pass:
+    - name: the current page kept in the menu with aria-current, the new tab dropped, "2MB" without a space
+      edits:
+        - find: <li><a href="index.html">Home</a></li>
+          replace: |-
+            <li><a href="index.html">Home</a></li>
+                      <li><a href="timetables.html" aria-current="page">Timetables</a></li>
+        - find: Download the winter timetable (PDF, 2 MB)
+          replace: Winter timetable (PDF, 2MB, download)
+        - find: <a href="https://harbourwatch.example/warnings" target="_blank">Harbour Watch storm warnings (opens in a new tab)</a>
+          replace: <a href="https://harbourwatch.example/warnings">Harbour Watch storm warnings</a>
+    - name: an icon's alt as the new-tab cue, a save name on the download, the logo named for the Guild
+      edits:
+        - find: alt="The Ferrymen's Guild home page"
+          replace: alt="Ferrymen's Guild"
+        - find: <a href="downloads/winter-timetable.pdf" download>
+          replace: <a href="downloads/winter-timetable.pdf" download="ferrymen-winter-timetable.pdf">
+        - find: Harbour Watch storm warnings (opens in a new tab)</a>
+          replace: Harbour Watch storm warnings <img src="images/new-tab.svg" alt="(opens in a new tab)"></a>
+    - name: the current page as plain text in the menu, root-relative paths, an ordered menu
+      edits:
+        - find: |-
+            <ul>
+                      <li><a href="index.html">Home</a></li>
+                      <li><a href="routes.html">Routes</a></li>
+                    </ul>
+          replace: |-
+            <ol>
+                      <li><a href="/">Home</a></li>
+                      <li>Timetables</li>
+                      <li><a href="/routes.html">Routes</a></li>
+                    </ol>
+        - find: <a href="index.html"><img
+          replace: <a href="/"><img
+        - find: <a href="routes.html">ferry routes</a> page
+          replace: <a href="/routes.html">ferry routes page</a>
+  fail:
+    - name: the download link still reading "here"
+      edits: [{ find: <a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>., replace: 'Download the winter timetable (PDF, 2 MB) <a href="downloads/winter-timetable.pdf" download>here</a>.' }]
+      fails: [no-vague-text, download-signposted]
+      because: '"Here" means nothing in a list of links; the words that say where it goes belong inside the link.'
+    - name: the logo's alt describing the picture
+      edits: [{ find: alt="The Ferrymen's Guild home page", replace: alt="Guild logo" }]
+      fails: [logo-alt]
+      because: The image is all the link has, so its alt must say where the link goes, not what the picture is.
+    - name: a new tab with no warning
+      edits: [{ find: Harbour Watch storm warnings (opens in a new tab), replace: Harbour Watch storm warnings }]
+      fails: [new-tab]
+      because: A link that opens a new tab should say so, or readers lose their way back.
+    - name: the current page left as a working link
+      edits:
+        - find: <li><a href="index.html">Home</a></li>
+          replace: |-
+            <li><a href="index.html">Home</a></li>
+                      <li><a href="timetables.html">Timetables</a></li>
+      fails: [no-self-link]
+      because: A menu link to the page you are on goes nowhere new; remove it, or mark it with aria-current="page".
+    - name: the download with no warning of its size
+      edits: [{ find: Download the winter timetable (PDF, 2 MB), replace: Download the winter timetable }]
+      fails: [download-signposted]
+      because: Readers on slow connections need to know before they download a file of several megabytes.
+    - name: the address as the routes link's text
+      edits: [{ find: <a href="routes.html">ferry routes</a> page, replace: <a href="routes.html">ferrymensguild.example/routes</a> }]
+      fails: [no-url-text]
+      because: A URL read out by a screen reader is ugly and says little.
+    - name: '"link to" in the warnings link'
+      edits: [{ find: Harbour Watch storm warnings (opens in a new tab), replace: link to the Harbour Watch storm warnings (opens in a new tab) }]
+      fails: [no-word-link]
+      because: Screen readers already announce a link, so the word "link" is only noise.
+    - name: the menu as links split by bars
+      edits:
+        - find: |-
+            <ul>
+                      <li><a href="index.html">Home</a></li>
+                      <li><a href="routes.html">Routes</a></li>
+                    </ul>
+          replace: <a href="index.html">Home</a> | <a href="routes.html">Routes</a>
+      fails: [menu-list, menu-no-loose-links, menu-home, menu-routes]
+      because: A navigation menu is a list of links.

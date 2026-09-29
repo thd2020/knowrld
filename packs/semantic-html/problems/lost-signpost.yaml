@@ -1,0 +1,194 @@
+id: lost-signpost
+statement: |
+  The Lost Signpost points every traveller the wrong way. This page is `projects/index.html` on the Lanternworks site, and every link on it is broken. Here is the site's folder tree:
+
+  ```
+  (site root)
+  ├── index.html            the home page
+  ├── contacts.html         has a heading with id="mailing-address"
+  ├── pdfs/
+  │   └── project-brief.pdf
+  └── projects/
+      ├── index.html        this page
+      └── lamp-designs.html
+  ```
+
+  Mend each signpost:
+
+  - **Lanternworks home page** leads to the site's home page;
+  - **project brief** leads to the PDF;
+  - **lamp design sketches** leads to the page next to this one;
+  - **Brightforge** leads to the partner's own site, `www.brightforge.example`, which is not part of Lanternworks;
+  - **project timeline** jumps to the Timeline heading further down this page. Two headings here share one id, and an id must be unique in a document;
+  - **mailing address** jumps to the mailing address on the contacts page;
+  - **email the lamplighter** opens a new email to `lamplighter@lanternworks.example`.
+path: /projects/index.html
+files:
+  - path: /index.html
+  - path: /contacts.html
+    ids: [mailing-address]
+  - path: /pdfs/project-brief.pdf
+  - path: /projects/lamp-designs.html
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Projects – Lanternworks</title>
+      </head>
+      <body>
+        <h1>Lantern projects</h1>
+        <p>Back to the <a href="index.html">Lanternworks home page</a>.</p>
+        <p>Our current project is the harbour beacon. Read the <a href="pdfs/project-brief.pdf">project brief</a>, or see the <a href="/lamp-designs.html">lamp design sketches</a>.</p>
+        <p>We build the beacon with our partners at <a href="www.brightforge.example">Brightforge</a>.</p>
+        <p>Jump to the <a href="#timeline">project timeline</a> below.</p>
+        <p>To send us a letter, use our <a href="contacts.html#mailing-address">mailing address</a>. To write by email, <a href="lamplighter@lanternworks.example">email the lamplighter</a>.</p>
+        <h2 id="budget">Budget</h2>
+        <p>The beacon costs four hundred crowns, shared between Lanternworks and Brightforge.</p>
+        <h2 id="budget">Timeline</h2>
+        <p>The lens is cast in spring, the tower is raised in summer, and the beacon is lit at midwinter.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Projects – Lanternworks</title>
+      </head>
+      <body>
+        <h1>Lantern projects</h1>
+        <p>Back to the <a href="../index.html">Lanternworks home page</a>.</p>
+        <p>Our current project is the harbour beacon. Read the <a href="../pdfs/project-brief.pdf">project brief</a>, or see the <a href="lamp-designs.html">lamp design sketches</a>.</p>
+        <p>We build the beacon with our partners at <a href="https://www.brightforge.example">Brightforge</a>.</p>
+        <p>Jump to the <a href="#timeline">project timeline</a> below.</p>
+        <p>To send us a letter, use our <a href="../contacts.html#mailing-address">mailing address</a>. To write by email, <a href="mailto:lamplighter@lanternworks.example">email the lamplighter</a>.</p>
+        <h2 id="budget">Budget</h2>
+        <p>The beacon costs four hundred crowns, shared between Lanternworks and Brightforge.</p>
+        <h2 id="timeline">Timeline</h2>
+        <p>The lens is cast in spring, the tower is raised in summer, and the beacon is lit at midwinter.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: home
+      says: The home page link leads to the site's home page
+      selector: a
+      text: { matches: 'home page' }
+      attr: { name: href, matches: '^(\.\./|/)(index\.html)?$' }
+      resolves: true
+      concepts: [relative-paths]
+    - id: brief
+      says: The project brief link leads to the PDF in the pdfs folder
+      selector: a
+      text: { matches: 'project brief' }
+      attr: { name: href, matches: 'pdfs/project-brief\.pdf$' }
+      resolves: true
+      concepts: [relative-paths]
+    - id: designs
+      says: The design sketches link leads to the page in this folder
+      selector: a
+      text: { matches: 'lamp design sketches' }
+      attr: { name: href, matches: 'lamp-designs\.html$' }
+      resolves: true
+      concepts: [relative-paths]
+    - id: partner
+      says: The partner link is a full URL to Brightforge's own site
+      selector: a
+      text: { matches: 'Brightforge' }
+      attr: { name: href, matches: '^https?://(www\.)?brightforge\.example(/.*)?$' }
+      concepts: [absolute-urls]
+    - id: timeline
+      says: The timeline link jumps to the Timeline heading on this page
+      selector: a
+      text: { matches: 'project timeline' }
+      attr: { name: href, matches: '^#(?!budget$)' }
+      resolves: { to: ':is(h2, section)' }
+      concepts: [document-fragments]
+    - id: timeline-target
+      says: The Timeline heading, or its section, has an id of its own
+      selector: 'h2:not([id="budget"])[id], section[id]:has(> h2)'
+      count: { min: 1 }
+      concepts: [document-fragments]
+    - id: mailing
+      says: The mailing address link jumps to the heading on the contacts page
+      selector: a
+      text: { matches: 'mailing address' }
+      attr: { name: href, matches: 'contacts\.html#mailing-address$' }
+      resolves: true
+      concepts: [document-fragments, relative-paths]
+    - id: email
+      says: The email link opens a new email to the lamplighter
+      selector: 'a[href^="mailto:" i]'
+      attr: { name: href, matches: '^mailto:lamplighter@lanternworks\.example(\?.*)?$' }
+      text: { matches: 'email the lamplighter' }
+      concepts: [email-links]
+    - id: unique-ids
+      says: No id is used twice on the page
+      selector: '[id]'
+      count: { min: 0 }
+      unique: id
+      concepts: [document-fragments]
+    - id: all-internal-work
+      says: Every link within the site leads to a file that exists
+      selector: 'a[href]:not([href^="mailto:" i]):not([href*="://"])'
+      count: { min: 5 }
+      every: true
+      resolves: true
+      concepts: [relative-paths, information-architecture]
+fixtures:
+  pass:
+    - name: root-relative paths everywhere
+      edits:
+        - { find: href="../index.html", replace: href="/" }
+        - { find: href="../pdfs/project-brief.pdf", replace: href="/pdfs/project-brief.pdf" }
+        - { find: href="lamp-designs.html", replace: href="/projects/lamp-designs.html" }
+        - { find: href="../contacts.html#mailing-address", replace: href="/contacts.html#mailing-address" }
+    - name: a section as the fragment target, a mailto subject, a dot-slash path
+      edits:
+        - find: |-
+            <h2 id="timeline">Timeline</h2>
+                <p>The lens is cast in spring, the tower is raised in summer, and the beacon is lit at midwinter.</p>
+          replace: |-
+            <section id="project-timeline">
+                  <h2>Timeline</h2>
+                  <p>The lens is cast in spring, the tower is raised in summer, and the beacon is lit at midwinter.</p>
+                </section>
+        - { find: href="#timeline", replace: href="#project-timeline" }
+        - { find: href="mailto:lamplighter@lanternworks.example", replace: href="mailto:lamplighter@lanternworks.example?subject=Harbour%20beacon" }
+        - { find: href="lamp-designs.html", replace: href="./lamp-designs.html" }
+        - { find: href="../index.html", replace: href="../" }
+    - name: the budget heading renamed, a trailing slash on the partner's URL
+      edits:
+        - { find: <h2 id="budget">Budget</h2>, replace: <h2 id="costs">Budget</h2> }
+        - { find: href="https://www.brightforge.example", replace: href="https://www.brightforge.example/" }
+        - { find: href="#timeline", replace: href="#timeline-heading" }
+        - { find: <h2 id="timeline">Timeline</h2>, replace: <h2 id="timeline-heading">Timeline</h2> }
+  fail:
+    - name: the brief linked as if the pdfs folder were inside projects
+      edits: [{ find: href="../pdfs/project-brief.pdf", replace: href="pdfs/project-brief.pdf" }]
+      fails: [brief, all-internal-work]
+      because: From projects/index.html, pdfs/… looks for a pdfs folder inside projects; you have to go up a level first.
+    - name: the home link pointing at this page's own index.html
+      edits: [{ find: href="../index.html", replace: href="index.html" }]
+      fails: [home]
+      because: index.html next to this page is this page; the home page is one folder up.
+    - name: the partner linked without a scheme
+      edits: [{ find: href="https://www.brightforge.example", replace: href="www.brightforge.example" }]
+      fails: [partner, all-internal-work]
+      because: Without https:// the browser treats it as a file on this site.
+    - name: the duplicate id left in place
+      edits: [{ find: <h2 id="timeline">Timeline</h2>, replace: <h2 id="budget">Timeline</h2> }]
+      fails: [unique-ids, timeline, timeline-target]
+      because: An id must be unique; the fragment #timeline now leads nowhere.
+    - name: the email link as a plain path
+      edits: [{ find: href="mailto:lamplighter@lanternworks.example", replace: href="lamplighter@lanternworks.example" }]
+      fails: [email, all-internal-work]
+      because: 'Without mailto: the browser looks for a file of that name on the site.'
+    - name: the mailing address fragment without its page
+      edits: [{ find: href="../contacts.html#mailing-address", replace: href="#mailing-address" }]
+      fails: [mailing, all-internal-work]
+      because: The mailing address heading is on the contacts page, not on this one.

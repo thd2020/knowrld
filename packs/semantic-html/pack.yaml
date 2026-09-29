@@ -1,7 +1,7 @@
 format: 0
 id: semantic-html
 title: Semantic HTML
-version: 0.1.0
+version: 0.2.0
 summary: >-
   The first region of the front-end world at full depth: HTML syntax, the document head,
   text semantics, page structure, links, debugging, and HTML as the basis of accessibility.

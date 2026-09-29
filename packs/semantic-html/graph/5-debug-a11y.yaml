@@ -1,0 +1,193 @@
+# Road, part 5: debugging (Learn: Debugging HTML) and accessible HTML (Learn: HTML, a good basis for accessibility).
+nodes:
+  - id: permissive-parsing
+    kind: concept
+    title: Permissive parsing and the DOM inspector
+    region: semantic-html
+    tier: road
+    requires: [nesting-elements, attributes]
+    says: The browser never refuses your page. It quietly rewrites broken markup into something valid, and not always what you meant. Open the DOM inspector to see what it really built.
+    cites:
+      - debugging-html#error-types
+      - debugging-html#permissive
+      - debugging-html#write-correct
+      - debugging-html#dom-inspector
+    check:
+      - prompt: Why does HTML not suffer from syntax errors the way Rust does?
+        choices:
+          - Browsers parse it permissively and still display the page, fixing invalid markup by built-in rules
+          - HTML has no syntax
+          - Editors refuse to save invalid HTML
+        answer: 0
+        explain: Browsers have built-in rules for interpreting badly-formed markup, so the page still displays.
+      - prompt: Where do you see the HTML the browser actually built from your source?
+        choices: [The DOM inspector in the devtools, The page source, The validator]
+        answer: 0
+        explain: The DOM inspector shows the currently-rendered HTML DOM, including the browser's fixes.
+
+  - id: html-validator
+    kind: concept
+    title: The HTML validator
+    region: semantic-html
+    tier: road
+    requires: [permissive-parsing]
+    says: For a big page, ask the W3C validator. Each message comes with a line and a column. Fix a few, validate again; one mistake often causes many messages.
+    cites:
+      - debugging-html#validator
+      - debugging-html#line-numbers
+      - debugging-html#fix-a-few
+    check:
+      - prompt: The validator lists twelve errors. What is a good strategy?
+        choices:
+          - Fix a few at a time and revalidate, since one problem can cause several errors
+          - Fix them all from the bottom up before revalidating
+          - Ignore them if the page looks right
+        answer: 0
+        explain: Several errors are often caused by a single problem, so fixing an early one can clear others.
+      - prompt: What helps you locate each reported error?
+        choices: [A line and column number, The element's CSS, The page title]
+        answer: 0
+        explain: Each message comes with a line and column number.
+
+  - id: semantic-html-accessibility
+    kind: concept
+    title: Semantic HTML is accessible HTML
+    region: semantic-html
+    tier: road
+    requires: [semantics]
+    says: Use the right element for the right job and the browser hands you accessibility for free. It costs no more time, and it helps search, phones and developers too.
+    cites:
+      - accessible-html#posh
+      - accessible-html#button-keyboard
+      - accessible-html#other-benefits
+      - accessible-html#not-all-or-nothing
+    check:
+      - prompt: What does a real <button> give you that a styled <div> does not?
+        choices:
+          - Built-in keyboard accessibility, with Tab to reach it and Space or Enter to activate it
+          - A different colour
+          - Nothing
+        answer: 0
+        explain: HTML buttons have built-in keyboard accessibility.
+      - prompt: Why is semantic HTML good for SEO?
+        choices:
+          - Search engines give more importance to keywords inside headings, links and similar elements than inside non-semantic divs
+          - Search engines only index semantic pages
+          - It is not; SEO depends only on the title
+        answer: 0
+        explain: Keywords in headings and links carry more weight than keywords in non-semantic divs.
+
+  - id: screen-reader-structure
+    kind: concept
+    title: How screen readers move through text
+    region: semantic-html
+    tier: road
+    requires: [semantic-html-accessibility, lists]
+    says: A screen reader user can list every heading and leap between them like a table of contents. Build your text from line breaks and bold, and they get one giant block.
+    cites:
+      - accessible-html#text-structure
+      - accessible-html#screen-reader-navigation
+      - accessible-html#bad-semantics
+    check:
+      - prompt: What can many screen readers do with the headings of a page?
+        choices:
+          - Bring up a list of all headings to use as a table of contents
+          - Nothing; headings are read like paragraphs
+          - Only read the first heading
+        answer: 0
+        explain: Screen readers can jump between headings and list all of them as a table of contents.
+      - prompt: A page built from line breaks and styled text has no heading elements. What does a screen reader user get?
+        choices:
+          - The same experience
+          - No signposts; the page is read out as a single giant block
+          - An automatic outline
+        answer: 1
+        explain: Without semantic structure there is nothing to use as signposts, so the page is read out all at once.
+
+  - id: clear-language
+    kind: concept
+    title: Clear language
+    region: semantic-html
+    tier: road
+    requires: [semantic-html-accessibility, abbreviations]
+    says: Plain words help everyone, most of all people reading in a second language or with cognitive disabilities. Write "5 to 7", "January", and spell out acronyms.
+    cites:
+      - accessible-html#clear-language
+      - accessible-html#language-tips
+    check:
+      - prompt: Which is clearer for a screen reader?
+        choices: ["5–7 Jan", "5 to 7 January"]
+        answer: 1
+        explain: Avoid dashes where you can and expand abbreviations such as Jan.
+
+  - id: source-order
+    kind: concept
+    title: Sections and source order
+    region: semantic-html
+    tier: road
+    requires: [screen-reader-structure, sectioning-elements]
+    says: nav, article, footer and their kin give a screen reader extra clues. And the order in the source is the order it is read. Get that right first; CSS can move things later.
+    cites:
+      - accessible-html#sectioning
+      - accessible-html#source-order
+    check:
+      - prompt: Why should content make sense in source order?
+        choices:
+          - Screen reader users hear the content in source order
+          - Browsers sort elements alphabetically
+          - CSS cannot move elements
+        answer: 0
+        explain: You can place content with CSS later, but the source order is what screen reader users get read out.
+
+  - id: native-controls
+    kind: concept
+    title: Native controls and the keyboard
+    region: semantic-html
+    tier: road
+    requires: [semantic-html-accessibility]
+    says: Buttons, links and form controls work with the keyboard out of the box. A div dressed as a button needs tabindex, a role and script to fake it. Use the real thing.
+    cites:
+      - accessible-html#keyboard-default
+      - accessible-html#div-buttons
+      - accessible-html#tabindex
+      - accessible-html#right-element
+    check:
+      - prompt: What does tabindex="0" do?
+        choices:
+          - Lets an element that is not normally tabbable receive focus with Tab
+          - Removes the element from the tab order
+          - Makes it the first element in the tab order
+        answer: 0
+        explain: tabindex="0" makes elements that are not normally tabbable tabbable. tabindex="-1" allows only programmatic focus.
+      - prompt: Why are positive tabindex values nearly always a bad idea?
+        choices:
+          - They set a custom tab order that can cause major confusion
+          - Browsers ignore them
+          - They disable the element
+        answer: 0
+        explain: A custom tab order is nearly always confusing; use it only if you really need to.
+
+  - id: accessible-links
+    kind: concept
+    title: Links that behave like links
+    region: semantic-html
+    tier: road
+    requires: [native-controls, link-text, document-fragments]
+    says: An anchor with href="#" and a click handler is a lie to assistive technology. Use a button for actions, and a skip link at the top of the body to jump past what repeats.
+    cites:
+      - accessible-html#fake-button-links
+      - accessible-html#use-button
+      - accessible-html#skip-link
+      - accessible-html#skip-link-who
+    check:
+      - prompt: A control runs JavaScript and goes nowhere. What should it be?
+        choices: ['<a href="#">', "<button>", '<a href="javascript:void(0)">']
+        answer: 1
+        explain: Use a button for actions. An anchor should only be used for navigation to a proper URL.
+      - prompt: Where does a skip link go, and where does it point?
+        choices:
+          - As close as possible to the opening body tag, pointing to the start of the main content
+          - In the footer, pointing to the top
+          - In the head, pointing to the title
+        answer: 0
+        explain: A skip link sits near the start of body and links to the beginning of the main content, bypassing repeated headers and navigation.

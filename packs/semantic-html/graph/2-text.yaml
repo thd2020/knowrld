@@ -1,0 +1,315 @@
+# Road, part 2: text semantics (Learn: Headings and paragraphs, Emphasis and importance, Lists, Advanced text features).
+nodes:
+  - id: headings
+    kind: concept
+    title: Headings and paragraphs
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: Six ranks of heading give a page its outline, and every paragraph gets its own p. One h1 at the top, and never a rank skipped on the way down.
+    cites:
+      - headings-and-paragraphs#paragraph
+      - headings-and-paragraphs#six-levels
+      - headings-and-paragraphs#hierarchy-rules
+    check:
+      - prompt: How many <h1> elements should a page preferably have?
+        choices: ["One", "One per section", "As many as needed for large text"]
+        answer: 0
+        explain: Preferably a single h1 per page, the top level heading; all others sit below it.
+      - prompt: A page uses <h3> for subheadings and <h2> for sub-subheadings. What is wrong?
+        choices:
+          - Nothing, any order works
+          - The levels are in the wrong order in the hierarchy
+          - h3 cannot appear before h2 in the file
+        answer: 1
+        explain: Headings must follow the hierarchy. Using h3 above h2 does not make sense and leads to weird results.
+      - prompt: How many heading levels should a page aim to use at most, unless necessary?
+        choices: ["Two", "Three", "Six"]
+        answer: 1
+        explain: MDN advises aiming for no more than three levels per page; deeper hierarchies become unwieldy.
+
+  - id: why-structure
+    kind: concept
+    title: Why structure matters
+    region: semantic-html
+    tier: road
+    requires: [headings]
+    says: Without structure a page is one grey wall. Readers skim headings, search engines weigh them, screen readers list them, and CSS needs elements to grip.
+    cites:
+      - headings-and-paragraphs#no-structure
+      - headings-and-paragraphs#why-structure
+    check:
+      - prompt: How do screen readers help their users find information quickly?
+        choices:
+          - By reading out the headings as an outline of the document
+          - By skipping every paragraph
+          - By reading the title element only
+        answer: 0
+        explain: Screen readers can read out the headings as an outline. Without headings, users must listen to the whole document.
+      - prompt: How do headings affect search?
+        choices:
+          - Search engines ignore them
+          - Search engines treat heading contents as important keywords for ranking
+          - Only the title element counts for search
+        answer: 1
+        explain: Search engines consider the contents of headings as important keywords. Without headings a page performs poorly for SEO.
+
+  - id: semantics
+    kind: concept
+    title: Semantics, meaning before looks
+    region: semantic-html
+    tier: road
+    requires: [why-structure]
+    says: A red light means stop because we agreed it does. An h1 means "the top heading" because HTML says so. Style can make a span look like one; it will never mean one.
+    cites:
+      - headings-and-paragraphs#semantics-everyday
+      - headings-and-paragraphs#h1-semantic
+      - headings-and-paragraphs#span-no-semantics
+    check:
+      - prompt: A <span> styled with CSS to look like a big heading. Does it get the benefits of an <h1>?
+        choices:
+          - Yes, it looks the same
+          - No, a span has no semantics, so search engines and screen readers get nothing from it
+          - Only in some browsers
+        answer: 1
+        explain: The span has no semantic value, so it gets none of the extra benefits. Use the relevant element for the job.
+      - prompt: What gives the h1 element its meaning?
+        choices:
+          - Its large default font size
+          - The role HTML gives it, "a top level heading on your page"
+          - The CSS applied to it
+        answer: 1
+        explain: The h1 is a semantic element; its role or meaning is a top level heading. The default size is only presentation.
+
+  - id: emphasis-and-importance
+    kind: concept
+    title: Emphasis and importance
+    region: semantic-html
+    tier: road
+    requires: [semantics, nesting-elements]
+    says: Stress a word and the sentence changes, so wrap it in em. Mark a warning as weighty with strong. Italic and bold are only how browsers dress them.
+    cites:
+      - emphasis-and-importance#em
+      - emphasis-and-importance#strong
+      - emphasis-and-importance#nest-strong-em
+    check:
+      - prompt: '"This liquid is highly toxic." Which element marks up "highly toxic"?'
+        choices: ["<em>", "<strong>", "<b>"]
+        answer: 1
+        explain: strong marks strong importance, like a warning. em marks stress that changes the meaning of a sentence.
+      - prompt: You only want italic styling, with no emphasis. Should you use <em>?
+        choices:
+          - Yes, that is what it is for
+          - No; use a span and some CSS, or perhaps an <i>
+          - Yes, but only inside a paragraph
+        answer: 1
+        explain: Browsers style em as italic, but you should not use it purely to get italics.
+
+  - id: presentational-elements
+    kind: concept
+    title: b, i and u, redefined
+    region: semantic-html
+    tier: road
+    requires: [emphasis-and-importance]
+    says: Bold, italic and underline were once mere paint. HTML5 gave them narrow meanings. Reach for them only when no better element fits, and there usually is one.
+    cites:
+      - emphasis-and-importance#presentational
+      - emphasis-and-importance#best-rule
+      - emphasis-and-importance#i-b-u-meanings
+      - emphasis-and-importance#underline-links
+    check:
+      - prompt: Which is a fitting use of <i>?
+        choices:
+          - A foreign word or a taxonomic name
+          - A warning that must not be missed
+          - A heading
+        answer: 0
+        explain: i conveys a meaning traditionally conveyed by italic, such as foreign words, taxonomic designations or technical terms.
+      - prompt: Why is underlining risky on the web?
+        choices:
+          - Screen readers cannot read underlined text
+          - People strongly associate underlining with hyperlinks
+          - Underline is not supported by CSS
+        answer: 1
+        explain: Users read underlines as links, so it is best to underline only links.
+
+  - id: lists
+    kind: concept
+    title: Unordered and ordered lists
+    region: semantic-html
+    tier: road
+    requires: [nesting-elements]
+    says: If the order does not matter, ul. If it does, ol. Either way each item stands in its own li, and a list may hold another list inside an item.
+    cites:
+      - lists#unordered
+      - lists#ul-li
+      - lists#ordered
+      - lists#nesting
+    check:
+      - prompt: Which list fits a set of directions?
+        choices: ["<ul>", "<ol>", "A <p> with <br> between the lines"]
+        answer: 1
+        explain: Ordered lists are for items whose order matters, such as directions.
+      - prompt: What wraps each item of a <ul>?
+        choices: ["<li>", "<item>", "<dt>"]
+        answer: 0
+        explain: The whole list goes in ul and each item in an li element.
+      - prompt: Can a list sit inside another list?
+        choices: ["No", "Yes, it is perfectly OK to nest one list inside another", "Only ordered lists"]
+        answer: 1
+        explain: You can nest lists, for example sub-bullets inside a list item.
+
+  - id: description-lists
+    kind: concept
+    title: Description lists
+    region: semantic-html
+    tier: road
+    requires: [lists]
+    says: Terms and what they mean, questions and their answers. A dl holds them; dt names each term and dd describes it, as many times as it needs.
+    cites:
+      - lists#description-purpose
+      - lists#dl-dt-dd
+      - lists#multiple-descriptions
+    check:
+      - prompt: Which elements mark up a glossary of terms and definitions?
+        choices: ["<ul> and <li>", "<dl>, <dt> and <dd>", "<ol> and <li>"]
+        answer: 1
+        explain: Description lists wrap the list in dl, each term in dt and each description in dd.
+      - prompt: Can one term have two descriptions?
+        choices: ["No, one dd per dt", "Yes, a single term with multiple descriptions is permitted", "Only in an ordered list"]
+        answer: 1
+        explain: It is permitted to have a single term with multiple descriptions.
+
+  - id: quotations
+    kind: concept
+    title: Quotations and citations
+    region: semantic-html
+    tier: road
+    requires: [semantics, attributes]
+    says: A quoted block goes in blockquote, a quoted phrase in q, each with a cite attribute pointing at the source. The name of the work itself goes in cite.
+    cites:
+      - advanced-text-features#blockquote
+      - advanced-text-features#inline-q
+      - advanced-text-features#cite-attribute-hidden
+      - advanced-text-features#cite-element
+    check:
+      - prompt: Does the browser show the URL in a blockquote's cite attribute?
+        choices:
+          - Yes, under the quote
+          - No; to show the source, put it in the text with a link or similar
+          - Only screen readers announce it
+        answer: 1
+        explain: Browsers and screen readers do not really do much with cite. Make the source available in the text.
+      - prompt: What does the <cite> element contain?
+        choices:
+          - The URL of the source
+          - The title of the resource being quoted, such as the name of a book
+          - The quoted words
+        answer: 1
+        explain: cite is meant to contain the title of the resource being quoted.
+      - prompt: Which element marks a short quotation within a sentence?
+        choices: ["<blockquote>", "<q>", "<cite>"]
+        answer: 1
+        explain: Inline quotations use q; block-level quoted content uses blockquote.
+
+  - id: abbreviations
+    kind: concept
+    title: Abbreviations
+    region: semantic-html
+    tier: road
+    requires: [semantics, attributes]
+    says: Spell out an abbreviation in plain words the first time, and wrap it in abbr. Where spelling it out makes no sense, put the expansion in title.
+    cites:
+      - advanced-text-features#abbr
+      - advanced-text-features#abbr-title
+      - advanced-text-features#acronym-obsolete
+    check:
+      - prompt: Which element marks up an acronym such as NASA?
+        choices: ["<abbr>", "<acronym>", "<dfn>"]
+        answer: 0
+        explain: acronym was removed from the HTML spec in favor of abbr for both abbreviations and acronyms.
+      - prompt: When is the title attribute the right place for the expansion?
+        choices:
+          - Always
+          - When providing the expansion in the text makes little sense and the term is fairly short
+          - Never; use a footnote
+        answer: 1
+        explain: Expand in plain text on first use; use title when an in-text expansion makes little sense.
+
+  - id: contact-address
+    kind: concept
+    title: Contact details
+    region: semantic-html
+    tier: road
+    requires: [semantics]
+    says: The address element holds contact details, and only the details for its page or its article. It is not for any street address you happen to mention.
+    cites:
+      - advanced-text-features#address
+      - advanced-text-features#address-scope
+    check:
+      - prompt: Which is a correct use of <address>?
+        choices:
+          - The site's contact information in its footer
+          - A list of shops unrelated to the page
+          - Any postal address in a story
+        answer: 0
+        explain: address gives contact information for the document or nearest article, not unrelated addresses.
+
+  - id: superscript-subscript
+    kind: concept
+    title: Superscript and subscript
+    region: semantic-html
+    tier: road
+    requires: [semantics]
+    says: In a date, a chemical formula or an equation, a raised or lowered character changes the meaning. sup lifts it and sub lowers it.
+    cites:
+      - advanced-text-features#sup-sub
+      - el-sup#summary
+      - el-sub#summary
+    check:
+      - prompt: How do you write the 2 in H2O correctly?
+        choices: ["<sup>2</sup>", "<sub>2</sub>", "<small>2</small>"]
+        answer: 1
+        explain: Chemical formulae use subscript, and sub handles it.
+
+  - id: computer-code
+    kind: concept
+    title: Representing computer code
+    region: semantic-html
+    tier: road
+    requires: [semantics, whitespace-and-comments]
+    says: Code in code, a variable in var, what the user types in kbd, what the program prints in samp. Wrap it in pre when its spacing must survive.
+    cites:
+      - advanced-text-features#code-elements
+      - el-code#summary
+    check:
+      - prompt: Which element marks up the output of a program?
+        choices: ["<code>", "<kbd>", "<samp>"]
+        answer: 2
+        explain: samp is for the output of a computer program; kbd is for input.
+      - prompt: Why wrap a code block in <pre>?
+        choices:
+          - To make it monospace only
+          - To keep its whitespace exactly as written
+          - To run it
+        answer: 1
+        explain: Browsers ignore excess whitespace, but inside pre it is rendered identically to how it appears in the editor.
+
+  - id: times-and-dates
+    kind: concept
+    title: Times and dates
+    region: semantic-html
+    tier: road
+    requires: [semantics, attributes]
+    says: People write the same day a dozen ways. The time element carries one unambiguous, machine-readable date beside whatever the reader sees.
+    cites:
+      - advanced-text-features#time
+      - advanced-text-features#time-why
+    check:
+      - prompt: What problem does <time> solve?
+        choices:
+          - It formats dates for the reader
+          - It attaches an unambiguous machine-readable date, so software can, for example, add events to a calendar
+          - It shows a clock
+        answer: 1
+        explain: Human date formats vary and computers cannot easily recognize them; time adds a machine-readable form.

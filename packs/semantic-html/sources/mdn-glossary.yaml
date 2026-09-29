@@ -1,0 +1,102 @@
+# Excerpts from the MDN Glossary (the region's country), cut verbatim at mdn/content commit dd70ed064388b0fac4338321f727c8840a508b64.
+# Prose by Mozilla Contributors, licensed CC BY-SA 2.5 or any later version:
+# https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license
+# Text keeps MDN's KumaScript macros (e.g. {{htmlelement("p")}}) exactly as in the source file.
+# Line numbers are 1-based and inclusive, counted in the raw file at that commit.
+# Re-check against upstream with: node packages/pack/src/cli.ts verify packs/semantic-html
+sources:
+  - id: glossary-semantics
+    title: Semantics
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Semantics
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/glossary/semantics/index.md
+    excerpts:
+      - id: definition
+        text: In programming, **Semantics** refers to the _meaning_ of a piece of code — for example "what effect does running that line of JavaScript have?", or "what purpose or role does that HTML element have" (rather than "what does it look like?".)
+        verbatim: true
+        lines:
+          - 8
+          - 8
+      - id: data-not-looks
+        text: HTML should be coded to represent the _data_ that will be populated and not based on its default presentation styling. Presentation (how it should look), is the sole responsibility of [CSS](/en-US/docs/Web/CSS).
+        verbatim: true
+        lines:
+          - 36
+          - 36
+      - id: benefits
+        text: |-
+          - Search engines will consider its contents as important keywords to influence the page's search rankings (see {{glossary("SEO")}})
+          - Screen readers can use it as a signpost to help visually impaired users navigate a page
+          - Finding blocks of meaningful code is significantly easier than searching through endless `div`s with or without semantic or namespaced classes
+          - Suggests to the developer the type of data that will be populated
+          - Semantic naming mirrors proper custom element/component naming
+        verbatim: true
+        lines:
+          - 40
+          - 44
+      - id: ask-yourself
+        text: When approaching which markup to use, ask yourself, "What element(s) best describe/represent the data that I'm going to populate?" For example, is it a list of data?; ordered, unordered?; is it an article with sections and an aside of related information?; does it list out definitions?; is it a figure or image that needs a caption?; should it have a header and a footer in addition to the global site-wide header and footer?; etc.
+        verbatim: true
+        lines:
+          - 46
+          - 46
+  - id: glossary-accessibility-tree
+    title: Accessibility tree
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Accessibility_tree
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/glossary/accessibility_tree/index.md
+    excerpts:
+      - id: definition
+        text: The **accessibility tree** contains {{Glossary("accessibility")}}-related information for most HTML elements.
+        verbatim: true
+        lines:
+          - 8
+          - 8
+      - id: from-dom
+        text: Browsers convert markup into an internal representation called the _[DOM tree](/en-US/docs/Web/API/Document_Object_Model)_. The DOM tree contains objects representing all the markup's elements, attributes, and text nodes. Browsers then create an accessibility tree based on the DOM tree, which is used by platform-specific Accessibility APIs to provide a representation that can be understood by assistive technologies, such as screen readers.
+        verbatim: true
+        lines:
+          - 10
+          - 10
+      - id: role
+        text: |-
+          - [**role**](/en-US/docs/Web/Accessibility/ARIA/Reference/Roles)
+            - : What kind of thing is it? For example, is it a button, a nav bar, or a list of items?
+        verbatim: true
+        lines:
+          - 18
+          - 19
+      - id: name
+        text: |-
+          - **name**
+            - : How can we refer to this thing? For instance, a link with the text "Read more" will have "Read more" as its name (find more on how names are computed in the [Accessible Name and Description Computation spec](https://w3c.github.io/accname/)).
+        verbatim: true
+        lines:
+          - 14
+          - 15
+  - id: glossary-seo
+    title: SEO
+    url: https://developer.mozilla.org/en-US/docs/Glossary/SEO
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/glossary/seo/index.md
+    excerpts:
+      - id: definition
+        text: "**SEO** (Search Engine Optimization) is the process of making a website more visible in search results, also termed improving search rankings."
+        verbatim: true
+        lines:
+          - 8
+          - 8
+      - id: technical
+        text: |-
+          - Technical
+            - : Tag the content using semantic {{Glossary("HTML")}}. When exploring the website, crawlers should only find the content you want indexed.
+        verbatim: true
+        lines:
+          - 16
+          - 17

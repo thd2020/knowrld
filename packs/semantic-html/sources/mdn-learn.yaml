@@ -1,0 +1,1051 @@
+# Excerpts from MDN Learn web development (the region's main road and its two challenges), cut verbatim at mdn/content commit dd70ed064388b0fac4338321f727c8840a508b64.
+# Prose by Mozilla Contributors, licensed CC BY-SA 2.5 or any later version:
+# https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license
+# Text keeps MDN's KumaScript macros (e.g. {{htmlelement("p")}}) exactly as in the source file.
+# Line numbers are 1-based and inclusive, counted in the raw file at that commit.
+# Re-check against upstream with: node packages/pack/src/cli.ts verify packs/semantic-html
+sources:
+  - id: basic-html-syntax
+    title: Basic HTML syntax
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/basic_html_syntax/index.md
+    excerpts:
+      - id: what-is-html
+        text: '{{glossary("HTML")}} (HyperText Markup Language) is a _markup language_ that tells web browsers how to structure the web pages you visit. HTML consists of a series of {{glossary("Element", "elements")}}, which you use to enclose, wrap, or _mark up_ different parts of content to make it appear or act in a certain way. The enclosing {{glossary("Tag", "tags")}} can make content into a hyperlink to link to another page, italicize words, and so on. For example, consider the following line of text:'
+        verbatim: true
+        lines:
+          - 37
+          - 37
+      - id: tags-case
+        text: '> Tags in HTML are not case-sensitive. This means they can be written in uppercase or lowercase. For example, a {{htmlelement("title")}} tag could be written as `<title>`, `<TITLE>`, `<Title>`, `<TiTlE>`, etc., and it will work. However, it is best practice to write all tags in lowercase for consistency and readability.'
+        verbatim: true
+        lines:
+          - 60
+          - 60
+      - id: opening-tag
+        text: "- **The opening tag:** This consists of the name of the element (in this example, _p_ for paragraph), wrapped in opening and closing angle brackets. This opening tag marks where the element begins or starts to take effect. In this example, it precedes the start of the paragraph text."
+        verbatim: true
+        lines:
+          - 70
+          - 70
+      - id: closing-tag
+        text: "- **The closing tag:** This is the same as the opening tag, except that it includes a forward slash before the element name. This marks where the element ends. Failing to include a closing tag is a common beginner error that can produce peculiar results."
+        verbatim: true
+        lines:
+          - 72
+          - 72
+      - id: nesting-right
+        text: There is a right and wrong way to do nesting. In the code block above, we open the `<p>` element first, then open the `<strong>` element. For proper nesting, we close the `<strong>` element first, then close the `<p>`.
+        verbatim: true
+        lines:
+          - 114
+          - 114
+      - id: nesting-overlap
+        text: The **tags have to open and close so that they are inside or outside one another**. Because the elements overlap in the previous code block, the browser has to guess at your intent. This kind of guessing can result in unexpected results.
+        verbatim: true
+        lines:
+          - 122
+          - 122
+      - id: void
+        text: Not all elements follow the pattern of an opening tag, content, then a closing tag. Some elements consist of a single tag, which is typically used to insert/embed something in the document. Such elements are called {{glossary("void element", "void elements")}}, which means "elements that cannot contain other HTML content".
+        verbatim: true
+        lines:
+          - 126
+          - 126
+      - id: void-slash
+        text: "> In some HTML examples, you'll see a `/` added at the end of a void element's tag, for example `<br />`. This is a different style of markup syntax, which isn't wrong, but this \"closing slash\" is not needed."
+        verbatim: true
+        lines:
+          - 141
+          - 141
+      - id: attributes
+        text: Attributes contain extra information about the element that isn't part of its content. The **`class`** attribute provides an identifying name that can be used to target the element with styles (CSS) or scripting information (JavaScript).
+        verbatim: true
+        lines:
+          - 149
+          - 149
+      - id: attribute-parts
+        text: |-
+          An attribute should have:
+
+          - A space between it and the element name. When an element has more than one attribute, the attributes should be separated by spaces too.
+          - The attribute name, followed by an equals sign (`=`).
+          - An attribute value, wrapped with opening and closing quote marks.
+        verbatim: true
+        lines:
+          - 151
+          - 155
+      - id: boolean
+        text: Sometimes you will see HTML attributes written without values. These are called [Boolean attributes](/en-US/docs/Glossary/Boolean/HTML). When a boolean attribute is added, its value is set to `true`, irrespective of whatever value is assigned to it (even no value). If an attribute is not included in an HTML tag, its value is set to `false`.
+        verbatim: true
+        lines:
+          - 198
+          - 198
+      - id: always-quote
+        text: Always include quotes around attribute values. It avoids errors and unintended behavior, and results in more readable code.
+        verbatim: true
+        lines:
+          - 250
+          - 250
+      - id: doctype
+        text: "   In modern times, the doctype is a historical artifact that needs to be included for everything else to work correctly. `<!doctype html>` is the shortest string of characters that counts as a valid doctype, and it should be included at the top of all webpages. That is all you need to know!"
+        verbatim: true
+        lines:
+          - 315
+          - 315
+      - id: html-root
+        text: '2. `<html></html>`: The {{htmlelement("html")}} element. This element wraps all the content on the page. It is sometimes known as the root element.'
+        verbatim: true
+        lines:
+          - 317
+          - 317
+      - id: head
+        text: "3. `<head></head>`: The {{htmlelement(\"head\")}} element. This element acts as a container for information about the page that _isn't_ part of the content that users will see. This can include keywords and a page description to be shown in search results, CSS to style content, character set declarations, and more. You will learn more about the head of the page in the next article."
+        verbatim: true
+        lines:
+          - 318
+          - 318
+      - id: charset
+        text: '4. `<meta charset="utf-8">`: A {{htmlelement("meta")}} element. This element represents metadata that describes the page. The [`charset`](/en-US/docs/Web/HTML/Reference/Elements/meta#charset) attribute specifies the character encoding your document will use. UTF-8 includes most characters from the vast majority of human written languages, which means the page will be able to display different languages successfully. There is no reason not to set this, and it can help avoid some problems later.'
+        verbatim: true
+        lines:
+          - 319
+          - 319
+      - id: body
+        text: '6. `<body></body>`: The {{htmlelement("body")}} element. This contains _all_ the content that displays on the page, including text, images, videos, games, playable audio tracks, and so on.'
+        verbatim: true
+        lines:
+          - 321
+          - 321
+      - id: whitespace
+        text: In almost all elements (there are exceptions such as {{htmlelement("pre")}}), no matter how much whitespace you use inside HTML element content, the HTML parser reduces each sequence of whitespace to a single space when rendering the code.
+        verbatim: true
+        lines:
+          - 400
+          - 400
+      - id: special-chars
+        text: In HTML, the characters `<`, `>`, `"`, `'`, and `&` are special characters. They are parts of the HTML syntax itself. So how do you include these special characters in your text? For example, how can you use a literal ampersand or less-than sign in your content without it being interpreted as code?
+        verbatim: true
+        lines:
+          - 416
+          - 416
+      - id: character-references
+        text: You do this with {{glossary("character reference", "character references")}}. These are special codes that represent characters, to be used in these exact circumstances. Each character reference starts with an ampersand (&), and ends with a semicolon (;).
+        verbatim: true
+        lines:
+          - 418
+          - 418
+      - id: comments
+        text: HTML has a mechanism to write comments in the code. Browsers ignore comments, therefore they are invisible to the user. The purpose of comments is to allow you to include notes in the code to explain how it works. This is very useful if you return to a code base after being away for long enough that you don't remember it, or if someone else starts working on it that has never seen it before.
+        verbatim: true
+        lines:
+          - 449
+          - 449
+  - id: webpage-metadata
+    title: What's in the head? Web page metadata
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Webpage_metadata
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/webpage_metadata/index.md
+    excerpts:
+      - id: head-not-displayed
+        text: "The HTML head is the contents of the {{htmlelement(\"head\")}} element. Unlike the contents of the {{htmlelement(\"body\")}} element (which are displayed on the page when loaded in a browser), the head's content is not displayed on the page. Instead, the head's job is to contain {{glossary(\"Metadata\", \"metadata\")}} about the document. In the above example, the head is quite small:"
+        verbatim: true
+        lines:
+          - 56
+          - 56
+      - id: h1-on-page
+        text: '- The {{htmlelement("Heading_Elements", "h1")}} element appears on the page when loaded in the browser — generally this should be used once per page, to mark up the title of your page content (the story title, or news headline, or whatever is appropriate to your usage.)'
+        verbatim: true
+        lines:
+          - 71
+          - 71
+      - id: title-metadata
+        text: "- The {{htmlelement(\"title\")}} element is metadata that represents the title of the overall HTML document (not the document's content.)"
+        verbatim: true
+        lines:
+          - 72
+          - 72
+      - id: title-bookmark
+        text: The `<title>` element contents are also used in other ways. For example, if you try bookmarking the page (_Bookmarks > Bookmark This Page_ or the star icon in the URL bar in Firefox), you will see the `<title>` contents filled in as the suggested bookmark name.
+        verbatim: true
+        lines:
+          - 88
+          - 88
+      - id: title-search
+        text: The `<title>` contents are also used in search results, as you'll see below.
+        verbatim: true
+        lines:
+          - 92
+          - 92
+      - id: charset
+        text: "This element specifies the document's character encoding — the character set that the document is permitted to use. `utf-8` is a universal character set that includes pretty much any character from any human language. This means that your web page will be able to handle displaying any language; it's therefore a good idea to set this on every web page you create! For example, your page could handle English and Japanese just fine:"
+        verbatim: true
+        lines:
+          - 106
+          - 106
+      - id: name-content
+        text: |-
+          - `name` specifies the type of meta element it is; what type of information it contains.
+          - `content` specifies the actual meta content.
+        verbatim: true
+        lines:
+          - 129
+          - 130
+      - id: description-seo
+        text: Specifying a description that includes keywords relating to the content of your page is useful as it has the potential to make your page appear higher in relevant searches performed in search engines (such activities are termed [Search Engine Optimization](/en-US/docs/Glossary/SEO), or {{glossary("SEO")}}.)
+        verbatim: true
+        lines:
+          - 145
+          - 145
+      - id: keywords-ignored
+        text: "> Many `<meta>` features just aren't used anymore. For example, the keyword `<meta>` element (`<meta name=\"keywords\" content=\"fill, in, your, keywords, here\">`) — which is supposed to provide keywords for search engines to determine the relevance of that page for different search terms — is ignored by search engines, because spammers were just filling the keyword list with hundreds of keywords, biasing results."
+        verbatim: true
+        lines:
+          - 172
+          - 172
+      - id: favicon
+        text: To further enrich your site design, you can add references to custom icons in your metadata, and these will be displayed in certain contexts. The most commonly used of these is the **favicon** (short for "favorites icon", referring to its use in the "favorites" or "bookmarks" lists in browsers).
+        verbatim: true
+        lines:
+          - 198
+          - 198
+      - id: link-stylesheet
+        text: "- The {{htmlelement(\"link\")}} element should always go inside the head of your document. This takes two attributes, `rel=\"stylesheet\"`, which indicates that it is the document's stylesheet, and `href`, which contains the path to the stylesheet file:"
+        verbatim: true
+        lines:
+          - 263
+          - 263
+      - id: script-defer
+        text: "- The {{htmlelement(\"script\")}} element should also go into the head, and should include a `src` attribute containing the path to the JavaScript you want to load, and `defer` (a [boolean attribute](/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax#boolean_attributes)), which instructs the browser to load the JavaScript after the page has finished parsing the HTML. The `defer` attribute is useful as it guarantees the HTML is all loaded before the JavaScript runs so that you don't get errors due to JavaScript trying to access an HTML element that doesn't exist on the page yet. There are [several ways](/en-US/docs/Learn_web_development/Core/Scripting/What_is_JavaScript#script_loading_strategies) to handle loading JavaScript on your page, but this is the most reliable one to use for modern browsers."
+        verbatim: true
+        lines:
+          - 269
+          - 269
+      - id: lang
+        text: Finally, it's worth mentioning that you can (and really should) set the language of your page. This can be done by adding the [lang attribute](/en-US/docs/Web/HTML/Reference/Global_attributes/lang) to the opening HTML tag (as seen in the [meta-example.html](https://github.com/mdn/learning-area/blob/main/html/introduction-to-html/the-html-head/meta-example.html) and shown below.)
+        verbatim: true
+        lines:
+          - 296
+          - 296
+      - id: lang-why
+        text: This is useful in many ways. Your HTML document will be indexed more effectively by search engines if its language is set (allowing it to appear correctly in language-specific results, for example), and it is useful to people with visual impairments using screen readers (for example, the word "six" exists in both French and English, but is pronounced differently.)
+        verbatim: true
+        lines:
+          - 304
+          - 304
+  - id: headings-and-paragraphs
+    title: Headings and paragraphs
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Headings_and_paragraphs
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/headings_and_paragraphs/index.md
+    excerpts:
+      - id: paragraph
+        text: 'In HTML, each paragraph has to be wrapped in a {{htmlelement("p")}} element, like so:'
+        verbatim: true
+        lines:
+          - 46
+          - 46
+      - id: six-levels
+        text: 'There are six heading elements: {{htmlelement("Heading_Elements", "h1")}}, {{htmlelement("Heading_Elements", "h2")}}, {{htmlelement("Heading_Elements", "h3")}}, {{htmlelement("Heading_Elements", "h4")}}, {{htmlelement("Heading_Elements", "h5")}}, and {{htmlelement("Heading_Elements", "h6")}}. Each element represents a different level of content in the document; `<h1>` represents the main heading, `<h2>` represents subheadings, `<h3>` represents sub-subheadings, and so on.'
+        verbatim: true
+        lines:
+          - 58
+          - 58
+      - id: hierarchy-rules
+        text: |-
+          - Preferably, you should use a single `<h1>` per page—this is the top level heading, and all others sit below this in the hierarchy.
+          - Make sure you use the headings in the correct order in the hierarchy. Don't use `<h3>` elements to represent subheadings, followed by `<h2>` elements to represent sub-subheadings—that doesn't make sense and will lead to weird results.
+          - Of the six heading levels available, you should aim to use no more than three per page, unless you feel it is necessary. Documents with many levels (for example, a deep heading hierarchy) become unwieldy and difficult to navigate. On such occasions, it is advisable to spread the content over multiple pages if possible.
+        verbatim: true
+        lines:
+          - 89
+          - 91
+      - id: no-structure
+        text: "This is because there are no elements to give the content structure, so the browser does not know what is a heading and what is a paragraph. Furthermore:"
+        verbatim: true
+        lines:
+          - 101
+          - 101
+      - id: why-structure
+        text: |-
+          - Users looking at a web page tend to scan quickly to find relevant content, often just reading the headings, to begin with. (We usually [spend a very short time on a web page](https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/).) If they can't see anything useful within a few seconds, they'll likely get frustrated and go somewhere else.
+          - Search engines indexing your page consider the contents of headings as important keywords for influencing the page's search rankings. Without headings, your page will perform poorly in terms of {{glossary("SEO")}} (Search Engine Optimization).
+          - Severely visually impaired people often don't read web pages; they listen to them instead. This is done with software called a [screen reader](https://en.wikipedia.org/wiki/Screen_reader). This software provides ways to get fast access to given text content. Among the various techniques used, they provide an outline of the document by reading out the headings, allowing their users to find the information they need quickly. If headings are not available, they will be forced to listen to the whole document read out loud.
+          - To style content with {{glossary("CSS")}}, or make it do interesting things with {{glossary("JavaScript")}}, you need to have elements wrapping the relevant content, so CSS/JavaScript can effectively target it.
+        verbatim: true
+        lines:
+          - 103
+          - 106
+      - id: semantics-everyday
+        text: Semantics are relied on everywhere around us—we rely on previous experience to tell us what the function of an everyday object is; when we see something, we know what its function will be. So, for example, we expect a red traffic light to mean "stop," and a green traffic light to mean "go." Things can get tricky very quickly if the wrong semantics are applied. (Do any countries use red to mean "go"? We hope not.)
+        verbatim: true
+        lines:
+          - 149
+          - 149
+      - id: h1-semantic
+        text: In a similar way, we need to make sure we are using the correct elements, giving our content the correct meaning, function, or appearance. In this context, the `{{htmlelement("Heading_Elements", "&lt;h1>")}}` element is also a semantic element, which gives the text it wraps around the role (or meaning) of "a top level heading on your page."
+        verbatim: true
+        lines:
+          - 151
+          - 151
+      - id: span-no-semantics
+        text: This is a {{htmlelement("span")}} element. It has no semantics. You use it to wrap content when you want to apply CSS to it (or do something to it with JavaScript) without giving it any extra meaning. (You'll find out more about these later on in the course.) We've applied some CSS to it to make it look like a top level heading, but since it has no semantic value, it will not get any of the extra benefits described above. It is a good idea to use the relevant HTML element for the job.
+        verbatim: true
+        lines:
+          - 167
+          - 167
+  - id: emphasis-and-importance
+    title: Emphasis and importance
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Emphasis_and_importance
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/emphasis_and_importance/index.md
+    excerpts:
+      - id: em
+        text: In HTML we use the {{htmlelement("em")}} (emphasis) element to mark up such instances. As well as making the document more interesting to read, these are recognized by screen readers, which can be configured to speak them in a different tone of voice. Browsers style this as italic by default, but you shouldn't use this tag purely to get italic styling. To do that, you'd use a {{htmlelement("span")}} element and some CSS, or perhaps an {{htmlelement("i")}} element (see below).
+        verbatim: true
+        lines:
+          - 50
+          - 50
+      - id: strong
+        text: In HTML we use the {{htmlelement("strong")}} (strong importance) element to mark up such instances. As well as making the document more useful, again these are recognized by screen readers, which can be configured to speak them in a different tone of voice. Browsers style this as bold text by default, but you shouldn't use this tag purely to get bold styling. To do that, you'd use a {{htmlelement("span")}} element and some CSS, or perhaps a {{htmlelement("b")}} element (see below).
+        verbatim: true
+        lines:
+          - 64
+          - 64
+      - id: nest-strong-em
+        text: "You can nest strong and emphasis inside one another if desired:"
+        verbatim: true
+        lines:
+          - 72
+          - 72
+      - id: presentational
+        text: The elements we've discussed so far have clear-cut associated semantics. The situation with {{htmlelement("b")}}, {{htmlelement("i")}}, and {{htmlelement("u")}} is somewhat more complicated. They came about so people could write bold, italics, or underlined text in an era when CSS was still supported poorly or not at all. Elements like this, which only affect presentation and not semantics, are known as **presentational elements** and should no longer be used because, as we've seen before, semantics is so important to accessibility, SEO, etc.
+        verbatim: true
+        lines:
+          - 137
+          - 137
+      - id: best-rule
+        text: "Here's the best rule you can remember: It's only appropriate to use `<b>`, `<i>`, or `<u>` to convey a meaning traditionally conveyed with bold, italics, or underline when there isn't a more suitable element; and there usually is. Consider whether `<strong>`, `<em>`, `<mark>`, or `<span>` might be more appropriate."
+        verbatim: true
+        lines:
+          - 141
+          - 141
+      - id: i-b-u-meanings
+        text: |-
+          - {{HTMLElement('i')}} is used to convey a meaning traditionally conveyed by italic: foreign words, taxonomic designation, technical terms, a thought…
+          - {{HTMLElement('b')}} is used to convey a meaning traditionally conveyed by bold: keywords, product names, lead sentence…
+          - {{HTMLElement('u')}} is used to convey a meaning traditionally conveyed by underline: proper name, misspelling…
+        verbatim: true
+        lines:
+          - 145
+          - 147
+      - id: underline-links
+        text: "> People strongly associate underlining with hyperlinks. Therefore, on the web, it's best to only underline links. Use the `<u>` element when it's semantically appropriate, but consider using CSS to change the default underline to something more appropriate on the web. The example below illustrates how it can be done."
+        verbatim: true
+        lines:
+          - 150
+          - 150
+  - id: lists
+    title: Lists
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Lists
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/lists/index.md
+    excerpts:
+      - id: unordered
+        text: "Unordered lists are used to mark up lists of items for which the order of the items doesn't matter. Let's take a grocery shopping list as an example:"
+        verbatim: true
+        lines:
+          - 38
+          - 38
+      - id: ul-li
+        text: |-
+          In this example, the items can be in any order. To create this list in HTML, we first wrap the whole list in a {{htmlelement("ul")}} (unordered list) element.
+          Then, we wrap each item in a {{htmlelement("li")}} (list item) element:
+        verbatim: true
+        lines:
+          - 47
+          - 48
+      - id: ordered
+        text: "Ordered lists are lists in which the order of the items _does_ matter. Let's take a set of directions as an example:"
+        verbatim: true
+        lines:
+          - 76
+          - 76
+      - id: nesting
+        text: "It is perfectly OK to nest one list inside another one. You might want to have some sub-bullets sitting below a top-level bullet. Let's take the second list from our recipe example:"
+        verbatim: true
+        lines:
+          - 179
+          - 179
+      - id: description-purpose
+        text: "The purpose of description lists is to mark up a set of items and their associated descriptions, such as terms and definitions, or questions and answers. Let's look at an example of a set of terms and definitions:"
+        verbatim: true
+        lines:
+          - 215
+          - 215
+      - id: dl-dt-dd
+        text: Description lists use a different wrapper than the other list types — {{htmlelement("dl")}}; in addition each term is wrapped in a {{htmlelement("dt")}} (description term) element, and each description is wrapped in a {{htmlelement("dd")}} (description definition) element.
+        verbatim: true
+        lines:
+          - 226
+          - 226
+      - id: multiple-descriptions
+        text: "Note that it is permitted to have a single term with multiple descriptions, for example:"
+        verbatim: true
+        lines:
+          - 260
+          - 260
+  - id: advanced-text-features
+    title: Advanced text features
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Advanced_text_features
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/advanced_text_features/index.md
+    excerpts:
+      - id: blockquote
+        text: 'If a section of block level content (be it a paragraph, multiple paragraphs, a list, etc.) is quoted from somewhere else, you should wrap it inside a {{htmlelement("blockquote")}} element to signify this, and include a URL pointing to the source of the quote inside a [`cite`](/en-US/docs/Web/HTML/Reference/Elements/blockquote#cite) attribute. For example, the following markup is taken from the MDN `<blockquote>` element page:'
+        verbatim: true
+        lines:
+          - 48
+          - 48
+      - id: inline-q
+        text: 'Inline quotations work in exactly the same way, except that they use the {{htmlelement("q")}} element. For example, the below bit of markup contains a quotation from the MDN `<q>` page:'
+        verbatim: true
+        lines:
+          - 78
+          - 78
+      - id: cite-attribute-hidden
+        text: The content of the [`cite`](/en-US/docs/Web/HTML/Reference/Elements/blockquote#cite) attribute sounds useful, but unfortunately browsers, screen readers, etc. don't really do much with it. There is no way to get the browser to display the contents of `cite`, without writing your own solution using JavaScript or CSS. If you want to make the source of the quotation available on the page you need to make it available in the text via a link or some other appropriate way.
+        verbatim: true
+        lines:
+          - 96
+          - 96
+      - id: cite-element
+        text: "There is a {{htmlelement(\"cite\")}} element, but this is meant to contain the title of the resource being quoted, e.g., the name of the book. There is no reason, however, why you couldn't link the text inside `<cite>` to the quote source in some way:"
+        verbatim: true
+        lines:
+          - 98
+          - 98
+      - id: abbr
+        text: Another fairly common element you'll meet when looking around the Web is {{htmlelement("abbr")}} — this is used to wrap around an abbreviation or acronym. When including either, provide a full expansion of the term in plain text on first use, along with the `<abbr>` to mark up the abbreviation. This provides a hint to user agents on how to announce/display the content while informing all users what the abbreviation means.
+        verbatim: true
+        lines:
+          - 190
+          - 190
+      - id: abbr-title
+        text: "If providing the expansion in addition to the abbreviation makes little sense, and the abbreviation or acronym is a fairly shortened term, provide the full expansion of the term as the value of the [`title`](/en-US/docs/Web/HTML/Reference/Global_attributes/title) attribute:"
+        verbatim: true
+        lines:
+          - 192
+          - 192
+      - id: acronym-obsolete
+        text: '> Earlier versions of html also included support for the {{htmlelement("acronym")}} element, but it was removed from the HTML spec in favor of using `<abbr>` to represent both abbreviations and acronyms. `<acronym>` should not be used.'
+        verbatim: true
+        lines:
+          - 215
+          - 215
+      - id: address
+        text: 'HTML has an element for marking up contact details — {{htmlelement("address")}}. This wraps around your contact details, for example:'
+        verbatim: true
+        lines:
+          - 255
+          - 255
+      - id: address-scope
+        text: '> The {{htmlelement("address")}} element should only be used to provide contact information for the document contained by the nearest {{htmlelement("article")}} or {{htmlelement("body")}} element. It would be correct to use it in the footer of a site to include the contact information of the entire site, or inside an article for the contact details of the author, but not to mark up a list of addresses unrelated to the content of that page.'
+        verbatim: true
+        lines:
+          - 288
+          - 288
+      - id: sup-sub
+        text: 'You will occasionally need to use superscript and subscript when marking up items like dates, chemical formulae, and mathematical equations so they have the correct meaning. The {{htmlelement("sup")}} and {{htmlelement("sub")}} elements handle this job. For example:'
+        verbatim: true
+        lines:
+          - 292
+          - 292
+      - id: code-elements
+        text: |-
+          - {{htmlelement("code")}}: For marking up generic pieces of computer code.
+          - {{htmlelement("pre")}}: For retaining whitespace (generally code blocks) — if you use indentation or excess whitespace inside your text, browsers will ignore it and you will not see it on your rendered page. If you wrap the text in `<pre></pre>` tags however, your whitespace will be rendered identically to how you see it in your text editor.
+          - {{htmlelement("var")}}: For specifically marking up variable names.
+          - {{htmlelement("kbd")}}: For marking up keyboard (and other types of) input entered into the computer.
+          - {{htmlelement("samp")}}: For marking up the output of a computer program.
+        verbatim: true
+        lines:
+          - 311
+          - 315
+      - id: time
+        text: 'HTML also provides the {{htmlelement("time")}} element for marking up times and dates in a machine-readable format. For example:'
+        verbatim: true
+        lines:
+          - 349
+          - 349
+      - id: time-why
+        text: But these different forms cannot be easily recognized by computers — what if you wanted to automatically grab the dates of all events in a page and insert them into a calendar? The {{htmlelement("time")}} element allows you to attach an unambiguous, machine-readable time/date for this purpose.
+        verbatim: true
+        lines:
+          - 371
+          - 371
+  - id: structuring-documents
+    title: Structuring documents
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Structuring_documents
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/structuring_documents/index.md
+    excerpts:
+      - id: common-components
+        text: "Webpages can and will look pretty different from one another, but they all tend to share similar standard components, unless the page is displaying a fullscreen video or game, is part of some kind of art project, or is just badly structured:"
+        verbatim: true
+        lines:
+          - 41
+          - 41
+      - id: component-list
+        text: |-
+          - header:
+            - : Usually a big strip across the top with a big heading, logo, and perhaps a tagline. This usually stays the same from one page of a website to another.
+          - navigation bar:
+            - : Links to the site's main sections; usually represented by menu buttons, links, or tabs. Like the header, this content usually remains consistent from one webpage to another — having inconsistent navigation on your website will just lead to confused, frustrated users. Many web designers consider the navigation bar to be part of the header rather than an individual component, but that's not a requirement; in fact, some also argue that having the two separate is better for [accessibility](/en-US/docs/Learn_web_development/Core/Accessibility), as screen readers can read the two features better if they are separate.
+          - main content:
+            - : A big area in the center that contains most of the unique content of a given webpage, for example, the video you want to watch, or the main story you're reading, or the map you want to view, or the news headlines, etc. This is the one part of the website that definitely will vary from page to page!
+          - sidebar:
+            - : Some peripheral info, links, quotes, ads, etc. Usually, this is contextual to what is contained in the main content (for example on a news article page, the sidebar might contain the author's bio, or links to related articles) but there are also cases where you'll find some recurring elements like a secondary navigation system.
+          - footer:
+            - : A strip across the bottom of the page that generally contains fine print, copyright notices, or contact info. It's a place to put common information (like the header) but usually, that information is not critical or secondary to the website itself. The footer is also sometimes used for {{Glossary("SEO")}} purposes, by providing links for quick access to popular content.
+        verbatim: true
+        lines:
+          - 43
+          - 52
+      - id: functionality
+        text: In your HTML code, you can mark up sections of content based on their _functionality_ — you can use elements that represent the sections of content described above unambiguously, and assistive technologies like screen readers can recognize those elements and help with tasks like "find the main navigation", or "find the main content." As we mentioned earlier in the course, there are a number of [consequences of not using the right element structure and semantics for the right job](/en-US/docs/Learn_web_development/Core/Structuring_content/Headings_and_paragraphs#why_do_we_need_structure).
+        verbatim: true
+        lines:
+          - 70
+          - 70
+      - id: section-tags
+        text: |-
+          - **header:** {{htmlelement("header")}}.
+          - **navigation bar:** {{htmlelement("nav")}}.
+          - **main content:** {{htmlelement("main")}}, with various content subsections represented by {{HTMLElement("article")}}, {{htmlelement("section")}}, and {{htmlelement("div")}} elements.
+          - **sidebar:** {{htmlelement("aside")}}; often placed inside {{htmlelement("main")}}.
+          - **footer:** {{htmlelement("footer")}}.
+        verbatim: true
+        lines:
+          - 74
+          - 78
+      - id: main-article-section
+        text: |-
+          - {{HTMLElement('main')}} is for content _unique to this page._ Use `<main>` only _once_ per page, and put it directly inside {{HTMLElement('body')}}. Ideally this shouldn't be nested within other elements.
+          - {{HTMLElement('article')}} encloses a block of related content that makes sense on its own without the rest of the page (for example, a single blog post).
+          - {{HTMLElement('section')}} is similar to `<article>`, but it is more for grouping together a single part of the page that constitutes one single piece of functionality (like a mini map, or a set of article headlines and summaries), or a theme. It's considered best practice to begin each section with a [heading](/en-US/docs/Learn_web_development/Core/Structuring_content/Headings_and_paragraphs); also note that you can break `<article>`s up into different `<section>`s, or `<section>`s up into different `<article>`s, depending on the context.
+        verbatim: true
+        lines:
+          - 202
+          - 204
+      - id: aside-header-nav-footer
+        text: |-
+          - {{HTMLElement('aside')}} contains content that is not directly related to the main content but can provide additional information indirectly related to it (glossary entries, author biography, related links, etc.).
+          - {{HTMLElement('header')}} represents a group of introductory content. If it is a child of {{HTMLElement('body')}} it defines the global header of a webpage, but if it's a child of an {{HTMLElement('article')}} or {{HTMLElement('section')}} it defines a specific header for that section (try not to confuse this with [titles and headings](/en-US/docs/Learn_web_development/Core/Structuring_content/Webpage_metadata#adding_a_title)).
+          - {{HTMLElement('nav')}} contains the main navigation functionality for the page. Secondary links, etc., would not go in the navigation.
+          - {{HTMLElement('footer')}} represents a group of end content for a page.
+        verbatim: true
+        lines:
+          - 205
+          - 208
+      - id: non-semantic
+        text: Sometimes you'll come across a situation where you can't find an ideal semantic element to group some items together or wrap some content. Sometimes you might want to just group a set of elements together to affect them all as a single entity with some {{glossary("CSS")}} or {{glossary("JavaScript")}}. For cases like these, HTML provides the {{HTMLElement("div")}} and {{HTMLElement("span")}} elements. You should use these preferably with a suitable [`class`](/en-US/docs/Web/HTML/Reference/Global_attributes/class) attribute, to provide some kind of label for them so they can be easily targeted.
+        verbatim: true
+        lines:
+          - 214
+          - 214
+      - id: span
+        text: "{{HTMLElement(\"span\")}} is an inline non-semantic element, which you should only use if you can't think of a better semantic text element to wrap your content, or don't want to add any specific meaning. For example:"
+        verbatim: true
+        lines:
+          - 216
+          - 216
+      - id: div
+        text: "{{HTMLElement(\"div\")}} is a block level non-semantic element, which you should only use if you can't think of a better semantic block element to use, or don't want to add any specific meaning. For example, imagine a shopping cart widget that you could choose to pull up at any point during your time on an e-commerce site:"
+        verbatim: true
+        lines:
+          - 230
+          - 230
+      - id: div-warning
+        text: "> Divs are so convenient to use that it's easy to use them too much. As they carry no semantic value, they just clutter your HTML code. Take care to use them only when there is no better semantic solution and try to reduce their usage to the minimum otherwise you'll have a hard time updating and maintaining your documents."
+        verbatim: true
+        lines:
+          - 251
+          - 251
+      - id: br
+        text: "`<br>` creates a line break in a paragraph; it is the only way to force a rigid structure in a situation where you want a series of fixed short lines, such as in a postal address or a poem. For example:"
+        verbatim: true
+        lines:
+          - 262
+          - 262
+      - id: hr
+        text: "`<hr>` elements create a horizontal rule in the document that denotes a thematic change in the text (such as a change in topic or scene). Visually it just looks like a horizontal line. As an example:"
+        verbatim: true
+        lines:
+          - 279
+          - 279
+      - id: information-architecture
+        text: The next stage after planning out the structure of a single webpage is to plan out the structure of a whole multi-page website, including how they should be arranged and link to one another for the best possible user experience. This is called {{glossary("Information architecture")}}.
+        verbatim: true
+        lines:
+          - 302
+          - 302
+      - id: sitemap
+        text: 5. Now try to sketch a rough sitemap — have a box for each page on your site, and draw lines to show the typical workflow between pages. The homepage will probably be in the top or at the center, and link to most if not all of the others. Most of the pages in a small site should be available from the main navigation, although there are exceptions. You might also want to include notes about how things might be presented.![A map of the site showing the homepage, country page, search results, specials page, and checkout and purchase flow](/shared-assets/images/diagrams/learn/structuring-documents/site-map.svg)
+        verbatim: true
+        lines:
+          - 350
+          - 350
+  - id: creating-links
+    title: Creating links
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Creating_links
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/creating_links/index.md
+    excerpts:
+      - id: url
+        text: Each resource on the web has an address, known as a {{glossary("URL")}} (Uniform Resource Locator), which hyperlinks point to.
+        verbatim: true
+        lines:
+          - 50
+          - 50
+      - id: anchor
+        text: A basic link is created by wrapping the text or other content inside an {{htmlelement("a")}} element and using the [`href`](/en-US/docs/Web/HTML/Reference/Elements/a#href) attribute, also known as a **Hypertext Reference**, or **target**, that contains the web address.
+        verbatim: true
+        lines:
+          - 62
+          - 62
+      - id: image-link
+        text: To turn an image into a link, wrap the {{htmlelement("img")}} element with an {{htmlelement("a")}} element. The example below uses a relative path to reference a locally stored SVG image file.
+        verbatim: true
+        lines:
+          - 97
+          - 97
+      - id: title-hover-only
+        text: |-
+          > A link title is only revealed on mouse hover, which means that people relying on keyboard controls or touchscreens to navigate web pages will have difficulty accessing title information.
+          > If a title's information is truly important to the usability of the page, then you should present it in a manner that will be accessible to all users, for example by putting it in the regular text.
+        verbatim: true
+        lines:
+          - 140
+          - 141
+      - id: up-a-directory
+        text: "If you want to include a hyperlink inside `projects/index.html` pointing to `pdfs/project-brief.pdf`, you have to go up a directory level, then back down into the `pdfs` directory. To go up a directory, you use two dots — `..` — so the URL is `../pdfs/project-brief.pdf`:"
+        verbatim: true
+        lines:
+          - 270
+          - 270
+      - id: root-relative
+        text: "If you want to create a link to a specific location that won't break if you move the linking file, you can do so by putting a single slash at the start of the path — this indicates that the path starts in the root directory of the site. For example, the previous link inside `projects/index.html` could be rewritten as:"
+        verbatim: true
+        lines:
+          - 283
+          - 283
+      - id: absolute-relative
+        text: |-
+          - Absolute path: Points to a location defined by its absolute location in your site (or elsewhere on the web). For example, you can create an absolute link that always points to the same location relative to the site root directory using the single slash at the start of the path, as we saw earlier: `/pdfs/project-brief.pdf`.
+          - Relative path: Points to a location that is _relative_ to the file you are linking from. In our earlier example, we used `projects/index.html` to create a relative link between the current file and a file called `index.html` that is inside a `projects` subdirectory. If you were to move the current file to a different location, the path would still be relative to that file, but it would point to a different absolute location.
+        verbatim: true
+        lines:
+          - 295
+          - 296
+      - id: internal-external
+        text: When a link points to a resource on _your_ site, it is referred to as an **internal link**. When a link points to a resource on a _different_ site, it is called an **external link**.
+        verbatim: true
+        lines:
+          - 312
+          - 312
+      - id: fragment
+        text: |-
+          It's possible to link to a specific part of an HTML document, known as a **document fragment**, rather than just to the top of the document.
+          Elements with an [`id`](/en-US/docs/Web/HTML/Reference/Global_attributes/id) attribute in the document automatically create a document fragment that can be linked to.
+        verbatim: true
+        lines:
+          - 334
+          - 335
+      - id: fragment-hash
+        text: "To link to that specific `id`, you include it at the end of the path, preceded by a hash/pound symbol (`#`), for example:"
+        verbatim: true
+        lines:
+          - 343
+          - 343
+      - id: fragment-same-page
+        text: "You can even use the document fragment reference on its own to link to _another part of the current document_:"
+        verbatim: true
+        lines:
+          - 352
+          - 352
+      - id: accessible-links
+        text: |-
+          It's easy to throw links up on your page. That's not enough. We need to make our links _accessible_ to all readers, regardless of their current context and which tools they prefer. For example:
+
+          - Screen reader users like jumping around from link to link on the page, and reading links out of context.
+          - Search engines use link text to index target files, so it is a good idea to include keywords in your link text to effectively describe what is being linked to.
+          - Visual readers skim over the page rather than reading every word, and their eyes will be drawn to page features that stand out, like links. They will find descriptive link text useful.
+        verbatim: true
+        lines:
+          - 396
+          - 400
+      - id: link-tips
+        text: |-
+          - Don't repeat the URL as part of the link text — URLs look ugly, and sound even uglier when a screen reader reads them out letter by letter.
+          - Don't say "link" or "links to" in the link text — it's just noise. Screen readers tell people there's a link.
+            Visual users will also know there's a link, because links are generally styled in a different color and underlined (this convention generally shouldn't be broken, as users are used to it).
+          - Keep your link text as short as possible — this is helpful because screen readers need to interpret the entire link text.
+          - Minimize instances where multiple copies of the same text are linked to different places.
+            This can cause problems for screen reader users, if there's a list of links out of context that are labeled "click here", "click here", "click here".
+        verbatim: true
+        lines:
+          - 424
+          - 429
+      - id: signposts
+        text: When linking to a resource that will not be opened in the current page as a "normal navigation", you should add clear wording to the link text about what is going to happen. For example, if you're downloading or streaming a resource, or if the link is going to open a popup or perform some other potentially unexpected effect, this should be stated in the text. This is important for users on low bandwidth connections, who might want to avoid downloading assets of multiple megabytes. It also helps to set up expectations for screen reader users, who may not be aware of what's happening otherwise.
+        verbatim: true
+        lines:
+          - 433
+          - 433
+      - id: download
+        text: "When you are linking to a resource that's to be downloaded rather than opened in the browser, you can use the `download` attribute to provide a default save filename. Here's an example with a download link to the latest Windows version of Firefox:"
+        verbatim: true
+        lines:
+          - 453
+          - 453
+      - id: new-tab-cue
+        text: |-
+          A common approach is to open external links in new tabs and internal links in the same tab.
+          Some designers prefer to open all links in the same tab.
+          If you do open links in new tabs, then it is recommended that you provide cues for these links, such as an icon next to the link text.
+        verbatim: true
+        lines:
+          - 479
+          - 481
+      - id: nav-menu
+        text: For this exercise, we'd like you to link some pages together with a navigation menu to create a multipage website. This is one common way in which a website is created — the same page structure is used on every page, including the same navigation menu, so when links are clicked it gives the impression that you are staying in the same place, and different content is being brought up.
+        verbatim: true
+        lines:
+          - 485
+          - 485
+      - id: nav-list
+        text: |-
+          1. Add an unordered list in the indicated place on one page that includes the names of the pages to link to.
+             A navigation menu is usually just a list of links, so this is semantically OK.
+        verbatim: true
+        lines:
+          - 496
+          - 497
+      - id: mailto
+        text: |-
+          It's possible to create links or buttons that, when clicked, open a new outgoing email message rather than linking to a resource or page.
+          This is done using the {{HTMLElement("a")}} element and the `mailto:` URL scheme.
+        verbatim: true
+        lines:
+          - 512
+          - 513
+      - id: mailto-empty
+        text: |-
+          In fact, the email address is optional. If you omit it and your [`href`](/en-US/docs/Web/HTML/Reference/Elements/a#href) is "mailto:", a new outgoing email window will be opened by the user's email client with no destination address.
+          This is often useful as "Share" links that users can click to send an email to an address of their choosing.
+        verbatim: true
+        lines:
+          - 523
+          - 524
+  - id: debugging-html
+    title: Debugging HTML
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Debugging_HTML
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/debugging_html/index.md
+    excerpts:
+      - id: error-types
+        text: |-
+          - **Syntax errors**: These are typos in your code that cause the program not to run, like the Rust error shown earlier. These are usually easy to fix as long as you are familiar with the language's syntax and know what the error messages mean.
+          - **Logic errors**: These are errors where the syntax is actually correct, but the code is not doing what you intended it to, meaning that the program runs incorrectly. These are often harder to fix than syntax errors, as there isn't an error message to direct you to the source of the error.
+        verbatim: true
+        lines:
+          - 60
+          - 61
+      - id: permissive
+        text: HTML itself doesn't suffer from syntax errors because browsers parse it permissively, meaning that the page still displays even if there are syntax errors in the source code. Browsers have built-in rules to state how to interpret incorrectly-written HTML markup (often called **invalid** or **badly-formed** markup), changing it automatically to some valid markup.
+        verbatim: true
+        lines:
+          - 63
+          - 63
+      - id: write-correct
+        text: So why is this both good and bad? Well, in this case the browser has created the intended result, but as you'll see [later on](#your_turn_studying_html_using_the_dom_inspector), this is not always the case. You'll always get _something_ running, but the browser doesn't always get it right, which can cause problems. It is better to write correct markup in the first place.
+        verbatim: true
+        lines:
+          - 82
+          - 82
+      - id: dom-inspector
+        text: "For this article, the only relevant devtools function is the **DOM inspector**, which shows the currently-rendered HTML DOM and allows you to edit it. Let's look at this now:"
+        verbatim: true
+        lines:
+          - 95
+          - 95
+      - id: validator
+        text: The tool for this job is the [Markup Validation Service](https://validator.w3.org/) (or **HTML validator**), which is created and maintained by the W3C (which you learned about in [The web standards model](/en-US/docs/Learn_web_development/Getting_started/Web_standards/The_web_standards_model)). The validator takes an HTML document as an input, goes through it, and gives you a report to tell you what is wrong with your HTML.
+        verbatim: true
+        lines:
+          - 186
+          - 186
+      - id: line-numbers
+        text: The error messages are usually helpful, but sometimes they are not so easy to understand. With a bit of practice, you can work out how to interpret these to fix your code. Let's go through the error messages and see what they mean. You'll see that each message comes with a line and column number to help you to locate the error easily.
+        verbatim: true
+        lines:
+          - 207
+          - 207
+      - id: fix-a-few
+        text: If you can't work out what every error message means, don't worry about it. A good strategy is to fix a few errors at a time, then revalidate your HTML after each set of fixes to show what errors are left. Sometimes, fixing an earlier error will also get rid of other error messages — several errors can often be caused by a single problem, in a domino effect.
+        verbatim: true
+        lines:
+          - 224
+          - 224
+  - id: accessible-html
+    title: "HTML: A good basis for accessibility"
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/accessibility/html/index.md
+    excerpts:
+      - id: posh
+        text: "As you learn more about HTML — read more resources, look at more examples, etc. — you'll keep seeing a common theme: the importance of using semantic HTML (sometimes called POSH, or Plain Old Semantic HTML). This means using the correct HTML elements for their intended purpose as much as possible."
+        verbatim: true
+        lines:
+          - 36
+          - 36
+      - id: button-keyboard
+        text: Not only do HTML `<button>`s have some suitable styling applied by default (which you will probably want to override), they also have built-in keyboard accessibility — users can navigate between buttons using the <kbd>Tab</kbd> key and activate their selection using <kbd>Space</kbd>, <kbd>Return</kbd> or <kbd>Enter</kbd>.
+        verbatim: true
+        lines:
+          - 50
+          - 50
+      - id: other-benefits
+        text: |-
+          Semantic HTML doesn't take any longer to write than non-semantic (bad) markup if you do it consistently from the start of your project. Even better, semantic markup has other benefits beyond accessibility:
+
+          1. **Easier to develop with** — as mentioned above, you get some functionality for free, plus it is arguably easier to understand.
+          2. **Better on mobile** — semantic HTML is arguably lighter in file size than non-semantic spaghetti code, and easier to make responsive.
+          3. **Good for SEO** — search engines give more importance to keywords inside headings, links, etc. than keywords included in non-semantic `<div>`s, etc., so your documents will be more findable by customers.
+        verbatim: true
+        lines:
+          - 52
+          - 56
+      - id: not-all-or-nothing
+        text: The goal isn't "all or nothing"; every improvement you can make will help the cause of accessibility.
+        verbatim: true
+        lines:
+          - 68
+          - 68
+      - id: text-structure
+        text: "One of the best accessibility aids a screen reader user can have is an excellent text structure with headings, paragraphs, lists, etc. A good semantic example might look something like the following:"
+        verbatim: true
+        lines:
+          - 72
+          - 72
+      - id: screen-reader-navigation
+        text: |-
+          1. The screen reader reads each header out as you progress through the content, notifying you what a heading is, what is a paragraph, etc.
+          2. It stops after each element, letting you go at whatever pace is comfortable for you.
+          3. You can jump to the next/previous heading in many screen readers.
+          4. You can also bring up a list of all headings in many screen readers, allowing you to use them as a handy table of contents to find specific content.
+        verbatim: true
+        lines:
+          - 104
+          - 107
+      - id: bad-semantics
+        text: If you try our longer version out with a screen reader (see [bad-semantics.html](https://mdn.github.io/learning-area/accessibility/html/bad-semantics.html)), you'll not have a very good experience — the screen reader hasn't got anything to use as signposts, so you can't retrieve a useful table of contents, and the whole page is seen as a single giant block, so it is just read out in one go, all at once.
+        verbatim: true
+        lines:
+          - 134
+          - 134
+      - id: clear-language
+        text: "The language you use can also affect accessibility. In general, you should use clear language that is not overly complex and doesn't use unnecessary jargon or slang terms. This not only benefits people with cognitive or other disabilities; it benefits readers for whom the text is not written in their first language, younger people…, everyone, in fact! Apart from this, you should try to avoid using language and characters that don't get read out clearly by the screen reader. For example:"
+        verbatim: true
+        lines:
+          - 140
+          - 140
+      - id: language-tips
+        text: |-
+          - Don't use dashes if you can avoid it. Instead of writing 5–7, write 5 to 7.
+          - Expand abbreviations — instead of writing Jan, write January.
+          - Expand acronyms, at least once or twice, then use the [`<abbr>`](/en-US/docs/Web/HTML/Reference/Elements/abbr) tag to describe them.
+        verbatim: true
+        lines:
+          - 142
+          - 144
+      - id: sectioning
+        text: You should use appropriate [sectioning elements](/en-US/docs/Web/HTML/Reference/Elements#content_sectioning) to structure your webpages, for example navigation ({{htmlelement("nav")}}), footer ({{htmlelement("footer")}}), and repeating content units ({{htmlelement("article")}}). These provide extra semantics for screen readers (and other tools) to give users extra clues about the content they are navigating.
+        verbatim: true
+        lines:
+          - 148
+          - 148
+      - id: source-order
+        text: In addition to having good semantics and an attractive layout, your content should make logical sense in its source order — you can always place it where you want using CSS later on, but you should get the source order right to start with, so what screen reader users get read out to them will make sense.
+        verbatim: true
+        lines:
+          - 186
+          - 186
+      - id: keyboard-default
+        text: One key aspect of the accessibility of UI controls is that by default, browsers allow them to be manipulated by the keyboard. You can try this out using our [native-keyboard-accessibility.html](https://mdn.github.io/learning-area/tools-testing/cross-browser-testing/accessibility/native-keyboard-accessibility.html) example (see the [source code](https://github.com/mdn/learning-area/blob/main/tools-testing/cross-browser-testing/accessibility/native-keyboard-accessibility.html)). Open this in a new tab, and try pressing the tab key; after a few presses, you should see the tab focus start to move through the different focusable elements. The focused elements are given a highlighted default style in every browser (it differs slightly between different browsers) so that you can tell what element is focused.
+        verbatim: true
+        lines:
+          - 192
+          - 192
+      - id: div-buttons
+        text: But using such code is not advised — you immediately lose the native keyboard accessibility you would have had if you'd just used {{htmlelement("button")}} elements, plus you don't get any of the default CSS styling that buttons get. In the rare to non-existent case when you need to use a non-button element for a button, use the [`button` role](/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/button_role) and implement all the default button behaviors, including keyboard and mouse button support.
+        verbatim: true
+        lines:
+          - 254
+          - 254
+      - id: tabindex
+        text: |-
+          Basically, the [`tabindex`](/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex) attribute is primarily intended to allow tabbable elements to have a custom tab order (specified in positive numerical order), instead of just being tabbed through in their default source order. This is nearly always a bad idea, as it can cause major confusion. Use it only if you really need to, for example, if the layout shows things in a very different visual order to the source code, and you want to make things work more logically. There are two other options for `tabindex`:
+
+          - `tabindex="0"` — as indicated above, this value allows elements that are not normally tabbable to become tabbable. This is the most useful value of `tabindex`.
+          - `tabindex="-1"` — this allows not normally tabbable elements to receive focus programmatically, e.g., via JavaScript, or as the target of links.
+        verbatim: true
+        lines:
+          - 272
+          - 275
+      - id: right-element
+        text: This is a lot of extra hassle to build the functionality back in. And there's bound to be other problems with it. **Better to just use the right element for the right job in the first place.**
+        verbatim: true
+        lines:
+          - 290
+          - 290
+      - id: labels-out-of-context
+        text: "Make sure your labels make sense out of context, read on their own, as well as in the context of the paragraph they are in. For example, the following shows an example of good link text:"
+        verbatim: true
+        lines:
+          - 300
+          - 300
+      - id: fake-button-links
+        text: Anchor tags are often abused with the `onclick` event to create pseudo-buttons by setting **href** to `"#"` or `"javascript:void(0)"` to prevent the page from refreshing.
+        verbatim: true
+        lines:
+          - 501
+          - 501
+      - id: use-button
+        text: These values cause unexpected behavior when copying or dragging links, opening links in a new tab or window, bookmarking, and when JavaScript is still downloading, errors out, or is disabled. This also conveys incorrect semantics to assistive technologies (e.g., screen readers). In these cases, it is recommended to use a {{HTMLElement("button")}} instead. In general you should only use an anchor for navigation using a proper URL.
+        verbatim: true
+        lines:
+          - 503
+          - 503
+      - id: new-tab-indicator
+        text: Links that open in a new tab or window via the `target="_blank"` declaration and links to whose `href` value points to a file resource should include an indicator about the behavior that will occur when the link is activated.
+        verbatim: true
+        lines:
+          - 507
+          - 507
+      - id: skip-link
+        text: A skip link, also known as skipnav, is an `a` element placed as close as possible to the opening {{HTMLElement("body")}} element that links to the beginning of the page's main content. This link allows people to bypass content repeated throughout multiple pages on a website, such as a website's header and primary navigation.
+        verbatim: true
+        lines:
+          - 536
+          - 536
+      - id: skip-link-who
+        text: Skip links are especially useful for people who navigate with the aid of assistive technology such as switch control, voice command, or mouth sticks/head wands, where the act of moving through repetitive links can be a laborious task.
+        verbatim: true
+        lines:
+          - 538
+          - 538
+  - id: challenge-letter
+    title: "Challenge: Marking up a letter"
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Marking_up_a_letter
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/marking_up_a_letter/index.md
+    excerpts:
+      - id: brief
+        text: For this project, your task is to mark up a letter that needs to be hosted on a university intranet. The letter is a response from a research fellow to a prospective PhD student concerning their application to the university.
+        verbatim: true
+        lines:
+          - 112
+          - 112
+      - id: block-semantics
+        text: |-
+          - Add an appropriate HTML structure including doctype, and {{htmlelement("html")}}, {{htmlelement("head")}} and {{htmlelement("body")}} elements.
+          - In general, the letter should be marked up as an organization of headings and paragraphs, except for the addresses mentioned in the next bullet. There is one top level heading (the "Re:" line) and three second level headings.
+          - Put the two addresses inside {{htmlelement("address")}} elements. Each line of the address should sit on a new line, but not be in a new paragraph.
+          - Use an appropriate list type to mark up the semester start dates, study subjects, and exotic dances.
+        verbatim: true
+        lines:
+          - 116
+          - 119
+      - id: inline-semantics
+        text: |-
+          - The names of the sender and receiver (and _Tel_ and _Email_) should be marked up with strong importance.
+          - The four dates in the document should be wrapped in appropriate elements containing machine-readable dates.
+          - The first address and first date in the letter should have a `class` attribute value of `sender-column` set on them. The CSS you'll add later will cause these to be right aligned, as it should be in the case in a classic letter layout.
+          - Mark up the following five acronyms/abbreviations in the main text of the letter — "PhD," "HTML," "CSS," "BCE," and "Esq." — to provide expansions of each one.
+          - The six sub/superscripts should be marked up appropriately — in the chemical formulae, and the numbers 103 and 104 (they should be 10 to the power of 3 and 4, respectively).
+          - Mark up at least two other appropriate words in the text with strong importance/emphasis.
+          - Mark up the university motto quote and citation with appropriate elements.
+        verbatim: true
+        lines:
+          - 123
+          - 129
+      - id: head
+        text: |-
+          - The character set of the document should be set as `utf-8` using the appropriate `<meta>` tag.
+          - The author of the letter should be specified in an appropriate `<meta>` tag.
+          - You should set the language of the document as `en-US`.
+          - Include the following text inside a document title element: "Awesome science application correspondence".
+        verbatim: true
+        lines:
+          - 133
+          - 136
+  - id: challenge-page
+    title: "Challenge: Structuring a page of content"
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Structuring_a_page_of_content
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/learn_web_development/core/structuring_content/structuring_a_page_of_content/index.md
+    excerpts:
+      - id: brief
+        text: For this project, your task is to take the content for the homepage of a bird watching website and add structural elements to it so it can have a page layout applied to it. You also need to make a few additions to the content.
+        verbatim: true
+        lines:
+          - 215
+          - 215
+      - id: content-additions
+        text: |-
+          1. Inside the `<h1>` element, add an `<img>` element that includes the dove logo on the page. Give it blank alternative text ("").
+          2. The "Home", "Get started", "Photos", "Gear", and "Forum" text items should be turned into a navigation menu.
+             1. Mark them up as an unordered list.
+             2. Inside each list item, wrap the text inside an `<a>` element that points to a URL of `#` (which creates a dummy link).
+          3. Remove the `<!-- Link images here. -->` comment. Replace it with a set of four thumbnail images of the "favorite birds". Each one should include some appropriate alternative text to describe the image, and be wrapped in an `<a>` element that links to the full-sized equivalent.
+        verbatim: true
+        lines:
+          - 219
+          - 223
+      - id: structure
+        text: |-
+          1. A header that wraps the top-level page heading and the navigation menu list.
+          2. An additional wrapper around the navigation menu list.
+          3. A main content area containing two columns — a main article to contain the welcome text, and a sidebar (aside) to contain the image thumbnails.
+          4. A footer containing the copyright information and credits.
+        verbatim: true
+        lines:
+          - 229
+          - 232

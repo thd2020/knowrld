@@ -1,0 +1,236 @@
+# Creatures (problems) and the region boss (project). Their problem files are not written yet:
+# the grading owner writes statements, starters, reference solutions and graders from
+# docs/semantic-html/creature-intents.md in the engine repo. Until then each node is `planned`.
+nodes:
+  - id: skeleton-wight
+    kind: problem
+    title: The Skeleton Wight
+    region: semantic-html
+    tier: road
+    requires: [character-encoding, page-title, document-language]
+    intent: Give a bare page its full frame, doctype, html with lang, a head with charset, title and description, and a body.
+    planned: true
+    problem: skeleton-wight
+    cites:
+      - basic-html-syntax#doctype
+      - webpage-metadata#charset
+      - webpage-metadata#title-metadata
+      - webpage-metadata#lang
+
+  - id: tangle-root
+    kind: problem
+    title: The Tangle Root
+    region: semantic-html
+    tier: road
+    requires: [html-validator]
+    intent: Repair unclosed elements, overlapping tags and an unclosed attribute quote so the page matches what the author meant.
+    planned: true
+    problem: tangle-root
+    cites:
+      - basic-html-syntax#nesting-overlap
+      - basic-html-syntax#always-quote
+      - debugging-html#permissive
+      - debugging-html#write-correct
+
+  - id: wall-golem
+    kind: problem
+    title: The Wall-of-Text Golem
+    region: semantic-html
+    tier: road
+    requires: [lists, why-structure]
+    intent: Turn an unmarked recipe into one h1, h2 subtitles, paragraphs, an unordered ingredients list and an ordered method.
+    planned: true
+    problem: wall-golem
+    cites:
+      - headings-and-paragraphs#six-levels
+      - headings-and-paragraphs#why-structure
+      - lists#unordered
+      - lists#ordered
+
+  - id: false-herald
+    kind: problem
+    title: The False Herald
+    region: semantic-html
+    tier: country
+    requires: [heading-navigation, presentational-elements]
+    intent: Replace styled spans and bold lines posing as headings with real heading elements in an unbroken hierarchy under a single h1.
+    planned: true
+    problem: false-herald
+    cites:
+      - headings-and-paragraphs#span-no-semantics
+      - el-headings#usage
+      - el-headings#skip-levels
+
+  - id: shouting-scribe
+    kind: problem
+    title: The Shouting Scribe
+    region: semantic-html
+    tier: country
+    requires: [em-and-i, strong-and-b]
+    intent: Mark stress with em, importance with strong, set-off terms with i and lang, and attention-only keywords with b, replacing presentational misuse.
+    planned: true
+    problem: shouting-scribe
+    cites:
+      - emphasis-and-importance#em
+      - emphasis-and-importance#strong
+      - el-i#uses
+      - el-b#uses
+
+  - id: glossary-sphinx
+    kind: problem
+    title: The Glossary Sphinx
+    region: semantic-html
+    tier: country
+    requires: [list-rules]
+    intent: Mark up a glossary as a description list, including one term with two descriptions and two terms sharing one description.
+    planned: true
+    problem: glossary-sphinx
+    cites:
+      - lists#dl-dt-dd
+      - lists#multiple-descriptions
+      - el-dt#several-terms
+
+  - id: echo-parrot
+    kind: problem
+    title: The Echo Parrot
+    region: semantic-html
+    tier: country
+    requires: [quote-attribution]
+    intent: Mark a block quotation and an inline quotation with cite URLs, put the attribution outside the blockquote and each work's title in cite.
+    planned: true
+    problem: echo-parrot
+    cites:
+      - advanced-text-features#blockquote
+      - advanced-text-features#inline-q
+      - el-blockquote#attribution-outside
+      - el-cite#summary
+
+  - id: almanac-imp
+    kind: problem
+    title: The Almanac Imp
+    region: semantic-html
+    tier: country
+    requires: [abbr-expansion, time-datetime, sup-sub-typography, address-scope]
+    intent: Mark abbreviations with expansions, dates in time with valid datetime values, superscripts and subscripts, and the author's contact details in address.
+    planned: true
+    problem: almanac-imp
+    cites:
+      - el-abbr#expand-first
+      - el-time#datetime-value
+      - advanced-text-features#sup-sub
+      - el-address#usage
+
+  - id: code-gremlin
+    kind: problem
+    title: The Code Gremlin
+    region: semantic-html
+    tier: country
+    requires: [code-family]
+    intent: Mark up a short tutorial with code, a pre block whose markup is escaped, kbd for keys, samp for output and var for a variable.
+    planned: true
+    problem: code-gremlin
+    cites:
+      - advanced-text-features#code-elements
+      - el-pre#escape
+      - el-kbd#nesting
+      - basic-html-syntax#character-references
+
+  - id: div-soup-slime
+    kind: problem
+    title: The Div-Soup Slime
+    region: semantic-html
+    tier: country
+    requires: [choosing-sections, header-footer-context, main-element, nav-element]
+    intent: Replace a page of nested divs with header, nav, one main, article, section with headings, aside and footer, keeping div only where no element fits.
+    planned: true
+    problem: div-soup-slime
+    cites:
+      - structuring-documents#section-tags
+      - structuring-documents#main-article-section
+      - structuring-documents#div-warning
+      - el-section#alternatives
+
+  - id: lost-signpost
+    kind: problem
+    title: The Lost Signpost
+    region: semantic-html
+    tier: road
+    requires: [document-fragments, email-links]
+    intent: Fix broken relative, root-relative and fragment links in a small site's page and add a working mailto contact link.
+    planned: true
+    problem: lost-signpost
+    cites:
+      - creating-links#up-a-directory
+      - creating-links#root-relative
+      - creating-links#fragment-hash
+      - creating-links#mailto
+
+  - id: click-here-ghost
+    kind: problem
+    title: The Click-Here Ghost
+    region: semantic-html
+    tier: road
+    requires: [link-signposts, navigation-menus]
+    intent: Rewrite vague and URL link text into descriptive text, flag downloads and new tabs, and build a list-based menu with no link to the current page.
+    planned: true
+    problem: click-here-ghost
+    cites:
+      - creating-links#link-tips
+      - creating-links#download
+      - creating-links#new-tab-cue
+      - creating-links#nav-list
+
+  - id: mimic-button
+    kind: problem
+    title: The Mimic
+    region: semantic-html
+    tier: country
+    requires: [main-element]
+    intent: Replace div and href="#" fake buttons with real buttons and add a skip link to an id on main as the first thing in body.
+    planned: true
+    problem: mimic-button
+    cites:
+      - accessible-html#div-buttons
+      - accessible-html#use-button
+      - accessible-html#skip-link
+      - el-main#skip-target
+
+  - id: semantic-citadel
+    kind: project
+    title: The Semantic Citadel
+    region: semantic-html
+    tier: road
+    requires:
+      - skeleton-wight
+      - tangle-root
+      - wall-golem
+      - false-herald
+      - shouting-scribe
+      - glossary-sphinx
+      - echo-parrot
+      - almanac-imp
+      - code-gremlin
+      - div-soup-slime
+      - lost-signpost
+      - click-here-ghost
+      - mimic-button
+      - head-resources
+      - information-architecture
+      - source-order
+      - clear-language
+      - title-quality
+      - language-tags
+      - breaks-with-meaning
+      - u-annotation
+      - accessibility-tree
+      - seo-basics
+      - meta-kinds
+      - semantics-in-depth
+    intent: Build a small multi-page site from the two MDN challenges, a marked-up letter and a structured home page, graded for structure, landmarks and heading outline, links, then an accessibility pass.
+    planned: true
+    problem: semantic-citadel
+    cites:
+      - challenge-letter#block-semantics
+      - challenge-letter#inline-semantics
+      - challenge-page#structure
+      - accessible-html#source-order

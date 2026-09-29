@@ -1,0 +1,176 @@
+# Road, part 4: links (Learn: Creating links).
+nodes:
+  - id: hyperlinks
+    kind: concept
+    title: Anatomy of a link
+    region: semantic-html
+    tier: road
+    requires: [attributes]
+    says: Every resource on the web has an address. Wrap text, a heading or an image in an a element and give it that address in href, and the web is a web.
+    cites:
+      - creating-links#url
+      - creating-links#anchor
+      - creating-links#image-link
+      - creating-links#title-hover-only
+    check:
+      - prompt: Which attribute of <a> holds the address the link points to?
+        choices: ["href", "src", "title"]
+        answer: 0
+        explain: A link is an a element whose href attribute contains the web address.
+      - prompt: How do you make an image into a link?
+        choices:
+          - Wrap the <img> element in an <a> element
+          - Give the <img> an href
+          - Put the <a> inside the <img>
+        answer: 0
+        explain: To turn an image into a link, wrap the img element with an a element.
+      - prompt: Why shouldn't vital information live only in a link's title attribute?
+        choices:
+          - It is only revealed on mouse hover, so keyboard and touchscreen users have trouble reaching it
+          - Browsers never show it
+          - It breaks the link
+        answer: 0
+        explain: A title shows only on hover. Put important information in the regular text.
+
+  - id: urls-and-paths
+    kind: concept
+    title: URLs and paths
+    region: semantic-html
+    tier: road
+    requires: [hyperlinks]
+    says: A path is directions from here. Name the folder to go down, two dots to climb up, a slash in front to start from the root. Another site always needs its full URL.
+    cites:
+      - creating-links#up-a-directory
+      - creating-links#root-relative
+      - creating-links#absolute-relative
+      - creating-links#internal-external
+    check:
+      - prompt: From projects/index.html, which path reaches pdfs/project-brief.pdf?
+        choices: ["pdfs/project-brief.pdf", "../pdfs/project-brief.pdf", "./project-brief.pdf"]
+        answer: 1
+        explain: Two dots go up a directory level; then go down into pdfs.
+      - prompt: What does a single slash at the start of a path mean?
+        choices:
+          - Start from the current file's folder
+          - Start in the root directory of the site
+          - Link to another site
+        answer: 1
+        explain: A leading slash makes the path start in the site's root directory, so moving the linking file does not break it.
+      - prompt: A link points to a page on a different site. What is it called?
+        choices: [An internal link, An external link, A fragment]
+        answer: 1
+        explain: A link to a resource on a different site is an external link.
+
+  - id: document-fragments
+    kind: concept
+    title: Linking to part of a page
+    region: semantic-html
+    tier: road
+    requires: [urls-and-paths]
+    says: Give an element an id and it becomes a place you can link to. Add a hash and the id to the path, or use the hash alone to jump within this page.
+    cites:
+      - creating-links#fragment
+      - creating-links#fragment-hash
+      - creating-links#fragment-same-page
+    check:
+      - prompt: 'What does href="#mailing_address" link to?'
+        choices:
+          - The element with id="mailing_address" in the current document
+          - A file called mailing_address
+          - An email address
+        answer: 0
+        explain: A document fragment reference on its own links to another part of the current document.
+      - prompt: What creates a document fragment you can link to?
+        choices: ["An id attribute on an element", "A class attribute", "A heading level"]
+        answer: 0
+        explain: Elements with an id attribute automatically create a document fragment that can be linked to.
+
+  - id: link-text
+    kind: concept
+    title: Clear link text
+    region: semantic-html
+    tier: road
+    requires: [hyperlinks]
+    says: Link text is a signpost read out of context. Say where it goes. Not "click here", not the URL, not the word "link".
+    cites:
+      - creating-links#accessible-links
+      - creating-links#link-tips
+      - accessible-html#labels-out-of-context
+    check:
+      - prompt: Which link text is best?
+        choices: ["Click here", "Download Firefox", "https://www.firefox.com/"]
+        answer: 1
+        explain: Descriptive text serves screen reader users jumping between links, search engines and skimming readers. Repeating the URL sounds ugly when read out.
+      - prompt: Should link text include the word "link"?
+        choices:
+          - Yes, so people know it is a link
+          - No, screen readers already tell people there's a link
+        answer: 1
+        explain: Saying "link" is noise; screen readers announce links and they are styled distinctly.
+
+  - id: link-signposts
+    kind: concept
+    title: Downloads, new tabs and fair warning
+    region: semantic-html
+    tier: road
+    requires: [link-text]
+    says: If a link downloads, streams or opens a new tab, say so in its text. Nobody likes a door that leads somewhere unexpected.
+    cites:
+      - creating-links#signposts
+      - creating-links#download
+      - creating-links#new-tab-cue
+      - accessible-html#new-tab-indicator
+    check:
+      - prompt: Which attribute gives a downloaded file a default save name?
+        choices: ["download", "target", "rel"]
+        answer: 0
+        explain: The download attribute provides a default save filename for a resource to be downloaded.
+      - prompt: 'A link opens in a new tab with target="_blank". What should it also have?'
+        choices:
+          - A cue, such as an icon or text, that it opens a new tab
+          - Nothing more
+          - A title attribute only
+        answer: 0
+        explain: Links that open in a new tab should indicate that behavior, for example with an icon next to the link text.
+
+  - id: email-links
+    kind: concept
+    title: Email links
+    region: semantic-html
+    tier: road
+    requires: [hyperlinks]
+    says: A mailto link opens a new message instead of a page. Put the address after mailto, or leave it out and let the reader choose.
+    cites:
+      - creating-links#mailto
+      - creating-links#mailto-empty
+    check:
+      - prompt: Which href opens a new email to nowhere@mozilla.org?
+        choices: ["mailto:nowhere@mozilla.org", "email://nowhere@mozilla.org", "nowhere@mozilla.org"]
+        answer: 0
+        explain: Email links use the a element with the mailto URL scheme.
+      - prompt: What happens with href="mailto:" and no address?
+        choices:
+          - The link is broken
+          - A new email opens with no destination address
+          - It emails the site owner
+        answer: 1
+        explain: The address is optional; the user's email client opens a new message with no recipient, useful for share links.
+
+  - id: navigation-menus
+    kind: concept
+    title: Navigation menus
+    region: semantic-html
+    tier: road
+    requires: [lists, urls-and-paths]
+    says: A menu is a list of links, the same on every page, so a reader feels they stay in one place while the content changes.
+    cites:
+      - creating-links#nav-menu
+      - creating-links#nav-list
+    check:
+      - prompt: Which markup is semantically right for a navigation menu?
+        choices:
+          - An unordered list of links
+          - A paragraph of links separated by bars
+          - A table with one link per cell
+        answer: 0
+        explain: A navigation menu is usually just a list of links, so an unordered list is semantically OK.

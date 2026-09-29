@@ -6,11 +6,11 @@ statement: |
 
   - the doctype, and a root element that declares the page's language;
   - a head that **starts** with the UTF-8 character-set declaration, so it falls within the first bytes the browser reads;
-  - a viewport setting that matches the device's width and leaves zooming alone;
+  - a viewport setting that matches the device's width and leaves zooming alone (no `user-scalable=no`, no `maximum-scale` below 2);
   - a title that puts the page's purpose first, **Horaires des marées**, and the site's name last, **Port-Brume**;
   - the author, **Maëlle Kerbrat**, and a one-sentence description of the page, as metadata;
   - the stylesheet `styles/marees.css`, which sits in a `styles` folder next to the page;
-  - a body holding the notice, unchanged.
+  - a body holding the notice, unchanged: the same heading, paragraphs and list, word for word. You may wrap it in landmarks.
 path: /marees.html
 files:
   - path: /styles/marees.css
@@ -62,12 +62,11 @@ grader:
       concepts: [document-language, language-tags]
     - id: charset-first
       says: The head starts with the UTF-8 character-set declaration
-      selector: 'head > meta[charset]:first-child'
-      attr: { name: charset, matches: '^\s*utf-8\s*$' }
+      selector: 'head > meta[charset="utf-8" i]:first-child, head > meta[http-equiv="content-type" i][content*="charset=utf-8" i]:first-child'
       concepts: [character-encoding]
     - id: one-charset
       says: There is exactly one character-set declaration
-      selector: 'meta[charset]'
+      selector: 'meta[charset], meta[http-equiv="content-type" i]'
       count: { min: 1, max: 1 }
       concepts: [character-encoding, meta-kinds]
     - id: viewport
@@ -80,7 +79,7 @@ grader:
       selector: 'meta[name="viewport" i]'
       count: { min: 0 }
       every: true
-      attr: { name: content, matches: '^(?!.*user-scalable\s*=\s*(no|0)\b)' }
+      attr: { name: content, matches: '^(?!.*user-scalable\s*=\s*(no|0)\b)(?!.*maximum-scale\s*=\s*(0*\.\d+|0*1(\.\d*)?)(\D|$))' }
       concepts: [viewport-meta]
     - id: title
       says: One title, with the page's purpose first and the site's name last
@@ -96,17 +95,36 @@ grader:
     - id: description
       says: A description meta says what the page holds in a few words
       selector: 'head meta[name="description" i]'
-      attr: { name: content, matches: '\S+(\s+\S+){3,}' }
+      attr: { name: content, matches: '^(?=(.*?[a-zà-ÿ]{3,}){3})\s*\S+(\s+\S+){3,}' }
       concepts: [head-and-metadata, meta-kinds]
     - id: stylesheet
       says: The stylesheet styles/marees.css is linked from the head
       selector: 'head link[rel~="stylesheet" i]'
-      attr: { name: href, matches: 'marees\.css$' }
+      attr: { name: href, matches: 'marees\.css([?#].*)?$' }
       resolves: true
       concepts: [head-resources]
     - id: body
-      says: The notice is in the body, with its heading and list intact
-      selector: 'body > h1 + p + ul'
+      says: The body holds the notice, word for word
+      selector: body
+      text: { matches: '^\s*Horaires\s*des\s*marées\s*Les\s*marées\s*de\s*la\s*semaine\s*au\s*port\s*de\s*Port-Brume\.\s*Les\s*heures\s*sont\s*données\s*à\s*l.heure\s*locale\.\s*Lundi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*12,\s*basse\s*mer\s*à\s*12\s*h\s*25\s*Mardi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*58,\s*basse\s*mer\s*à\s*13\s*h\s*10\s*Mercredi\s*:\s*pleine\s*mer\s*à\s*7\s*h\s*41,\s*basse\s*mer\s*à\s*13\s*h\s*54\s*Par\s*gros\s*temps,\s*la\s*passe\s*nord\s*reste\s*fermée\.\s*$' }
+      concepts: [document-skeleton]
+    - id: notice-heading
+      says: The notice keeps its heading
+      selector: h1
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*Horaires des marées\s*$' }
+      concepts: [document-skeleton]
+    - id: notice-paragraphs
+      says: The notice keeps its two paragraphs
+      selector: 'body p'
+      count: { min: 2 }
+      concepts: [document-skeleton]
+    - id: notice-list
+      says: The notice keeps its list of three days
+      selector: 'ul > li'
+      count: { min: 3, max: 3 }
+      every: true
+      text: { matches: '^\s*(Lundi|Mardi|Mercredi)\s*:' }
       concepts: [document-skeleton]
 fixtures:
   pass:
@@ -161,6 +179,12 @@ fixtures:
         </ul>
         <p>Par gros temps, la passe nord reste fermée.</p>
         </html>
+    - name: the notice wrapped in main, the charset in its http-equiv form, a cache-busting query on the stylesheet
+      edits:
+        - { find: "<h1>Horaires des marées</h1>", replace: "<main><h1>Horaires des marées</h1>" }
+        - { find: "<p>Par gros temps, la passe nord reste fermée.</p>", replace: "<p>Par gros temps, la passe nord reste fermée.</p></main>" }
+        - { find: "<meta charset=\"utf-8\">", replace: "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">" }
+        - { find: "styles/marees.css\"", replace: "styles/marees.css?v=2\"" }
   fail:
     - name: the language copied from an English template
       edits: [{ find: '<html lang="fr">', replace: '<html lang="en">' }]
@@ -194,3 +218,24 @@ fixtures:
       edits: [{ find: '<meta name="author" content="Maëlle Kerbrat">', replace: '<meta name="keywords" content="marées, Port-Brume, Maëlle Kerbrat">' }]
       fails: [author]
       because: Search engines ignore the keywords meta, and it does not name an author.
+    - name: zooming capped at the starting scale
+      edits:
+        - { find: "content=\"width=device-width\"", replace: "content=\"width=device-width, initial-scale=1, maximum-scale=1\"" }
+      fails: [viewport-zoom]
+      because: A maximum scale of 1 stops zooming as surely as user-scalable=no.
+    - name: the notice emptied down to its tags
+      html: |
+        <!doctype html>
+        <html lang="fr">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Horaires des marées – Port-Brume</title>
+            <meta name="author" content="Maëlle Kerbrat">
+            <meta name="description" content="Les pleines et basses mers de la semaine au port.">
+            <link rel="stylesheet" href="styles/marees.css">
+          </head>
+          <body><h1>x</h1><p>y</p><ul></ul></body>
+        </html>
+      fails: [body, notice-heading, notice-list]
+      because: The frame goes around the notice; the notice itself stays as the harbourmaster wrote it.

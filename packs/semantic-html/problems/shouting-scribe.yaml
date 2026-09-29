@@ -10,7 +10,7 @@ statement: |
   - the customer's misspelling, **recieve**, is kept as she wrote it and annotated as a misspelling;
   - in the search results, highlight the word that matched the search in each result.
 
-  Underlining on the web says "link", so nothing else keeps an underline for decoration. How any of it looks is the stylesheet's business.
+  Underlining on the web says "link", so apart from the annotated misspelling nothing is underlined: not with an element, and not with an inline style. Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
 starter:
   html: |
     <!doctype html>
@@ -119,6 +119,11 @@ grader:
       count: { min: 1, max: 1 }
       text: { matches: '^\s*recieve\s*$' }
       concepts: [u-annotation]
+    - id: no-decorative-underline
+      says: Nothing but the misspelling is underlined, not even with an inline style
+      selector: '[style*="underline" i]:not(u)'
+      count: { max: 0 }
+      concepts: [u-annotation, presentational-elements]
     - id: search-matches
       says: The matched word is highlighted in each search result
       selector: 'li mark'
@@ -184,3 +189,8 @@ fixtures:
       edits: [{ find: <em>after</em>, replace: <strong>after</strong> }]
       fails: [stress, strong-for-importance]
       because: The word is stressed to change the meaning, not marked as more important.
+    - name: the heading underlined with an inline style
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"text-decoration: underline\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: Underlined text reads as a link whatever draws the line, so decoration by inline style is the same mistake as u.

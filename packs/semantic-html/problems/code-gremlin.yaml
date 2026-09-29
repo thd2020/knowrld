@@ -6,7 +6,7 @@ statement: |
 
   - **lightLamp()** is a piece of code within a sentence;
   - the example is a block of code, shown exactly as written, tags and all: `<p class="spell">Light!</p>`. Keep its characters from being read as markup;
-  - **Ctrl+S** is a keyboard shortcut made of two keys;
+  - **Ctrl+S** is a keyboard shortcut made of two keys, each marked as a key. MDN writes them side by side, `Ctrl` + `S`; wrapping the pair in one more keyboard-input element is also allowed;
   - **Lamp lit.** is what the program prints;
   - **flame** is the name of a variable.
 starter:
@@ -71,17 +71,17 @@ grader:
       count: { max: 0 }
       concepts: [character-references]
     - id: keys
-      says: The shortcut is keyboard input made of two keys
-      selector: 'kbd > kbd'
+      says: The shortcut is keyboard input made of two keys, Ctrl and S, each its own kbd
+      selector: 'kbd:not(:has(kbd))'
       count: { min: 2, max: 2 }
       every: true
       text: { matches: '^\s*(Ctrl|S)\s*$' }
       concepts: [code-family]
     - id: shortcut
-      says: The two keys sit inside one keyboard input
-      selector: 'kbd:has(> kbd)'
+      says: The two keys sit side by side, with or without an outer kbd around them
+      selector: ':has(> kbd + kbd)'
       count: { min: 1, max: 1 }
-      text: { matches: 'Ctrl[\s\S]*S' }
+      text: { matches: 'Ctrl\W{0,5}S' }
       concepts: [code-family]
     - id: output
       says: The program's output is marked as sample output
@@ -116,6 +116,9 @@ fixtures:
             <pre><code>&lt;p class="spell"&gt;
               Light!
             &lt;/p&gt;</code></pre>
+    - name: the two keys side by side with no outer kbd, as MDN Learn writes them
+      edits:
+        - { find: "<kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>", replace: "<kbd>Ctrl</kbd> + <kbd>S</kbd>" }
   fail:
     - name: the example pasted into the code block unescaped
       edits:

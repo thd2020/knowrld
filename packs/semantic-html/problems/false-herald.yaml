@@ -94,9 +94,14 @@ grader:
       selector: body
       outline: { start: 1 }
       concepts: [heading-navigation]
+    - id: hierarchy
+      says: Each subsection sits under its own section, in the handbook's order
+      selector: body
+      text: { matches: 'Lighting the lamp[\s\S]*(Trimming the wick[\s\S]*Cleaning the lens|Cleaning the lens[\s\S]*Trimming the wick)[\s\S]*Logging the weather[\s\S]*Storm signals[\s\S]*Handing over the watch' }
+      concepts: [headings, heading-navigation]
     - id: no-fake-headings
       says: No span, bold text or paragraph is posing as a heading
-      selector: 'span, b, strong, p, div'
+      selector: ':is(span, b, strong, p, div):not(:is(h1, h2, h3, h4, h5, h6) *)'
       count: { min: 0 }
       every: true
       text: { not: '^\s*(Keeper.s Handbook|Lighting the lamp|Trimming the wick|Cleaning the lens|Logging the weather|Storm signals|Handing over the watch)\s*$' }
@@ -150,6 +155,11 @@ fixtures:
     - name: a heading with a span inside it for an icon
       edits:
         - { find: <h2>Handing over the watch</h2>, replace: '<h2><span class="icon" aria-hidden="true">⚓</span> Handing over the watch</h2>' }
+    - name: the classes kept on a span inside the h1, and bold kept inside real headings
+      edits:
+        - { find: "<h1>Keeper's Handbook</h1>", replace: "<h1><span class=\"big\">Keeper's Handbook</span></h1>" }
+        - { find: "<h3>Storm signals</h3>", replace: "<h3><b>Storm signals</b></h3>" }
+        - { find: "<h2>Handing over the watch</h2>", replace: "<h2><strong>Handing over the watch</strong></h2>" }
   fail:
     - name: an h1 for every section, as in the old outline algorithm
       edits:
@@ -173,3 +183,9 @@ fixtures:
       edits: [{ find: <h1>Keeper's Handbook</h1>, replace: '<span class="big" role="heading" aria-level="1">Keeper''s Handbook</span>' }]
       fails: [one-h1, no-fake-headings]
       because: The statement asks for real heading elements; ARIA is for when no element fits, and here one does.
+    - name: Storm signals moved under Handing over the watch
+      edits:
+        - { find: "<h3>Storm signals</h3>\n    <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>", replace: "" }
+        - { find: "<p>Read the log aloud to the next keeper before you sleep.</p>", replace: "<p>Read the log aloud to the next keeper before you sleep.</p><h3>Storm signals</h3><p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>" }
+      fails: [hierarchy]
+      because: The statement puts Storm signals under Logging the weather; right levels in the wrong section still break the outline.

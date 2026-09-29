@@ -10,6 +10,8 @@ statement: |
   - the link to `https://wardens.example/oak-road` reads **Warden's map**;
   - only *brambles*, *roots* and the warning **Never cut the heartwood.** carry strong importance.
 
+  Change only the markup: every word of the notice, from its heading to the signature, stays where it is, and its five paragraphs stay paragraphs.
+
   Work the way a validator teaches you: fix one tangle, look at the page again, and watch how one mistake was causing several. Some end tags, such as those of `li` and `p`, may be left out under the rules of HTML, and the browser closes them for you; the ones that matter here are the ones it cannot guess.
 starter:
   html: |
@@ -99,6 +101,22 @@ grader:
       selector: 'strong > em, em > strong'
       text: { matches: '^\s*roots\s*$' }
       concepts: [nesting-elements]
+    - id: title-kept
+      says: The notice keeps its top-level heading, The oak road bargain
+      selector: h1
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*The oak road bargain\s*$' }
+      concepts: [html-validator]
+    - id: text-kept
+      says: The rest of the notice is still there, in its order, from the heading to the signature
+      selector: body
+      text: { matches: 'The oak road bargain\s*Whoever clears the old oak road may keep what grows along it\.\s*Tools\s*Bring a saw, shears and a lantern\.\s*Cut the brambles first\s*Then the roots\s*Last of all, the vines\s*Read the Warden.s map before you start\.\s*Never cut the heartwood\.\s*Signed, the Warden of the Oak Road, .who keeps the wood.\.\s*$' }
+      concepts: [html-validator]
+    - id: paragraphs-kept
+      says: The notice's five paragraphs are still paragraphs
+      selector: 'body p'
+      count: { min: 5, max: 5 }
+      concepts: [html-validator]
     - id: steps
       says: The three steps are still a list
       selector: 'ol > li'
@@ -153,3 +171,9 @@ fixtures:
       edits: [{ find: <em>old oak road</em>, replace: <em>old oak road }]
       fails: [em-contained]
       because: An open em spreads to everything after it.
+    - name: the heading and the signature deleted instead of repaired
+      edits:
+        - { find: "<h1>The oak road bargain</h1>", replace: "" }
+        - { find: "<p>Signed, the Warden of the Oak Road, \"who keeps the wood\".</p>", replace: "" }
+      fails: [title-kept, text-kept, paragraphs-kept]
+      because: A repair keeps the Warden's words; deleting what the browser mangled only hides the tangle.

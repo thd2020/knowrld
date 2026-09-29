@@ -1,9 +1,9 @@
 # The Semantic HTML region's map beyond its quoted pages: MDN pages listed, not taught here.
 # Computed by tools/semantic-html/fog.mjs (engine repo) from the tome index of mdn/content at dd70ed064388b0fac4338321f727c8840a508b64.
 # tier country: a page the road links to that belongs to this region but is not quoted, or one promoted by judgement
-# (JUDGED_COUNTRY in fog.mjs: the landmark roles and four glossary terms) (43).
+# (JUDGED_COUNTRY in fog.mjs: the landmark roles, aria-labelledby, the search element and four glossary terms) (45).
 # tier wilderness: a page the road links to that belongs to a later region (its home), or a page one link
-# beyond a quoted country page (105; homes: css, forms, interactive, javascript, media, obsolete, tables). Glossary pages beyond the country are
+# beyond a quoted country page (104; homes: css, forms, interactive, javascript, media, obsolete, tables). Glossary pages beyond the country are
 # kept only when a quoted passage links to them. 4 deprecated or non-standard pages beyond the road are left out.
 # Titles and URLs only; no MDN text is quoted here.
 pages:
@@ -97,6 +97,11 @@ pages:
     region: semantic-html
     tier: country
     url: https://developer.mozilla.org/en-US/docs/Glossary/Void_element
+  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
+    title: "ARIA: aria-labelledby attribute"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
   - slug: Web/Accessibility/ARIA/Reference/Roles
     title: WAI-ARIA Roles
     region: semantic-html
@@ -192,6 +197,11 @@ pages:
     region: semantic-html
     tier: country
     url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script
+  - slug: Web/HTML/Reference/Elements/search
+    title: <search> HTML generic search element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/search
   - slug: Web/HTML/Reference/Elements/span
     title: <span> HTML content span element
     region: semantic-html
@@ -540,12 +550,6 @@ pages:
     tier: wilderness
     home: interactive
     url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-label
-  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
-    title: "ARIA: aria-labelledby attribute"
-    region: semantic-html
-    tier: wilderness
-    home: interactive
-    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
   - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-selected
     title: "ARIA: aria-selected attribute"
     region: semantic-html

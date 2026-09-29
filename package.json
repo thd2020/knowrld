@@ -1,0 +1,15 @@
+{
+  "name": "knowrld",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "validate": "node packages/pack/src/cli.ts validate packs/web-basics",
+    "verify": "node packages/pack/src/cli.ts verify packs/web-basics",
+    "test": "npm test -w @knowrld/pack",
+    "typecheck": "tsc -p packages/pack"
+  },
+  "devDependencies": { "typescript": "^7.0.2", "@types/node": "^24" },
+  "engines": { "node": ">=24" }
+}

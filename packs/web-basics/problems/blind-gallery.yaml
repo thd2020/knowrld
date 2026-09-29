@@ -1,0 +1,48 @@
+id: blind-gallery
+statement: |
+  None of the pictures in this gallery loaded, and there is nothing to stand in for them. That is also what a screen reader user meets on every visit.
+
+  Give every image alt text that describes what the picture shows. A file name is not a description.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Harbour gallery</title></head>
+      <body>
+        <h1>Harbour gallery</h1>
+        <img src="images/fishing-boats.jpg" width="320" height="200">
+        <img src="images/lighthouse.jpg" alt="lighthouse.jpg" width="320" height="200">
+        <img src="images/market.jpg" width="320" height="200">
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Harbour gallery</title></head>
+      <body>
+        <h1>Harbour gallery</h1>
+        <img src="images/fishing-boats.jpg" alt="Three fishing boats moored at the harbour wall at dawn" width="320" height="200">
+        <img src="images/lighthouse.jpg" alt="A white lighthouse on the rocks at the harbour mouth" width="320" height="200">
+        <img src="images/market.jpg" alt="Stalls of the fish market under striped awnings" width="320" height="200">
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: all-alt
+      says: Every image has alt text
+      selector: img
+      count: { min: 3 }
+      every: true
+      attr: { name: alt, matches: '\S' }
+    - id: not-filename
+      says: No alt text is a file name
+      selector: img[alt]
+      every: true
+      attr: { name: alt, matches: '^(?!.*\.(jpe?g|png|gif|webp)\s*$)' }
+    - id: descriptive
+      says: Each description has at least three words
+      selector: img
+      every: true
+      attr: { name: alt, matches: '\S+\s+\S+\s+\S+' }

@@ -1,0 +1,70 @@
+id: two-faced-herald
+statement: |
+  Warnings on this board should be red, `#b3261e`. The rule for `.warning` is there, but the herald still reads them out in charcoal.
+
+  Work out which rule wins and why, then make warnings red. Keep the `p.notice` rule, keep ordinary notices charcoal (`#2b2a27`), and do not use `!important` or `style` attributes.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Herald's board</title></head>
+      <body>
+        <p class="notice warning">The east bridge is closed.</p>
+        <p class="notice">The market opens at nine.</p>
+        <p class="notice warning">Wolves seen near the mill.</p>
+      </body>
+    </html>
+  css: |
+    p.notice {
+      color: #2b2a27;
+    }
+
+    .warning {
+      color: #b3261e;
+    }
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Herald's board</title></head>
+      <body>
+        <p class="notice warning">The east bridge is closed.</p>
+        <p class="notice">The market opens at nine.</p>
+        <p class="notice warning">Wolves seen near the mill.</p>
+      </body>
+    </html>
+  css: |
+    p.notice {
+      color: #2b2a27;
+    }
+
+    p.warning {
+      color: #b3261e;
+    }
+grader:
+  type: dom
+  checks:
+    - id: warnings-red
+      says: Every warning is #b3261e
+      selector: .warning
+      every: true
+      style: { property: color, equals: "#b3261e" }
+    - id: notices-charcoal
+      says: Ordinary notices stay #2b2a27
+      selector: .notice:not(.warning)
+      every: true
+      style: { property: color, equals: "#2b2a27" }
+    - id: notice-rule-kept
+      says: The p.notice rule is still there
+      selector: style
+      text: { matches: "p\\.notice\\s*\\{" }
+    - id: no-important
+      says: No !important
+      selector: style
+      count: { min: 0 }
+      every: true
+      text: { not: "!\\s*important" }
+    - id: no-inline
+      says: No style attributes are used
+      selector: "[style]"
+      count: { min: 0, max: 0 }

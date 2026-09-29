@@ -1,0 +1,55 @@
+id: swollen-crate
+statement: |
+  The crate is meant to take exactly 200 pixels of shelf, border included, but it bulges to 250.
+
+  Fix it without changing its `width`, `padding` or `border` values.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Storeroom</title></head>
+      <body>
+        <div class="crate">Supplies</div>
+      </body>
+    </html>
+  css: |
+    .crate {
+      width: 200px;
+      padding: 20px;
+      border: 5px solid #2b2a27;
+    }
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Storeroom</title></head>
+      <body>
+        <div class="crate">Supplies</div>
+      </body>
+    </html>
+  css: |
+    .crate {
+      box-sizing: border-box;
+      width: 200px;
+      padding: 20px;
+      border: 5px solid #2b2a27;
+    }
+grader:
+  type: dom
+  checks:
+    - id: border-box
+      says: The crate uses the alternative box model
+      selector: .crate
+      style: { property: box-sizing, equals: border-box }
+    - id: width
+      says: The width is still 200px
+      selector: .crate
+      style: { property: width, equals: 200px }
+    - id: padding
+      says: The padding is still 20px
+      selector: .crate
+      style: { property: padding-left, equals: 20px }
+    - id: border
+      says: The border is still 5px
+      selector: .crate
+      style: { property: border-left-width, equals: 5px }

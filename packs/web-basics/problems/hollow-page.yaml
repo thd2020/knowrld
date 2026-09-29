@@ -1,0 +1,50 @@
+id: hollow-page
+statement: |
+  Mira's bakery page shows up, but the browser has to guess at everything around it. Give it a proper frame:
+
+  - a doctype on the first line,
+  - the language of the page set to English on the `<html>` element,
+  - UTF-8 declared as the character encoding in the head,
+  - a title in the head that names the bakery.
+starter:
+  html: |
+    <html>
+      <head>
+      </head>
+      <body>
+        <h1>Mira's bakery</h1>
+        <p>Fresh bread every morning.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Mira's bakery</title>
+      </head>
+      <body>
+        <h1>Mira's bakery</h1>
+        <p>Fresh bread every morning.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: doctype
+      says: The page starts with a doctype
+      doctype: true
+    - id: lang
+      says: The html element says the page is in English
+      selector: html
+      attr: { name: lang, matches: "^en" }
+    - id: charset
+      says: The head declares UTF-8
+      selector: head meta[charset]
+      attr: { name: charset, matches: "^utf-8$" }
+    - id: title
+      says: The title names the bakery
+      selector: head title
+      count: { min: 1, max: 1 }
+      text: { matches: "bakery" }

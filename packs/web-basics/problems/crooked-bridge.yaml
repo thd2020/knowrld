@@ -1,0 +1,75 @@
+id: crooked-bridge
+statement: |
+  The links on this bridge are stacked one above the other. Lay them out in a single row with flexbox:
+
+  - make the list in the navigation a flex container,
+  - spread the links along the row with `space-between`,
+  - centre them on the cross axis.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Bridge town</title></head>
+      <body>
+        <header>
+          <nav>
+            <ul>
+              <li><a href="#inn">The inn</a></li>
+              <li><a href="#smithy">The smithy</a></li>
+              <li><a href="#chapel">The chapel</a></li>
+              <li><a href="#docks">The docks</a></li>
+            </ul>
+          </nav>
+        </header>
+      </body>
+    </html>
+  css: |
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Bridge town</title></head>
+      <body>
+        <header>
+          <nav>
+            <ul>
+              <li><a href="#inn">The inn</a></li>
+              <li><a href="#smithy">The smithy</a></li>
+              <li><a href="#chapel">The chapel</a></li>
+              <li><a href="#docks">The docks</a></li>
+            </ul>
+          </nav>
+        </header>
+      </body>
+    </html>
+  css: |
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+grader:
+  type: dom
+  checks:
+    - id: flex
+      says: The list is a flex container
+      selector: nav ul
+      style: { property: display, equals: flex }
+    - id: spread
+      says: The links are spread with space-between
+      selector: nav ul
+      style: { property: justify-content, equals: space-between }
+    - id: centred
+      says: The links are centred on the cross axis
+      selector: nav ul
+      style: { property: align-items, equals: center }
+    - id: four-links
+      says: All four links are still there
+      selector: nav li a[href]
+      count: { min: 4, max: 4 }

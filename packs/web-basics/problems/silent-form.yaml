@@ -1,0 +1,46 @@
+id: silent-form
+statement: |
+  This sign-up form has words next to its fields, but nothing tells a screen reader which word belongs to which field, and clicking a word does nothing.
+
+  Turn the words **Name** and **Email** into `<label>` elements associated with their inputs. Keep the inputs' `id` values as they are.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Join the guild</title></head>
+      <body>
+        <form>
+          <p>Name <input type="text" id="name" name="name"></p>
+          <p>Email <input type="email" id="email" name="email"></p>
+          <p><button>Join</button></p>
+        </form>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Join the guild</title></head>
+      <body>
+        <form>
+          <p><label for="name">Name</label> <input type="text" id="name" name="name"></p>
+          <p><label for="email">Email</label> <input type="email" id="email" name="email"></p>
+          <p><button>Join</button></p>
+        </form>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: inputs-kept
+      says: Both inputs keep their ids
+      selector: input#name, input#email
+      count: { min: 2, max: 2 }
+    - id: name-label
+      says: A label is associated with the name field
+      selector: label[for="name"]
+      text: { matches: "name" }
+    - id: email-label
+      says: A label is associated with the email field
+      selector: label[for="email"]
+      text: { matches: "email" }

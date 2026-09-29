@@ -1,0 +1,207 @@
+nodes:
+  - id: html-elements
+    kind: concept
+    title: Elements and tags
+    region: html
+    says: Everything on a page is wrapped in an element. Learn its parts before you build anything.
+    cites:
+      - basic-html-syntax#opening-tag
+      - basic-html-syntax#content
+      - basic-html-syntax#closing-tag
+      - basic-html-syntax#attributes
+    check:
+      - prompt: What marks where an element ends?
+        choices:
+          - The closing tag, which repeats the name after a forward slash
+          - The next opening tag
+          - A semicolon after the content
+        answer: 0
+        explain: A closing tag such as </p> ends the element. Leaving it out is a common beginner error.
+      - prompt: In <p class="note">Hello</p>, what is class="note"?
+        choices: [An element, An attribute, The content]
+        answer: 1
+        explain: Attributes carry extra information about the element that is not part of its content.
+
+  - id: void-elements
+    kind: concept
+    title: Void elements
+    region: html
+    requires: [html-elements]
+    says: Some elements have no content and no closing tag. They insert something instead.
+    cites: [basic-html-syntax#void]
+    check:
+      - prompt: Which of these is a void element?
+        choices: ["<img>", "<p>", "<ul>"]
+        answer: 0
+        explain: An image element embeds a resource and cannot contain other HTML content.
+
+  - id: document-skeleton
+    kind: concept
+    title: The document skeleton
+    region: html
+    requires: [html-elements]
+    says: Every page shares the same frame. The doctype first, then html, head and body.
+    cites:
+      - basic-html-syntax#doctype
+      - basic-html-syntax#html-root
+      - basic-html-syntax#head
+      - basic-html-syntax#body
+    check:
+      - prompt: Where does content that users should see belong?
+        choices: [In the head, In the body, Before the doctype]
+        answer: 1
+        explain: The body contains all the content that displays on the page. The head holds information about the page.
+      - prompt: Why is <!doctype html> still written today?
+        choices:
+          - It links to the rules the page must follow
+          - It is a historical artifact that must be included for everything else to work correctly
+          - It sets the page language
+        answer: 1
+        explain: Doctypes once linked to rule sets. Now the short form is kept so the browser renders the page correctly.
+
+  - id: head-metadata
+    kind: concept
+    title: Metadata in the head
+    region: html
+    requires: [document-skeleton]
+    says: The head speaks to the browser, to bookmarks and to search engines. Say the encoding and the title.
+    cites:
+      - basic-html-syntax#charset
+      - basic-html-syntax#title
+      - webpage-metadata#title-uses
+    check:
+      - prompt: Where does the text of the <title> element appear?
+        choices:
+          - As the largest heading on the page
+          - In the browser tab, in bookmarks and in search results
+          - Nowhere; it is only for the server
+        answer: 1
+        explain: The title names the tab and is also used as the suggested bookmark name and in search results.
+
+  - id: hollow-page
+    kind: problem
+    title: The Hollow Page
+    region: html
+    requires: [head-metadata]
+    cites: [basic-html-syntax#doctype, basic-html-syntax#charset, basic-html-syntax#title]
+    problem: hollow-page
+
+  - id: headings
+    kind: concept
+    title: Headings
+    region: html
+    requires: [html-elements]
+    says: Six levels of heading give a page its outline. Use them for meaning, never for size.
+    cites: [headings#six, headings#three, headings#semantics]
+    check:
+      - prompt: You want a subheading to look smaller. What do you change?
+        choices:
+          - Switch it from <h2> to <h5>
+          - Keep the correct level and change its size with CSS
+          - Wrap it in <small>
+        answer: 1
+        explain: The level carries the outline of the document. Size is a job for CSS.
+
+  - id: lists
+    kind: concept
+    title: Lists
+    region: html
+    requires: [html-elements]
+    says: When order matters, number it. When it does not, bullet it.
+    cites: [lists#unordered, lists#ul, lists#li, lists#ordered]
+    check:
+      - prompt: Which list fits the steps of a recipe?
+        choices: ["<ul>", "<ol>", "A <p> with <br> between lines"]
+        answer: 1
+        explain: Ordered lists are for items whose order matters, such as directions.
+      - prompt: What element wraps each item in both kinds of list?
+        choices: ["<li>", "<item>", "<dt>"]
+        answer: 0
+        explain: Each item goes in an <li> element inside the <ul> or <ol>.
+
+  - id: scrambled-recipe
+    kind: problem
+    title: The Scrambled Recipe
+    region: html
+    requires: [headings, lists]
+    cites: [headings#six, lists#unordered, lists#ordered]
+    problem: scrambled-recipe
+
+  - id: links
+    kind: concept
+    title: Links
+    region: html
+    requires: [html-elements]
+    says: A link is an a element with an href. Its text should say where it goes.
+    cites: [creating-links#basic, creating-links#screen-readers, creating-links#skimming]
+    check:
+      - prompt: Which link text is better?
+        choices: ["Click here", "Download the timetable"]
+        answer: 1
+        explain: Screen reader users often hear links out of context, and sighted readers skim for them. The text must describe the target.
+
+  - id: images
+    kind: concept
+    title: Images and alt text
+    region: html
+    requires: [void-elements]
+    says: An image needs a source to show and words for when it cannot be seen.
+    cites: [html-images#img, html-images#alt]
+    check:
+      - prompt: What should an image's alt attribute contain?
+        choices:
+          - The file name
+          - A textual description for when the image cannot be seen or displayed
+          - Keywords for search engines only
+        answer: 1
+        explain: The alt text stands in for the image when it is not displayed or cannot be seen.
+
+  - id: blind-gallery
+    kind: problem
+    title: The Blind Gallery
+    region: html
+    requires: [images]
+    cites: [html-images#alt]
+    problem: blind-gallery
+
+  - id: landmarks
+    kind: concept
+    title: Page landmarks
+    region: html
+    requires: [headings, links]
+    says: Header, nav, main and footer tell every reader, human or machine, what each part of the page is for.
+    cites: [structuring-documents#functionality, structuring-documents#nav, structuring-documents#main]
+    check:
+      - prompt: Which element should hold the unique content of a page?
+        choices: ["<div id=\"content\">", "<main>", "<section>"]
+        answer: 1
+        explain: The main element marks the unique content of the page, and assistive technology can jump straight to it.
+
+  - id: form-labels
+    kind: concept
+    title: Labels for form controls
+    region: html
+    requires: [html-elements]
+    says: Every control needs a label that names what to enter.
+    cites: [html-forms#label, html-forms#screen-reader, html-forms#id]
+    check:
+      - prompt: How is a <label> tied to an <input id="email">?
+        choices: ["<label for=\"email\">", "<label name=\"email\">", "By placing the label directly before the input"]
+        answer: 0
+        explain: The for attribute of the label matches the id of the control.
+
+  - id: silent-form
+    kind: problem
+    title: The Silent Form
+    region: html
+    requires: [form-labels]
+    cites: [html-forms#label, html-forms#id]
+    problem: silent-form
+
+  - id: notice-board
+    kind: project
+    title: The Village Notice Board
+    region: html
+    requires: [hollow-page, scrambled-recipe, blind-gallery, landmarks, silent-form]
+    cites: [structuring-documents#functionality, creating-links#screen-readers, html-images#alt]
+    problem: notice-board

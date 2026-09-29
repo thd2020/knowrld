@@ -1,0 +1,76 @@
+id: scrambled-recipe
+statement: |
+  This recipe was typed as loose paragraphs with line breaks. Give it structure:
+
+  - one top-level heading with the name of the dish,
+  - a second-level heading for **Ingredients** and one for **Method**,
+  - the ingredients as an unordered list, since their order does not matter,
+  - the method as an ordered list, since it does.
+
+  Remove the `<br>` line breaks; list items replace them.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Flatbread</title></head>
+      <body>
+        <p><b>Flatbread</b></p>
+        <p>Ingredients</p>
+        <p>- 250 g flour<br>- 150 ml water<br>- 1 teaspoon salt</p>
+        <p>Method</p>
+        <p>1. Mix the flour and salt.<br>2. Add the water and knead.<br>3. Cook in a hot pan.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Flatbread</title></head>
+      <body>
+        <h1>Flatbread</h1>
+        <h2>Ingredients</h2>
+        <ul>
+          <li>250 g flour</li>
+          <li>150 ml water</li>
+          <li>1 teaspoon salt</li>
+        </ul>
+        <h2>Method</h2>
+        <ol>
+          <li>Mix the flour and salt.</li>
+          <li>Add the water and knead.</li>
+          <li>Cook in a hot pan.</li>
+        </ol>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: one-h1
+      says: One top-level heading names the dish
+      selector: h1
+      count: { min: 1, max: 1 }
+      text: { matches: "flatbread" }
+    - id: two-h2
+      says: Ingredients and Method are second-level headings
+      selector: h2
+      count: { min: 2, max: 2 }
+    - id: ingredients
+      says: The ingredients are an unordered list
+      selector: ul > li
+      count: { min: 3 }
+    - id: flour
+      says: Flour is one of the ingredients
+      selector: ul > li
+      text: { matches: "flour" }
+    - id: steps
+      says: The method is an ordered list
+      selector: ol > li
+      count: { min: 3 }
+    - id: first-step
+      says: The first step comes first
+      selector: ol > li:first-child
+      text: { matches: "mix" }
+    - id: no-br
+      says: No line breaks are left in the lists
+      selector: ul br, ol br
+      count: { min: 0, max: 0 }

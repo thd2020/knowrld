@@ -1,0 +1,481 @@
+# Excerpts from MDN Learn web development, cut verbatim at mdn/content commit e1250f3487ad2d64e06cca58660ddc95b9a2d65c.
+# Prose by Mozilla Contributors, licensed CC BY-SA 2.5 or any later version:
+# https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license
+# Re-check against upstream with: node packages/pack/src/cli.ts verify packs/web-basics
+sources:
+  - id: basic-html-syntax
+    title: Basic HTML syntax
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/basic_html_syntax/index.md
+    excerpts:
+      - id: what-is-html
+        text: '{{glossary("HTML")}} (HyperText Markup Language) is a _markup language_ that tells web browsers how to structure the web pages you visit. HTML consists of a series of {{glossary("Element", "elements")}}, which you use to enclose, wrap, or _mark up_ different parts of content to make it appear or act in a certain way. The enclosing {{glossary("Tag", "tags")}} can make content into a hyperlink to link to another page, italicize words, and so on. For example, consider the following line of text:'
+        verbatim: true
+        lines:
+          - 37
+          - 37
+      - id: opening-tag
+        text: "- **The opening tag:** This consists of the name of the element (in this example, _p_ for paragraph), wrapped in opening and closing angle brackets. This opening tag marks where the element begins or starts to take effect. In this example, it precedes the start of the paragraph text."
+        verbatim: true
+        lines:
+          - 70
+          - 70
+      - id: content
+        text: '- **The content:** This is the content of the element. In this example, it is the paragraph text — "My cat is very grumpy".'
+        verbatim: true
+        lines:
+          - 71
+          - 71
+      - id: closing-tag
+        text: "- **The closing tag:** This is the same as the opening tag, except that it includes a forward slash before the element name. This marks where the element ends. Failing to include a closing tag is a common beginner error that can produce peculiar results."
+        verbatim: true
+        lines:
+          - 72
+          - 72
+      - id: void
+        text: Not all elements follow the pattern of an opening tag, content, then a closing tag. Some elements consist of a single tag, which is typically used to insert/embed something in the document. Such elements are called {{glossary("void element", "void elements")}}, which means "elements that cannot contain other HTML content".
+        verbatim: true
+        lines:
+          - 126
+          - 126
+      - id: attributes
+        text: Attributes contain extra information about the element that isn't part of its content. The **`class`** attribute provides an identifying name that can be used to target the element with styles (CSS) or scripting information (JavaScript).
+        verbatim: true
+        lines:
+          - 149
+          - 149
+      - id: doctype
+        text: In modern times, the doctype is a historical artifact that needs to be included for everything else to work correctly. `<!doctype html>` is the shortest string of characters that counts as a valid doctype, and it should be included at the top of all webpages. That is all you need to know!
+        verbatim: true
+        lines:
+          - 315
+          - 315
+      - id: html-root
+        text: '2. `<html></html>`: The {{htmlelement("html")}} element. This element wraps all the content on the page. It is sometimes known as the root element.'
+        verbatim: true
+        lines:
+          - 317
+          - 317
+      - id: head
+        text: "3. `<head></head>`: The {{htmlelement(\"head\")}} element. This element acts as a container for information about the page that _isn't_ part of the content that users will see. This can include keywords and a page description to be shown in search results, CSS to style content, character set declarations, and more. You will learn more about the head of the page in the next article."
+        verbatim: true
+        lines:
+          - 318
+          - 318
+      - id: charset
+        text: '4. `<meta charset="utf-8">`: A {{htmlelement("meta")}} element. This element represents metadata that describes the page. The [`charset`](/en-US/docs/Web/HTML/Reference/Elements/meta#charset) attribute specifies the character encoding your document will use. UTF-8 includes most characters from the vast majority of human written languages, which means the page will be able to display different languages successfully. There is no reason not to set this, and it can help avoid some problems later.'
+        verbatim: true
+        lines:
+          - 319
+          - 319
+      - id: title
+        text: '5. `<title></title>`: The {{htmlelement("title")}} element. This sets the title of the page, which is the title that appears in the browser tab the page is loaded in. The page title is also used to describe the page when it is bookmarked.'
+        verbatim: true
+        lines:
+          - 320
+          - 320
+      - id: body
+        text: '6. `<body></body>`: The {{htmlelement("body")}} element. This contains _all_ the content that displays on the page, including text, images, videos, games, playable audio tracks, and so on.'
+        verbatim: true
+        lines:
+          - 321
+          - 321
+  - id: webpage-metadata
+    title: What's in the head? Web page metadata
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Webpage_metadata
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/webpage_metadata/index.md
+    excerpts:
+      - id: title-uses
+        text: The `<title>` element contents are also used in other ways. For example, if you try bookmarking the page (_Bookmarks > Bookmark This Page_ or the star icon in the URL bar in Firefox), you will see the `<title>` contents filled in as the suggested bookmark name.
+        verbatim: true
+        lines:
+          - 88
+          - 88
+  - id: headings
+    title: Headings and paragraphs
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Headings_and_paragraphs
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/headings_and_paragraphs/index.md
+    excerpts:
+      - id: six
+        text: 'There are six heading elements: {{htmlelement("Heading_Elements", "h1")}}, {{htmlelement("Heading_Elements", "h2")}}, {{htmlelement("Heading_Elements", "h3")}}, {{htmlelement("Heading_Elements", "h4")}}, {{htmlelement("Heading_Elements", "h5")}}, and {{htmlelement("Heading_Elements", "h6")}}. Each element represents a different level of content in the document; `<h1>` represents the main heading, `<h2>` represents subheadings, `<h3>` represents sub-subheadings, and so on.'
+        verbatim: true
+        lines:
+          - 58
+          - 58
+      - id: three
+        text: "- Of the six heading levels available, you should aim to use no more than three per page, unless you feel it is necessary. Documents with many levels (for example, a deep heading hierarchy) become unwieldy and difficult to navigate. On such occasions, it is advisable to spread the content over multiple pages if possible."
+        verbatim: true
+        lines:
+          - 91
+          - 91
+      - id: semantics
+        text: In a similar way, we need to make sure we are using the correct elements, giving our content the correct meaning, function, or appearance. In this context, the `{{htmlelement("Heading_Elements", "&lt;h1>")}}` element is also a semantic element, which gives the text it wraps around the role (or meaning) of "a top level heading on your page."
+        verbatim: true
+        lines:
+          - 151
+          - 151
+  - id: structuring-documents
+    title: Structuring documents
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Structuring_documents
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/structuring_documents/index.md
+    excerpts:
+      - id: functionality
+        text: In your HTML code, you can mark up sections of content based on their _functionality_ — you can use elements that represent the sections of content described above unambiguously, and assistive technologies like screen readers can recognize those elements and help with tasks like "find the main navigation", or "find the main content." As we mentioned earlier in the course, there are a number of [consequences of not using the right element structure and semantics for the right job](/en-US/docs/Learn_web_development/Core/Structuring_content/Headings_and_paragraphs#why_do_we_need_structure).
+        verbatim: true
+        lines:
+          - 70
+          - 70
+      - id: nav
+        text: |-
+          - navigation bar:
+            - : Links to the site's main sections; usually represented by menu buttons, links, or tabs. Like the header, this content usually remains consistent from one webpage to another — having inconsistent navigation on your website will just lead to confused, frustrated users. Many web designers consider the navigation bar to be part of the header rather than an individual component, but that's not a requirement; in fact, some also argue that having the two separate is better for [accessibility](/en-US/docs/Learn_web_development/Core/Accessibility), as screen readers can read the two features better if they are separate.
+        verbatim: true
+        lines:
+          - 45
+          - 46
+      - id: main
+        text: |-
+          - main content:
+            - : A big area in the center that contains most of the unique content of a given webpage, for example, the video you want to watch, or the main story you're reading, or the map you want to view, or the news headlines, etc. This is the one part of the website that definitely will vary from page to page!
+        verbatim: true
+        lines:
+          - 47
+          - 48
+  - id: lists
+    title: Lists
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Lists
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/lists/index.md
+    excerpts:
+      - id: unordered
+        text: "Unordered lists are used to mark up lists of items for which the order of the items doesn't matter. Let's take a grocery shopping list as an example:"
+        verbatim: true
+        lines:
+          - 38
+          - 38
+      - id: ul
+        text: In this example, the items can be in any order. To create this list in HTML, we first wrap the whole list in a {{htmlelement("ul")}} (unordered list) element.
+        verbatim: true
+        lines:
+          - 47
+          - 47
+      - id: li
+        text: 'Then, we wrap each item in a {{htmlelement("li")}} (list item) element:'
+        verbatim: true
+        lines:
+          - 48
+          - 48
+      - id: ordered
+        text: "Ordered lists are lists in which the order of the items _does_ matter. Let's take a set of directions as an example:"
+        verbatim: true
+        lines:
+          - 76
+          - 76
+  - id: creating-links
+    title: Creating links
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Creating_links
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/creating_links/index.md
+    excerpts:
+      - id: basic
+        text: A basic link is created by wrapping the text or other content inside an {{htmlelement("a")}} element and using the [`href`](/en-US/docs/Web/HTML/Reference/Elements/a#href) attribute, also known as a **Hypertext Reference**, or **target**, that contains the web address.
+        verbatim: true
+        lines:
+          - 62
+          - 62
+      - id: screen-readers
+        text: "- Screen reader users like jumping around from link to link on the page, and reading links out of context."
+        verbatim: true
+        lines:
+          - 398
+          - 398
+      - id: skimming
+        text: "- Visual readers skim over the page rather than reading every word, and their eyes will be drawn to page features that stand out, like links. They will find descriptive link text useful."
+        verbatim: true
+        lines:
+          - 400
+          - 400
+  - id: html-images
+    title: HTML images
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_images
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/html_images/index.md
+    excerpts:
+      - id: img
+        text: 'In order to put an image on a web page, we use the {{htmlelement("img")}} element. This is a {{Glossary("void element")}} (meaning, it cannot have any child content and cannot have an end tag) that requires two attributes to be useful: `src` and `alt`. The `src` attribute contains a URL pointing to the image you want to embed in the page. As with the `href` attribute for {{htmlelement("a")}} elements, the `src` attribute can be a relative URL or an absolute URL. Without a `src` attribute, an `img` element has no image to load.'
+        verbatim: true
+        lines:
+          - 46
+          - 46
+      - id: alt
+        text: "The next attribute we'll look at is `alt`. Its value is supposed to be a textual description of the image, for use in situations where the image cannot be seen/displayed or takes a long time to render because of a slow internet connection. For example, our above code could be modified like so:"
+        verbatim: true
+        lines:
+          - 92
+          - 92
+  - id: html-forms
+    title: Forms and buttons in HTML
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_forms
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/structuring_content/html_forms/index.md
+    excerpts:
+      - id: label
+        text: As we said above, {{htmlelement("label")}} elements provide identifying labels associated with form controls that describe the data that should be entered into them. You can put whatever text content you like in `<label>` elements, but they should accurately describe what data the associated form control expects. The association is created by giving the form control an `id` attribute, then giving the `<label>` element a `for` attribute with the same value as the control's `id`.
+        verbatim: true
+        lines:
+          - 219
+          - 219
+      - id: screen-reader
+        text: "- When visually impaired users use a screen reader to help them read and interact with web page content, the screen reader will read out the associated label text when each control is encountered. This makes it easier for the users to understand what content should be entered into each control."
+        verbatim: true
+        lines:
+          - 230
+          - 230
+      - id: id
+        text: "- `id`: Specifies an ID that can be used to identify the element. In this case, it is used to associate the form control with its `<label>`."
+        verbatim: true
+        lines:
+          - 196
+          - 196
+  - id: what-is-css
+    title: What is CSS?
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/What_is_CSS
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/styling_basics/what_is_css/index.md
+    excerpts:
+      - id: control
+        text: Using CSS, you can control exactly how HTML elements look in the browser, presenting your documents to your users with whatever design and layout you like.
+        verbatim: true
+        lines:
+          - 57
+          - 57
+      - id: rule-based
+        text: CSS is a rule-based language — you define rules by specifying groups of styles that should be applied to a particular element or groups of elements on your web page.
+        verbatim: true
+        lines:
+          - 75
+          - 75
+      - id: selector
+        text: '- In the above example, the CSS rule opens with a {{Glossary("CSS Selector", "selector")}}. This _selects_ the HTML elements that we are going to style. In this case, we are styling level one headings (`{{htmlelement("Heading_Elements", "&lt;h1>")}}`).'
+        verbatim: true
+        lines:
+          - 86
+          - 86
+      - id: block
+        text: "- We then include a set of curly braces (`{ }`) to create a **declaration block**."
+        verbatim: true
+        lines:
+          - 87
+          - 87
+      - id: declarations
+        text: "- The declaration block contains one or more **declarations**, which take the form of **property** and **value** pairs. We specify the property (for example, `color` in the above example) before the colon, and we specify the value of the property after the colon (`red` is the value being set for the `color` property)."
+        verbatim: true
+        lines:
+          - 88
+          - 88
+  - id: getting-started-css
+    title: Getting started with CSS
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Getting_started
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/styling_basics/getting_started/index.md
+    excerpts:
+      - id: three-ways
+        text: The very first thing we need to do is to tell the HTML document that we have some CSS rules we want it to use. There are three different ways to apply CSS to an HTML document that you'll commonly come across — external stylesheets, internal stylesheets, and inline styles. Let's look at these now.
+        verbatim: true
+        lines:
+          - 81
+          - 81
+      - id: external
+        text: An external stylesheet contains CSS in a separate file with a `.css` extension. This is the most common and useful method of bringing CSS to a document. You can link a single CSS file to multiple web pages, styling all of them with the same CSS stylesheet.
+        verbatim: true
+        lines:
+          - 87
+          - 87
+      - id: internal-cost
+        text: However, for sites with more than one page, internal stylesheets are less efficient than external stylesheets. To apply uniform CSS styling to multiple pages using internal stylesheets, you must repeat the internal stylesheet across every web page. The efficiency penalty carries over to site maintenance too. With CSS in internal stylesheets, there is the risk that even one simple styling change may require edits to multiple web pages.
+        verbatim: true
+        lines:
+          - 140
+          - 140
+      - id: inline
+        text: Inline styles are CSS declarations that affect a single HTML element, contained within a `style` attribute. Let's try implementing one now.
+        verbatim: true
+        lines:
+          - 146
+          - 146
+  - id: basic-selectors
+    title: Basic CSS selectors
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Basic_selectors
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/styling_basics/basic_selectors/index.md
+    excerpts:
+      - id: type
+        text: A **type selector** is sometimes called a _tag name selector_ or _element selector_ because it selects an HTML tag/element in your document. In the example below, we have used the `span`, `em` and `strong` selectors.
+        verbatim: true
+        lines:
+          - 49
+          - 49
+      - id: class
+        text: The case-sensitive class selector starts with a dot (`.`) character. It will select everything in the document with that class applied to it. In the live example below, we have created a class called `highlight` and applied it to several places in the document. All elements with that class are highlighted.
+        verbatim: true
+        lines:
+          - 96
+          - 96
+      - id: id
+        text: "The case-sensitive ID selector begins with a `#` rather than a dot character, but is used in the same way as a class selector. The difference is that an ID can be used only once per page, and elements can only have a single `id` value. An ID selector selects an element with a specific `id`, and you can precede the ID with a type selector to only target the element if both the element and ID match. You can see both of these uses in the following example:"
+        verbatim: true
+        lines:
+          - 216
+          - 216
+      - id: list
+        text: If you want to apply the same CSS to multiple items, you can combine individual selectors into a _selector list_. The rule is then applied to all the individual selectors. For example, if I have the same CSS for an `h1` and a `.special` selector, I could write this as two separate rules.
+        verbatim: true
+        lines:
+          - 260
+          - 260
+  - id: handling-conflicts
+    title: Handling conflicts
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Handling_conflicts
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/styling_basics/handling_conflicts/index.md
+    excerpts:
+      - id: cascade
+        text: Stylesheets [**cascade**](/en-US/docs/Web/CSS/Guides/Cascade/Introduction). At a very simple level, this means that the origin and the order of CSS rules matter. When two rules both have equal specificity, the one that is defined last in the stylesheet is the one that will be used. There are other concepts that have an effect, such as [cascade layers](/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers), but these are more advanced and we won't cover them in any detail here.
+        verbatim: true
+        lines:
+          - 53
+          - 53
+      - id: specificity
+        text: "Below, we again have two rules that could apply to the `<h1>` element. The `<h1>` content below ends up being colored `red`, even though the `color: blue` declaration appears later in the source order, because the class selector `main-heading` gives its rule a higher specificity than the type selector `h1`. The declaration with the higher specificity, defined using the class selector, is applied."
+        verbatim: true
+        lines:
+          - 80
+          - 80
+      - id: inheritance
+        text: Also significant here is the concept of [**inheritance**](/en-US/docs/Web/CSS/Guides/Cascade/Inheritance), which means that some CSS properties by default inherit values set on the current element's parent element and some don't. This can also cause unexpected behavior.
+        verbatim: true
+        lines:
+          - 47
+          - 47
+  - id: box-model
+    title: The box model
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/styling_basics/box_model/index.md
+    excerpts:
+      - id: parts
+        text: |-
+          - **Content box**: The area where your content is displayed; size it using properties like {{cssxref("width")}} and {{cssxref("height")}}.
+          - **Padding box**: The padding sits around the content as white space; size it using {{cssxref("padding")}} and related properties.
+          - **Border box**: The border box wraps the content and any padding; size it using {{cssxref("border")}} and related properties.
+          - **Margin box**: The margin is the outermost layer, wrapping the content, padding, and border as whitespace between this box and other elements; size it using {{cssxref("margin")}} and related properties.
+        verbatim: true
+        lines:
+          - 189
+          - 192
+      - id: standard
+        text: In the standard box model, if you set `width` and `height` property values on a box, these values define the `width` and `height` of the _content box_. Any padding and borders are then added to those dimensions to get the total size taken up by the box (see the image below).
+        verbatim: true
+        lines:
+          - 200
+          - 200
+      - id: alternative
+        text: In the alternative box model, any width is the width of the visible box on the page. The content area width is that width minus the width for the padding and border (see image below). This is convenient as there is no need to add up the border and padding to get the real size of the box.
+        verbatim: true
+        lines:
+          - 223
+          - 223
+      - id: border-box
+        text: "To turn on the alternative model for an element, set `box-sizing: border-box` on it:"
+        verbatim: true
+        lines:
+          - 225
+          - 225
+  - id: layout-intro
+    title: Introduction to CSS layout
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Introduction
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/css_layout/introduction/index.md
+    excerpts:
+      - id: normal-flow
+        text: Elements on a webpage lay out in **normal flow** if you haven't applied any CSS to change the way they behave. You can change how elements behave either by adjusting their position in normal flow or by removing them from it altogether. Starting with a solid, well-structured document that's readable in normal flow is the best way to begin any webpage. It ensures that your content is readable even if the user's using a very limited browser or a device such as a screen reader that reads out the content of the page. In addition, since normal flow is designed to make a readable document, by starting in this way you're working _with_ the document rather than struggling _against_ it as you make changes to the layout.
+        verbatim: true
+        lines:
+          - 44
+          - 44
+  - id: flexbox
+    title: Flexbox
+    url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-28
+    raw: https://raw.githubusercontent.com/mdn/content/e1250f3487ad2d64e06cca58660ddc95b9a2d65c/files/en-us/learn_web_development/core/css_layout/flexbox/index.md
+    excerpts:
+      - id: container
+        text: "This causes the `<section>` element to become a **flex container** and its children become **flex items**. This is what it looks like:"
+        verbatim: true
+        lines:
+          - 164
+          - 164
+      - id: recap
+        text: Let's recap what's happening here. Adding a {{cssxref("display")}} value of `flex` to an element makes it a flex container. The container is displayed as [Block-level content](/en-US/docs/Glossary/Block-level_content) in terms of how it interacts with the rest of the page. When the element is converted to a flex container, its children are converted to (and laid out as) flex items.
+        verbatim: true
+        lines:
+          - 170
+          - 170
+      - id: main-axis
+        text: "- The **main axis** is the axis running in the direction the flex items are laid out in (for example, as a row across the page, or a column down the page.) The start and end points of this axis are called the **main start** and **main end**. The length of a flex item along the main axis is the **main size**."
+        verbatim: true
+        lines:
+          - 184
+          - 184
+      - id: cross-axis
+        text: "- The **cross axis** is the axis running perpendicular to the direction the flex items are laid out in. The start and end points of this axis are called the **cross start** and **cross end**. The length of a flex item along the cross axis is the **cross size**."
+        verbatim: true
+        lines:
+          - 185
+          - 185
+      - id: align-items
+        text: The {{cssxref("align-items")}} property controls where the flex items sit on the cross axis.
+        verbatim: true
+        lines:
+          - 638
+          - 638
+      - id: justify-content
+        text: '{{cssxref("justify-content")}} controls where the flex items sit on the main axis.'
+        verbatim: true
+        lines:
+          - 690
+          - 690

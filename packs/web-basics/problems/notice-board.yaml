@@ -1,0 +1,114 @@
+id: notice-board
+statement: |
+  The village notice board was built from anonymous boxes. Rebuild it so that every reader, and every machine, can tell what each part is for.
+
+  - A complete document frame: doctype, English as the language, UTF-8, and a title.
+  - A `<header>` that contains a `<nav>`. The navigation is a list of at least three links, each with an `href` and with text that says where it goes. No "click here".
+  - One `<main>` with exactly one top-level heading and at least two second-level headings.
+  - At least one image, with alt text.
+  - A `<footer>`.
+starter:
+  html: |
+    <html>
+      <head></head>
+      <body>
+        <div class="top">
+          <div class="menu">
+            <a href="#news">Click here</a> for news,
+            <a href="#market">click here</a> for the market.
+          </div>
+        </div>
+        <div class="content">
+          <div class="big">Oakford notice board</div>
+          <div class="section-title">News</div>
+          <p>The mill reopens on Monday.</p>
+          <div class="section-title">Market</div>
+          <p>Stalls open at nine every Saturday.</p>
+          <img src="images/mill.jpg">
+        </div>
+        <div class="bottom">Kept by the parish council</div>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Oakford notice board</title>
+      </head>
+      <body>
+        <header>
+          <nav>
+            <ul>
+              <li><a href="#news">Village news</a></li>
+              <li><a href="#market">Saturday market</a></li>
+              <li><a href="#council">Parish council</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <h1>Oakford notice board</h1>
+          <h2 id="news">News</h2>
+          <p>The mill reopens on Monday.</p>
+          <img src="images/mill.jpg" alt="The old watermill beside the river">
+          <h2 id="market">Market</h2>
+          <p>Stalls open at nine every Saturday.</p>
+        </main>
+        <footer id="council">Kept by the parish council</footer>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: doctype
+      says: The page starts with a doctype
+      doctype: true
+    - id: lang
+      says: The page is marked as English
+      selector: html
+      attr: { name: lang, matches: "^en" }
+    - id: charset
+      says: The head declares UTF-8
+      selector: head meta[charset]
+      attr: { name: charset, matches: "^utf-8$" }
+    - id: title
+      says: The page has a title
+      selector: head title
+      text: { matches: "\\S" }
+    - id: header-nav
+      says: The navigation sits in the header
+      selector: header nav
+    - id: nav-list
+      says: The navigation is a list of at least three links
+      selector: nav li a[href]
+      count: { min: 3 }
+    - id: link-text
+      says: No link says "click here"
+      selector: nav a
+      every: true
+      text: { not: "click here" }
+    - id: one-main
+      says: There is exactly one main
+      selector: main
+      count: { min: 1, max: 1 }
+    - id: one-h1
+      says: The main holds the only top-level heading
+      selector: main h1
+      count: { min: 1, max: 1 }
+    - id: no-stray-h1
+      says: No other top-level heading appears
+      selector: h1
+      count: { max: 1 }
+    - id: h2s
+      says: At least two second-level headings divide the main
+      selector: main h2
+      count: { min: 2 }
+    - id: image-alt
+      says: Every image has alt text
+      selector: img
+      every: true
+      attr: { name: alt, matches: "\\S" }
+    - id: footer
+      says: The page ends with a footer
+      selector: footer

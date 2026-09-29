@@ -1,0 +1,62 @@
+nodes:
+  - id: normal-flow
+    kind: concept
+    title: Normal flow
+    region: layout
+    requires: [box-model]
+    says: Before any layout, blocks stack down the page and inline content runs along the line.
+    cites: [layout-intro#normal-flow]
+    check:
+      - prompt: What is normal flow?
+        choices:
+          - How elements lay out when no CSS changes their behaviour
+          - A flexbox setting
+          - The order of rules in a stylesheet
+        answer: 0
+        explain: Normal flow is the default layout, before you adjust or remove elements from it.
+
+  - id: flex-container
+    kind: concept
+    title: Flex containers and axes
+    region: layout
+    requires: [normal-flow]
+    says: One declaration turns a box into a flex container, and its children line up along the main axis.
+    cites: [flexbox#container, flexbox#recap, flexbox#main-axis, flexbox#cross-axis]
+    check:
+      - prompt: After display flex on a <ul>, which elements become flex items?
+        choices: [The <ul> itself, Its direct children, Every descendant]
+        answer: 1
+        explain: The container's children become flex items.
+      - prompt: With the default flex-direction of row, where does the cross axis run?
+        choices: [Left to right, Top to bottom]
+        answer: 1
+        explain: The cross axis runs perpendicular to the main axis.
+
+  - id: flex-align
+    kind: concept
+    title: Aligning flex items
+    region: layout
+    requires: [flex-container]
+    says: justify-content moves items along the main axis. align-items moves them across it.
+    cites: [flexbox#justify-content, flexbox#align-items]
+    check:
+      - prompt: In a row, which property centres items vertically?
+        choices: [justify-content, align-items]
+        answer: 1
+        explain: In a row the cross axis is vertical, and align-items controls the cross axis.
+
+  - id: crooked-bridge
+    kind: problem
+    title: The Crooked Bridge
+    region: layout
+    requires: [flex-align, landmarks]
+    cites: [flexbox#container, flexbox#justify-content, flexbox#align-items]
+    problem: crooked-bridge
+
+  - id: profile-keep
+    kind: project
+    title: The Profile Keep
+    region: layout
+    requires: [notice-board, herald-card, crooked-bridge]
+    cites: [structuring-documents#functionality, flexbox#recap, box-model#border-box]
+    problem: profile-keep

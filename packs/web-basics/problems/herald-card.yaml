@@ -1,0 +1,88 @@
+id: herald-card
+statement: |
+  The herald wants a card for each announcement. Style the `.card` so that:
+
+  - it uses the alternative box model and is exactly `300px` wide,
+  - it has `16px` of padding and a `2px` solid border in any colour,
+  - its heading is `#8b2e16`,
+  - its text is set in `Georgia, serif`. Set the font once on `.card` and let the paragraph inherit it; do not write a rule for `.card p`.
+
+  Do not use `style` attributes.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Announcements</title></head>
+      <body>
+        <article class="card">
+          <h2>Harvest fair</h2>
+          <p>Bring a dish to share. Music from six.</p>
+        </article>
+      </body>
+    </html>
+  css: ""
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Announcements</title></head>
+      <body>
+        <article class="card">
+          <h2>Harvest fair</h2>
+          <p>Bring a dish to share. Music from six.</p>
+        </article>
+      </body>
+    </html>
+  css: |
+    .card {
+      box-sizing: border-box;
+      width: 300px;
+      padding: 16px;
+      border: 2px solid #2b2a27;
+      font-family: Georgia, serif;
+    }
+
+    .card h2 {
+      color: #8b2e16;
+    }
+grader:
+  type: dom
+  checks:
+    - id: border-box
+      says: The card uses the alternative box model
+      selector: .card
+      style: { property: box-sizing, equals: border-box }
+    - id: width
+      says: The card is 300px wide
+      selector: .card
+      style: { property: width, equals: 300px }
+    - id: padding
+      says: The card has 16px of padding
+      selector: .card
+      style: { property: padding-top, equals: 16px }
+    - id: border-width
+      says: The card has a 2px border
+      selector: .card
+      style: { property: border-top-width, equals: 2px }
+    - id: border-style
+      says: The border is solid
+      selector: .card
+      style: { property: border-top-style, equals: solid }
+    - id: heading
+      says: The card's heading is #8b2e16
+      selector: .card h2
+      style: { property: color, equals: "#8b2e16" }
+    - id: font
+      says: The paragraph inherits Georgia, serif
+      selector: .card p
+      style: { property: font-family, equals: "Georgia, serif" }
+    - id: inherited
+      says: No rule targets the paragraph directly
+      selector: style
+      count: { min: 0 }
+      every: true
+      text: { not: "\\.card\\s+p\\s*[,{]" }
+    - id: no-inline
+      says: No style attributes are used
+      selector: "[style]"
+      count: { min: 0, max: 0 }

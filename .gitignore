@@ -1,0 +1,6 @@
+node_modules/
+dist/
+WORKLOG.md
+.claude/
+.env
+.env.*

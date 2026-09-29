@@ -1,0 +1,128 @@
+nodes:
+  - id: css-rules
+    kind: concept
+    title: CSS rules
+    region: css
+    requires: [document-skeleton]
+    says: A rule picks elements with a selector and styles them with declarations.
+    cites:
+      - what-is-css#control
+      - what-is-css#rule-based
+      - what-is-css#selector
+      - what-is-css#block
+      - what-is-css#declarations
+    check:
+      - prompt: "In h1 { color: red; }, what is color?"
+        choices: [A selector, A property, A value]
+        answer: 1
+        explain: A declaration is a property and value pair. The property comes before the colon.
+
+  - id: applying-css
+    kind: concept
+    title: Applying CSS to a page
+    region: css
+    requires: [css-rules]
+    says: Styles can live in a file, in a style element or on the element itself. The file is usually best.
+    cites:
+      - getting-started-css#three-ways
+      - getting-started-css#external
+      - getting-started-css#internal-cost
+      - getting-started-css#inline
+    check:
+      - prompt: Why is an external stylesheet usually the best choice?
+        choices:
+          - It loads faster than any other method
+          - One file can style many pages, so a change is made once
+          - Browsers ignore style elements
+        answer: 1
+        explain: Internal stylesheets must be repeated on every page. One linked file styles them all.
+
+  - id: selectors
+    kind: concept
+    title: Type, class and ID selectors
+    region: css
+    requires: [css-rules]
+    says: Select by element name, by class with a dot, by ID with a hash.
+    cites:
+      - basic-selectors#type
+      - basic-selectors#class
+      - basic-selectors#id
+      - basic-selectors#list
+    check:
+      - prompt: Which selector matches <p class="note">?
+        choices: ["#note", ".note", "note"]
+        answer: 1
+        explain: A class selector starts with a dot.
+      - prompt: How many elements on a page may share one ID?
+        choices: [One, Any number, Two]
+        answer: 0
+        explain: An ID can be used only once per page.
+
+  - id: grey-knight
+    kind: problem
+    title: The Grey Knight
+    region: css
+    requires: [selectors, applying-css]
+    cites: [basic-selectors#type, basic-selectors#class]
+    problem: grey-knight
+
+  - id: cascade
+    kind: concept
+    title: Cascade, specificity and inheritance
+    region: css
+    requires: [selectors]
+    says: When two rules disagree, the more specific one wins. When they are equal, the later one does.
+    cites:
+      - handling-conflicts#cascade
+      - handling-conflicts#specificity
+      - handling-conflicts#inheritance
+    check:
+      - prompt: '.alert { color: red } comes first, h1 { color: blue } comes later. What colour is <h1 class="alert">?'
+        choices: [Red, Blue]
+        answer: 0
+        explain: A class selector is more specific than a type selector, so source order does not decide.
+      - prompt: Two rules with identical selectors set different colours. Which wins?
+        choices: [The first, The last]
+        answer: 1
+        explain: With equal specificity, the rule defined last is used.
+
+  - id: two-faced-herald
+    kind: problem
+    title: The Two-Faced Herald
+    region: css
+    requires: [cascade]
+    cites: [handling-conflicts#cascade, handling-conflicts#specificity]
+    problem: two-faced-herald
+
+  - id: box-model
+    kind: concept
+    title: The box model
+    region: css
+    requires: [css-rules]
+    says: Every box has content, padding, border and margin. How wide it is depends on which model you use.
+    cites: [box-model#parts, box-model#standard, box-model#alternative, box-model#border-box]
+    check:
+      - prompt: In the standard box model, a box has width 200px, padding 20px and a 5px border. How wide is the visible box?
+        choices: [200px, 240px, 250px]
+        answer: 2
+        explain: Padding and border are added to the content width, 200 + 2 × 20 + 2 × 5 = 250.
+      - prompt: Which declaration makes width include padding and border?
+        choices: ["box-sizing: border-box", "box-sizing: content-box", "display: block"]
+        answer: 0
+        explain: The alternative box model is turned on with box-sizing border-box.
+
+  - id: swollen-crate
+    kind: problem
+    title: The Swollen Crate
+    region: css
+    requires: [box-model]
+    cites: [box-model#standard, box-model#border-box]
+    problem: swollen-crate
+
+  - id: herald-card
+    kind: project
+    title: The Herald's Card
+    region: css
+    requires: [grey-knight, two-faced-herald, swollen-crate]
+    cites: [basic-selectors#class, handling-conflicts#inheritance, box-model#border-box]
+    problem: herald-card

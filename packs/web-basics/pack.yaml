@@ -1,0 +1,23 @@
+format: 0
+id: web-basics
+title: Web Basics
+version: 0.1.0
+summary: >-
+  The first steps of front-end development: structuring a page with semantic HTML,
+  styling it with CSS, and laying it out with flexbox.
+license: CC-BY-SA-4.0
+blueprint:
+  title: MDN Curriculum, Core modules 2, 3 and 5
+  url: https://developer.mozilla.org/en-US/curriculum/
+  license: CC-BY-SA-2.5+
+regions:
+  - id: html
+    title: Semantic HTML
+    summary: Documents, elements, headings, lists, links, images and forms, marked up by meaning.
+  - id: css
+    title: CSS Fundamentals
+    summary: Rules, selectors, the cascade and the box model.
+  - id: layout
+    title: CSS Layout
+    summary: Normal flow and flexbox.
+final: profile-keep

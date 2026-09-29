@@ -1,0 +1,61 @@
+id: grey-knight
+statement: |
+  Everything on this page is the browser's default black on white. Style it with two rules in the CSS tab:
+
+  - Use a **type selector** to make every `h1` the colour `#8b2e16`.
+  - Use a **class selector** to give paragraphs with the class `note` the background colour `#f3e3b5`. Other paragraphs keep no background.
+
+  Do not use `style` attributes.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Orders of the day</title></head>
+      <body>
+        <h1>Orders of the day</h1>
+        <p>Muster at the gate at dawn.</p>
+        <p class="note">Bring your own lantern.</p>
+        <p>Dismissed at noon.</p>
+      </body>
+    </html>
+  css: ""
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head><meta charset="utf-8"><title>Orders of the day</title></head>
+      <body>
+        <h1>Orders of the day</h1>
+        <p>Muster at the gate at dawn.</p>
+        <p class="note">Bring your own lantern.</p>
+        <p>Dismissed at noon.</p>
+      </body>
+    </html>
+  css: |
+    h1 {
+      color: #8b2e16;
+    }
+
+    .note {
+      background-color: #f3e3b5;
+    }
+grader:
+  type: dom
+  checks:
+    - id: h1-colour
+      says: The heading is #8b2e16
+      selector: h1
+      style: { property: color, equals: "#8b2e16" }
+    - id: note-background
+      says: The note paragraph has the background #f3e3b5
+      selector: p.note
+      style: { property: background-color, equals: "#f3e3b5" }
+    - id: others-plain
+      says: Other paragraphs keep no background
+      selector: p:not(.note)
+      every: true
+      style: { property: background-color, equals: "rgba(0, 0, 0, 0)" }
+    - id: no-inline
+      says: No style attributes are used
+      selector: "[style]"
+      count: { min: 0, max: 0 }

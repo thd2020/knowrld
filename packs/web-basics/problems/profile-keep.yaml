@@ -1,0 +1,132 @@
+id: profile-keep
+statement: |
+  The last keep of this land asks for everything at once. Build a profile page for Ada Park, a front-end developer.
+
+  - A complete document frame: doctype, English, UTF-8 and a title that includes her name.
+  - A `<header>` with a `<nav>` whose list of at least three links is laid out in a row with flexbox.
+  - One `<main>` with exactly one top-level heading, a portrait image with alt text, and at least two `<section>` elements, each with its own second-level heading.
+  - Inside one section, an element with the class `card` that uses the alternative box model.
+  - A `<footer>`.
+
+  Do not use `style` attributes.
+starter:
+  html: |
+    <html>
+      <head>
+      </head>
+      <body>
+        <!-- Build Ada Park's profile here. -->
+      </body>
+    </html>
+  css: ""
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Ada Park, front-end developer</title>
+      </head>
+      <body>
+        <header>
+          <nav>
+            <ul>
+              <li><a href="#about">About Ada</a></li>
+              <li><a href="#work">Selected work</a></li>
+              <li><a href="#contact">Contact details</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <h1>Ada Park</h1>
+          <img src="images/ada.jpg" alt="Ada Park smiling at her desk with two monitors">
+          <section id="about">
+            <h2>About</h2>
+            <p>I build accessible websites for small businesses.</p>
+          </section>
+          <section id="work">
+            <h2>Selected work</h2>
+            <article class="card">
+              <h3>Harbour gallery</h3>
+              <p>A photo gallery that works with a screen reader.</p>
+            </article>
+          </section>
+        </main>
+        <footer id="contact">ada@example.com</footer>
+      </body>
+    </html>
+  css: |
+    nav ul {
+      display: flex;
+      gap: 1rem;
+      list-style: none;
+      padding: 0;
+    }
+
+    .card {
+      box-sizing: border-box;
+      width: 320px;
+      padding: 16px;
+      border: 1px solid #2b2a27;
+    }
+grader:
+  type: dom
+  checks:
+    - id: doctype
+      says: The page starts with a doctype
+      doctype: true
+    - id: lang
+      says: The page is marked as English
+      selector: html
+      attr: { name: lang, matches: "^en" }
+    - id: charset
+      says: The head declares UTF-8
+      selector: head meta[charset]
+      attr: { name: charset, matches: "^utf-8$" }
+    - id: title
+      says: The title includes Ada's name
+      selector: head title
+      text: { matches: "ada" }
+    - id: nav-in-header
+      says: The navigation sits in the header
+      selector: header nav
+    - id: nav-links
+      says: The navigation lists at least three links
+      selector: nav li a[href]
+      count: { min: 3 }
+    - id: nav-row
+      says: The navigation list is a flex container
+      selector: nav ul
+      style: { property: display, equals: flex }
+    - id: one-main
+      says: There is exactly one main
+      selector: main
+      count: { min: 1, max: 1 }
+    - id: one-h1
+      says: One top-level heading, inside the main
+      selector: main h1
+      count: { min: 1, max: 1 }
+    - id: no-stray-h1
+      says: No other top-level heading appears
+      selector: h1
+      count: { max: 1 }
+    - id: portrait
+      says: The main has a portrait with alt text
+      selector: main img
+      every: true
+      attr: { name: alt, matches: "\\S+\\s+\\S+" }
+    - id: sections
+      says: At least two sections, each with a second-level heading
+      selector: main section > h2
+      count: { min: 2 }
+    - id: card
+      says: A card inside a section uses the alternative box model
+      selector: section .card
+      style: { property: box-sizing, equals: border-box }
+    - id: footer
+      says: The page ends with a footer
+      selector: footer
+    - id: no-inline
+      says: No style attributes are used
+      selector: "[style]"
+      count: { min: 0, max: 0 }

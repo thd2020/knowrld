@@ -1,5 +1,7 @@
-# Road, part 1: the syntax and the head of a document (Learn: Basic HTML syntax, Web page metadata).
+# Road, part 1: the syntax and the head of a document (Learn: Basic HTML syntax, Web page metadata),
+# with the viewport from the meta reference as country.
 # Each concept's `says` is the only game-written line; the cited excerpts are MDN's own words.
+# Checks are written so that every key follows from the cited excerpts; the client shuffles choices at render time.
 # Why each prerequisite edge exists is recorded in docs/semantic-html/edge-justifications.md in the engine repo.
 nodes:
   - id: html-elements
@@ -7,7 +9,7 @@ nodes:
     title: Elements and tags
     region: semantic-html
     tier: road
-    says: Every part of a page is marked up by an element. An opening tag, the content, a closing tag with a slash. Learn those three and the rest follows.
+    says: Every part of a page is marked up by an element. An opening tag, the content, then a closing tag with a slash before the name. Learn those three and the rest follows.
     cites:
       - basic-html-syntax#what-is-html
       - basic-html-syntax#opening-tag
@@ -16,18 +18,18 @@ nodes:
     check:
       - prompt: What marks where an element ends?
         choices:
-          - "The closing tag: the element name after a forward slash, in angle brackets"
-          - The next opening tag
-          - A blank line after the content
-        answer: 0
-        explain: The closing tag is the opening tag with a forward slash before the name. Leaving it out is a common beginner error.
+          - The next opening tag, which ends the one before it
+          - A blank line after the element's content
+          - "A closing tag: the element name after a forward slash"
+        answer: 2
+        explain: The closing tag is the opening tag with a forward slash before the element name. Leaving it out is a common beginner error.
       - prompt: Does <TITLE> work the same as <title>?
         choices:
-          - No, tags must be lowercase
-          - Yes, tags are not case-sensitive, though lowercase is best practice
-          - Only inside the head
-        answer: 1
-        explain: Tags are not case-sensitive, but writing them in lowercase is recommended for consistency and readability.
+          - No; the browser ignores any tag written in uppercase letters
+          - Only inside the head, where letter case is never checked
+          - Yes, though writing tags in lowercase is best practice
+        answer: 2
+        explain: Tags are not case-sensitive, but writing them all in lowercase is recommended for consistency and readability.
 
   - id: nesting-elements
     kind: concept
@@ -42,18 +44,18 @@ nodes:
     check:
       - prompt: Which line is nested correctly?
         choices:
-          - "<p>My cat is <strong>very</strong> grumpy.</p>"
           - "<p>My cat is <strong>very grumpy.</p></strong>"
           - "<strong><p>My cat is very</strong> grumpy.</p>"
-        answer: 0
-        explain: The strong element opened inside the paragraph must close before the paragraph closes. Overlapping tags make the browser guess.
-      - prompt: What happens when elements overlap?
+          - "<p>My cat is <strong>very</strong> grumpy.</p>"
+        answer: 2
+        explain: The strong element opened inside the paragraph must close before the paragraph closes. When tags overlap, the browser has to guess.
+      - prompt: In <p>My cat is <strong>very</strong> grumpy.</p>, which element must close first?
         choices:
-          - The browser refuses to show the page
-          - The browser has to guess at your intent, which can give unexpected results
-          - Nothing; overlap is allowed
-        answer: 1
-        explain: Tags have to open and close inside or outside one another. When they overlap, the browser guesses.
+          - strong, because it was opened last
+          - p, because it was opened first
+          - Either one; closing tags can come in any order
+        answer: 0
+        explain: For proper nesting you open p, then strong, and close strong before you close p.
 
   - id: void-elements
     kind: concept
@@ -61,50 +63,94 @@ nodes:
     region: semantic-html
     tier: road
     requires: [html-elements]
-    says: Some elements hold nothing. A single tag that inserts or embeds a thing, and no closing tag at all.
+    says: Some elements hold nothing. A single tag that inserts or embeds a thing, such as a line break, and no closing tag at all.
     cites:
       - basic-html-syntax#void
       - basic-html-syntax#void-slash
     check:
-      - prompt: What does "void element" mean?
+      - prompt: What makes an element void?
         choices:
-          - An element with no attributes
-          - An element that cannot contain other HTML content
-          - An element that is hidden from view
-        answer: 1
+          - "It holds nothing: one tag, no content, no closing tag"
+          - It carries no attributes at all
+          - It is hidden from view until a script shows it
+        answer: 0
         explain: Void elements consist of a single tag and cannot contain other HTML content, like <br>.
       - prompt: Is the slash in <br /> required?
         choices:
-          - Yes, or the page breaks
-          - No; it is a different markup style that isn't wrong, but it is not needed
-          - Only in the head
+          - Yes; otherwise the line never breaks
+          - No; it is another markup style, not wrong, just not needed
+          - Only when the br sits inside a heading element
         answer: 1
-        explain: The closing slash on a void element is optional style, not a requirement.
+        explain: The closing slash on a void element is a different style of markup. It isn't wrong, but it is not needed.
 
   - id: attributes
     kind: concept
-    title: Attributes and their values
+    title: Attributes
     region: semantic-html
     tier: road
     requires: [html-elements]
-    says: An attribute tells more about an element without being its content. A space, a name, an equals sign, a value in quotes. Always the quotes.
+    says: An attribute tells more about an element without being its content. A space, a name, an equals sign, a value in quotes. A boolean attribute needs only its name, and being there is enough to switch it on.
     cites:
       - basic-html-syntax#attributes
       - basic-html-syntax#attribute-parts
       - basic-html-syntax#boolean
-      - basic-html-syntax#always-quote
     check:
-      - prompt: 'In <a href=https://example.com title=The Mozilla homepage>, how is title read?'
+      - prompt: What does an attribute hold?
         choices:
-          - As one title with the value "The Mozilla homepage"
-          - As a title of "The" and two boolean attributes, Mozilla and homepage
-          - As an error that hides the link
+          - The words the element shows on the page, written inside its tag
+          - A child element, written inside the opening tag instead of after it
+          - Extra information about the element that is not part of its content
+        answer: 2
+        explain: Attributes contain extra information about the element that isn't part of its content, such as a class to target it with CSS.
+      - prompt: An input is written with disabled="false". Is it disabled?
+        choices:
+          - No; the value false switches it off
+          - Yes; a boolean attribute is true whenever it is present
+          - Only in browsers that read the attribute's value
         answer: 1
-        explain: Without quotes, the space ends the value. That is why MDN advises always quoting attribute values.
-      - prompt: What value does a boolean attribute such as disabled have when it is written with no value?
-        choices: ["true", "false", "an empty string that means off"]
+        explain: When a boolean attribute is added, its value is true whatever value it is given. To enable the input, leave disabled out.
+      - prompt: Which opening tag is written correctly?
+        choices:
+          - '<pclass="note">'
+          - '<p "note"=class>'
+          - '<p class="note">'
+        answer: 2
+        explain: An attribute needs a space between it and the element name, then its name, an equals sign and a quoted value.
+
+  - id: attribute-quotes
+    kind: concept
+    title: Quoting attribute values
+    region: semantic-html
+    tier: road
+    requires: [attributes, character-references]
+    says: Always quote a value. Without quotes a space ends it, and the rest turns into stray attributes. Pick single or double quotes, never mix them, and write &quot; for a quote of the same kind inside.
+    cites:
+      - basic-html-syntax#unquoted-values
+      - basic-html-syntax#always-quote
+      - basic-html-syntax#quote-styles
+      - basic-html-syntax#quotes-inside
+    check:
+      - prompt: In <a href=https://www.mozilla.org/ title=The Mozilla homepage>, what is the link's title?
+        choices:
+          - '"The Mozilla homepage", read as one value'
+          - '"The", followed by two boolean attributes'
+          - Nothing; the browser drops the whole title
+        answer: 1
+        explain: Without quotes, the browser reads a title of "The" and two boolean attributes, Mozilla and homepage.
+      - prompt: Which attribute is written correctly?
+        choices:
+          - title="Isn't this fun?"
+          - href="https://www.example.com'
+          - title="An "interesting" reference"
         answer: 0
-        explain: A boolean attribute that is present is true, whatever value it is given. If it is absent, it is false.
+        explain: One kind of quote may sit inside the other. Mixing them, or nesting the same kind unescaped, leaves the value unfinished or broken.
+      - prompt: How do you put a double quote inside a double-quoted value?
+        choices:
+          - Put a backslash before it
+          - Write it as &quot;
+          - Type it twice, as ""
+        answer: 1
+        explain: To use a quote mark inside quotes of the same type, use a character reference such as &quot;.
 
   - id: document-skeleton
     kind: concept
@@ -120,16 +166,19 @@ nodes:
       - basic-html-syntax#body
     check:
       - prompt: Where does the content that users see belong?
-        choices: [In the head, In the body, Before the doctype]
-        answer: 1
-        explain: The body contains all the content that displays on the page. The head holds information about the page that users do not see.
-      - prompt: Why is <!doctype html> still written?
         choices:
-          - It links to the rules the page must follow
-          - It is a historical artifact that must be included for everything else to work correctly
-          - It sets the language of the page
-        answer: 1
-        explain: Doctypes once linked to rule sets. Today the short form is the minimum valid doctype and belongs at the top of every page.
+          - In the head, next to the title
+          - Before the doctype, so it loads first
+          - In the body
+        answer: 2
+        explain: The body contains all the content that displays on the page. The head holds information about the page that users do not see.
+      - prompt: Which order is right for a minimal page?
+        choices:
+          - <!doctype html>, then <html> holding <head> and <body>
+          - <html>, then <!doctype html> inside <head>, then <body>
+          - <head>, then <!doctype html>, then <html> holding <body>
+        answer: 0
+        explain: The doctype goes at the top of every page. The html root element wraps everything else, the head first and then the body.
 
   - id: whitespace-and-comments
     kind: concept
@@ -137,19 +186,25 @@ nodes:
     region: semantic-html
     tier: road
     requires: [html-elements]
-    says: In almost every element the parser folds each run of spaces and newlines into one space, so indent for your own eyes. Notes between <!-- and --> are for you alone.
+    says: In almost every element the parser folds each run of spaces and newlines into one space, so indent for your own eyes. A comment between <!-- and --> vanishes from the rendered page, but anyone who opens the page source can still read it.
     cites:
       - basic-html-syntax#whitespace
       - basic-html-syntax#comments
     check:
       - prompt: You type five spaces between two words in a paragraph. What renders?
-        choices: [Five spaces, One space, No space]
-        answer: 1
+        choices:
+          - Five spaces, exactly as typed
+          - No space; the words run together
+          - One space
+        answer: 2
         explain: In almost all elements the parser reduces each sequence of whitespace to a single space. <pre> is an exception.
-      - prompt: Who sees an HTML comment?
-        choices: [Every visitor, Only people reading the code, Only screen reader users]
+      - prompt: What does the browser do with an HTML comment?
+        choices:
+          - Shows it in small grey text
+          - Ignores it, so it is invisible on the page
+          - Reports it in the console as a warning
         answer: 1
-        explain: Browsers ignore comments, so they are invisible to the user. They are notes in the code.
+        explain: Browsers ignore comments, so they are invisible to the user. They are notes in the code for whoever reads it.
 
   - id: character-references
     kind: concept
@@ -157,19 +212,31 @@ nodes:
     region: semantic-html
     tier: road
     requires: [html-elements]
-    says: Five characters belong to the language itself. To show a < or an & as text, write its reference, from the ampersand to the semicolon.
+    says: Five characters belong to the language itself. To show a < or an & as text, write its reference, from the ampersand to the semicolon. Every other symbol you can type as it is, once the page is UTF-8.
     cites:
       - basic-html-syntax#special-chars
       - basic-html-syntax#character-references
+      - basic-html-syntax#reference-example
+      - basic-html-syntax#utf8-no-references
     check:
       - prompt: How do you show a literal less-than sign in a paragraph?
-        choices: ["&lt;", "\\<", "<<"]
-        answer: 0
-        explain: Character references start with an ampersand and end with a semicolon. &lt; stands for "less than".
-      - prompt: Which of these is not one of the special characters in HTML syntax?
-        choices: ["&", '"', "%"]
+        choices: ['\<', "<<", "&lt;"]
         answer: 2
-        explain: The special characters are <, >, ", ' and &.
+        explain: Character references start with an ampersand and end with a semicolon. &lt; stands for "less than".
+      - prompt: 'What goes wrong in <p>In HTML, you define a paragraph using the <p> element.</p>?'
+        choices:
+          - Nothing; the inner <p> is shown as text
+          - The inner <p> starts a new paragraph
+          - The browser refuses to render the page
+        answer: 1
+        explain: The browser reads the second <p> as the start of a new paragraph. Writing &lt;p&gt; shows the angle brackets as text.
+      - prompt: Your page is UTF-8. Do you need a reference to write é or ©?
+        choices:
+          - Yes; every symbol outside plain English letters needs a reference
+          - Only ©, because legal symbols are special characters in HTML
+          - No; modern browsers handle the actual symbols under UTF-8
+        answer: 2
+        explain: Only the special characters of HTML syntax need references. Other symbols are fine as long as the character encoding is UTF-8.
 
   - id: head-and-metadata
     kind: concept
@@ -177,27 +244,34 @@ nodes:
     region: semantic-html
     tier: road
     requires: [document-skeleton, attributes]
-    says: The head is never shown on the page. It speaks about the page, to browsers and to search engines. Many of its meta elements pair a name with content.
+    says: The head is never shown on the page. It speaks about the page, to browsers and to search engines. Many of its meta elements pair a name with content, such as the author and a description.
     cites:
       - webpage-metadata#head-not-displayed
       - webpage-metadata#name-content
       - webpage-metadata#description-seo
       - webpage-metadata#keywords-ignored
     check:
-      - prompt: 'In <meta name="description" content="...">, what does name say?'
+      - prompt: In <meta name="description" content="...">, what does name say?
         choices:
-          - The type of information the meta element contains
-          - The name of the page's author
-          - The file name of the page
-        answer: 0
-        explain: name specifies the type of meta element; content holds the actual metadata.
+          - The name of the person who wrote the page, for search engines
+          - What kind of information this meta element holds
+          - The file name the page is saved under on the server
+        answer: 1
+        explain: name specifies the type of meta element, what type of information it contains. content holds the actual metadata.
       - prompt: Why do search engines ignore the keywords meta element?
         choices:
+          - Spammers stuffed it with keywords, biasing results
           - It was never part of HTML
-          - Spammers filled it with hundreds of keywords, biasing results
-          - It only works in the body
-        answer: 1
-        explain: The keywords meta element is ignored because spammers abused it. A good description still helps.
+          - It only works when it is placed inside the body
+        answer: 0
+        explain: The keywords meta element is ignored because spammers filled it with hundreds of keywords. A good description still helps.
+      - prompt: How is the author of a page recorded in the head?
+        choices:
+          - <address name="author">…</address> in the head
+          - <title author="…">
+          - <meta name="author" content="…">
+        answer: 2
+        explain: The author is one of the meta elements with name and content attributes.
 
   - id: page-title
     kind: concept
@@ -205,7 +279,7 @@ nodes:
     region: semantic-html
     tier: road
     requires: [head-and-metadata]
-    says: Two titles, two jobs. The title names the whole document, in the tab and the bookmark. The h1 heads the content on the page.
+    says: Two titles, two jobs. The title names the whole document, in the tab, the bookmark and the search result. The h1 heads the content on the page.
     cites:
       - webpage-metadata#h1-on-page
       - webpage-metadata#title-metadata
@@ -214,14 +288,14 @@ nodes:
     check:
       - prompt: Where does the text of <title> appear?
         choices:
-          - As the largest heading on the page
-          - In the browser tab, as the suggested bookmark name and in search results
+          - As the largest heading at the top of the page body
+          - In the tab, the suggested bookmark name and search results
           - Nowhere; only the server reads it
         answer: 1
         explain: The title names the tab, fills in the suggested bookmark name and is used in search results.
       - prompt: Which element marks up the headline readers see on the page?
-        choices: ["<title>", "<h1>", "<head>"]
-        answer: 1
+        choices: ["<title>", "<head>", "<h1>"]
+        answer: 2
         explain: The h1 appears on the page and marks up the title of the content. The title element is metadata about the whole document.
 
   - id: character-encoding
@@ -230,18 +304,33 @@ nodes:
     region: semantic-html
     tier: road
     requires: [head-and-metadata]
-    says: Tell the browser which letters you write with. Set utf-8 and nearly any human language can stand on your page.
+    says: Tell the browser which letters you write with, and tell it early. Set utf-8, the only valid encoding today, in the first bytes of the file, and nearly any human language can stand on your page.
     cites:
       - webpage-metadata#charset
       - basic-html-syntax#charset
+      - el-meta#charset
     check:
       - prompt: Why set <meta charset="utf-8">?
         choices:
-          - It makes the page load faster
-          - utf-8 includes pretty much any character from any human language, so the page can display any language
+          - It lets the page display characters from almost any language
+          - It makes the page load faster on slow connections
           - It is required for CSS to work
+        answer: 0
+        explain: utf-8 includes pretty much any character from any human language, so English and Japanese display correctly on the same page.
+      - prompt: Where must the charset meta element sit?
+        choices:
+          - Within the first 1024 bytes of the document
+          - Anywhere in the head
+          - At the very end of the body
+        answer: 0
+        explain: A meta element that declares the encoding must be located entirely within the first 1024 bytes of the document.
+      - prompt: Which charset values are valid in an HTML document today?
+        choices:
+          - utf-8, iso-8859-1 or any encoding the server names
+          - Only utf-8, in any letter case
+          - Any value, as long as the browser supports it
         answer: 1
-        explain: utf-8 is a universal character set, so English and Japanese, for example, display correctly on the same page.
+        explain: The value must be an ASCII case-insensitive match for "utf-8", because UTF-8 is the only valid encoding for HTML5 documents.
 
   - id: head-resources
     kind: concept
@@ -249,23 +338,34 @@ nodes:
     region: semantic-html
     tier: road
     requires: [head-and-metadata]
-    says: From the head you send for help. A link element fetches a stylesheet or an icon; a script with defer waits until the page is read.
+    says: From the head you send for help. A link element fetches an icon or a stylesheet; a script with defer waits until the page is read, and it always needs its closing tag.
     cites:
       - webpage-metadata#favicon
+      - webpage-metadata#favicon-link
       - webpage-metadata#link-stylesheet
       - webpage-metadata#script-defer
     check:
-      - prompt: Which attribute on <link> marks it as the document's stylesheet?
-        choices: ['rel="stylesheet"', 'type="css"', 'src="style.css"']
+      - prompt: Which element adds a favicon?
+        choices:
+          - <link rel="icon" href="/favicon.ico">
+          - <meta name="icon" content="/favicon.ico">
+          - <img rel="favicon" src="/favicon.ico">
         answer: 0
-        explain: The link element takes rel="stylesheet" and an href with the path to the stylesheet.
+        explain: A favicon is added with a link element in the head that references the path to the icon file.
       - prompt: What does defer do on a script element?
         choices:
-          - Loads the JavaScript after the browser has finished parsing the HTML
-          - Stops the script from running
-          - Moves the script into the body
-        answer: 0
+          - Runs the script only after the user clicks the page
+          - Loads the script after the HTML has been parsed
+          - Moves the script to the end of the body
+        answer: 1
         explain: defer makes the browser load the JavaScript after parsing the HTML, so the script never looks for elements that do not exist yet.
+      - prompt: Is <script> a void element?
+        choices:
+          - Yes, write it as a single tag
+          - Only when it has a src
+          - No, it needs a closing tag
+        answer: 2
+        explain: The script element may look like a void element, but it's not, and so needs a closing tag.
 
   - id: document-language
     kind: concept
@@ -273,22 +373,64 @@ nodes:
     region: semantic-html
     tier: road
     requires: [document-skeleton, attributes]
-    says: Name the language on the opening html tag. Search engines index you better, and a screen reader knows how to say "six".
+    says: Name the language on the opening html tag. Search engines index you better, and a screen reader knows how to say "six". A phrase in another language gets its own lang.
     cites:
       - webpage-metadata#lang
-      - webpage-metadata#lang-why
+      - webpage-metadata#lang-parts
     check:
       - prompt: Where is the page language usually set?
         choices:
-          - A lang attribute on the opening <html> tag
-          - A <language> element in the head
-          - The file name
-        answer: 0
+          - A language element placed inside the head, before the title
+          - The lang attribute on the opening <html> tag
+          - The file extension, such as .en.html
+        answer: 1
         explain: The lang attribute on the opening html tag sets the language of the page.
-      - prompt: Why does the language matter to a screen reader?
+      - prompt: Why does the page language matter to a screen reader?
         choices:
-          - It chooses the voice speed
-          - The same word can be pronounced differently in different languages
-          - It does not matter to screen readers
+          - It picks how fast the voice reads
+          - The same word can be said differently in two languages
+          - It doesn't; they detect it
         answer: 1
         explain: MDN's example is "six", which exists in both French and English but is pronounced differently.
+      - prompt: A Japanese phrase sits in an English page. What marks it?
+        choices:
+          - <span lang="ja">…</span>
+          - <span class="ja">…</span>
+          - <ja>…</ja>
+        answer: 0
+        explain: You can set subsections of a document to be recognized as a different language with lang on an element around them.
+
+  - id: viewport-meta
+    kind: concept
+    title: The viewport
+    region: semantic-html
+    tier: country
+    requires: [head-and-metadata]
+    says: A phone may draw your page on a wide virtual screen and shrink it. Tell it to fit the device, with a viewport meta of width=device-width. Never switch zooming off; people with low vision need it.
+    cites:
+      - meta-viewport#summary
+      - meta-viewport#narrow-screens
+      - meta-viewport#recommended
+      - meta-viewport#no-zoom
+    check:
+      - prompt: What does <meta name="viewport" content="width=device-width"> do?
+        choices:
+          - Makes the page as wide as its widest image
+          - Locks the zoom level so users cannot pinch
+          - Sets the viewport to match the device's width
+        answer: 2
+        explain: This is the recommended setting. It sets the viewport to match the device's width.
+      - prompt: Without a viewport meta, what might a narrow phone do?
+        choices:
+          - Refuse to open the page until the user rotates the phone
+          - Show the page at full size but hide everything past the screen edge
+          - Render into a wider virtual viewport, then shrink it to fit
+        answer: 2
+        explain: Some narrow screens render pages in a virtual viewport wider than the screen, then shrink the result down to fit.
+      - prompt: Why not set user-scalable=no?
+        choices:
+          - It stops people with low vision from zooming to read
+          - It forces the browser to load the page at a far lower speed
+          - Browsers treat it as an error and drop the whole viewport meta
+        answer: 0
+        explain: Disabling zoom prevents people with low vision from reading the page. WCAG requires at least 2x scaling.

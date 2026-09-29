@@ -1,5 +1,6 @@
-# Country: concepts from the reference and glossary pages one link away from the road.
-# They deepen a road concept with the rules the Learn pages leave out.
+# Country: concepts from the HTML and ARIA reference and the Glossary, one link from the road
+# (the landmark role pages are promoted by judgement; see the fog.yaml header). They deepen a road concept
+# with the rules the Learn pages leave out.
 nodes:
   - id: heading-navigation
     kind: concept
@@ -7,7 +8,7 @@ nodes:
     region: semantic-html
     tier: country
     requires: [screen-reader-structure]
-    says: A screen reader user jumps heading to heading to learn the land. Skip a rank and they stop to wonder what went missing. Resize with CSS, never by changing the rank.
+    says: A screen reader user jumps heading to heading to learn the land. Skip a rank and they stop to wonder what went missing. Resize with CSS, never by changing the rank. And one h1 per page; an h1 in every section was never good practice and is now non-conforming.
     cites:
       - el-headings#usage
       - el-headings#single-h1
@@ -16,99 +17,142 @@ nodes:
     check:
       - prompt: A subheading should look smaller. What do you change?
         choices:
-          - Switch it from <h2> to <h5>
-          - Keep the correct level and change the font-size with CSS
-          - Wrap it in <small>
+          - Switch it from an h2 to an h5
+          - Keep the level and set font-size in CSS
+          - Wrap it in a small element
         answer: 1
         explain: Do not use heading elements to resize text; use the CSS font-size property.
       - prompt: Why is skipping from <h2> to <h4> a problem?
         choices:
-          - Someone navigating by headings may wonder where the missing heading is
-          - The browser deletes the h4
-          - It is invalid and the page will not render
-        answer: 0
-        explain: Skipping levels confuses people who jump from heading to heading.
-      - prompt: Is it allowed to have more than one <h1> on a page?
+          - The browser quietly deletes the h4 and its whole section
+          - People jumping heading to heading wonder what is missing
+          - The page stops rendering at the h4 and shows an error
+        answer: 1
+        explain: Skipping levels confuses people who move from heading to heading and are left wondering where the missing heading is.
+      - prompt: Each <section> of a page opens with its own <h1>, as older tutorials taught. What about today?
         choices:
-          - It is allowed if they are not nested, but a single h1 is best practice
-          - Never
-          - Yes, one per section is the recommended practice
+          - Non-conforming; use one h1 and nest the levels
+          - Required, so each section has a top heading
+          - Fine, since browsers compute the outline
         answer: 0
-        explain: Multiple h1s are allowed by the standard when not nested, but not considered a best practice.
+        explain: Nested h1 elements in sectioning elements were allowed in older versions of HTML, but never best practice, and are now non-conforming.
 
   - id: header-footer-context
     kind: concept
     title: Where a header or footer stands
     region: semantic-html
     tier: country
-    requires: [sectioning-elements]
-    says: At the top level a header is the banner of the whole site. Inside an article or section it is only that part's introduction. A footer belongs to its nearest section, or to the page.
+    requires: [header-nav-footer]
+    says: At the top level a header is the banner of the whole site. Inside an article or section it is only that part's introduction. A footer belongs to its nearest section, or to the page when that is the body.
     cites:
-      - el-header#banner
-      - el-header#nested
+      - el-header#banner-or-section
       - el-footer#summary
       - el-footer#usage
     check:
-      - prompt: A <header> inside an <article>. Is it the site's banner landmark?
+      - prompt: A <header> sits inside an <article>. Is it the site's banner landmark?
         choices:
-          - Yes, every header is a banner
-          - No, it loses landmark status and introduces its surrounding section
+          - Yes; every header element is a banner
+          - Only if it contains an h1
+          - No; it introduces only its section
+        answer: 2
+        explain: Nested in sectioning content or main, header loses its landmark status and introduces its surrounding section.
+      - prompt: A footer sits inside an article. What does it belong to?
+        choices:
+          - The whole page, like every footer
+          - That article, its nearest sectioning ancestor
+          - Nothing; footers must be children of body
         answer: 1
-        explain: Nested in sectioning content or main, header represents introductory content for that section, not the site banner.
-      - prompt: Does <footer> start a new section in the outline?
-        choices: ["Yes", "No, footer is not sectioning content"]
-        answer: 1
-        explain: The footer element is not sectioning content and doesn't introduce a new section.
+        explain: A footer represents a footer for its nearest ancestor sectioning content. Only when that is the body does it apply to the whole page.
 
   - id: main-element
     kind: concept
     title: The one main
     region: semantic-html
     tier: country
-    requires: [sectioning-elements, accessible-links]
-    says: One visible main per document, holding only what is unique to it. It is a landmark assistive technology can jump to, and with an id it is the target of your skip link.
+    requires: [sectioning-elements]
+    says: One visible main per document, holding only what is unique to it, never the logo, the menu or the copyright. It is a landmark assistive technology can jump to.
     cites:
       - el-main#only-one
       - el-main#unique-content
       - el-main#landmark
-      - el-main#skip-target
     check:
       - prompt: Should the site logo and navigation go inside <main>?
         choices:
-          - Yes, everything goes in main
-          - No, content repeated across documents does not belong in main
+          - Yes; main should wrap the whole page
+          - No; content repeated across pages stays out of main
+          - Only the navigation
         answer: 1
         explain: Content repeated across documents, such as navigation links, logos and copyright, should not be in main.
       - prompt: How many <main> elements without the hidden attribute may a document have?
-        choices: ["One", "One per article", "Any number"]
-        answer: 0
+        choices: ["One per article", "Any number", "One"]
+        answer: 2
         explain: A document mustn't have more than one main element that doesn't have the hidden attribute.
+      - prompt: What does <main> give assistive technology?
+        choices:
+          - A landmark users can jump to
+          - A faster speaking rate for the text inside it
+          - A list of the page's links
+        answer: 0
+        explain: main behaves like a main landmark, which assistive technology can use to quickly identify and navigate to the main content.
 
   - id: nav-element
     kind: concept
     title: Major navigation only
     region: semantic-html
     tier: country
-    requires: [navigation-menus, sectioning-elements]
+    requires: [navigation-menus, header-nav-footer]
     says: nav is for the major blocks of navigation, not every cluster of links. With two navs on a page, give each a label so the reader knows which is which.
     cites:
-      - el-nav#summary
       - el-nav#usage
-      - el-headings#labeled-navs
+      - el-headings#labeled-sections
     check:
       - prompt: Must every group of links be inside a <nav>?
         choices:
-          - Yes
-          - No, nav is intended only for major blocks of navigation links
-        answer: 1
+          - No; nav is for major blocks of navigation
+          - Yes, every group of links needs one
+          - Only groups of three or more links
+        answer: 0
         explain: A footer's list of links, for example, often doesn't need a nav.
       - prompt: A page has a primary nav and a footer nav. How can a screen reader user tell them apart?
         choices:
-          - Label each one, for example with aria-labelledby
-          - Use two different colours
-          - They cannot
+          - Give each a label with aria-labelledby
+          - Give each one a different colour and font so they look distinct
+          - They can't; all navs sound the same
         answer: 0
         explain: Labelled, they are announced as "Primary navigation" and "Footer navigation" instead of two unnamed nav sections.
+
+  - id: landmarks
+    kind: concept
+    title: Landmarks
+    region: semantic-html
+    tier: country
+    requires: [header-footer-context, main-element, nav-element, choosing-sections]
+    says: Landmarks are the places a screen reader can jump to, and the sectioning elements make them for you. header in body is the banner, nav the navigation, main the main, aside the complementary, footer in body the contentinfo. A section is a region only once it has a name.
+    cites:
+      - role-landmark#description
+      - role-landmark#html-elements
+      - role-region#section-named
+      - role-contentinfo#one-per-page
+    check:
+      - prompt: Which element gives the complementary landmark?
+        choices: ["<aside>", "<section>", "<footer>"]
+        answer: 0
+        explain: Each landmark role has its HTML element; complementary is aside.
+      - prompt: When does a <section> become a region landmark?
+        choices:
+          - Always, like every sectioning element
+          - When it has an accessible name
+          - Only when role="region" is written on it
+        answer: 1
+        explain: A section automatically has the region role if it is given an accessible name, for example with aria-labelledby.
+      - prompt: How many top-level contentinfo landmarks should a page have?
+        choices: ["One per section", "One", "None; footers are not landmarks"]
+        answer: 1
+        explain: Each page should only include one contentinfo landmark, made with a footer or role="contentinfo".
+      - prompt: What is the best way to make a navigation landmark?
+        choices: ['<div role="navigation">', '<div class="nav">', "<nav>"]
+        answer: 2
+        explain: Prefer the semantic HTML element over an ARIA role; a class adds no semantics at all.
 
   - id: choosing-sections
     kind: concept
@@ -116,26 +160,28 @@ nodes:
     region: semantic-html
     tier: country
     requires: [non-semantic-wrappers]
-    says: Section is the generic one, for when nothing more specific fits, and it needs a heading. Standalone? Article. Tangential? Aside. Only styling? A div.
+    says: section is the generic one, for when nothing more specific fits, and it wants a heading. Standalone? article. Tangential? aside. The main content? main. Only styling? A div.
     cites:
-      - el-section#summary
       - el-section#alternatives
       - el-article#usage
       - el-aside#usage
     check:
       - prompt: You need a wrapper purely to apply styles. Which element?
-        choices: ["<section>", "<div>", "<article>"]
-        answer: 1
+        choices: ["<section>", "<article>", "<div>"]
+        answer: 2
         explain: If you are only using the element as a styling wrapper, use a div instead of section.
       - prompt: How should the comments on a blog post be marked up?
         choices:
-          - As <article> elements nested inside the post's <article>
-          - As <aside> elements
-          - As one <section> of <p>s with no structure
-        answer: 0
+          - As aside elements, since comments sit beside the main post
+          - As article elements nested in the post's article
+          - As one section of plain paragraphs
+        answer: 1
         explain: A nested article represents an article related to the outer one, such as a comment on a blog post.
       - prompt: Should parenthesized text go in <aside>?
-        choices: ["Yes", "No, it is part of the main flow"]
+        choices:
+          - Yes; asides are for side remarks
+          - No; it is part of the main flow
+          - Only when it is longer than a line
         answer: 1
         explain: Do not use aside for parenthesized text; that text is part of the main flow.
 
@@ -148,18 +194,24 @@ nodes:
     says: Both lean the letters, but em stresses a word and changes what you mean, while i sets text apart, a ship's name, a species, a foreign phrase with its lang.
     cites:
       - el-em#i-vs-em
-      - el-em#neither-decorative
       - el-i#uses
       - el-i#not-presentational
     check:
       - prompt: '"They searched the docks for the Empress of the Galaxy." Which element fits the ship''s name?'
-        choices: ["<em>", "<i>", "<cite>"]
-        answer: 1
-        explain: Ship or vessel names in Western writing are a use case for i; there is no added emphasis.
+        choices: ["<em>", "<cite>", "<i>"]
+        answer: 2
+        explain: Ship or vessel names in Western writing are a use case for i; there is no added stress.
       - prompt: What should an idiomatic term from another language carry, besides <i>?
-        choices: ["A lang attribute", "A title attribute", "A class of foreign"]
-        answer: 0
+        choices: ["A class of foreign", "A title with a translation", "A lang attribute"]
+        answer: 2
         explain: Idiomatic terms from another language should include the lang attribute to identify the language.
+      - prompt: Is <i> just a way to get italics?
+        choices:
+          - Yes; it is purely presentational
+          - No; it marks text set off from the normal prose
+          - It was removed from HTML5
+        answer: 1
+        explain: i was once presentational; it now marks text set off from the normal prose, such as a technical term or a thought.
 
   - id: strong-and-b
     kind: concept
@@ -175,13 +227,20 @@ nodes:
       - el-b#uses
     check:
       - prompt: Product names in a review, with no special importance. Which element?
-        choices: ["<strong>", "<b>", "<h3>"]
-        answer: 1
+        choices: ["<strong>", "<h3>", "<b>"]
+        answer: 2
         explain: b is for spans like keywords or product names whose presentation is typically bold, without special importance.
       - prompt: Should a section title be marked up with <b>?
-        choices: ["Yes", "No, use a heading element h1 to h6"]
+        choices:
+          - Yes, if it should look bold
+          - No; use a heading element
+          - Only in a sidebar
         answer: 1
-        explain: Do not mark titles and headings with b; use the heading elements.
+        explain: Do not mark titles and headings with b; use the h1 to h6 elements.
+      - prompt: '"Warning! This is very dangerous." Which element fits "Warning!"?'
+        choices: ["<b>", "<em>", "<strong>"]
+        answer: 2
+        explain: strong gives portions of a sentence added importance, as in MDN's "Warning! This is very dangerous."
 
   - id: u-annotation
     kind: concept
@@ -193,15 +252,54 @@ nodes:
     cites:
       - el-u#restored
       - el-u#use-cases
-      - el-u#not-for
     check:
       - prompt: Which is a valid use of <u>?
         choices:
-          - Marking a spelling error
           - Underlining a book title
+          - Marking a spelling error
           - Decorating a heading
-        answer: 0
+        answer: 1
         explain: Valid uses include annotating spelling errors; do not use u for presentation or book titles.
+      - prompt: What does <u> mean since HTML5?
+        choices:
+          - Text with a non-textual annotation applied
+          - Underlined text, purely for decoration
+          - A hyperlink with no href
+        answer: 0
+        explain: u was restored in HTML5 with a semantic meaning, to mark text as having some form of non-textual annotation.
+
+  - id: inline-semantics
+    kind: concept
+    title: mark, dfn, small and s
+    region: semantic-html
+    tier: country
+    requires: [strong-and-b]
+    says: More words with meaning. mark highlights what is relevant here, like a search match. dfn marks the term a sentence defines. small holds side comments and fine print. s strikes what is no longer accurate; an edit to the document is del and ins.
+    cites:
+      - el-mark#usage
+      - el-dfn#summary
+      - el-small#summary
+      - el-s#summary
+    check:
+      - prompt: Search results highlight the words that matched. Which element?
+        choices: ["<strong>", "<mark>", "<em>"]
+        answer: 1
+        explain: mark can indicate the words that matched a search. strong would say the words are important, not relevant.
+      - prompt: 'A shop shows an old price that no longer applies: "Was $50". Which element?'
+        choices:
+          - <del>, since the price has been edited out of the page
+          - <small>, since old prices are the page's fine print
+          - <s>, for something no longer accurate
+        answer: 2
+        explain: s represents things that are no longer relevant or accurate. del and ins are for document edits.
+      - prompt: Which element marks the term being defined in a sentence?
+        choices: ["<dfn>", "<abbr>", "<cite>"]
+        answer: 0
+        explain: dfn indicates a term to be defined, inside a complete definition statement.
+      - prompt: Which element fits a copyright line?
+        choices: ["<sub>", "<mark>", "<small>"]
+        answer: 2
+        explain: small represents side-comments and small print, like copyright and legal text.
 
   - id: abbr-expansion
     kind: concept
@@ -216,17 +314,20 @@ nodes:
       - el-abbr#independent
       - el-abbr#title-if-needed
     check:
-      - prompt: A page uses <abbr title="HyperText Markup Language">HTML</abbr> once. Do later <abbr>HTML</abbr> elements inherit that title?
-        choices: ["Yes", "No, each abbr element is independent"]
+      - prompt: A page uses <abbr title="HyperText Markup Language">HTML</abbr> once. Do later <abbr>HTML</abbr> elements get that title?
+        choices:
+          - Yes, the first title applies to all
+          - No; each abbr is independent
+          - Only within the same paragraph
         answer: 1
-        explain: Providing a title for one abbr does not attach the same expansion to others.
+        explain: Providing a title for one abbr does not attach the same expansion to others with the same text.
       - prompt: What may the title attribute of <abbr> contain?
         choices:
+          - Any helpful tooltip text you like, such as a joke or a hint
+          - A link to a glossary entry
           - The full expansion and nothing else
-          - Any tooltip text
-          - A link to a glossary
-        answer: 0
-        explain: If present, title must contain the full description and nothing else.
+        answer: 2
+        explain: If present, title must contain the full description of the abbreviation and nothing else.
 
   - id: time-datetime
     kind: concept
@@ -234,26 +335,29 @@ nodes:
     region: semantic-html
     tier: country
     requires: [times-and-dates]
-    says: A time element can hold a clock time, a calendar date or a duration. Put the machine-readable value in datetime; without it, the text itself must be that value.
+    says: A time element can hold a clock time, a calendar date or a duration. Put the machine-readable value in datetime; without it, the text itself must be that value, and nothing but text.
     cites:
       - el-time#summary
-      - el-time#represents
       - el-time#datetime-value
     check:
-      - prompt: A <time> has no datetime attribute. Where does its machine-readable value come from?
+      - prompt: A <time> has no datetime attribute. Where does its value come from?
         choices:
-          - Its child text content, and it must have no element descendants
+          - Its text content, which then must be valid
           - The page's lang attribute
-          - Nowhere; the element is invalid
+          - Nowhere; datetime is required
         answer: 0
-        explain: Without datetime, the datetime value is the element's child text content.
-      - prompt: Which of these can <time> represent?
+        explain: Without datetime, the value is the element's child text content, and the element must have no element descendants.
+      - prompt: Which can <time> represent?
         choices:
-          - A time, a date in the Gregorian calendar, or a duration
-          - Only dates
-          - Any number
-        answer: 0
+          - Any number at all, such as a price or a page count
+          - A time, a Gregorian date, or a duration
+          - Only calendar dates, never times
+        answer: 1
         explain: It may represent a 24-hour time, a precise Gregorian date or a valid duration.
+      - prompt: Which is a valid datetime for just a time of day?
+        choices: ["7.30pm", "half past seven", "19:30"]
+        answer: 2
+        explain: A time is written on a 24-hour clock as hours and minutes, like 19:30.
 
   - id: quote-attribution
     kind: concept
@@ -270,30 +374,18 @@ nodes:
     check:
       - prompt: Where does the visible attribution for a <blockquote> go?
         choices:
-          - Outside the blockquote element
-          - Inside the blockquote, in the last paragraph
+          - Inside it, in the last paragraph
           - In the cite attribute only
-        answer: 0
+          - Outside the blockquote element
+        answer: 2
         explain: According to the specification, attribution must be placed outside the blockquote.
-
-  - id: address-scope
-    kind: concept
-    title: Whose address?
-    region: semantic-html
-    tier: country
-    requires: [contact-address, header-footer-context]
-    says: An address belongs to its nearest article or to the body, holds contact details and a name, and nothing else. A publication date goes in time, not here.
-    cites:
-      - el-address#content
-      - el-address#usage
-    check:
-      - prompt: An article's footer holds the author's email and the publication date. Where does the date go?
+      - prompt: How do you give the source URL of a q element?
         choices:
-          - Inside the <address> with the email
-          - In a <time> element, outside the <address>
-          - In the title attribute of address
-        answer: 1
-        explain: address should not contain more than contact information; a publication date belongs in time.
+          - A cite attribute on the q
+          - A cite element inside the q
+          - A title attribute on the q
+        answer: 0
+        explain: To reference the source of quoted material in a blockquote or q, use the cite attribute on the element.
 
   - id: list-rules
     kind: concept
@@ -310,22 +402,57 @@ nodes:
     check:
       - prompt: How do you decide between <ol> and <ul>?
         choices:
-          - Change the order of the items; if the meaning changes, use ol
-          - Use ol for long lists
-          - Use ul only inside nav
+          - Reorder the items; if the meaning changes, use ol
+          - Use ol for any long list
+          - Use ul only when the list sits inside nav
         answer: 0
         explain: If reordering changes the meaning, the order is meaningful and the list is an ol.
-      - prompt: Can an <li> be placed directly in a <div>?
-        choices: ["Yes", "No, it must be contained in an ol, ul or menu"]
+      - prompt: Can an <li> sit directly in a <div>?
+        choices:
+          - Yes, anywhere
+          - No; it must be in an ol, ul or menu
+          - Only when the div sits inside a nav element for a menu
         answer: 1
-        explain: An li must be contained in an ordered list, unordered list or menu.
+        explain: An li must be contained in an ordered list, an unordered list or a menu.
       - prompt: Two <dt> elements are followed by one <dd>. What does that mean?
         choices:
-          - Both terms are defined by that description
           - The second term has no definition
-          - It is invalid
-        answer: 0
+          - Both terms share that description
+          - The markup is invalid
+        answer: 1
         explain: Several dt in a row are terms all defined by the immediately following dd.
+
+  - id: list-attributes
+    kind: concept
+    title: Counting and grouping list items
+    region: semantic-html
+    tier: country
+    requires: [list-rules]
+    says: An ol can count down with reversed, start anywhere with start, and number in letters or Roman numerals with type, though start is always a plain number. An li can reset the count with value. In a dl, each term and its descriptions may share a div.
+    cites:
+      - el-ol#reversed-start
+      - el-ol#type
+      - el-li#value
+      - el-dl#div-groups
+    check:
+      - prompt: A countdown list should be numbered 10, 9, 8 and so on. Which attributes?
+        choices:
+          - reversed and start="10"
+          - type="reverse" with start="10"
+          - order="descending" from="10"
+        answer: 0
+        explain: reversed numbers the items from high to low, and start sets the number to count from.
+      - prompt: An ol with type="i" must start at iv. What is start?
+        choices: ['start="iv"', 'start="4"', 'start="IV"']
+        answer: 1
+        explain: start is always an Arabic numeral, even when the numbering type is letters or Roman numerals.
+      - prompt: Why wrap each dt and dd group of a dl in a div?
+        choices:
+          - To apply microdata, attributes or styles to a whole group
+          - Browsers require it before they indent any of the dd elements
+          - It turns the whole description list into a two-column table
+        answer: 0
+        explain: HTML allows a div around each name-value group, useful for microdata, global attributes on a whole group, or styling.
 
   - id: breaks-with-meaning
     kind: concept
@@ -342,17 +469,18 @@ nodes:
     check:
       - prompt: How should you separate two paragraphs?
         choices:
-          - Two <br> elements
-          - Wrap each in <p> and control spacing with CSS margin
-          - An <hr>
-        answer: 1
-        explain: Do not use br to create margins between paragraphs; use p and the CSS margin property.
+          - Two br elements between them
+          - An hr between them
+          - Wrap each in p and set spacing with CSS
+        answer: 2
+        explain: Do not use br to create margins between paragraphs; use p elements and the CSS margin property.
       - prompt: You want a purely decorative horizontal line. Which is right?
         choices:
-          - An <hr>
+          - An hr element
           - A CSS border on an existing element
+          - A paragraph of underscores that runs across the width
         answer: 1
-        explain: hr is now defined semantically as a thematic break; to draw a line, add a border with CSS.
+        explain: hr is now defined semantically as a thematic break; to draw a line, use CSS.
 
   - id: title-quality
     kind: concept
@@ -364,20 +492,27 @@ nodes:
     cites:
       - el-title#text-only
       - el-title#seo
-      - el-title#unique
+      - el-title#guidelines
       - el-title#assistive
     check:
-      - prompt: Which title follows MDN's advice for a site's contact page?
-        choices:
-          - "Contact us - Harbour Bakery"
-          - "Harbour Bakery - Contact us"
-          - "Home"
-        answer: 0
+      - prompt: Which title follows MDN's advice for a bakery's contact page?
+        choices: ["Harbour Bakery - Contact us", "Home", "Contact us - Harbour Bakery"]
+        answer: 2
         explain: Titles should be unique and surface the page's primary purpose first, followed by the name of the website.
       - prompt: What happens to HTML tags inside <title>?
-        choices: ["They are rendered", "They are treated as plain text", "They are removed with their content"]
+        choices:
+          - They are rendered as elements
+          - They are treated as plain text
+          - They are removed with their content
         answer: 1
-        explain: The title only contains text; any tags inside are treated as plain text.
+        explain: The title only contains text; any tags inside it are treated as plain text.
+      - prompt: Why avoid a title like "bakery bread cakes pastries cheap"?
+        choices:
+          - Keyword blobs can lower a page's search ranking
+          - Titles must not contain more than three words
+          - Search engines ignore any title written entirely in lowercase
+        answer: 0
+        explain: If a title is just a list of words, algorithms often reduce the page's position in search results.
 
   - id: language-tags
     kind: concept
@@ -385,7 +520,7 @@ nodes:
     region: semantic-html
     tier: country
     requires: [document-language]
-    says: The lang on html holds one BCP 47 tag for most of the page, and it makes even the title be spoken right. Where a part is in another language, tag that part too.
+    says: The lang on html holds one language tag for most of the page, and it makes even the title be spoken right. Where a part is in another language, tag that part too.
     cites:
       - el-html#lang
       - el-html#head-announced
@@ -394,18 +529,18 @@ nodes:
     check:
       - prompt: Without a lang on <html>, what do screen readers typically do?
         choices:
-          - Default to the operating system's language, which may cause mispronunciations
-          - Refuse to read the page
-          - Detect the language perfectly
-        answer: 0
-        explain: Without it, screen readers typically default to the OS language.
+          - Detect the language perfectly from the words
+          - Refuse to read the page aloud until a language is chosen
+          - Fall back to the OS language and may mispronounce
+        answer: 2
+        explain: Without it, screen readers typically default to the operating system's language, which may cause mispronunciations.
       - prompt: A French quotation sits in an English page. What does WCAG ask for?
         choices:
-          - Specify the language of that part too, with lang
-          - Nothing; the page language is enough
-          - Translate it
-        answer: 0
-        explain: WCAG Success Criterion 3.1.2 requires the languages of parts in other languages to be specified.
+          - Translate it into English
+          - Mark that part with its own lang
+          - Nothing; the page lang covers it
+        answer: 1
+        explain: WCAG Success Criterion 3.1.2 requires the language of each part in another language to be specified.
 
   - id: code-family
     kind: concept
@@ -420,73 +555,20 @@ nodes:
       - el-pre#contains
       - el-kbd#nesting
     check:
-      - prompt: A <pre> block shows the code <p>Hello</p>. What must you do?
+      - prompt: A <pre> block should show the code <p>Hello</p>. What must you do?
         choices:
-          - Escape the angle brackets with character references such as &lt;
-          - Nothing; pre shows text exactly as written
-          - Wrap it in a comment
-        answer: 0
-        explain: The text of pre is parsed as HTML, so syntax characters such as < may need escaping.
+          - Nothing; pre shows text exactly as typed
+          - Escape the < as &lt;
+          - Wrap it in an HTML comment
+        answer: 1
+        explain: The text of pre is parsed as HTML, so syntax characters such as < may need escaping with character references.
       - prompt: What does a <kbd> nested inside another <kbd> represent?
         choices:
-          - An actual key within a larger input
-          - Output from the program
-          - A variable
-        answer: 0
-        explain: kbd within kbd represents an actual key or unit of input as part of a larger input.
-
-  - id: sup-sub-typography
-    kind: concept
-    title: Raised and lowered for a reason
-    region: semantic-html
-    tier: country
-    requires: [superscript-subscript]
-    says: sup and sub follow typographic convention, exponents, ordinals, footnotes, formulae. A logo that sits high is styling, and styling is CSS.
-    cites:
-      - el-sup#typographical
-      - el-sup#wordmark
-      - el-sup#uses
-      - el-sub#uses
-    check:
-      - prompt: Which is an appropriate use of <sup>?
-        choices:
-          - The "th" in 4th
-          - Raising a company wordmark for looks
-          - Making a footnote smaller
-        answer: 0
-        explain: Ordinal numbers are a use case; a wordmark should use CSS vertical-align.
-      - prompt: Which element marks up a footnote number?
-        choices: ["<sup>", "<sub>", "<small>"]
-        answer: 1
-        explain: MDN lists footnote numbers as a use case for sub.
-
-  - id: semantics-in-depth
-    kind: concept
-    title: Coding for the data, not the look
-    region: semantic-html
-    tier: country
-    requires: [semantics]
-    says: Ask what best describes the data you will put there. A list? Ordered? An article with an aside? The answer is your element; how it looks is for CSS alone.
-    cites:
-      - glossary-semantics#definition
-      - glossary-semantics#data-not-looks
-      - glossary-semantics#benefits
-      - glossary-semantics#ask-yourself
-    check:
-      - prompt: In HTML, what does "semantics" refer to?
-        choices:
-          - The purpose or role of an element, rather than what it looks like
-          - The default styling of elements
-          - The order of attributes
-        answer: 0
-        explain: Semantics is meaning, for example what purpose or role an HTML element has, rather than how it looks.
-      - prompt: Which is a benefit of semantic markup listed by MDN?
-        choices:
-          - Screen readers can use it as a signpost
-          - Pages download without a server
-          - CSS is no longer needed
-        answer: 0
-        explain: Screen readers use semantic markup as signposts; search engines, developers and component naming also benefit.
+          - Output printed by the program
+          - A variable name used in the program's code
+          - One key within a larger input
+        answer: 2
+        explain: kbd within kbd represents an actual key or other unit of input as part of a larger input.
 
   - id: accessibility-tree
     kind: concept
@@ -502,33 +584,16 @@ nodes:
       - glossary-accessibility-tree#role
     check:
       - prompt: What is the accessibility tree built from?
-        choices: ["The DOM tree", "The CSS", "The page source text"]
-        answer: 0
-        explain: Browsers create the accessibility tree based on the DOM tree and expose it to assistive technologies through accessibility APIs.
-      - prompt: A link reads "Read more". What is its name in the accessibility tree?
-        choices: ["Read more", "a", "link"]
-        answer: 0
-        explain: A link with the text "Read more" has "Read more" as its name; its role is a separate property.
-
-  - id: seo-basics
-    kind: concept
-    title: Search engine optimization
-    region: semantic-html
-    tier: country
-    requires: [why-structure, head-and-metadata]
-    says: SEO is being found. The technical part is plain to you now, tag the content with semantic HTML and let crawlers find only what you want indexed.
-    cites:
-      - glossary-seo#definition
-      - glossary-seo#technical
-      - accessible-html#other-benefits
-    check:
-      - prompt: What is the technical class of SEO methods, according to MDN?
+        choices: ["The CSS rules", "The DOM tree", "The page's raw source text"]
+        answer: 1
+        explain: Browsers create the accessibility tree based on the DOM tree and expose it to assistive technologies.
+      - prompt: A real <button>Save</button> is in the page. What does the accessibility tree hold for it?
         choices:
-          - Tag the content using semantic HTML
-          - Buy links from other sites
-          - Repeat keywords in the meta keywords element
+          - Its name, "Save", and its role, button
+          - Its CSS colours, font and size, as the screen shows it
+          - Only the text "Save", since elements have no roles
         answer: 0
-        explain: Technical SEO means tagging content with semantic HTML so crawlers find the content you want indexed.
+        explain: Objects in the tree have a name (how to refer to it) and a role (what kind of thing it is), among other properties.
 
   - id: meta-kinds
     kind: concept
@@ -541,14 +606,14 @@ nodes:
       - el-meta#summary
       - el-meta#kinds
     check:
-      - prompt: 'What kind of metadata does <meta charset="utf-8"> provide?'
+      - prompt: What kind of metadata does <meta charset="utf-8"> provide?
         choices:
-          - A charset declaration giving the document's character encoding
           - Document-level metadata about the author
-          - A pragma directive
-        answer: 0
-        explain: With the charset attribute, meta is a charset declaration.
-      - prompt: Which attribute makes <meta> give document-level metadata that applies to the whole page?
-        choices: ["name", "http-equiv", "itemprop"]
-        answer: 0
-        explain: With name set, meta provides document-level metadata.
+          - A pragma directive for the server
+          - A charset declaration
+        answer: 2
+        explain: With the charset attribute, meta is a charset declaration, giving the document's character encoding.
+      - prompt: Which attribute makes <meta> give document-level metadata?
+        choices: ["http-equiv", "name", "itemprop"]
+        answer: 1
+        explain: With name set, meta provides document-level metadata that applies to the whole page.

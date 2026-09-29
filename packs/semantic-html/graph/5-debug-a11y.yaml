@@ -10,20 +10,26 @@ nodes:
     cites:
       - debugging-html#error-types
       - debugging-html#permissive
-      - debugging-html#write-correct
       - debugging-html#dom-inspector
     check:
-      - prompt: Why does HTML not suffer from syntax errors the way Rust does?
+      - prompt: Why doesn't HTML stop on syntax errors?
         choices:
-          - Browsers parse it permissively and still display the page, fixing invalid markup by built-in rules
-          - HTML has no syntax
+          - Browsers parse it permissively and fix bad markup
+          - HTML has no syntax rules
           - Editors refuse to save invalid HTML
         answer: 0
         explain: Browsers have built-in rules for interpreting badly-formed markup, so the page still displays.
-      - prompt: Where do you see the HTML the browser actually built from your source?
-        choices: [The DOM inspector in the devtools, The page source, The validator]
+      - prompt: Where do you see the HTML the browser actually built?
+        choices: ["The DOM inspector", "The page source", "The validator's report"]
         answer: 0
         explain: The DOM inspector shows the currently-rendered HTML DOM, including the browser's fixes.
+      - prompt: The browser fixed your bad nesting. Why fix the source anyway?
+        choices:
+          - The browser's guess is not always what you meant
+          - Fixed pages load more slowly
+          - Validators email site owners about it
+        answer: 0
+        explain: You always get something running, but the browser doesn't always get it right. It is better to write correct markup.
 
   - id: html-validator
     kind: concept
@@ -39,14 +45,14 @@ nodes:
     check:
       - prompt: The validator lists twelve errors. What is a good strategy?
         choices:
-          - Fix a few at a time and revalidate, since one problem can cause several errors
-          - Fix them all from the bottom up before revalidating
           - Ignore them if the page looks right
-        answer: 0
+          - Fix a few, then validate again
+          - Fix all twelve from the bottom up first
+        answer: 1
         explain: Several errors are often caused by a single problem, so fixing an early one can clear others.
-      - prompt: What helps you locate each reported error?
-        choices: [A line and column number, The element's CSS, The page title]
-        answer: 0
+      - prompt: What helps you find each reported error?
+        choices: ["The CSS rules applied to the element", "A line and column number", "The page title"]
+        answer: 1
         explain: Each message comes with a line and column number.
 
   - id: semantic-html-accessibility
@@ -64,18 +70,25 @@ nodes:
     check:
       - prompt: What does a real <button> give you that a styled <div> does not?
         choices:
-          - Built-in keyboard accessibility, with Tab to reach it and Space or Enter to activate it
-          - A different colour
-          - Nothing
-        answer: 0
+          - A different default colour and border, but nothing a user can do with it
+          - Nothing; the two behave the same once styled
+          - Keyboard access, Tab to reach it and Enter or Space to press it
+        answer: 2
         explain: HTML buttons have built-in keyboard accessibility.
       - prompt: Why is semantic HTML good for SEO?
         choices:
-          - Search engines give more importance to keywords inside headings, links and similar elements than inside non-semantic divs
-          - Search engines only index semantic pages
-          - It is not; SEO depends only on the title
+          - Search engines weigh keywords in headings and links more
+          - Search engines skip pages with divs
+          - It isn't; only the title matters for search
         answer: 0
-        explain: Keywords in headings and links carry more weight than keywords in non-semantic divs.
+        explain: Search engines give more importance to keywords inside headings and links than inside non-semantic divs.
+      - prompt: A legacy page is full of bad markup you cannot all replace. What does MDN advise?
+        choices:
+          - Improve what you can; every improvement helps
+          - Leave it all; partial fixes make things worse
+          - Rewrite the whole site before touching any of it
+        answer: 0
+        explain: The goal isn't all or nothing; every improvement you can make helps the cause of accessibility.
 
   - id: screen-reader-structure
     kind: concept
@@ -83,25 +96,25 @@ nodes:
     region: semantic-html
     tier: road
     requires: [semantic-html-accessibility, lists]
-    says: A screen reader user can list every heading and leap between them like a table of contents. Build your text from line breaks and bold, and they get one giant block.
+    says: A screen reader user can list every heading and leap between them like a table of contents. Build your text from line breaks and styled spans, and they get one giant block.
     cites:
       - accessible-html#text-structure
       - accessible-html#screen-reader-navigation
       - accessible-html#bad-semantics
     check:
-      - prompt: What can many screen readers do with the headings of a page?
+      - prompt: What can many screen readers do with a page's headings?
         choices:
-          - Bring up a list of all headings to use as a table of contents
           - Nothing; headings are read like paragraphs
-          - Only read the first heading
-        answer: 0
-        explain: Screen readers can jump between headings and list all of them as a table of contents.
-      - prompt: A page built from line breaks and styled text has no heading elements. What does a screen reader user get?
-        choices:
-          - The same experience
-          - No signposts; the page is read out as a single giant block
-          - An automatic outline
+          - List them all as a table of contents
+          - Read only the first heading on the page
         answer: 1
+        explain: Screen readers can jump between headings and bring up a list of all of them as a table of contents.
+      - prompt: A page is built from br and styled spans, with no heading elements. What does a screen reader user get?
+        choices:
+          - One giant block with no signposts
+          - An automatic outline built from font sizes
+          - The same experience as with headings
+        answer: 0
         explain: Without semantic structure there is nothing to use as signposts, so the page is read out all at once.
 
   - id: clear-language
@@ -110,22 +123,32 @@ nodes:
     region: semantic-html
     tier: road
     requires: [semantic-html-accessibility, abbreviations]
-    says: Plain words help everyone, most of all people reading in a second language or with cognitive disabilities. Write "5 to 7", "January", and spell out acronyms.
+    says: Plain words help everyone, most of all people reading in a second language or with cognitive disabilities. Write "5 to 7", write "January", and spell out acronyms before you abbreviate them.
     cites:
       - accessible-html#clear-language
-      - accessible-html#language-tips
+      - el-abbr#expand-first
     check:
-      - prompt: Which is clearer for a screen reader?
-        choices: ["5–7 Jan", "5 to 7 January"]
+      - prompt: How does MDN advise rewriting "5–7 Jan" for a page?
+        choices:
+          - Keep it; screen readers expand dates themselves
+          - 5 to 7 January
+          - 5 – 7 Jan., with spaces around the dash
         answer: 1
-        explain: Avoid dashes where you can and expand abbreviations such as Jan.
+        explain: Avoid dashes where you can, and expand abbreviations such as Jan.
+      - prompt: Who benefits from clear language?
+        choices:
+          - Only people with cognitive disabilities, since others read fluently
+          - Only search engine crawlers
+          - Everyone, including second-language readers
+        answer: 2
+        explain: Clear language helps people with cognitive disabilities, readers whose first language differs, younger people, and everyone else.
 
   - id: source-order
     kind: concept
     title: Sections and source order
     region: semantic-html
     tier: road
-    requires: [screen-reader-structure, sectioning-elements]
+    requires: [screen-reader-structure, sectioning-elements, header-nav-footer]
     says: nav, article, footer and their kin give a screen reader extra clues. And the order in the source is the order it is read. Get that right first; CSS can move things later.
     cites:
       - accessible-html#sectioning
@@ -133,11 +156,18 @@ nodes:
     check:
       - prompt: Why should content make sense in source order?
         choices:
-          - Screen reader users hear the content in source order
+          - Screen readers read it out in source order
           - Browsers sort elements alphabetically
-          - CSS cannot move elements
+          - CSS cannot move elements around the page
         answer: 0
         explain: You can place content with CSS later, but the source order is what screen reader users get read out.
+      - prompt: Your design shows the sidebar first on wide screens. Where does it go in the source?
+        choices:
+          - First in the source, so the code matches the visual design exactly
+          - Wherever reading order makes sense; CSS can place it
+          - Inside the header, so it is read early
+        answer: 1
+        explain: Get the source order right to start with; you can always place content where you want using CSS.
 
   - id: native-controls
     kind: concept
@@ -149,45 +179,133 @@ nodes:
     cites:
       - accessible-html#keyboard-default
       - accessible-html#div-buttons
+      - accessible-html#fake-button-fix
       - accessible-html#tabindex
-      - accessible-html#right-element
     check:
       - prompt: What does tabindex="0" do?
         choices:
-          - Lets an element that is not normally tabbable receive focus with Tab
+          - Makes a non-tabbable element reachable with Tab
           - Removes the element from the tab order
-          - Makes it the first element in the tab order
+          - Puts the element first in the tab order, before every other one
         answer: 0
         explain: tabindex="0" makes elements that are not normally tabbable tabbable. tabindex="-1" allows only programmatic focus.
       - prompt: Why are positive tabindex values nearly always a bad idea?
         choices:
-          - They set a custom tab order that can cause major confusion
           - Browsers ignore them
+          - They create a custom tab order that confuses people
           - They disable the element
-        answer: 0
+        answer: 1
         explain: A custom tab order is nearly always confusing; use it only if you really need to.
+      - prompt: What does it take to make a div act like a button?
+        choices:
+          - tabindex, role="button" and script for Enter
+          - Only a class named button
+          - Nothing; divs are focusable
+        answer: 0
+        explain: Focus via tabindex, a role for screen readers and JavaScript for the Enter key. Better to use the right element in the first place.
 
-  - id: accessible-links
+  - id: links-vs-buttons
     kind: concept
-    title: Links that behave like links
+    title: Links go somewhere, buttons do something
     region: semantic-html
     tier: road
-    requires: [native-controls, link-text, document-fragments]
-    says: An anchor with href="#" and a click handler is a lie to assistive technology. Use a button for actions, and a skip link at the top of the body to jump past what repeats.
+    requires: [native-controls, hyperlinks]
+    says: An anchor with href="#" and a click handler lies to assistive technology and breaks copying, new tabs and bookmarks. A link navigates to a real URL; an action is a button. Either way its label must make sense read alone.
     cites:
       - accessible-html#fake-button-links
-      - accessible-html#use-button
-      - accessible-html#skip-link
-      - accessible-html#skip-link-who
+      - accessible-html#meaningful-labels
     check:
       - prompt: A control runs JavaScript and goes nowhere. What should it be?
-        choices: ['<a href="#">', "<button>", '<a href="javascript:void(0)">']
-        answer: 1
+        choices: ['<a href="#">', '<a href="javascript:void(0)">', "<button>"]
+        answer: 2
         explain: Use a button for actions. An anchor should only be used for navigation to a proper URL.
-      - prompt: Where does a skip link go, and where does it point?
+      - prompt: What goes wrong with href="#" pseudo-buttons?
         choices:
-          - As close as possible to the opening body tag, pointing to the start of the main content
+          - Copying, new tabs and bookmarks break, and the semantics are wrong
+          - Nothing, if the click handler works
+          - They can never be styled with CSS to look like real buttons
+        answer: 0
+        explain: These values cause unexpected behaviour when copying, opening in a new tab or bookmarking, and convey incorrect semantics.
+      - prompt: Why must button labels make sense on their own?
+        choices:
+          - Screen reader users may list all controls out of context
+          - Browsers cut off button labels after a few words, so only short ones work
+          - Search engines index button text
+        answer: 0
+        explain: Screen reader users sometimes bring up a list of buttons and form controls, so a label like "Click here" tells them nothing.
+
+  - id: skip-links
+    kind: concept
+    title: Skip links
+    region: semantic-html
+    tier: road
+    requires: [document-fragments, main-element]
+    says: The first thing in body can be a link that jumps past the header and navigation to the main content, which carries the matching id. Keyboard, switch and voice users skip the same links on every page.
+    cites:
+      - accessible-html#skip-link
+      - el-a#skip-link
+      - el-main#skip-target
+    check:
+      - prompt: Where does a skip link go, and what does it point to?
+        choices:
+          - At the start of body, pointing to the main content
           - In the footer, pointing to the top
           - In the head, pointing to the title
         answer: 0
-        explain: A skip link sits near the start of body and links to the beginning of the main content, bypassing repeated headers and navigation.
+        explain: A skip link sits as close as possible to the opening body tag and links to the beginning of the main content.
+      - prompt: What makes <main> the target of a skip link?
+        choices:
+          - An id on main, matched by the link's fragment
+          - Nothing; browsers find the main element for every skip link by themselves
+          - A class of skip-target on the main element
+        answer: 0
+        explain: Adding an id attribute to the main element lets it be the target of a skip navigation link.
+      - prompt: Who gains most from a skip link?
+        choices:
+          - People moving by keyboard, switch or voice control
+          - Search engine crawlers indexing the page
+          - People on fast connections
+        answer: 0
+        explain: Skip links help people who navigate with switch control, voice command or other aids, for whom repeated links are laborious.
+
+  - id: text-alternatives
+    kind: concept
+    title: Text alternatives for images
+    region: semantic-html
+    tier: road
+    requires: [attributes, semantic-html-accessibility]
+    says: An image a reader cannot see must speak through its alt, briefly, with only what the picture adds to the text around it. A decorative image gets an empty alt so it is skipped, not spelled out. An image that is the whole of a link names that link.
+    cites:
+      - accessible-html#missing-alt
+      - accessible-html#alt-content
+      - accessible-html#empty-alt
+      - creating-links#image-link
+    check:
+      - prompt: A decorative icon sits beside a heading. What alt should it have?
+        choices:
+          - alt="" so screen readers skip it
+          - No alt attribute at all, since the image has no meaning
+          - alt="icon"
+        answer: 0
+        explain: Use an empty alt for decoration. Without any alt, many screen readers announce the whole image URL.
+      - prompt: What may a screen reader do with an image that has no alt?
+        choices:
+          - Skip it silently, as if the image were not on the page
+          - Describe the picture automatically
+          - Read out its file name or URL
+        answer: 2
+        explain: VoiceOver, for example, reads out the file name, which often gives no context at all.
+      - prompt: A logo image is the only content of a link to the home page. What should its alt be?
+        choices:
+          - alt="" since the logo is decoration
+          - alt="logo.png"
+          - alt="Harbour Bakery home"
+        answer: 2
+        explain: The image is the link's only content, so its alt must say where the link goes, as MDN's image link uses alt="MDN Web Docs".
+      - prompt: What belongs in alt text?
+        choices:
+          - What the image conveys that the surrounding text doesn't
+          - Every visible detail of the image
+          - The photographer's name and camera
+        answer: 0
+        explain: The alt should be brief and include the information the image conveys that is not duplicated in the surrounding text.

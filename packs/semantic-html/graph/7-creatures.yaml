@@ -1,28 +1,29 @@
 # Creatures (problems) and the region boss (project). Their problem files are not written yet:
 # the grading owner writes statements, starters, reference solutions and graders from
 # docs/semantic-html/creature-intents.md in the engine repo. Until then each node is `planned`.
+# Every concept is exercised by at least one creature before the boss (tools/semantic-html/audit.mjs checks this).
 nodes:
   - id: skeleton-wight
     kind: problem
     title: The Skeleton Wight
     region: semantic-html
     tier: road
-    requires: [character-encoding, page-title, document-language]
-    intent: Give a bare page its full frame, doctype, html with lang, a head with charset, title and description, and a body.
+    requires: [title-quality, language-tags, viewport-meta, meta-kinds, head-resources]
+    intent: Give a bare page its full frame, doctype, html with lang, a head with the charset first, a viewport, a purpose-first title, author and description meta and a stylesheet link, and a body.
     planned: true
     problem: skeleton-wight
     cites:
       - basic-html-syntax#doctype
-      - webpage-metadata#charset
-      - webpage-metadata#title-metadata
-      - webpage-metadata#lang
+      - el-meta#charset
+      - meta-viewport#recommended
+      - webpage-metadata#name-content
 
   - id: tangle-root
     kind: problem
     title: The Tangle Root
     region: semantic-html
     tier: road
-    requires: [html-validator]
+    requires: [html-validator, attribute-quotes]
     intent: Repair unclosed elements, overlapping tags and an unclosed attribute quote so the page matches what the author meant.
     planned: true
     problem: tangle-root
@@ -30,7 +31,7 @@ nodes:
       - basic-html-syntax#nesting-overlap
       - basic-html-syntax#always-quote
       - debugging-html#permissive
-      - debugging-html#write-correct
+      - debugging-html#fix-a-few
 
   - id: wall-golem
     kind: problem
@@ -38,14 +39,14 @@ nodes:
     region: semantic-html
     tier: road
     requires: [lists, why-structure]
-    intent: Turn an unmarked recipe into one h1, h2 subtitles, paragraphs, an unordered ingredients list and an ordered method.
+    intent: Turn an unmarked recipe into one h1, h2 subtitles, paragraphs, an unordered ingredients list and an ordered method with a nested sub-list.
     planned: true
     problem: wall-golem
     cites:
       - headings-and-paragraphs#six-levels
       - headings-and-paragraphs#why-structure
       - lists#unordered
-      - lists#ordered
+      - lists#nesting
 
   - id: false-herald
     kind: problem
@@ -59,6 +60,7 @@ nodes:
     cites:
       - headings-and-paragraphs#span-no-semantics
       - el-headings#usage
+      - el-headings#single-h1
       - el-headings#skip-levels
 
   - id: shouting-scribe
@@ -66,29 +68,30 @@ nodes:
     title: The Shouting Scribe
     region: semantic-html
     tier: country
-    requires: [em-and-i, strong-and-b]
-    intent: Mark stress with em, importance with strong, set-off terms with i and lang, and attention-only keywords with b, replacing presentational misuse.
+    requires: [em-and-i, u-annotation, inline-semantics, language-tags]
+    intent: Mark stress with em, importance with strong, set-off terms with i (a foreign phrase with its lang), attention-only keywords with b, a misspelling with u and a search match with mark, replacing presentational misuse.
     planned: true
     problem: shouting-scribe
     cites:
       - emphasis-and-importance#em
-      - emphasis-and-importance#strong
+      - el-strong#em-vs-strong
       - el-i#uses
-      - el-b#uses
+      - el-u#use-cases
 
   - id: glossary-sphinx
     kind: problem
     title: The Glossary Sphinx
     region: semantic-html
     tier: country
-    requires: [list-rules]
-    intent: Mark up a glossary as a description list, including one term with two descriptions and two terms sharing one description.
+    requires: [list-attributes]
+    intent: Mark up a glossary as a description list, including one term with two descriptions and two terms sharing one description, each group optionally wrapped in a div.
     planned: true
     problem: glossary-sphinx
     cites:
       - lists#dl-dt-dd
       - lists#multiple-descriptions
       - el-dt#several-terms
+      - el-dl#div-groups
 
   - id: echo-parrot
     kind: problem
@@ -110,15 +113,15 @@ nodes:
     title: The Almanac Imp
     region: semantic-html
     tier: country
-    requires: [abbr-expansion, time-datetime, sup-sub-typography, address-scope]
-    intent: Mark abbreviations with expansions, dates in time with valid datetime values, superscripts and subscripts, and the author's contact details in address.
+    requires: [abbr-expansion, time-datetime, superscript-subscript, contact-address, breaks-with-meaning, clear-language]
+    intent: Mark abbreviations with expansions, dates in time with valid datetime values, a formula and an ordinal with sub and sup, and the author's contact details in address with br between its lines, replacing br-built spacing and a decorative hr.
     planned: true
     problem: almanac-imp
     cites:
       - el-abbr#expand-first
-      - el-time#datetime-value
+      - advanced-text-features#time-formats
       - advanced-text-features#sup-sub
-      - el-address#usage
+      - advanced-text-features#address-scope
 
   - id: code-gremlin
     kind: problem
@@ -140,58 +143,58 @@ nodes:
     title: The Div-Soup Slime
     region: semantic-html
     tier: country
-    requires: [choosing-sections, header-footer-context, main-element, nav-element]
-    intent: Replace a page of nested divs with header, nav, one main, article, section with headings, aside and footer, keeping div only where no element fits.
+    requires: [landmarks, source-order]
+    intent: Replace a page of nested divs with header, nav, one main, article, sections with headings, aside and footer in a sensible source order, so every landmark is present once, keeping div only where no element fits.
     planned: true
     problem: div-soup-slime
     cites:
       - structuring-documents#section-tags
-      - structuring-documents#main-article-section
+      - structuring-documents#main-article-section-aside
       - structuring-documents#div-warning
-      - el-section#alternatives
+      - role-landmark#html-elements
 
   - id: lost-signpost
     kind: problem
     title: The Lost Signpost
     region: semantic-html
     tier: road
-    requires: [document-fragments, email-links]
-    intent: Fix broken relative, root-relative and fragment links in a small site's page and add a working mailto contact link.
+    requires: [document-fragments, absolute-urls, email-links, information-architecture]
+    intent: Fix broken relative, root-relative, absolute and fragment links in a small site from its sitemap, giving each fragment target a unique id, and add a working mailto contact link.
     planned: true
     problem: lost-signpost
     cites:
       - creating-links#up-a-directory
-      - creating-links#root-relative
+      - creating-links#internal-external
       - creating-links#fragment-hash
-      - creating-links#mailto
+      - attr-id#unique
 
   - id: click-here-ghost
     kind: problem
     title: The Click-Here Ghost
     region: semantic-html
     tier: road
-    requires: [link-signposts, navigation-menus]
-    intent: Rewrite vague and URL link text into descriptive text, flag downloads and new tabs, and build a list-based menu with no link to the current page.
+    requires: [anchor-attributes, navigation-menus, text-alternatives]
+    intent: Rewrite vague and URL link text into descriptive text, give an image link alt text that names its destination, flag downloads and new tabs, and build a list-based menu with no working link to the current page.
     planned: true
     problem: click-here-ghost
     cites:
       - creating-links#link-tips
-      - creating-links#download
-      - creating-links#new-tab-cue
+      - creating-links#new-tab
       - creating-links#nav-list
+      - creating-links#image-link
 
   - id: mimic-button
     kind: problem
     title: The Mimic
     region: semantic-html
     tier: country
-    requires: [main-element]
+    requires: [links-vs-buttons, skip-links, accessibility-tree]
     intent: Replace div and href="#" fake buttons with real buttons and add a skip link to an id on main as the first thing in body.
     planned: true
     problem: mimic-button
     cites:
       - accessible-html#div-buttons
-      - accessible-html#use-button
+      - accessible-html#fake-button-links
       - accessible-html#skip-link
       - el-main#skip-target
 
@@ -214,18 +217,6 @@ nodes:
       - lost-signpost
       - click-here-ghost
       - mimic-button
-      - head-resources
-      - information-architecture
-      - source-order
-      - clear-language
-      - title-quality
-      - language-tags
-      - breaks-with-meaning
-      - u-annotation
-      - accessibility-tree
-      - seo-basics
-      - meta-kinds
-      - semantics-in-depth
     intent: Build a small multi-page site from the two MDN challenges, a marked-up letter and a structured home page, graded for structure, landmarks and heading outline, links, then an accessibility pass.
     planned: true
     problem: semantic-citadel

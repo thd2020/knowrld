@@ -1,4 +1,4 @@
-# Road, part 4: links (Learn: Creating links).
+# Road, part 4: links (Learn: Creating links), with the <a> reference as country.
 nodes:
   - id: hyperlinks
     kind: concept
@@ -6,84 +6,127 @@ nodes:
     region: semantic-html
     tier: road
     requires: [attributes]
-    says: Every resource on the web has an address. Wrap text, a heading or an image in an a element and give it that address in href, and the web is a web.
+    says: Every resource on the web has an address, its URL. Wrap text, a heading or an image in an a element, point href at the address, and the web is a web. Put nothing vital in a link's title; only a mouse ever reveals it.
     cites:
       - creating-links#url
       - creating-links#anchor
-      - creating-links#image-link
+      - creating-links#block-links
       - creating-links#title-hover-only
     check:
       - prompt: Which attribute of <a> holds the address the link points to?
-        choices: ["href", "src", "title"]
-        answer: 0
+        choices: ["src", "href", "title"]
+        answer: 1
         explain: A link is an a element whose href attribute contains the web address.
-      - prompt: How do you make an image into a link?
+      - prompt: Can a whole heading be a link?
         choices:
-          - Wrap the <img> element in an <a> element
-          - Give the <img> an href
-          - Put the <a> inside the <img>
+          - Yes; wrap the heading in an a element
+          - No; only inline text can be linked
+          - Only an h1 can be a link
         answer: 0
-        explain: To turn an image into a link, wrap the img element with an a element.
-      - prompt: Why shouldn't vital information live only in a link's title attribute?
+        explain: Almost any content can be made into a link, even block-level elements such as a heading.
+      - prompt: Why shouldn't vital information live only in a link's title?
         choices:
-          - It is only revealed on mouse hover, so keyboard and touchscreen users have trouble reaching it
-          - Browsers never show it
-          - It breaks the link
+          - It shows only on mouse hover
+          - Browsers never display it at all
+          - Search engines penalize it
         answer: 0
-        explain: A title shows only on hover. Put important information in the regular text.
+        explain: A title is only revealed on mouse hover, so keyboard and touchscreen users have trouble reaching it. Put important information in the text.
 
-  - id: urls-and-paths
+  - id: relative-paths
     kind: concept
-    title: URLs and paths
+    title: Relative paths
     region: semantic-html
     tier: road
     requires: [hyperlinks]
-    says: A path is directions from here. Name the folder to go down, two dots to climb up, a slash in front to start from the root. Another site always needs its full URL.
+    says: A relative path is directions from here. A file name for a neighbour, a folder name to go down, two dots to climb up. Start with a slash and the path starts at the site's root instead, so moving the linking file won't break it.
     cites:
+      - creating-links#same-directory
+      - creating-links#subdirectory
       - creating-links#up-a-directory
       - creating-links#root-relative
-      - creating-links#absolute-relative
-      - creating-links#internal-external
     check:
       - prompt: From projects/index.html, which path reaches pdfs/project-brief.pdf?
-        choices: ["pdfs/project-brief.pdf", "../pdfs/project-brief.pdf", "./project-brief.pdf"]
-        answer: 1
-        explain: Two dots go up a directory level; then go down into pdfs.
-      - prompt: What does a single slash at the start of a path mean?
+        choices: ["projects/pdfs/project-brief.pdf", "pdfs/project-brief.pdf", "../pdfs/project-brief.pdf"]
+        answer: 2
+        explain: Two dots go up a directory level; then the path goes down into pdfs.
+      - prompt: What does a slash at the start of a path mean?
         choices:
-          - Start from the current file's folder
-          - Start in the root directory of the site
-          - Link to another site
+          - Start from the current folder
+          - Start at the root directory of the site
+          - Go to another website with that name
         answer: 1
-        explain: A leading slash makes the path start in the site's root directory, so moving the linking file does not break it.
-      - prompt: A link points to a page on a different site. What is it called?
-        choices: [An internal link, An external link, A fragment]
+        explain: A leading slash makes the path start in the site's root directory, so moving the linking file does not break the link.
+      - prompt: In the top-level index.html, which path reaches contacts.html in the same folder?
+        choices: ["contacts.html", "../contacts.html", "/root/contacts.html"]
+        answer: 0
+        explain: A file in the same directory is reached by its file name alone, or with ./ in front.
+
+  - id: absolute-urls
+    kind: concept
+    title: Absolute URLs and how links resolve
+    region: semantic-html
+    tier: road
+    requires: [relative-paths]
+    says: A full URL, with its domain, points to the same place from anywhere on the web, and a link to another site always needs one. Every other path is resolved against the address of the page it sits in, so the same path can land in two places.
+    cites:
+      - creating-links#absolute-relative
+      - creating-links#internal-external
+      - creating-links#url-resolution
+      - creating-links#trailing-slash
+    check:
+      - prompt: Which of these is absolute with respect to the whole web?
+        choices:
+          - /pdfs/project-brief.pdf, since it starts at the root
+          - https://example.com/pdfs/project-brief.pdf
+          - ../pdfs/project-brief.pdf, since it climbs up a level
         answer: 1
-        explain: A link to a resource on a different site is an external link.
+        explain: /pdfs/project-brief.pdf is absolute only within your site; it is relative to the domain name. A URL with the full domain is absolute for the whole web.
+      - prompt: Why can't a link to another site use /pdfs/brief.pdf?
+        choices:
+          - The browser needs the other site's domain to find it
+          - Slashes are banned in external links
+          - External links must end in .html
+        answer: 0
+        explain: Paths like /pdfs/project-brief.pdf are relative to your own site; the browser needs the website's domain name to find a page elsewhere.
+      - prompt: The link projects/index.html sits in pdfs/index.html on www.example.com. Where does it go?
+        choices:
+          - https://www.example.com/projects/index.html
+          - Nowhere; the link is refused
+          - https://www.example.com/pdfs/projects/index.html
+        answer: 2
+        explain: All links resolve relative to the current document's URL, so from pdfs/index.html the link lands on /pdfs/projects/index.html, which doesn't exist.
 
   - id: document-fragments
     kind: concept
     title: Linking to part of a page
     region: semantic-html
     tier: road
-    requires: [urls-and-paths]
-    says: Give an element an id and it becomes a place you can link to. Add a hash and the id to the path, or use the hash alone to jump within this page.
+    requires: [relative-paths]
+    says: Give an element an id and it becomes a place to link to. Add a hash and the id to a path, or use the hash alone to jump within this page. An id must be unique in the whole document, or the link has nowhere certain to land.
     cites:
       - creating-links#fragment
       - creating-links#fragment-hash
       - creating-links#fragment-same-page
+      - attr-id#unique
     check:
-      - prompt: 'What does href="#mailing_address" link to?'
+      - prompt: What does href="#mailing_address" link to?
         choices:
-          - The element with id="mailing_address" in the current document
-          - A file called mailing_address
-          - An email address
-        answer: 0
+          - A file named mailing_address
+          - The element with id="mailing_address" in this page
+          - An email address stored in the site
+        answer: 1
         explain: A document fragment reference on its own links to another part of the current document.
-      - prompt: What creates a document fragment you can link to?
-        choices: ["An id attribute on an element", "A class attribute", "A heading level"]
-        answer: 0
+      - prompt: What turns an element into a fragment you can link to?
+        choices: ["A class attribute", "An id attribute", "A heading level"]
+        answer: 1
         explain: Elements with an id attribute automatically create a document fragment that can be linked to.
+      - prompt: Two elements on one page both have id="top". What is wrong?
+        choices:
+          - "Nothing; a link to #top goes to both at once"
+          - An id may not be a common English word such as top
+          - An id must be unique in the whole document
+        answer: 2
+        explain: The id attribute defines an identifier that must be unique within the entire document.
 
   - id: link-text
     kind: concept
@@ -91,22 +134,38 @@ nodes:
     region: semantic-html
     tier: road
     requires: [hyperlinks]
-    says: Link text is a signpost read out of context. Say where it goes. Not "click here", not the URL, not the word "link".
+    says: Link text is a signpost read out of context. Say where it goes. Not "click here", not the URL, not the word "link". And keep links looking like links; colour alone is not enough.
     cites:
       - creating-links#accessible-links
       - creating-links#link-tips
       - accessible-html#labels-out-of-context
+      - accessible-html#link-styling
     check:
       - prompt: Which link text is best?
-        choices: ["Click here", "Download Firefox", "https://www.firefox.com/"]
-        answer: 1
-        explain: Descriptive text serves screen reader users jumping between links, search engines and skimming readers. Repeating the URL sounds ugly when read out.
+        choices: ["Click here", "https://www.firefox.com/", "Download Firefox"]
+        answer: 2
+        explain: Descriptive text serves screen reader users jumping between links, search engines and skimming readers. Read aloud, a URL sounds ugly.
       - prompt: Should link text include the word "link"?
         choices:
-          - Yes, so people know it is a link
-          - No, screen readers already tell people there's a link
+          - Yes, so people know to click
+          - No; screen readers already say it is a link
+          - Only for links that open a new tab
         answer: 1
-        explain: Saying "link" is noise; screen readers announce links and they are styled distinctly.
+        explain: Saying "link" is noise; screen readers announce links, and visual users see them styled differently.
+      - prompt: Five links on a page all read "Read more". Why is that a problem?
+        choices:
+          - A list of links out of context is useless
+          - Browsers merge them into one link
+          - Search engines index only the first one
+        answer: 0
+        explain: Screen reader users often list the links on a page; a list of identical labels tells them nothing.
+      - prompt: Your design makes links the same weight as body text and tells them apart by colour only. Is that enough?
+        choices:
+          - Yes, if the colour is bright enough
+          - No; colour should not be the only way links stand out
+          - Yes, links never need anything but colour
+        answer: 1
+        explain: Colour should not be used as the sole method of distinguishing links from the text around them.
 
   - id: link-signposts
     kind: concept
@@ -114,24 +173,31 @@ nodes:
     region: semantic-html
     tier: road
     requires: [link-text]
-    says: If a link downloads, streams or opens a new tab, say so in its text. Nobody likes a door that leads somewhere unexpected.
+    says: If a link downloads, streams or opens a new tab, say so in its text. Opening new tabs is a choice with costs, so make it on purpose. Nobody likes a door that leads somewhere unexpected.
     cites:
       - creating-links#signposts
       - creating-links#download
-      - creating-links#new-tab-cue
+      - creating-links#new-tab
       - accessible-html#new-tab-indicator
     check:
       - prompt: Which attribute gives a downloaded file a default save name?
-        choices: ["download", "target", "rel"]
-        answer: 0
+        choices: ["target", "rel", "download"]
+        answer: 2
         explain: The download attribute provides a default save filename for a resource to be downloaded.
-      - prompt: 'A link opens in a new tab with target="_blank". What should it also have?'
+      - prompt: A link opens in a new tab. What should it also have?
         choices:
-          - A cue, such as an icon or text, that it opens a new tab
-          - Nothing more
+          - A cue in its text or an icon saying so
+          - Nothing; new tabs need no warning
           - A title attribute only
         answer: 0
-        explain: Links that open in a new tab should indicate that behavior, for example with an icon next to the link text.
+        explain: Links that open in a new tab should indicate it, for example with text or an icon next to the link text.
+      - prompt: Which is a reason not to open a link in a new tab?
+        choices:
+          - It breaks the back button that many users rely on
+          - New tabs can't load other sites
+          - Search engines ignore links with a target
+        answer: 0
+        explain: Opening links in a new tab can disorient users who are used to the back button, and screen reader users may lose their place.
 
   - id: email-links
     kind: concept
@@ -139,38 +205,92 @@ nodes:
     region: semantic-html
     tier: road
     requires: [hyperlinks]
-    says: A mailto link opens a new message instead of a page. Put the address after mailto, or leave it out and let the reader choose.
+    says: A mailto link opens a new message instead of a page. Put the address after mailto, or leave it out and let the reader choose. Add a subject or a body as query terms, spaces percent-escaped.
     cites:
       - creating-links#mailto
       - creating-links#mailto-empty
+      - creating-links#mailto-details
+      - creating-links#mailto-encoding
     check:
       - prompt: Which href opens a new email to nowhere@mozilla.org?
-        choices: ["mailto:nowhere@mozilla.org", "email://nowhere@mozilla.org", "nowhere@mozilla.org"]
-        answer: 0
+        choices: ["email://nowhere@mozilla.org", "mailto:nowhere@mozilla.org", "nowhere@mozilla.org"]
+        answer: 1
         explain: Email links use the a element with the mailto URL scheme.
       - prompt: What happens with href="mailto:" and no address?
         choices:
-          - The link is broken
-          - A new email opens with no destination address
-          - It emails the site owner
+          - The link is broken and does nothing
+          - A new email opens with no recipient
+          - It emails the owner of the website
         answer: 1
-        explain: The address is optional; the user's email client opens a new message with no recipient, useful for share links.
+        explain: The address is optional; the email client opens a new message with no destination address, useful for share links.
+      - prompt: How are a subject and a body added to a mailto link?
+        choices:
+          - As query terms after ?, joined by &
+          - As extra attributes on the a element
+          - Inside the link text, after a colon
+        answer: 0
+        explain: Each field and its value is a query term. A ? separates them from the address and & separates the fields.
 
   - id: navigation-menus
     kind: concept
     title: Navigation menus
     region: semantic-html
     tier: road
-    requires: [lists, urls-and-paths]
-    says: A menu is a list of links, the same on every page, so a reader feels they stay in one place while the content changes.
+    requires: [lists, relative-paths]
+    says: A menu is a list of links, the same on every page, so readers feel they stay in one place while the content changes. On each page, drop the link to that page itself; where the design keeps it, mark it with aria-current="page".
     cites:
       - creating-links#nav-menu
       - creating-links#nav-list
+      - el-nav#summary
+      - attr-aria-current#styled-current
     check:
-      - prompt: Which markup is semantically right for a navigation menu?
+      - prompt: Which markup is right for a navigation menu?
         choices:
+          - A paragraph of links split by bars
+          - A table with one link in each cell
           - An unordered list of links
-          - A paragraph of links separated by bars
-          - A table with one link per cell
-        answer: 0
+        answer: 2
         explain: A navigation menu is usually just a list of links, so an unordered list is semantically OK.
+      - prompt: On the About page, what happens to the menu's About link?
+        choices:
+          - It stays as a normal link
+          - It moves to the end of the menu
+          - It is removed, or marked as the current page
+        answer: 2
+        explain: MDN removes the link to the page itself, which also shows which page you are on. If a styled link is kept instead, aria-current="page" tells assistive technology.
+      - prompt: Why use the same menu on every page?
+        choices:
+          - It feels like staying in one place while content changes
+          - Browsers cache only identical menus
+          - Search engines require it
+        answer: 0
+        explain: The same structure and menu on every page gives the impression of staying in the same place while different content comes up.
+
+  - id: anchor-attributes
+    kind: concept
+    title: target, download and tel
+    region: semantic-html
+    tier: country
+    requires: [link-signposts, email-links]
+    says: target names where a link opens, _self by default, _blank for a new tab, which now also cuts the opener as noopener does. download only works for same-origin files. And tel dials a number where the device can.
+    cites:
+      - el-a#download-limits
+      - el-a#target
+      - el-a#target-noopener
+      - el-a#tel
+    check:
+      - prompt: A link to a PDF on another origin has a download attribute. What happens?
+        choices:
+          - Nothing special; download works only for same-origin URLs
+          - The file is always saved under the name you gave it
+          - The browser blocks the link
+        answer: 0
+        explain: download only works for same-origin URLs, or the blob and data schemes.
+      - prompt: Where does a link open by default?
+        choices: ["_blank", "_self", "_top"]
+        answer: 1
+        explain: _self, the current browsing context, is the default target.
+      - prompt: Which href dials a phone number?
+        choices: ["phone:+1-800-555-0123", "tel:+1(800)555-0123", "call://18005550123"]
+        answer: 1
+        explain: Telephone links use the tel URL scheme. What happens depends on the device.

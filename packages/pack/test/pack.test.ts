@@ -59,6 +59,19 @@ describe("validator", () => {
   });
 });
 
+describe("semantic-html pack", () => {
+  const dir = fileURLToPath(new URL("../../../packs/semantic-html", import.meta.url));
+  it("loads and validates with no errors, only planned-problem warnings", () => {
+    const { pack, issues } = loadPack(dir);
+    expect(issues).toEqual([]);
+    const found = validatePack(pack!);
+    expect(found.filter((i) => i.level === "error")).toEqual([]);
+    expect(found.every((i) => /planned but not written yet/.test(i.message))).toBe(true);
+    expect(pack!.fog!.length).toBeGreaterThan(0);
+    expect(pack!.nodes.every((n) => n.tier === "road" || n.tier === "country")).toBe(true);
+  });
+});
+
 describe("optional tiers, planned problems and fog", () => {
   it("accepts a tier on nodes and treats a planned, unwritten problem as a warning", () => {
     const pack = structuredClone(loadWebBasics());

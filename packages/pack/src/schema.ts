@@ -114,12 +114,15 @@ export const DomCheck = z
   })
   .refine((c) => c.doctype || c.selector, "a check needs a selector or doctype: true");
 
-// Pages beyond the country, drawn as fog at a region's edge: listed, not taught.
+// Pages a region lists but does not quote, drawn as fog at its edge. `country` pages are one link from the road
+// and on the region's subject; `wilderness` pages lie further out, and `home` names the later region, if any,
+// that a wilderness page belongs to (free text, since that region may not exist in any pack yet).
 export const FogPage = z.object({
   slug: z.string().min(1),
   title: z.string(),
   region: id,
-  tier: z.literal("wilderness"),
+  tier: z.enum(["country", "wilderness"]),
+  home: id.optional(),
   url: z.url(),
 });
 export const FogFile = z.object({ pages: z.array(FogPage) });

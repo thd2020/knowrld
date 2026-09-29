@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { loadPack, validatePack, excerptConflict, topoOrder } from "../src/index.ts";
 import { composeDocument, gradeDocument } from "../src/dom-grader.ts";
 import type { LoadedPack } from "../src/load.ts";
+import { FogFile } from "../src/schema.ts";
 
 const packDir = fileURLToPath(new URL("../../../packs/web-basics", import.meta.url));
 
@@ -101,6 +102,17 @@ describe("optional tiers, planned problems and fog", () => {
     const messages = validatePack(pack).map((i) => i.message).join("\n");
     expect(messages).toMatch(/duplicate id Web\/HTML\/Reference\/Elements\/hgroup/);
     expect(messages).toMatch(/unknown region nowhere/);
+  });
+
+  it("accepts listed country pages and a home region on wilderness pages", () => {
+    const fog = FogFile.parse({
+      pages: [
+        { slug: "Web/HTML/Reference/Elements/p", title: "<p>", region: "html", tier: "country", url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p" },
+        { slug: "Web/HTML/Reference/Elements/table", title: "<table>", region: "html", tier: "wilderness", home: "tables", url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table" },
+      ],
+    });
+    expect(fog.pages.map((p) => p.home)).toEqual([undefined, "tables"]);
+    expect(() => FogFile.parse({ pages: [{ ...fog.pages[0], tier: "road" }] })).toThrow();
   });
 
   it("loads a pack without fog.yaml as having no fog", () => {

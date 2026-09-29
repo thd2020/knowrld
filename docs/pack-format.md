@@ -8,7 +8,7 @@ my-pack/
   sources/*.yaml   official sources and the excerpts cut from them
   graph/*.yaml     nodes: concepts, problems and projects
   problems/*.yaml  what a problem asks, its starter code, a reference solution and its checks
-  fog.yaml         optional: wilderness pages beyond the region, listed but not taught
+  fog.yaml         optional: pages around the region, listed but not taught
 ```
 
 ## Manifest
@@ -29,7 +29,7 @@ A problem or project node may carry a one-line `intent` and `planned: true`. A p
 
 ## Fog
 
-`fog.yaml` lists pages two links away from a region's road, drawn as fog at its edge. Each entry has the page's `slug`, `title`, `url`, `region` and `tier: wilderness`. Fog pages have no characters and no excerpts; they only mark what lies beyond.
+`fog.yaml` lists pages a region names but does not quote, drawn as fog at its edge. Each entry has the page's `slug`, `title`, `url`, `region` and a `tier`: `country` for a page one link from the road that belongs to the region but has no excerpt, `wilderness` for a page further out. A wilderness page may name its `home`, the later region it belongs to (for example `forms` or `tables`). Fog pages have no characters and no excerpts; they only mark what lies around the taught ground.
 
 ## Problems
 

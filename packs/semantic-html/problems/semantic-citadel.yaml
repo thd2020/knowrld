@@ -451,7 +451,7 @@ grader:
           says: The home page's title puts the page first and the site after
           pages: [home]
           selector: 'head title'
-          text: { matches: '^\s*Birdwatching\b.*\S.*\bThe Citadel\s*$' }
+          text: { matches: '^\s*(?!The Citadel)\S.*\S\s*\W\s*The Citadel\s*$' }
           concepts: [page-title, title-quality]
         - id: title-letter
           says: The letter's title puts the given text first and the site after
@@ -489,7 +489,7 @@ grader:
           concepts: [header-nav-footer, header-footer-context]
         - id: menu-in-header
           says: The menu is a nav inside the page's header
-          selector: 'body > header nav, body > header ~ nav'
+          selector: 'header:not(:is(article, aside, main, nav, section) header) nav'
           count: { min: 1 }
           concepts: [header-nav-footer, nav-element]
         - id: one-main
@@ -505,13 +505,18 @@ grader:
         - id: order
           says: The header comes before main, and main before the footer
           selector: main
-          precedes: 'body > footer'
+          precedes: 'footer:not(:is(article, aside, main, nav, section) footer)'
           concepts: [source-order]
         - id: header-first
           says: The header comes before the main content
-          selector: 'body > header'
+          selector: 'header:not(:is(article, aside, main, nav, section) header)'
           precedes: main
           concepts: [source-order]
+        - id: native-elements
+          says: Landmarks, headings and buttons are their own HTML elements, not other elements given their ARIA roles
+          selector: ':not(header)[role~="banner"], :not(footer)[role~="contentinfo"], :not(main)[role~="main"], :not(nav)[role~="navigation"], :not(aside)[role~="complementary"], :not(h1, h2, h3, h4, h5, h6)[role~="heading"], :not(button)[role~="button"]'
+          count: { max: 0 }
+          concepts: [landmarks, semantic-html-accessibility]
         - id: one-h1
           says: Each page has one top level heading
           selector: h1
@@ -531,7 +536,7 @@ grader:
         - id: home-h1
           says: The home page's heading reads Birdwatching and holds the dove logo
           pages: [home]
-          selector: 'body > header h1:has(img[src$="dove.png"])'
+          selector: 'header:not(:is(article, aside, main, nav, section) header) h1:has(img[src$="dove.png"])'
           name: { matches: '^\s*Birdwatching\s*$' }
           concepts: [headings, text-alternatives]
         - id: logo-alt
@@ -548,9 +553,9 @@ grader:
           text: { matches: 'Welcome to our fake birdwatching site[\s\S]*great outdoors' }
           concepts: [sectioning-elements, choosing-sections]
         - id: home-aside
-          says: The favourite photos are a sidebar in main, under their heading
+          says: The favourite photos are a sidebar, in main or beside it, under their heading
           pages: [home]
-          selector: 'main aside'
+          selector: 'main aside, aside:not(:is(article, aside, main, nav, section) aside)'
           count: { min: 1, max: 1 }
           text: { matches: 'Favou?rite photos' }
           concepts: [sectioning-elements, choosing-sections]
@@ -667,18 +672,16 @@ grader:
           text: { matches: '^\s*(HTML|CSS)\s*$' }
           concepts: [abbreviations]
         - id: abbr-bce
-          says: BCE is an abbreviation with its expansion
+          says: BCE is an abbreviation, expanded in a title or in the text beside it
           pages: [letter]
-          selector: abbr
-          text: { matches: '^\s*BCE\s*$' }
-          attr: { name: title, matches: 'Before (the )?Common Era' }
+          selector: 'abbr[title*="common era" i], :has(> abbr)'
+          text: { matches: '^\s*BCE\s*$|<?BCE\W{0,3}\(\s*Before (the )?Common Era\s*\)|Before (the )?Common Era\s*\(\s*BCE\s*\)' }
           concepts: [abbreviations, abbr-expansion]
         - id: abbr-esq
-          says: Esq. is an abbreviation with its expansion
+          says: Esq. is an abbreviation, expanded in a title or in the text beside it
           pages: [letter]
-          selector: abbr
-          text: { matches: '^\s*Esq\.?\s*$' }
-          attr: { name: title, matches: 'Esquire' }
+          selector: 'abbr[title*="esquire" i], :has(> abbr)'
+          text: { matches: '^\s*Esq\.?\s*$|Esq\.?\W{0,3}\(\s*Esquire\s*\)|Esquire\s*\(\s*Esq\.?\s*\)' }
           concepts: [abbreviations, abbr-expansion]
         - id: subscripts
           says: The four subscripts in the chemical formulae are marked up
@@ -717,14 +720,15 @@ grader:
         - id: semesters
           says: The semester dates are a list
           pages: [letter]
-          selector: ':is(ul, ol) > li'
+          selector: ':is(ul, ol) > li:has(time)'
           count: { min: 3 }
+          every: true
           text: { matches: 'semester' }
           concepts: [lists]
         - id: subjects
           says: The subjects are an ordered list, in order of priority
           pages: [letter]
-          selector: 'ol'
+          selector: 'ol:has(> li ~ li ~ li)'
           text: { matches: 'wine[\s\S]*funk bass[\s\S]*musical scores' }
           concepts: [lists, list-rules]
         - id: dances
@@ -825,6 +829,34 @@ grader:
           count: { min: 4 }
           every: true
           attr: { name: alt, matches: '\b(robin|blue ?tit|heron|kingfisher)\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-1-alt
+          says: The thumbnail linking to picture 1 names the robin
+          pages: [home]
+          selector: 'a[href$="favorite-bird-1.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\brobin\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-2-alt
+          says: The thumbnail linking to picture 2 names the blue tit
+          pages: [home]
+          selector: 'a[href$="favorite-bird-2.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bblue ?tit\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-3-alt
+          says: The thumbnail linking to picture 3 names the heron
+          pages: [home]
+          selector: 'a[href$="favorite-bird-3.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bheron\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-4-alt
+          says: The thumbnail linking to picture 4 names the kingfisher
+          pages: [home]
+          selector: 'a[href$="favorite-bird-4.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bkingfisher\b' }
           concepts: [text-alternatives]
         - id: thumbnail-alt-distinct
           says: No two thumbnails share alt text
@@ -1019,6 +1051,19 @@ fixtures:
             - { find: <abbr>HTML</abbr>, replace: <abbr title="Hypertext Markup Language">HTML</abbr> }
             - { find: <abbr>CSS</abbr>, replace: <abbr title="Cascading Style Sheets">CSS</abbr> }
             - { find: '<a href="index.html">Home</a>', replace: '<a href="/">Home</a>' }
+    - name: both pages wrapped in a page-width div, the home title led by "Home", BCE and Esq. expanded in the text
+      pages:
+        home:
+          edits:
+            - { find: "<body>", replace: "<body><div class=\"page-width\">" }
+            - { find: "</body>", replace: "</div></body>" }
+            - { find: "<title>Birdwatching – The Citadel</title>", replace: "<title>Home – The Citadel</title>" }
+        letter:
+          edits:
+            - { find: "<body>", replace: "<body><div class=\"page-width\">" }
+            - { find: "</body>", replace: "</div></body>" }
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr> (Before Common Era)" }
+            - { find: '<abbr title="Esquire">Esq.</abbr>', replace: "<abbr>Esq.</abbr> (Esquire)" }
   fail:
     - name: the header inside main on the home page
       pages:
@@ -1096,3 +1141,21 @@ fixtures:
             - { find: "</ol>", replace: "</ul>" }
       fails: [subjects]
       because: The subjects come in order of priority, so the order matters and the list is ordered.
+    - name: the thumbnails' alt texts name the wrong birds
+      pages:
+        home:
+          edits:
+            - { find: 'alt="A blue tit on a feeder"', replace: 'alt="A robin, second view"' }
+            - { find: 'alt="A grey heron in the shallows"', replace: 'alt="A robin, third view"' }
+      fails: [thumbnail-2-alt, thumbnail-3-alt]
+      because: Alt text on a linked image says where the link goes, so it must name the bird that picture shows.
+    - name: the letter's header and footer as divs with ARIA roles
+      pages:
+        letter:
+          edits:
+            - { find: "<header>", replace: "<div role=\"banner\">" }
+            - { find: "</header>", replace: "</div>" }
+            - { find: "<footer>", replace: "<div role=\"contentinfo\">" }
+            - { find: "</footer>", replace: "</div>" }
+      fails: [menu-in-header, header-first, native-elements]
+      because: Every landmark role has its own HTML element, and the region teaches the element, not the role.

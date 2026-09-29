@@ -6,8 +6,8 @@ statement: |
   - Write dates so they read aloud clearly: no dashes between numbers, and months in full. The range becomes *5 to 7 January 2027*.
   - Mark up the start and end of that range, the peak at *6.40pm on 6 January 2027* (local time), the *first week of 2027* and the publication date, *28 December 2026*, as times with machine-readable values.
   - The 2 in H2O is a subscript; the *rd* of *3rd* is a superscript.
-  - The author's contact details, and nothing else, go in the entry's footer as the article's contact information, one detail per line. The publication date stays outside them.
-  - Paragraphs are paragraphs, not text separated by pairs of line breaks, and the horizontal rule here only draws a line, so it goes.
+  - The author's contact details, and nothing else, go in the entry's footer as the article's contact information, one detail per line (with line breaks, paragraphs or a list). The publication date stays outside them.
+  - Paragraphs are paragraphs, not text separated by pairs of line breaks or spaced out with empty paragraphs, and no text lies outside them; the horizontal rule here only draws a line, so it goes.
 starter:
   html: |
     <!doctype html>
@@ -145,8 +145,8 @@ grader:
       text: { matches: 'Mira Tallow[\s\S]*Port-Brume' }
       concepts: [contact-address]
     - id: address-lines
-      says: Each contact detail sits on its own line within the address
-      selector: 'address br'
+      says: Each contact detail sits on its own line within the address, split by line breaks, paragraphs or list items
+      selector: 'address br, address p, address li'
       count: { min: 3 }
       concepts: [contact-address, breaks-with-meaning]
     - id: address-contact-only
@@ -166,9 +166,15 @@ grader:
       concepts: [breaks-with-meaning]
     - id: paragraphs
       says: The entry's text is in paragraphs, with no loose text
-      selector: 'article, article > div, article > section'
+      selector: 'body, article, article > div, article > section'
       every: true
       text: { own: true, not: '\S' }
+      concepts: [breaks-and-rules]
+    - id: no-empty-paragraphs
+      says: No empty paragraph is used for spacing
+      selector: p
+      every: true
+      text: { matches: '\S' }
       concepts: [breaks-and-rules]
 fixtures:
   pass:
@@ -227,6 +233,14 @@ fixtures:
                   Port-Brume<br>
                   <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a></p>
                 </address>
+    - name: the contact details as a list inside the address
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: <ul><li>Mira Tallow</li><li>Tide House, Quay Street</li><li>Port-Brume</li><li><a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a></li></ul>
   fail:
     - name: the dash left in the range
       edits:
@@ -270,3 +284,8 @@ fixtures:
       edits: [{ find: H<sub>2</sub>O, replace: H<sup>2</sup>O }]
       fails: [subscript, superscript, formula]
       because: The number of atoms in a chemical formula is a subscript.
+    - name: spacing made with empty paragraphs
+      edits:
+        - { find: "<p>Readings for", replace: "<p>&nbsp;</p><p>&nbsp;</p><p>Readings for" }
+      fails: [no-empty-paragraphs]
+      because: An empty paragraph is spacing, which is the stylesheet's job, as much as a pair of line breaks is.

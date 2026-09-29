@@ -15,7 +15,7 @@ statement: |
 
   Lay the ghost to rest:
 
-  - Every link's text says where it leads. No "click here" or "here", no URLs, and no "link" or "link to" in the text.
+  - Every link's text says where it leads. No "click here" or "here", no URLs, and no "link" or "link to" in the text. The text readers see is what counts: an `aria-label` must not say something the visible text does not.
   - The logo is the only content of the link to the home page, so its alt text must name that destination.
   - The winter timetable link downloads a file. Mark it as a download, and warn readers in the link text that it is a PDF of 2 MB.
   - The storm warnings link opens in a new tab. Either say so in the link, or let it open in the same tab.
@@ -84,31 +84,34 @@ grader:
       says: No link reads "click here", "here" or another label that means nothing out of context
       selector: 'a[href]'
       every: true
+      text: { not: '^\W*(click|click here|here|this|this link|link|more|read more|go)\W*$|click here' }
       name: { not: '^\W*(click|click here|here|this|this link|link|more|read more|go)\W*$|click here' }
       concepts: [link-text]
     - id: no-url-text
       says: No link's text is a URL or a file name
       selector: 'a[href]'
       every: true
+      text: { not: 'https?:|www\.|\.(html?|pdf|svg)\b|\w\.example\b' }
       name: { not: 'https?:|www\.|\.(html?|pdf|svg)\b|\w\.example\b' }
       concepts: [link-text]
     - id: no-word-link
       says: No link says "link" or "link to" in its text
       selector: 'a[href]'
       every: true
+      text: { not: '\blinks?\b' }
       name: { not: '\blinks?\b' }
       concepts: [link-text]
     - id: logo-alt
       says: The logo's alt text names where its link leads
       selector: 'header a[href] img'
       every: true
-      attr: { name: alt, matches: '\b(home|ferrymen|guild)\b' }
+      attr: { name: alt, matches: '\b(home|homepage|ferrymen|guild|front page|start page|main page)\b' }
       name: { not: '\blogo\b|\.svg|^\s*(image|picture|icon)\b' }
       concepts: [text-alternatives]
     - id: logo-link
       says: The logo still leads to the home page
       selector: 'header a[href]:has(img)'
-      name: { matches: '\b(home|ferrymen|guild)\b' }
+      name: { matches: '\b(home|homepage|ferrymen|guild|front page|start page|main page)\b' }
       resolves: true
       concepts: [text-alternatives]
     - id: download
@@ -117,9 +120,9 @@ grader:
       attr: { name: download, present: true }
       concepts: [anchor-attributes, link-signposts]
     - id: download-signposted
-      says: The download link warns that it is a 2 MB PDF, and names the winter timetable
+      says: The download link's own text warns that it is a 2 MB PDF, and names the winter timetable
       selector: 'a[href$="winter-timetable.pdf"]'
-      name: { matches: '^(?=[\s\S]*winter[\s\S]*timetable)(?=[\s\S]*\bPDF\b)(?=[\s\S]*\b2\s*MB\b)' }
+      text: { matches: '^(?=[\s\S]*winter[\s\S]*timetable)(?=[\s\S]*\bPDF\b)(?=[\s\S]*\b2\s*MB\b)' }
       concepts: [link-signposts]
     - id: warnings
       says: The storm warnings still link to the Harbour Watch
@@ -146,19 +149,19 @@ grader:
     - id: menu-home
       says: The menu leads to the home page
       selector: 'nav li a[href]'
-      name: { matches: '^\s*home\s*$' }
+      attr: { name: href, matches: '^(\.?/|(\./|/)?index\.html)$' }
       resolves: true
       concepts: [navigation-menus]
     - id: menu-routes
       says: The menu leads to the routes page
       selector: 'nav li a[href]'
-      name: { matches: '^\s*routes\s*$' }
+      name: { matches: '\broutes?\b' }
       attr: { name: href, matches: 'routes\.html$' }
       resolves: true
       concepts: [navigation-menus]
     - id: no-self-link
       says: The menu has no working link to this page, unless it is marked as the current page
-      selector: 'nav a[href*="timetables" i]:not([aria-current="page"]), nav a[href=""]:not([aria-current="page"]), nav a[href="#"]:not([aria-current="page"])'
+      selector: 'nav a:is([href*="timetables" i], [href=""], [href="#"]):not([aria-current="page"], [aria-current="true"], [aria-current="location"])'
       count: { max: 0 }
       concepts: [navigation-menus]
     - id: links-resolve
@@ -205,6 +208,12 @@ fixtures:
           replace: <a href="/"><img
         - find: <a href="routes.html">ferry routes</a> page
           replace: <a href="/routes.html">ferry routes page</a>
+    - name: longer menu labels, a front-page logo alt, the current page marked with aria-current="true"
+      edits:
+        - { find: '<a href="index.html">Home</a>', replace: '<a href="index.html">Home page</a>' }
+        - { find: '<a href="routes.html">Routes</a>', replace: '<a href="routes.html">Ferry routes</a>' }
+        - { find: 'alt="The Ferrymen''s Guild home page"', replace: 'alt="Ferry timetables front page"' }
+        - { find: '<li><a href="routes.html">Ferry routes</a></li>', replace: '<li><a href="timetables.html" aria-current="true">Timetables</a></li><li><a href="routes.html">Ferry routes</a></li>' }
   fail:
     - name: the download link still reading "here"
       edits: [{ find: <a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>., replace: 'Download the winter timetable (PDF, 2 MB) <a href="downloads/winter-timetable.pdf" download>here</a>.' }]
@@ -248,3 +257,8 @@ fixtures:
           replace: <a href="index.html">Home</a> | <a href="routes.html">Routes</a>
       fails: [menu-list, menu-no-loose-links, menu-home, menu-routes]
       because: A navigation menu is a list of links.
+    - name: a vague visible label with the destination hidden in aria-label
+      edits:
+        - { find: '<a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>', replace: 'For the winter timetable, <a href="downloads/winter-timetable.pdf" download aria-label="Winter timetable PDF 2 MB">click</a>' }
+      fails: [no-vague-text, download-signposted]
+      because: Sighted readers and voice-control users see only "click"; a link's visible text must say where it leads, and its name must contain that text.

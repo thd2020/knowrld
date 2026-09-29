@@ -4,13 +4,13 @@ statement: |
 
   Rebuild the page with elements that say what each part is:
 
-  - the site's header, holding the site name and the main navigation menu;
+  - the site's header, holding the site name, and the main navigation menu, inside the header or straight after it;
   - the page's main content: the blog post, which stands on its own, with its two parts and its comments section, each part starting with its heading;
   - each comment, which also stands on its own inside the post;
   - the related climbs, which sit beside the post rather than in it;
   - the site's footer.
 
-  Put the parts in a sensible reading order: header, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
+  Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
 starter:
   html: |
     <!doctype html>
@@ -149,6 +149,16 @@ grader:
       count: { min: 1, max: 1 }
       text: { matches: 'Home[\s\S]*Climbs[\s\S]*About the club' }
       concepts: [nav-element, landmarks]
+    - id: nav-before-main
+      says: The main navigation menu comes with the header, before the main content
+      selector: nav
+      precedes: main
+      concepts: [header-nav-footer, source-order]
+    - id: native-elements
+      says: No div or span is given a landmark's role in place of its element
+      selector: ':not(header)[role~="banner"], :not(footer)[role~="contentinfo"], :not(main)[role~="main"], :not(nav)[role~="navigation"], :not(aside)[role~="complementary"], :not(article)[role~="article"]'
+      count: { max: 0 }
+      concepts: [landmarks, non-semantic-wrappers]
     - id: menu-list
       says: The menu is still a list of links
       selector: 'nav ul > li > a'
@@ -185,7 +195,7 @@ grader:
       concepts: [choosing-sections]
     - id: articles-headed
       says: Every article starts with a heading
-      selector: 'article:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6)))'
+      selector: 'article:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6), > hgroup > :is(h1, h2, h3, h4, h5, h6), > header > hgroup > :is(h1, h2, h3, h4, h5, h6)))'
       count: { max: 0 }
       concepts: [sectioning-elements]
     - id: sections
@@ -195,17 +205,19 @@ grader:
       concepts: [sectioning-elements, choosing-sections]
     - id: sections-headed
       says: Every section starts with a heading
-      selector: 'section:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6)))'
+      selector: 'section:not(:has(> :is(h1, h2, h3, h4, h5, h6), > header :is(h1, h2, h3, h4, h5, h6), > hgroup > :is(h1, h2, h3, h4, h5, h6), > header > hgroup > :is(h1, h2, h3, h4, h5, h6)))'
       count: { max: 0 }
       concepts: [sectioning-elements]
     - id: related
-      says: The related climbs are one complementary landmark beside the post
+      says: The related climbs are one aside, a complementary landmark beside the post
+      selector: aside
       role: complementary
       count: { min: 1, max: 1 }
       text: { matches: 'Black Tooth[\s\S]*Widow' }
       concepts: [sectioning-elements, landmarks]
     - id: footer
-      says: The site's footer is the page's one contentinfo landmark
+      says: The site's footer is a footer element, the page's one contentinfo landmark
+      selector: footer
       role: contentinfo
       count: { min: 1, max: 1 }
       text: { matches: 'Spire Club' }
@@ -327,6 +339,9 @@ fixtures:
                     </article>
         - find: <p>From the top we could see three valleys and, far off, the sea.</p>
           replace: <div class="photo-frame"><p>From the top we could see three valleys and, far off, the sea.</p></div>
+    - name: the post's heading grouped with a subtitle
+      edits:
+        - { find: "<h2>Up the Grey Spire</h2>", replace: "<hgroup><h2>Up the Grey Spire</h2><p>A day on the ridge</p></hgroup>" }
   fail:
     - name: the related climbs in a second main
       edits:
@@ -432,3 +447,25 @@ fixtures:
               </section>
       fails: [styling-wrapper, banner, footer]
       because: The wrapper exists only for styling, which is what div is for; as a section it also turns the site's header and footer into the section's own, so the page loses its banner and contentinfo landmarks.
+    - name: the sidebar and the footer as divs with ARIA roles
+      edits:
+        - { find: "<aside>", replace: "<div role=\"complementary\" class=\"related\">" }
+        - { find: "</aside>", replace: "</div>" }
+        - { find: "<footer>", replace: "<div role=\"contentinfo\" class=\"site-footer\">" }
+        - { find: "</footer>", replace: "</div>" }
+      fails: [related, footer, native-elements]
+      because: Every landmark role has its own element; the region teaches the element, which brings the role with it.
+    - name: the menu moved after the main content
+      edits:
+        - find: |-
+            <nav>
+                      <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/climbs/">Climbs</a></li>
+                        <li><a href="/about.html">About the club</a></li>
+                      </ul>
+                    </nav>
+          replace: ""
+        - { find: "<footer>", replace: "<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/climbs/\">Climbs</a></li><li><a href=\"/about.html\">About the club</a></li></ul></nav><footer>" }
+      fails: [nav-before-main]
+      because: The menu belongs with the header at the top of the reading order, before the content it leads to.

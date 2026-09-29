@@ -78,7 +78,7 @@ grader:
       says: The home page link leads to the site's home page
       selector: a
       text: { matches: 'home page' }
-      attr: { name: href, matches: '^(\.\./|/)(index\.html)?$' }
+      attr: { name: href, matches: '^(\.\.(/(index\.html)?)?|/(index\.html)?)$' }
       resolves: true
       concepts: [relative-paths]
     - id: brief
@@ -167,6 +167,9 @@ fixtures:
         - { find: href="https://www.brightforge.example", replace: href="https://www.brightforge.example/" }
         - { find: href="#timeline", replace: href="#timeline-heading" }
         - { find: <h2 id="timeline">Timeline</h2>, replace: <h2 id="timeline-heading">Timeline</h2> }
+    - name: the home page link written as the parent folder, ..
+      edits:
+        - { find: 'href="../index.html"', replace: 'href=".."' }
   fail:
     - name: the brief linked as if the pdfs folder were inside projects
       edits: [{ find: href="../pdfs/project-brief.pdf", replace: href="pdfs/project-brief.pdf" }]

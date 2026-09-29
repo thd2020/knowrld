@@ -90,26 +90,34 @@ grader:
       count: { max: 0 }
       concepts: [links-vs-buttons]
     - id: basket
-      says: Add to basket is a button
+      says: Add to basket is a button that calls addToBasket()
       role: button
+      attr: { name: onclick, matches: '\baddToBasket\(\)' }
       name: { matches: '\badd\b[\s\S]*\bbasket\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: zoom
-      says: Zoom in is a button
+      says: Zoom in is a button that calls zoomIn()
       role: button
+      attr: { name: onclick, matches: '\bzoomIn\(\)' }
       name: { matches: '\bzoom\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: details
-      says: Show details is a button
+      says: Show details is a button that calls showDetails()
       role: button
+      attr: { name: onclick, matches: '\bshowDetails\(\)' }
       name: { matches: '\bdetails\b|\bdescription\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: same-actions
-      says: Each button still calls its function when pressed
-      selector: 'button, input[type="button" i]'
+      says: Each of the three buttons still calls its function when pressed
+      selector: ':is(button, input[type="button" i]):is([onclick*="addToBasket"], [onclick*="zoomIn"], [onclick*="showDetails"])'
       count: { min: 3 }
       every: true
-      attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\(\)\s*;?\s*$' }
+      attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\(\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
+      concepts: [native-controls]
+    - id: buttons-enabled
+      says: The buttons can be pressed; none is disabled
+      selector: ':is(button, input)[disabled]'
+      count: { max: 0 }
       concepts: [native-controls]
     - id: labels-alone
       says: Every button's label makes sense on its own
@@ -163,6 +171,10 @@ fixtures:
           replace: <main id="main">
         - find: <button type="button" onclick="showDetails()">Show details</button>
           replace: <button type="button" onclick="showDetails();">Read the description</button>
+    - name: an extra menu button in the header, and return false after a call
+      edits:
+        - { find: "<nav>", replace: "<button type=\"button\" onclick=\"toggleMenu()\" aria-expanded=\"false\">Menu</button><nav>" }
+        - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket(); return false;"' }
   fail:
     - name: a div given a button role and a tabindex
       edits:
@@ -211,3 +223,8 @@ fixtures:
         - { find: '>Show details</button>', replace: '>Click me</button>' }
       fails: [basket, zoom, details, labels-alone]
       because: Screen reader users may list the buttons out of context, where "Click me" says nothing.
+    - name: the basket button disabled
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<button type="button" disabled onclick="addToBasket()">' }
+      fails: [buttons-enabled]
+      because: A disabled button cannot be pressed by anyone, so the control is lost, not fixed.

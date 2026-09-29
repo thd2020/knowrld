@@ -88,14 +88,37 @@ export const ProblemNode = NodeBase.extend({
 export const GraphNode = z.discriminatedUnion("kind", [ConceptNode, ProblemNode]);
 export const GraphFile = z.object({ nodes: z.array(GraphNode).min(1) });
 
+// A text test: regular expressions (case-insensitive) that the text must, or must not, match.
+const TextTest = z.object({ matches: z.string().optional(), not: z.string().optional() });
+
+// One step of a `next` sequence: the following sibling (skipping whitespace-only text and
+// comments) is an element matching `is` and `text`. With `absent: true` the step instead
+// requires that no such sibling follows, and it must be the last step.
+const NextStep = z.object({
+  is: z.string().optional(),
+  text: TextTest.optional(),
+  absent: z.literal(true).optional(),
+});
+
 // One declarative assertion against the rendered page. Data, not code, so the
 // validator can read every grader and packs cannot ship scripts in v0.
+//
+// Selection: `selector` (CSS), then `within` (an ancestor), `role` (the element's computed
+// ARIA role, implicit or explicit; with no selector, every element with that role) and
+// `first` (keep only the first match in document order). Then `count` bounds the selection.
+// Set assertions over the whole selection: `unique`. Element assertions, which must hold for
+// one element, or for every element with `every: true`: `attr`, `text`, `name`, `style`,
+// `datetime`, `outline`, `next`, `precedes`, `resolves`. Document assertions: `doctype`,
+// `axe`. In a multi-page problem, `pages` limits a check to some pages and `pooled` selects
+// across those pages together instead of page by page.
 export const DomCheck = z
   .object({
     id,
     says: z.string(),
     doctype: z.literal(true).optional(),
     selector: z.string().optional(),
+    role: z.string().regex(/^[a-z]+$/).optional(),
+    first: z.literal(true).optional(),
     count: z
       .object({ min: z.number().int().optional(), max: z.number().int().optional() })
       .optional(),
@@ -109,10 +132,36 @@ export const DomCheck = z
         matches: z.string().optional(),
       })
       .optional(),
-    text: z.object({ matches: z.string().optional(), not: z.string().optional() }).optional(),
+    // `own: true` tests only the element's own text nodes, not its descendants' text.
+    text: TextTest.extend({ own: z.literal(true).optional() }).optional(),
     style: z.object({ property: z.string(), equals: z.string() }).optional(),
+    // The element's accessible name, computed as assistive technology would (a subset of accname 1.2).
+    name: TextTest.optional(),
+    // The element's machine-readable date or time (its datetime attribute, else its text) is a
+    // valid HTML date, time, week, year, duration or date-and-time string.
+    datetime: z.literal(true).optional(),
+    // The headings inside the element, in document order, never skip a level going down;
+    // with `start`, the first heading is at that level.
+    outline: z.object({ start: z.number().int().min(1).max(6).optional() }).optional(),
+    // The siblings after the element, in order.
+    next: z.array(NextStep).min(1).optional(),
+    // The element comes before every element matching this selector, in document order.
+    precedes: z.string().optional(),
+    // No two selected elements share a value of this attribute ("text": of their text).
+    unique: z.string().optional(),
+    // The element's href leads to a page or file of the site, and its #fragment to an existing id there.
+    // With `page`, it must lead to that page of the problem; with `to`, the fragment's element must match `to`.
+    resolves: z.union([z.literal(true), z.object({ page: id.optional(), to: z.string().optional() })]).optional(),
+    // axe-core rule ids that must report no violations on the page. The pack only names the
+    // rules; the engine that hosts the grader runs them (see docs/pack-format.md).
+    axe: z.array(z.string().regex(/^[a-z0-9-]+$/)).min(1).optional(),
+    pages: z.array(id).min(1).optional(),
+    pooled: z.literal(true).optional(),
+    // Graph nodes whose teaching this check assesses; the validator checks they exist.
+    concepts: z.array(id).optional(),
   })
-  .refine((c) => c.doctype || c.selector, "a check needs a selector or doctype: true");
+  .refine((c) => c.doctype || c.selector || c.role || c.axe, "a check needs a selector, a role, axe rules or doctype: true")
+  .refine((c) => !c.next || c.next.every((s, i) => !s.absent || i === c.next!.length - 1), "only the last next step may be absent");
 
 // Pages a region lists but does not quote, drawn as fog at its edge. `country` pages are one link from the road
 // and on the region's subject; `wilderness` pages lie further out, and `home` names the later region, if any,
@@ -127,14 +176,62 @@ export const FogPage = z.object({
 });
 export const FogFile = z.object({ pages: z.array(FogPage) });
 
-export const ProblemFile = z.object({
+const Code = z.object({ html: z.string(), css: z.string().default("") });
+
+// A page of a multi-page problem, served at `path` on the problem's site.
+export const ProblemPage = z.object({
   id,
-  statement: z.string(),
-  starter: z.object({ html: z.string(), css: z.string().default("") }),
-  // A reference answer. Tests require it to pass every check and the starter to fail one.
-  solution: z.object({ html: z.string(), css: z.string().default("") }),
-  grader: z.object({ type: z.literal("dom"), checks: z.array(DomCheck).min(1) }),
+  path: z.string().regex(/^\/[^?#\s]*$/, "a page path starts with / and has no query or fragment"),
+  title: z.string(),
+  starter: Code,
+  solution: Code,
 });
+
+// Another file on the problem's site, so `resolves` can tell a working link from a broken one.
+// `ids` lists the fragment targets inside it, if it is a page the player does not edit.
+export const SiteFile = z.object({
+  path: z.string().regex(/^\/[^?#\s]*$/),
+  ids: z.array(z.string()).optional(),
+});
+
+// A graded stage of a project; all its checks must pass for the stage to fall.
+export const Stage = z.object({ id, title: z.string(), says: z.string(), checks: z.array(DomCheck).min(1) });
+
+// Changes to the reference solution that make a test fixture: each `find` must occur in it.
+const Edit = z.object({ find: z.string().min(1), replace: z.string() });
+const FixturePage = z.object({ html: z.string().optional(), css: z.string().optional(), edits: z.array(Edit).optional() });
+
+// A test answer: a full page (`html`), or the reference solution with `edits`. In a multi-page
+// problem, `pages` overrides some pages and the rest stay as the reference solution.
+export const Fixture = FixturePage.extend({
+  name: z.string(),
+  pages: z.record(z.string(), FixturePage).optional(),
+  // Wrong answers only: the checks that must fail, and why the answer is wrong.
+  fails: z.array(id).optional(),
+  because: z.string().optional(),
+});
+
+export const ProblemFile = z
+  .object({
+    id,
+    statement: z.string(),
+    // A single-page problem has a starter and a reference solution; a multi-page one has `pages`.
+    starter: Code.optional(),
+    // A reference answer. Tests require it to pass every check and the starter to fail one.
+    solution: Code.optional(),
+    pages: z.array(ProblemPage).min(1).optional(),
+    // Where a single-page problem's page sits on its site (default /index.html).
+    path: z.string().regex(/^\/[^?#\s]*$/).optional(),
+    files: z.array(SiteFile).optional(),
+    // Either one list of checks or a sequence of stages.
+    grader: z
+      .object({ type: z.literal("dom"), checks: z.array(DomCheck).min(1).optional(), stages: z.array(Stage).min(1).optional() })
+      .refine((g) => !!g.checks !== !!g.stages, "a grader has either checks or stages"),
+    // Answers other than the reference that must pass, and wrong ones that must fail. Tests only;
+    // never shipped to players.
+    fixtures: z.object({ pass: z.array(Fixture).default([]), fail: z.array(Fixture).default([]) }).optional(),
+  })
+  .refine((p) => (p.pages ? !p.starter && !p.solution && !p.path : !!p.starter && !!p.solution), "a problem has a starter and a solution, or pages (not both)");
 
 export type PackManifest = z.infer<typeof PackManifest>;
 export type SourceDoc = z.infer<typeof SourceDoc>;
@@ -144,3 +241,7 @@ export type CheckItem = z.infer<typeof CheckItem>;
 export type DomCheck = z.infer<typeof DomCheck>;
 export type ProblemFile = z.infer<typeof ProblemFile>;
 export type FogPage = z.infer<typeof FogPage>;
+export type ProblemPage = z.infer<typeof ProblemPage>;
+export type SiteFile = z.infer<typeof SiteFile>;
+export type Stage = z.infer<typeof Stage>;
+export type Fixture = z.infer<typeof Fixture>;

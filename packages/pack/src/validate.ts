@@ -1,5 +1,48 @@
 import { excerptConflict } from "./licence.ts";
 import type { Issue, LoadedPack } from "./load.ts";
+import type { ProblemFile } from "./schema.ts";
+import { allChecks, fixtureCode, problemPages } from "./problem.ts";
+
+function badPattern(re: string | undefined): boolean {
+  if (re === undefined) return false;
+  try {
+    new RegExp(re, "i");
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+// Problems are data, so the validator can read every grader: ids, page names, patterns and fixtures.
+export function validateProblem(p: ProblemFile): string[] {
+  const out: string[] = [];
+  const checks = allChecks(p);
+  const pageIds = new Set(problemPages(p).map((pg) => pg.id));
+  const seen = new Set<string>();
+  for (const c of checks) {
+    if (seen.has(c.id)) out.push(`check id ${c.id} is used twice`);
+    seen.add(c.id);
+    const patterns = [c.attr?.matches, c.text?.matches, c.text?.not, c.name?.matches, c.name?.not, ...(c.next ?? []).flatMap((s) => [s.text?.matches, s.text?.not])];
+    if (patterns.some(badPattern)) out.push(`check ${c.id} has an invalid regular expression`);
+    for (const pg of c.pages ?? []) if (!pageIds.has(pg)) out.push(`check ${c.id} names unknown page ${pg}`);
+    if (typeof c.resolves === "object" && c.resolves.page && !pageIds.has(c.resolves.page)) out.push(`check ${c.id} resolves to unknown page ${c.resolves.page}`);
+    if (c.pages && !p.pages) out.push(`check ${c.id} names pages, but the problem has only one`);
+    if (c.pooled && !p.pages) out.push(`check ${c.id} is pooled, but the problem has only one page`);
+  }
+  const paths = problemPages(p).map((pg) => pg.path);
+  if (new Set(paths).size !== paths.length) out.push("two pages share a path");
+  for (const f of [...(p.fixtures?.pass ?? []), ...(p.fixtures?.fail ?? [])]) {
+    try {
+      fixtureCode(p, f);
+    } catch (e) {
+      out.push((e as Error).message);
+    }
+    for (const id of f.fails ?? []) if (!seen.has(id)) out.push(`fixture "${f.name}" expects unknown check ${id} to fail`);
+  }
+  for (const f of p.fixtures?.fail ?? []) if (!f.fails?.length) out.push(`wrong fixture "${f.name}" must name the checks it fails`);
+  return out;
+}
+
 
 // Returns ids in prerequisite order, or the ids left on a cycle.
 export function topoOrder(nodes: { id: string; requires: string[] }[]): { order: string[]; cycle: string[] } {
@@ -80,6 +123,10 @@ export function validatePack(pack: LoadedPack): Issue[] {
     }
   }
   for (const p of problems) if (!usedProblems.has(p.id)) warn(`problems/${p.id}`, "no node uses this problem");
+  for (const p of problems) {
+    for (const m of validateProblem(p)) err(`problems/${p.id}`, m);
+    for (const c of allChecks(p)) for (const n of c.concepts ?? []) if (!nodeIds.has(n)) err(`problems/${p.id}`, `check ${c.id} names unknown concept ${n}`);
+  }
 
   const { cycle } = topoOrder(nodes);
   if (cycle.length) err("graph", `prerequisite cycle among: ${cycle.join(", ")}`);

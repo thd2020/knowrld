@@ -59,6 +59,42 @@ describe("validator", () => {
   });
 });
 
+describe("optional tiers, planned problems and fog", () => {
+  it("accepts a tier on nodes and treats a planned, unwritten problem as a warning", () => {
+    const pack = structuredClone(loadWebBasics());
+    const problem = pack.nodes.find((n) => n.kind === "problem")!;
+    problem.tier = "road";
+    if (problem.kind !== "concept") {
+      problem.problem = "not-written-yet";
+      problem.planned = true;
+      problem.intent = "Fix the page.";
+    }
+    const issues = validatePack(pack);
+    expect(issues.filter((i) => i.level === "error")).toEqual([]);
+    expect(issues.map((i) => i.message).join("\n")).toMatch(/not-written-yet is planned but not written yet/);
+  });
+
+  it("warns when a planned problem already exists", () => {
+    const pack = structuredClone(loadWebBasics());
+    const problem = pack.nodes.find((n) => n.kind === "problem")!;
+    if (problem.kind !== "concept") problem.planned = true;
+    expect(validatePack(pack).map((i) => i.message).join("\n")).toMatch(/exists; drop planned/);
+  });
+
+  it("rejects fog pages in unknown regions and duplicate fog slugs", () => {
+    const pack = structuredClone(loadWebBasics());
+    const page = { slug: "Web/HTML/Reference/Elements/hgroup", title: "<hgroup>", region: "html", tier: "wilderness" as const, url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/hgroup" };
+    pack.fog = [page, page, { ...page, slug: "Glossary/ARIA", region: "nowhere" }];
+    const messages = validatePack(pack).map((i) => i.message).join("\n");
+    expect(messages).toMatch(/duplicate id Web\/HTML\/Reference\/Elements\/hgroup/);
+    expect(messages).toMatch(/unknown region nowhere/);
+  });
+
+  it("loads a pack without fog.yaml as having no fog", () => {
+    expect(loadWebBasics().fog).toEqual([]);
+  });
+});
+
 // jsdom has no layout engine and only partial computed styles, so checks on
 // computed style are left to the in-browser self-test page (selftest.html).
 describe("graders against starters and reference solutions", () => {

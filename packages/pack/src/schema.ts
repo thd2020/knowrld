@@ -54,10 +54,16 @@ export const CheckItem = z.object({
   explain: z.string(),
 });
 
+// Where a node sits in its region: on the main road (the region's core
+// curriculum pages) or in the country around it (reference pages one link away).
+export const Tier = z.enum(["road", "country"]);
+
 const NodeBase = z.object({
   id,
   title: z.string(),
   region: id,
+  // Optional; packs without tiers treat every node as road.
+  tier: Tier.optional(),
   requires: z.array(id).default([]),
   // References to excerpts as "<source-id>#<excerpt-id>".
   cites: z.array(z.string().regex(/^[a-z0-9-]+#[a-z0-9-]+$/)).default([]),
@@ -72,6 +78,11 @@ export const ConceptNode = NodeBase.extend({
 export const ProblemNode = NodeBase.extend({
   kind: z.enum(["problem", "project"]),
   problem: id,
+  // One line saying what the player must do; the problem file holds the full statement.
+  intent: z.string().optional(),
+  // True while the problem file has not been written yet. A missing problem is then
+  // a warning instead of an error, so a graph can be drafted before its graders.
+  planned: z.boolean().optional(),
 });
 
 export const GraphNode = z.discriminatedUnion("kind", [ConceptNode, ProblemNode]);
@@ -103,6 +114,16 @@ export const DomCheck = z
   })
   .refine((c) => c.doctype || c.selector, "a check needs a selector or doctype: true");
 
+// Pages beyond the country, drawn as fog at a region's edge: listed, not taught.
+export const FogPage = z.object({
+  slug: z.string().min(1),
+  title: z.string(),
+  region: id,
+  tier: z.literal("wilderness"),
+  url: z.url(),
+});
+export const FogFile = z.object({ pages: z.array(FogPage) });
+
 export const ProblemFile = z.object({
   id,
   statement: z.string(),
@@ -119,3 +140,4 @@ export type GraphNode = z.infer<typeof GraphNode>;
 export type CheckItem = z.infer<typeof CheckItem>;
 export type DomCheck = z.infer<typeof DomCheck>;
 export type ProblemFile = z.infer<typeof ProblemFile>;
+export type FogPage = z.infer<typeof FogPage>;

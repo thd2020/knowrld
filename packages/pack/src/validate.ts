@@ -31,6 +31,7 @@ export function validatePack(pack: LoadedPack): Issue[] {
   const err = (file: string, message: string) => issues.push({ level: "error", file, message });
   const warn = (file: string, message: string) => issues.push({ level: "warning", file, message });
   const { manifest, sources, nodes, problems } = pack;
+  const fog = pack.fog ?? [];
 
   const dup = (kind: string, ids: string[]) => {
     const seen = new Set<string>();
@@ -72,7 +73,9 @@ export function validatePack(pack: LoadedPack): Issue[] {
       });
     } else {
       const p = problemById.get(n.problem);
-      if (!p) err(where, `problem ${n.problem} is missing`);
+      if (!p && n.planned) warn(where, `problem ${n.problem} is planned but not written yet`);
+      else if (!p) err(where, `problem ${n.problem} is missing`);
+      else if (n.planned) warn(where, `problem ${n.problem} exists; drop planned`);
       usedProblems.add(n.problem);
     }
   }
@@ -86,6 +89,9 @@ export function validatePack(pack: LoadedPack): Issue[] {
     if (inRegion.length === 0) err(`pack.yaml`, `region ${r.id} has no nodes`);
     else if (!inRegion.some((n) => n.kind === "project")) warn(`pack.yaml`, `region ${r.id} has no capstone project`);
   }
+
+  dup("fog", fog.map((f) => f.slug));
+  for (const f of fog) if (!regionIds.has(f.region)) err("fog.yaml", `${f.slug}: unknown region ${f.region}`);
 
   const final = nodes.find((n) => n.id === manifest.final);
   if (!final) err("pack.yaml", `final boss ${manifest.final} is not a node`);

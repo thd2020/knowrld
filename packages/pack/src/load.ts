@@ -7,6 +7,8 @@ import {
   SourceFile,
   GraphFile,
   ProblemFile,
+  FogFile,
+  type FogPage,
   type SourceDoc,
   type GraphNode,
 } from "./schema.ts";
@@ -23,6 +25,8 @@ export interface LoadedPack {
   sources: SourceDoc[];
   nodes: GraphNode[];
   problems: ProblemFile[];
+  // Optional fog.yaml: wilderness pages beyond the country. Empty when absent.
+  fog?: FogPage[];
 }
 
 function yamlFiles(dir: string): string[] {
@@ -64,6 +68,8 @@ export function loadPack(dir: string): { pack?: LoadedPack; issues: Issue[] } {
     const p = read(ProblemFile, f, issues);
     return p ? [p] : [];
   });
+  const fogFile = join(dir, "fog.yaml");
+  const fog = existsSync(fogFile) ? (read(FogFile, fogFile, issues)?.pages ?? []) : [];
   if (!manifest) return { issues };
-  return { pack: { dir, manifest, sources, nodes, problems }, issues };
+  return { pack: { dir, manifest, sources, nodes, problems, fog }, issues };
 }

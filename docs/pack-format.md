@@ -8,6 +8,7 @@ my-pack/
   sources/*.yaml   official sources and the excerpts cut from them
   graph/*.yaml     nodes: concepts, problems and projects
   problems/*.yaml  what a problem asks, its starter code, a reference solution and its checks
+  fog.yaml         optional: wilderness pages beyond the region, listed but not taught
 ```
 
 ## Manifest
@@ -21,6 +22,14 @@ Each source records its title, URL, publisher, SPDX licence, retrieval date and,
 ## Nodes
 
 Every node belongs to a region, lists the nodes it requires, and cites at least one excerpt as `source-id#excerpt-id`. Each node is carried by an inhabitant of the world. A concept is taught by a character, who says one line in their own voice, quotes the cited excerpts, and asks retrieval questions. A problem is a creature that the player defeats by solving it. A project is a boss, and each region should end in one.
+
+A node may carry an optional `tier`: `road` for the region's core curriculum pages, `country` for the reference pages one link away from them. Packs without tiers treat every node as road.
+
+A problem or project node may carry a one-line `intent` and `planned: true`. A planned node whose problem file does not exist yet gives a warning instead of an error, so a graph can be drafted before its graders are written. Once the problem file exists, drop `planned`.
+
+## Fog
+
+`fog.yaml` lists pages two links away from a region's road, drawn as fog at its edge. Each entry has the page's `slug`, `title`, `url`, `region` and `tier: wilderness`. Fog pages have no characters and no excerpts; they only mark what lies beyond.
 
 ## Problems
 

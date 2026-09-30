@@ -94,10 +94,29 @@ grader:
       selector: body
       outline: { start: 1 }
       concepts: [heading-navigation]
-    - id: hierarchy
-      says: Each subsection sits under its own section, in the handbook's order
-      selector: body
-      text: { matches: 'Lighting the lamp[\s\S]*(Trimming the wick[\s\S]*Cleaning the lens|Cleaning the lens[\s\S]*Trimming the wick)[\s\S]*Logging the weather[\s\S]*Storm signals[\s\S]*Handing over the watch' }
+    - id: storm-under-weather
+      says: Storm signals sits under Logging the weather in the heading outline
+      selector: h3
+      text: { matches: '^\s*Storm signals\s*$' }
+      under: { matches: '^\s*Logging the weather\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: wick-under-lamp
+      says: Trimming the wick sits under Lighting the lamp in the heading outline
+      selector: h3
+      text: { matches: '^\s*Trimming the wick\s*$' }
+      under: { matches: '^\s*Lighting the lamp\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: lens-under-lamp
+      says: Cleaning the lens sits under Lighting the lamp in the heading outline
+      selector: h3
+      text: { matches: '^\s*Cleaning the lens\s*$' }
+      under: { matches: '^\s*Lighting the lamp\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: sections-under-title
+      says: The three sections sit under Keeper's Handbook
+      selector: h2
+      every: true
+      under: { matches: '^\s*Keeper.s Handbook\s*$' }
       concepts: [headings, heading-navigation]
     - id: no-fake-headings
       says: No span, bold text or paragraph is posing as a heading
@@ -160,6 +179,9 @@ fixtures:
         - { find: "<h1>Keeper's Handbook</h1>", replace: "<h1><span class=\"big\">Keeper's Handbook</span></h1>" }
         - { find: "<h3>Storm signals</h3>", replace: "<h3><b>Storm signals</b></h3>" }
         - { find: "<h2>Handing over the watch</h2>", replace: "<h2><strong>Handing over the watch</strong></h2>" }
+    - name: a table of contents at the top
+      edits:
+        - { find: "<p>Everything a new keeper needs for the first season on the rock.</p>", replace: "<p>Everything a new keeper needs for the first season on the rock.</p><nav><ul><li><a href=\"#lamp\">Lighting the lamp</a></li><li><a href=\"#weather\">Logging the weather</a></li><li><a href=\"#watch\">Handing over the watch</a></li></ul></nav>" }
   fail:
     - name: an h1 for every section, as in the old outline algorithm
       edits:
@@ -187,5 +209,11 @@ fixtures:
       edits:
         - { find: "<h3>Storm signals</h3>\n    <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>", replace: "" }
         - { find: "<p>Read the log aloud to the next keeper before you sleep.</p>", replace: "<p>Read the log aloud to the next keeper before you sleep.</p><h3>Storm signals</h3><p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>" }
-      fails: [hierarchy]
+      fails: [storm-under-weather]
       because: The statement puts Storm signals under Logging the weather; right levels in the wrong section still break the outline.
+    - name: Storm signals moved under Handing over the watch, with a hidden paragraph listing the headings in order
+      edits:
+        - { find: "<h3>Storm signals</h3>\n    <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>", replace: "" }
+        - { find: "<p>Read the log aloud to the next keeper before you sleep.</p>", replace: "<p>Read the log aloud to the next keeper before you sleep.</p><h3>Storm signals</h3><p>When the glass falls fast, raise the storm cone and wake the second keeper.</p><p hidden>Lighting the lamp Trimming the wick Cleaning the lens Logging the weather Storm signals Handing over the watch</p>" }
+      fails: [storm-under-weather]
+      because: The outline is made of headings; text elsewhere on the page does not move a heading into another section.

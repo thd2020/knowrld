@@ -10,7 +10,7 @@ statement: |
   - a title that puts the page's purpose first, **Horaires des marées**, and the site's name last, **Port-Brume**;
   - the author, **Maëlle Kerbrat**, and a one-sentence description of the page, as metadata;
   - the stylesheet `styles/marees.css`, which sits in a `styles` folder next to the page;
-  - a body holding the notice, unchanged: the same heading, paragraphs and list, word for word. You may wrap it in landmarks.
+  - a body holding the notice, unchanged: the same heading, paragraphs and list, word for word. You may wrap it in landmarks, and add a skip link or a footer around it, but change nothing inside it.
 path: /marees.html
 files:
   - path: /styles/marees.css
@@ -79,7 +79,7 @@ grader:
       selector: 'meta[name="viewport" i]'
       count: { min: 0 }
       every: true
-      attr: { name: content, matches: '^(?!.*user-scalable\s*=\s*(no|0)\b)(?!.*maximum-scale\s*=\s*(0*\.\d+|0*1(\.\d*)?)(\D|$))' }
+      attr: { name: content, matches: '^(?!.*user-scalable\s*=\s*(no|0|false)\b)(?!.*maximum-scale\s*=\s*(0*\.\d+|0*1(\.\d*)?)(\D|$))' }
       concepts: [viewport-meta]
     - id: title
       says: One title, with the page's purpose first and the site's name last
@@ -95,7 +95,7 @@ grader:
     - id: description
       says: A description meta says what the page holds in a few words
       selector: 'head meta[name="description" i]'
-      attr: { name: content, matches: '^(?=(.*?[a-zà-ÿ]{3,}){3})\s*\S+(\s+\S+){3,}' }
+      attr: { name: content, matches: '^(?!\s*(\S+)(\s+\1)+\s*$)(?=(.*?[a-zà-ÿ]{3,}){3})\s*\S+(\s+\S+){3,}' }
       concepts: [head-and-metadata, meta-kinds]
     - id: stylesheet
       says: The stylesheet styles/marees.css is linked from the head
@@ -104,9 +104,9 @@ grader:
       resolves: true
       concepts: [head-resources]
     - id: body
-      says: The body holds the notice, word for word
+      says: The body holds the notice, word for word and in order; landmarks, a skip link or a footer may surround it
       selector: body
-      text: { matches: '^\s*Horaires\s*des\s*marées\s*Les\s*marées\s*de\s*la\s*semaine\s*au\s*port\s*de\s*Port-Brume\.\s*Les\s*heures\s*sont\s*données\s*à\s*l.heure\s*locale\.\s*Lundi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*12,\s*basse\s*mer\s*à\s*12\s*h\s*25\s*Mardi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*58,\s*basse\s*mer\s*à\s*13\s*h\s*10\s*Mercredi\s*:\s*pleine\s*mer\s*à\s*7\s*h\s*41,\s*basse\s*mer\s*à\s*13\s*h\s*54\s*Par\s*gros\s*temps,\s*la\s*passe\s*nord\s*reste\s*fermée\.\s*$' }
+      text: { matches: 'Horaires\s*des\s*marées\s*Les\s*marées\s*de\s*la\s*semaine\s*au\s*port\s*de\s*Port-Brume\.\s*Les\s*heures\s*sont\s*données\s*à\s*l.heure\s*locale\.\s*Lundi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*12,\s*basse\s*mer\s*à\s*12\s*h\s*25\s*Mardi\s*:\s*pleine\s*mer\s*à\s*6\s*h\s*58,\s*basse\s*mer\s*à\s*13\s*h\s*10\s*Mercredi\s*:\s*pleine\s*mer\s*à\s*7\s*h\s*41,\s*basse\s*mer\s*à\s*13\s*h\s*54\s*Par\s*gros\s*temps,\s*la\s*passe\s*nord\s*reste\s*fermée\.' }
       concepts: [document-skeleton]
     - id: notice-heading
       says: The notice keeps its heading
@@ -185,6 +185,10 @@ fixtures:
         - { find: "<p>Par gros temps, la passe nord reste fermée.</p>", replace: "<p>Par gros temps, la passe nord reste fermée.</p></main>" }
         - { find: "<meta charset=\"utf-8\">", replace: "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">" }
         - { find: "styles/marees.css\"", replace: "styles/marees.css?v=2\"" }
+    - name: a skip link, main and a footer around the notice, and a script at the end of the body
+      edits:
+        - { find: "<body>", replace: "<body><a href=\"#avis\">Aller au contenu</a><main id=\"avis\">" }
+        - { find: "</body>", replace: "</main><footer><p>Capitainerie de Port-Brume</p></footer><script>window.x = 1;</script></body>" }
   fail:
     - name: the language copied from an English template
       edits: [{ find: '<html lang="fr">', replace: '<html lang="en">' }]
@@ -239,3 +243,13 @@ fixtures:
         </html>
       fails: [body, notice-heading, notice-list]
       because: The frame goes around the notice; the notice itself stays as the harbourmaster wrote it.
+    - name: zooming switched off with user-scalable=false
+      edits:
+        - { find: "content=\"width=device-width\"", replace: "content=\"width=device-width, user-scalable=false\"" }
+      fails: [viewport-zoom]
+      because: Any false value for user-scalable stops readers zooming in.
+    - name: a description that repeats one word
+      edits:
+        - { find: "content=\"Les heures de pleine mer et de basse mer de la semaine au port de Port-Brume.\"", replace: "content=\"les les les les\"" }
+      fails: [description]
+      because: A description says what the page holds; one word repeated says nothing.

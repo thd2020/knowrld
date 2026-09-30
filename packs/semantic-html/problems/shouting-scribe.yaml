@@ -10,7 +10,7 @@ statement: |
   - the customer's misspelling, **recieve**, is kept as she wrote it and annotated as a misspelling;
   - in the search results, highlight the word that matched the search in each result.
 
-  Underlining on the web says "link", so apart from the annotated misspelling nothing is underlined: not with an element, and not with an inline style. Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
+  Underlining on the web says "link", so apart from the annotated misspelling (and real links) nothing is underlined: not with an element, an inline style, a bottom border or a style rule. Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
 starter:
   html: |
     <!doctype html>
@@ -120,9 +120,16 @@ grader:
       text: { matches: '^\s*recieve\s*$' }
       concepts: [u-annotation]
     - id: no-decorative-underline
-      says: Nothing but the misspelling is underlined, not even with an inline style
-      selector: '[style*="underline" i]:not(u)'
+      says: Nothing but the misspelling (and links) is underlined, not with an inline style, a border or a style rule
+      selector: ':is([style*="underline" i], [style*="border-bottom" i]):not(u, a)'
       count: { max: 0 }
+      concepts: [u-annotation, presentational-elements]
+    - id: no-underline-rules
+      says: No style rule underlines anything but u or a link
+      selector: style
+      count: { min: 0 }
+      every: true
+      text: { not: '(^|[{};])\s*(?!(u|a)\s*[{,:.\[])[^{}@]+\{[^}]*(underline|border-bottom)' }
       concepts: [u-annotation, presentational-elements]
     - id: search-matches
       says: The matched word is highlighted in each search result
@@ -160,6 +167,9 @@ fixtures:
           replace: <p><strong>Do not touch the blue flask.</strong> <strong>Its fumes blister the skin.</strong></p>
         - find: <i lang="la">caveat emptor</i>
           replace: <i lang="la-x-classic">caveat emptor</i>
+    - name: the heading links home, with an inline underline on the link
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1><a href=\"/\" style=\"text-decoration: underline\">Hollow Oak Apothecary</a></h1>" }
   fail:
     - name: the decorative underline kept on the shop name
       edits: [{ find: <h1>Hollow Oak Apothecary</h1>, replace: <h1><u>Hollow Oak Apothecary</u></h1> }]
@@ -194,3 +204,13 @@ fixtures:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"text-decoration: underline\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
       because: Underlined text reads as a link whatever draws the line, so decoration by inline style is the same mistake as u.
+    - name: the heading underlined by a style rule
+      edits:
+        - { find: "</head>", replace: "<style>h1 { text-decoration: underline; }</style></head>" }
+      fails: [no-underline-rules]
+      because: An underline reads as a link wherever it comes from, the stylesheet included.
+    - name: the heading underlined with a bottom border
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"border-bottom: 1px solid\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: A bottom border under text draws the same line as an underline.

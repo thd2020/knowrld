@@ -145,10 +145,17 @@ grader:
       text: { matches: 'Mira Tallow[\s\S]*Port-Brume' }
       concepts: [contact-address]
     - id: address-lines
-      says: Each contact detail sits on its own line within the address, split by line breaks, paragraphs or list items
-      selector: 'address br, address p, address li'
+      says: Each contact detail sits on its own line within the address, split by line breaks, paragraphs, divs or list items
+      selector: 'address br, address p, address div, address li'
       count: { min: 3 }
       concepts: [contact-address, breaks-with-meaning]
+    - id: address-no-blank-lines
+      says: No two line breaks in the address come together, so no line is left empty
+      selector: 'address br'
+      count: { min: 0 }
+      every: true
+      next: [{ is: br, absent: true }]
+      concepts: [breaks-with-meaning]
     - id: address-contact-only
       says: The address holds contact details only, not the publication date
       selector: address
@@ -171,8 +178,8 @@ grader:
       text: { own: true, not: '\S' }
       concepts: [breaks-and-rules]
     - id: no-empty-paragraphs
-      says: No empty paragraph is used for spacing
-      selector: p
+      says: No empty paragraph or box is used for spacing
+      selector: 'p, div'
       every: true
       text: { matches: '\S' }
       concepts: [breaks-and-rules]
@@ -241,6 +248,13 @@ fixtures:
                       Port-Brume<br>
                       <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
           replace: <ul><li>Mira Tallow</li><li>Tide House, Quay Street</li><li>Port-Brume</li><li><a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a></li></ul>
+    - name: the contact lines as divs inside the address
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+          replace: <div>Mira Tallow</div><div>Tide House, Quay Street</div><div>Port-Brume</div>
   fail:
     - name: the dash left in the range
       edits:
@@ -289,3 +303,18 @@ fixtures:
         - { find: "<p>Readings for", replace: "<p>&nbsp;</p><p>&nbsp;</p><p>Readings for" }
       fails: [no-empty-paragraphs]
       because: An empty paragraph is spacing, which is the stylesheet's job, as much as a pair of line breaks is.
+    - name: the contact details on one line, with the line breaks piled up after them
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: Mira Tallow, Tide House, Quay Street, Port-Brume, <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a><br><br><br>
+      fails: [address-no-blank-lines]
+      because: The line breaks must separate the details; piled up at the end they only add empty lines.
+    - name: spacing made with empty divs
+      edits:
+        - { find: "<p>Readings for", replace: "<div>&nbsp;</div><div>&nbsp;</div><p>Readings for" }
+      fails: [no-empty-paragraphs]
+      because: An empty box is spacing, the stylesheet's job, whatever element holds it.

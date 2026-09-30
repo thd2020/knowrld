@@ -92,19 +92,19 @@ grader:
     - id: basket
       says: Add to basket is a button that calls addToBasket()
       role: button
-      attr: { name: onclick, matches: '\baddToBasket\(\)' }
+      attr: { name: onclick, matches: '\baddToBasket\s*\(\s*\)' }
       name: { matches: '\badd\b[\s\S]*\bbasket\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: zoom
       says: Zoom in is a button that calls zoomIn()
       role: button
-      attr: { name: onclick, matches: '\bzoomIn\(\)' }
+      attr: { name: onclick, matches: '\bzoomIn\s*\(\s*\)' }
       name: { matches: '\bzoom\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: details
       says: Show details is a button that calls showDetails()
       role: button
-      attr: { name: onclick, matches: '\bshowDetails\(\)' }
+      attr: { name: onclick, matches: '\bshowDetails\s*\(\s*\)' }
       name: { matches: '\bdetails\b|\bdescription\b' }
       concepts: [links-vs-buttons, accessibility-tree]
     - id: same-actions
@@ -112,8 +112,13 @@ grader:
       selector: ':is(button, input[type="button" i]):is([onclick*="addToBasket"], [onclick*="zoomIn"], [onclick*="showDetails"])'
       count: { min: 3 }
       every: true
-      attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\(\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
+      attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\s*\(\s*\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
       concepts: [native-controls]
+    - id: keyboard-reachable
+      says: No link or button is taken out of the keyboard's reach with a negative tabindex, inert or aria-hidden
+      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *)'
+      count: { max: 0 }
+      concepts: [native-controls, skip-links]
     - id: buttons-enabled
       says: The buttons can be pressed; none is disabled
       selector: ':is(button, input)[disabled]'
@@ -134,10 +139,10 @@ grader:
       resolves: { to: main }
       concepts: [skip-links]
     - id: skip-before-header
-      says: The skip link comes before the header and its menu
+      says: The skip link comes before the menu, at the top of the body or first in the header
       selector: 'a[href^="#"]'
       name: { matches: 'skip|jump|main|content' }
-      precedes: 'header, nav'
+      precedes: 'nav'
       concepts: [skip-links, source-order]
     - id: main-id
       says: The main element has an id for the skip link to target
@@ -175,6 +180,11 @@ fixtures:
       edits:
         - { find: "<nav>", replace: "<button type=\"button\" onclick=\"toggleMenu()\" aria-expanded=\"false\">Menu</button><nav>" }
         - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket(); return false;"' }
+    - name: the skip link first inside the header, and a space before a call's brackets
+      edits:
+        - { find: '<a href="#main-content">Skip to main content</a>', replace: "" }
+        - { find: "<header>", replace: "<header><a href=\"#main-content\">Skip to main content</a>" }
+        - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket ()"' }
   fail:
     - name: a div given a button role and a tabindex
       edits:
@@ -228,3 +238,13 @@ fixtures:
         - { find: '<button type="button" onclick="addToBasket()">', replace: '<button type="button" disabled onclick="addToBasket()">' }
       fails: [buttons-enabled]
       because: A disabled button cannot be pressed by anyone, so the control is lost, not fixed.
+    - name: the basket button taken out of the tab order
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<button type="button" tabindex="-1" onclick="addToBasket()">' }
+      fails: [keyboard-reachable]
+      because: A button with tabindex="-1" can no longer be reached with Tab, which is the whole point of using a button.
+    - name: the skip link taken out of the tab order
+      edits:
+        - { find: '<a href="#main-content">', replace: '<a href="#main-content" tabindex="-1">' }
+      fails: [keyboard-reachable]
+      because: A skip link exists for keyboard users; one they cannot tab to skips nothing.

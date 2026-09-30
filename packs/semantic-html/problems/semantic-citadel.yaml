@@ -489,7 +489,7 @@ grader:
           concepts: [header-nav-footer, header-footer-context]
         - id: menu-in-header
           says: The menu is a nav inside the page's header
-          selector: 'header:not(:is(article, aside, main, nav, section) header) nav'
+          selector: 'header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav'
           count: { min: 1 }
           concepts: [header-nav-footer, nav-element]
         - id: one-main
@@ -675,13 +675,13 @@ grader:
           says: BCE is an abbreviation, expanded in a title or in the text beside it
           pages: [letter]
           selector: 'abbr[title*="common era" i], :has(> abbr)'
-          text: { matches: '^\s*BCE\s*$|<?BCE\W{0,3}\(\s*Before (the )?Common Era\s*\)|Before (the )?Common Era\s*\(\s*BCE\s*\)' }
+          text: { own: true, matches: '^\s*BCE\s*$|before (the )?common era' }
           concepts: [abbreviations, abbr-expansion]
         - id: abbr-esq
           says: Esq. is an abbreviation, expanded in a title or in the text beside it
           pages: [letter]
           selector: 'abbr[title*="esquire" i], :has(> abbr)'
-          text: { matches: '^\s*Esq\.?\s*$|Esq\.?\W{0,3}\(\s*Esquire\s*\)|Esquire\s*\(\s*Esq\.?\s*\)' }
+          text: { own: true, matches: '^\s*Esq\.?\s*$|\besquire\b' }
           concepts: [abbreviations, abbr-expansion]
         - id: subscripts
           says: The four subscripts in the chemical formulae are marked up
@@ -731,6 +731,14 @@ grader:
           selector: 'ol:has(> li ~ li ~ li)'
           text: { matches: 'wine[\s\S]*funk bass[\s\S]*musical scores' }
           concepts: [lists, list-rules]
+        - id: subjects-items
+          says: Every item of the subjects list holds a subject
+          pages: [letter]
+          selector: 'ol > li'
+          count: { min: 3 }
+          every: true
+          text: { matches: '\w' }
+          concepts: [lists, list-rules]
         - id: dances
           says: The dances and their definitions are a description list
           pages: [letter]
@@ -751,7 +759,7 @@ grader:
       checks:
         - id: menu-list
           says: The menu is a list of the site's six pages
-          selector: 'nav :is(ul, ol) > li'
+          selector: ':is(header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav) :is(ul, ol) > li'
           count: { min: 6, max: 6 }
           concepts: [navigation-menus, lists]
         - id: menu-links
@@ -777,7 +785,7 @@ grader:
           concepts: [navigation-menus]
         - id: menu-same
           says: The menu offers the same pages, in the same order, on both pages
-          selector: 'nav :is(ul, ol)'
+          selector: ':is(header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav) :is(ul, ol)'
           pooled: true
           count: { min: 2, max: 2 }
           every: true
@@ -1064,6 +1072,14 @@ fixtures:
             - { find: "</body>", replace: "</div></body>" }
             - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr> (Before Common Era)" }
             - { find: '<abbr title="Esquire">Esq.</abbr>', replace: "<abbr>Esq.</abbr> (Esquire)" }
+    - name: a site-map nav in each footer, and the menu straight after the header
+      pages:
+        home:
+          edits:
+            - { find: "<footer>", replace: "<footer><nav aria-label=\"Site map\"><ul><li><a href=\"gear.html\">Gear</a></li></ul></nav>" }
+        letter:
+          edits:
+            - { find: "<footer>", replace: "<footer><nav aria-label=\"Site map\"><ul><li><a href=\"gear.html\">Gear</a></li></ul></nav>" }
   fail:
     - name: the header inside main on the home page
       pages:
@@ -1159,3 +1175,18 @@ fixtures:
             - { find: "</footer>", replace: "</div>" }
       fails: [menu-in-header, header-first, native-elements]
       because: Every landmark role has its own HTML element, and the region teaches the element, not the role.
+    - name: BCE and Esq. left unexpanded inside spans
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <span><abbr>BCE</abbr></span>" }
+            - { find: '<abbr title="Esquire">Esq.</abbr>', replace: "<span><abbr>Esq.</abbr></span>" }
+      fails: [abbr-bce, abbr-esq]
+      because: Wrapping an abbreviation in a span expands nothing; the expansion has to be in a title or in the text beside it.
+    - name: an empty item padding the subjects list
+      pages:
+        letter:
+          edits:
+            - { find: "Turning H<sub>2</sub>O into wine", replace: "</li><li>Turning H<sub>2</sub>O into wine" }
+      fails: [subjects-items]
+      because: Each item of a list is one of the things listed; an empty item lists nothing.

@@ -120,9 +120,10 @@ grader:
       attr: { name: download, present: true }
       concepts: [anchor-attributes, link-signposts]
     - id: download-signposted
-      says: The download link's own text warns that it is a 2 MB PDF, and names the winter timetable
+      says: The download link warns that it is a 2 MB PDF, in its text or an icon's alt text, and its text names the winter timetable
       selector: 'a[href$="winter-timetable.pdf"]'
-      text: { matches: '^(?=[\s\S]*winter[\s\S]*timetable)(?=[\s\S]*\bPDF\b)(?=[\s\S]*\b2\s*MB\b)' }
+      text: { matches: 'winter[\s\S]*timetable' }
+      name: { matches: '^(?=[\s\S]*winter[\s\S]*timetable)(?=[\s\S]*\bPDF\b)(?=[\s\S]*\b2\s*MB\b)' }
       concepts: [link-signposts]
     - id: warnings
       says: The storm warnings still link to the Harbour Watch
@@ -161,8 +162,15 @@ grader:
       concepts: [navigation-menus]
     - id: no-self-link
       says: The menu has no working link to this page, unless it is marked as the current page
-      selector: 'nav a:is([href*="timetables" i], [href=""], [href="#"]):not([aria-current="page"], [aria-current="true"], [aria-current="location"])'
+      selector: 'nav a:is([href*="timetables" i], [href=""], [href^="#"], [href^="?"]):not([aria-current="page"], [aria-current="true"], [aria-current="location"])'
       count: { max: 0 }
+      concepts: [navigation-menus]
+    - id: no-self-label
+      says: No working menu link is labelled with this page's name, unless it is marked as the current page
+      selector: 'nav a[href]:not([aria-current="page"], [aria-current="true"], [aria-current="location"])'
+      count: { min: 0 }
+      every: true
+      text: { not: '\btimetables?\b' }
       concepts: [navigation-menus]
     - id: links-resolve
       says: Every link within the site leads to a file that exists
@@ -214,6 +222,9 @@ fixtures:
         - { find: '<a href="routes.html">Routes</a>', replace: '<a href="routes.html">Ferry routes</a>' }
         - { find: 'alt="The Ferrymen''s Guild home page"', replace: 'alt="Ferry timetables front page"' }
         - { find: '<li><a href="routes.html">Ferry routes</a></li>', replace: '<li><a href="timetables.html" aria-current="true">Timetables</a></li><li><a href="routes.html">Ferry routes</a></li>' }
+    - name: a PDF icon inside the download link carries the file type
+      edits:
+        - { find: "Download the winter timetable (PDF, 2 MB)", replace: "Download the winter timetable <img src=\"images/pdf.svg\" alt=\"PDF\"> (2 MB)" }
   fail:
     - name: the download link still reading "here"
       edits: [{ find: <a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>., replace: 'Download the winter timetable (PDF, 2 MB) <a href="downloads/winter-timetable.pdf" download>here</a>.' }]
@@ -262,3 +273,8 @@ fixtures:
         - { find: '<a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>', replace: 'For the winter timetable, <a href="downloads/winter-timetable.pdf" download aria-label="Winter timetable PDF 2 MB">click</a>' }
       fails: [no-vague-text, download-signposted]
       because: Sighted readers and voice-control users see only "click"; a link's visible text must say where it leads, and its name must contain that text.
+    - name: the current page kept in the menu as a link to the top of the page
+      edits:
+        - { find: '<li><a href="routes.html">Routes</a></li>', replace: '<li><a href="#top">Timetables</a></li><li><a href="routes.html">Routes</a></li>' }
+      fails: [no-self-link, no-self-label]
+      because: A link to this page, even to its top, reloads where the reader already is; remove it or mark it as the current page.

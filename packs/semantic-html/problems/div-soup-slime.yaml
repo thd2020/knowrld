@@ -10,7 +10,7 @@ statement: |
   - the related climbs, which sit beside the post rather than in it;
   - the site's footer.
 
-  Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
+  Leave nothing hidden in the markup. Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
 starter:
   html: |
     <!doctype html>
@@ -143,15 +143,16 @@ grader:
       count: { min: 1, max: 1 }
       concepts: [landmarks]
     - id: navigation
-      says: The main navigation menu is a navigation landmark holding the list of links
-      selector: 'nav'
+      says: The main navigation menu is one navigation landmark, in or right after the header, holding the list of links
+      selector: 'header:has(h1) nav, header:has(h1) + nav'
       role: navigation
       count: { min: 1, max: 1 }
+      rendered: true
       text: { matches: 'Home[\s\S]*Climbs[\s\S]*About the club' }
       concepts: [nav-element, landmarks]
     - id: nav-before-main
       says: The main navigation menu comes with the header, before the main content
-      selector: nav
+      selector: 'header:has(h1) nav, header:has(h1) + nav'
       precedes: main
       concepts: [header-nav-footer, source-order]
     - id: native-elements
@@ -159,9 +160,14 @@ grader:
       selector: ':not(header)[role~="banner"], :not(footer)[role~="contentinfo"], :not(main)[role~="main"], :not(nav)[role~="navigation"], :not(aside)[role~="complementary"], :not(article)[role~="article"]'
       count: { max: 0 }
       concepts: [landmarks, non-semantic-wrappers]
+    - id: nothing-hidden
+      says: Nothing is hidden on the page; every part of it is for readers
+      selector: '[hidden], [style*="display:none" i], [style*="display: none" i]'
+      count: { max: 0 }
+      concepts: [page-regions]
     - id: menu-list
       says: The menu is still a list of links
-      selector: 'nav ul > li > a'
+      selector: ':is(header:has(h1) nav, header:has(h1) + nav) ul > li > a'
       count: { min: 3 }
       concepts: [nav-element]
     - id: one-main
@@ -342,6 +348,9 @@ fixtures:
     - name: the post's heading grouped with a subtitle
       edits:
         - { find: "<h2>Up the Grey Spire</h2>", replace: "<hgroup><h2>Up the Grey Spire</h2><p>A day on the ridge</p></hgroup>" }
+    - name: a second, smaller nav in the footer
+      edits:
+        - { find: "<p>© 2027 High Paths, the blog of the Spire Club.</p>", replace: "<nav aria-label=\"Legal\"><ul><li><a href=\"/privacy.html\">Privacy</a></li></ul></nav><p>© 2027 High Paths, the blog of the Spire Club.</p>" }
   fail:
     - name: the related climbs in a second main
       edits:

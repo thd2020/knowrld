@@ -44,8 +44,9 @@ A DOM check first selects elements, then asserts something about them.
 - **Asserting on elements.** These must hold for one selected element, or for every one with `every: true`:
   - `attr`: an attribute is present, absent, equal to a value or matching a pattern;
   - `text`: the text matches or must not match a pattern (`own: true` looks only at the element's own text nodes, to find loose text); text never includes script, style, template or noscript contents);
-  - `rendered: true` keeps only rendered elements (none inside `hidden`, `display: none` or `visibility: hidden`), and `text` then reads rendered text only;
-  - `under`: the element is a heading whose parent in the outline, the nearest earlier heading of a higher rank, has text matching the pattern;
+  - `rendered: true` keeps only rendered elements, and `text` then reads rendered text only. Rendering is judged from the DOM alone: the `hidden` attribute, the body of a closed `details`, and computed `display: none`, `visibility: hidden`, `opacity: 0` and `font-size: 0` hide content. The grader knows no layout, so text moved off-screen, clipped to nothing, covered, or coloured like its background still counts as rendered;
+  - `text.following: true` appends the text that follows the element inside its parent, to test what comes right after it;
+  - `under`: the element is a heading whose parent in the outline, the nearest earlier heading element (h1 to h6) of a higher rank, has an accessible name matching the pattern;
   - `name`: the accessible name, as a screen reader would announce it (aria-labelledby, aria-label, alt, content, title), matches or must not match;
   - `style`: a computed style;
   - `datetime`: the element's machine-readable date or time (its `datetime` attribute, or its text when it has none) is valid under the HTML standard's date and time microsyntaxes;

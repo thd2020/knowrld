@@ -144,13 +144,26 @@ const NOT_TEXT = new Set(["SCRIPT", "STYLE", "TEMPLATE", "NOSCRIPT"]);
 // Rendered as far as the DOM can tell: no hidden attribute on it or an ancestor, and no computed
 // display: none (on it or an ancestor) or visibility: hidden. Unlike isHidden, aria-hidden does not
 // count: aria-hidden content is still on screen.
+//
+// Only what the DOM shows counts: the hidden attribute, content of a closed details element
+// (other than its summary), and computed display: none, visibility: hidden, opacity: 0 or
+// font-size: 0. Layout is not known, so text moved off-screen, clipped, covered or coloured like
+// its background still counts as rendered.
 export function isRendered(el: Element): boolean {
   if (el.closest("[hidden]")) return false;
+  // Inside a closed details, only its summary shows.
+  for (let e: Element | null = el; e?.parentElement; e = e.parentElement) {
+    const p: Element = e.parentElement;
+    if (p.tagName === "DETAILS" && !p.hasAttribute("open") && !(e.tagName === "SUMMARY" && e === p.querySelector(":scope > summary"))) return false;
+  }
   const view = el.ownerDocument.defaultView;
   try {
     for (let e: Element | null = el; e; e = e.parentElement) {
       const s = view?.getComputedStyle(e);
-      if (s && (s.display === "none" || (e === el && s.visibility === "hidden"))) return false;
+      if (!s) continue;
+      if (s.display === "none" || (e === el && s.visibility === "hidden")) return false;
+      if (s.opacity !== "" && Number(s.opacity) === 0) return false;
+      if (/^0(px|em|rem|%)?$/.test(s.fontSize.trim())) return false;
     }
   } catch {
     // No computed styles in this DOM; attributes alone decide.
@@ -161,6 +174,11 @@ export function isRendered(el: Element): boolean {
 // An element's text, without the contents of script, style, template and noscript, and with
 // `rendered`, without anything hidden. With `own`, only its own text nodes.
 export function textOf(el: Element, opts: { own?: boolean; rendered?: boolean } = {}): string {
+  if (opts.rendered && !isRendered(el)) return "";
+  if (opts.rendered && el.tagName === "DETAILS" && !el.hasAttribute("open")) {
+    const summary = el.querySelector(":scope > summary");
+    return summary ? textOf(summary, opts) : "";
+  }
   let out = "";
   for (const n of el.childNodes) {
     if (n.nodeType === 3) out += n.nodeValue ?? "";
@@ -174,9 +192,10 @@ export function textOf(el: Element, opts: { own?: boolean; rendered?: boolean } 
   return out;
 }
 
-// The heading's parent in the outline: the nearest earlier visible heading of a higher rank.
+// The heading's parent in the outline: the nearest earlier visible heading element (h1 to h6) of a
+// higher rank. Elements given role=heading do not count.
 function parentHeading(el: Element): Element | null | undefined {
-  const all = [...el.ownerDocument.querySelectorAll("h1, h2, h3, h4, h5, h6, [role=heading]")].filter((h) => !isHidden(h));
+  const all = [...el.ownerDocument.querySelectorAll("h1, h2, h3, h4, h5, h6")].filter((h) => !isHidden(h));
   const i = all.indexOf(el);
   if (i < 0) return undefined;
   const level = headingLevel(el);
@@ -273,14 +292,21 @@ function assess(
       }
     }
     if (c.text) {
-      const why = textFails(textOf(el, { own: c.text.own, rendered: c.rendered }), c.text, "text");
+      let t = textOf(el, { own: c.text.own, rendered: c.rendered });
+      if (c.text.following) {
+        for (let n = el.nextSibling; n; n = n.nextSibling) {
+          if (n.nodeType === 3) t += n.nodeValue ?? "";
+          else if (n.nodeType === 1 && !NOT_TEXT.has((n as Element).tagName.toUpperCase())) t += textOf(n as Element, { rendered: c.rendered });
+        }
+      }
+      const why = textFails(t, c.text, "text");
       if (why) return why;
     }
     if (c.under) {
       const parent = parentHeading(el);
       if (parent === undefined) return "is not a visible heading";
       if (parent === null) return "has no heading of a higher rank before it";
-      const why = textFails(parent.textContent ?? "", c.under, `sits under ${tag(parent)}, whose text`);
+      const why = textFails(accessibleName(parent), c.under, `sits under ${tag(parent)}, whose name`);
       if (why) return why;
     }
     if (c.name) {

@@ -201,16 +201,31 @@ describe("text, rendering and the heading outline", () => {
     const r = pass(d, { selector: "p", rendered: true, text: { matches: "members only" } });
     expect(r.pass).toBe(false);
     expect(pass(doc(`<p>Archive <span aria-hidden="true">(members only)</span></p>`), { selector: "p", rendered: true, text: { matches: "members only" } }).pass).toBe(true);
+    for (const hide of [`<span style="opacity: 0">members only</span>`, `<span style="font-size: 0">members only</span>`, `<details><summary>More</summary>members only</details>`]) {
+      expect(pass(doc(`<div>Archive ${hide}</div>`), { selector: "div", rendered: true, text: { matches: "members only" } }).pass, hide).toBe(false);
+    }
+    expect(pass(doc(`<div>Archive <details open><summary>x</summary>members only</details></div>`), { selector: "div", rendered: true, text: { matches: "members only" } }).pass).toBe(true);
+    expect(pass(doc(`<div><details><summary>Members only</summary>x</details></div>`), { selector: "div", rendered: true, text: { matches: "members only" } }).pass).toBe(true);
+  });
+
+  it("with following, adds the text after the element in its parent", () => {
+    const d = doc(`<p>300 <abbr>BCE</abbr> (<i>before the Common Era</i>). <abbr>PhD</abbr></p>`);
+    const c = { selector: "abbr", every: true, text: { following: true, matches: "^(?!\\s*BCE)|^\\s*BCE\\W{0,5}before the common era" } };
+    expect(pass(d, c).pass).toBe(true);
+    expect(pass(doc(`<p><span><abbr>BCE</abbr></span> before the Common Era</p>`), c).pass).toBe(false);
   });
 
   it("checks a heading's parent in the outline", () => {
     const d = doc(`<h1>Book</h1><h2>Lamp</h2><h3>Wick</h3><h2>Weather</h2><p hidden>Lamp Wick Weather Storm</p><h2>Watch</h2><h3>Storm</h3>`);
     const storm = { selector: "h3", text: { matches: "^Storm$" }, under: { matches: "^Weather$" } };
     expect(pass(d, storm).pass).toBe(false);
-    expect(pass(d, { ...storm, every: true, text: undefined, selector: "h3:last-of-type" }).detail).toMatch(/sits under <h2> whose text|sits under <h2>, whose text/);
+    expect(pass(d, { ...storm, every: true, text: undefined, selector: "h3:last-of-type" }).detail).toMatch(/sits under <h2>, whose name/);
     expect(pass(d, { selector: "h3", text: { matches: "^Wick$" }, under: { matches: "^Lamp$" } }).pass).toBe(true);
     expect(pass(d, { selector: "h1", under: { matches: "." } }).detail).toMatch(/no heading of a higher rank/);
     expect(pass(doc("<p>x</p>"), { selector: "p", under: { matches: "." } }).detail).toMatch(/not a visible heading/);
+    const named = doc(`<h2><span aria-hidden="true">2.</span> Weather</h2><h3>Storm</h3><a role="heading" aria-level="2">Lamp</a><h3>Wick</h3>`);
+    expect(pass(named, { selector: "h3", text: { matches: "^Storm$" }, under: { matches: "^Weather$" } }).pass).toBe(true);
+    expect(pass(named, { selector: "h3", text: { matches: "^Wick$" }, under: { matches: "^Lamp$" } }).pass).toBe(false);
   });
 });
 

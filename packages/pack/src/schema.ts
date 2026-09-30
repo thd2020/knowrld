@@ -134,9 +134,12 @@ export const DomCheck = z
       .optional(),
     // `own: true` tests only the element's own text nodes, not its descendants' text. Text never
     // includes the contents of script, style, template or noscript elements.
-    text: TextTest.extend({ own: z.literal(true).optional() }).optional(),
-    // Keep only rendered elements (not inside anything with the hidden attribute, display: none or
-    // visibility: hidden), and read `text` from rendered content only.
+    // `following: true` appends the text that follows the element within its parent, to test what
+    // comes right after it (an abbreviation's expansion in brackets, say).
+    text: TextTest.extend({ own: z.literal(true).optional(), following: z.literal(true).optional() }).optional(),
+    // Keep only rendered elements, and read `text` from rendered content only. Rendering is judged
+    // from the DOM alone (see isRendered): hidden, closed details, display: none, visibility: hidden,
+    // opacity: 0 and font-size: 0 hide; off-screen or clipped text does not.
     rendered: z.literal(true).optional(),
     // The element is a heading whose parent in the heading outline (the nearest earlier heading of
     // a higher rank) has text that passes this test.

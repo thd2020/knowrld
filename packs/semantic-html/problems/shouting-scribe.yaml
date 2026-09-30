@@ -120,16 +120,16 @@ grader:
       text: { matches: '^\s*recieve\s*$' }
       concepts: [u-annotation]
     - id: no-decorative-underline
-      says: Nothing but the misspelling (and links) is underlined, not with an inline style, a border or a style rule
-      selector: ':is([style*="underline" i], [style*="border-bottom" i]):not(u, a)'
+      says: Nothing but the misspelling (and links) is underlined, not with an inline style, a border, a box shadow or a style rule
+      selector: ':is([style*="underline" i], [style*="border-bottom" i], [style*="box-shadow" i]):not(u, a)'
       count: { max: 0 }
       concepts: [u-annotation, presentational-elements]
     - id: no-underline-rules
-      says: No style rule underlines anything but u or a link
+      says: No style rule underlines anything but u or a link (judged by the last part of each selector)
       selector: style
       count: { min: 0 }
       every: true
-      text: { not: '(^|[{};])\s*(?!(u|a)\s*[{,:.\[])[^{}@]+\{[^}]*(underline|border-bottom)' }
+      text: { not: '(?:^|[{}])\s*(?:[^{};@]*,\s*)?(?:[^{};,@]*[\s>+~])?(?!(?:u|a)(?![\w-]))[^{};,\s>+~]+\s*(?:,[^{};@]*)?\{[^}]*(?:underline|border-bottom)' }
       concepts: [u-annotation, presentational-elements]
     - id: search-matches
       says: The matched word is highlighted in each search result
@@ -170,6 +170,9 @@ fixtures:
     - name: the heading links home, with an inline underline on the link
       edits:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1><a href=\"/\" style=\"text-decoration: underline\">Hollow Oak Apothecary</a></h1>" }
+    - name: style rules that underline only u and links
+      edits:
+        - { find: "</head>", replace: "<style>body { font-family: serif; } u { text-decoration: red wavy underline; } mark { background: gold; } a:hover { text-decoration: underline; } nav a, u.spelling { text-decoration: underline; }</style></head>" }
   fail:
     - name: the decorative underline kept on the shop name
       edits: [{ find: <h1>Hollow Oak Apothecary</h1>, replace: <h1><u>Hollow Oak Apothecary</u></h1> }]
@@ -204,6 +207,11 @@ fixtures:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"text-decoration: underline\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
       because: Underlined text reads as a link whatever draws the line, so decoration by inline style is the same mistake as u.
+    - name: the heading underlined with an inline box shadow
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"box-shadow: 0 2px 0 currentColor\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: A line drawn under the text by a shadow is still an underline.
     - name: the heading underlined by a style rule
       edits:
         - { find: "</head>", replace: "<style>h1 { text-decoration: underline; }</style></head>" }
@@ -214,3 +222,8 @@ fixtures:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"border-bottom: 1px solid\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
       because: A bottom border under text draws the same line as an underline.
+    - name: a rule that underlines links and the heading together
+      edits:
+        - { find: "</head>", replace: "<style>a, h1 { text-decoration: underline; }</style></head>" }
+      fails: [no-underline-rules]
+      because: Listing a beside h1 does not make the heading a link; it is still underlined for decoration.

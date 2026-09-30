@@ -72,7 +72,7 @@ pages:
         <html lang="en">
           <head>
             <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="width=device-width">
             <title>Birdwatching – The Citadel</title>
             <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300%7CCinzel+Decorative:700" rel="stylesheet">
             <link href="style.css" rel="stylesheet">
@@ -245,7 +245,7 @@ pages:
         <html lang="en-US">
           <head>
             <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="width=device-width">
             <meta name="author" content="Dr. Eleanor Gaye">
             <title>Awesome science application correspondence – The Citadel</title>
             <style>

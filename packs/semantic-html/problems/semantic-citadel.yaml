@@ -20,7 +20,7 @@ statement: |
   **Both pages** share one site:
 
   - Their titles put the page first and the site after: *… – The Citadel*.
-  - Each page is framed by a header at the top, holding the menu, and a footer at the bottom.
+  - Each page is framed by a header at the top, holding the menu or followed straight after by it, and a footer at the bottom.
   - The menu is the same on both pages: *Home, Get started, Photos, Gear, Forum, Letters*. It links to `index.html`, `get-started.html`, `photos.html`, `gear.html`, `forum.html` and `letter.html`, which all exist now. On each page, the link to that page itself is removed or marked as the current page.
   - The first focusable thing on each page is a link that skips to the `main` element.
 
@@ -671,17 +671,33 @@ grader:
           count: { min: 2 }
           text: { matches: '^\s*(HTML|CSS)\s*$' }
           concepts: [abbreviations]
+        - id: bce-marked
+          says: BCE is marked up as an abbreviation
+          pages: [letter]
+          selector: abbr
+          text: { matches: '^\s*BCE\s*$' }
+          concepts: [abbreviations]
         - id: abbr-bce
-          says: BCE is an abbreviation, expanded in a title or in the text beside it
+          says: BCE is expanded, in a title or in the text straight after it
           pages: [letter]
-          selector: 'abbr[title*="common era" i], :has(> abbr)'
-          text: { own: true, matches: '^\s*BCE\s*$|before (the )?common era' }
+          selector: 'abbr:not([title*="common era" i])'
+          count: { min: 0 }
+          every: true
+          text: { following: true, matches: '^(?!\s*BCE\b)|^\s*BCE\W{0,6}(that is,?\s*|i\.?\s*e\.?,?\s*)?before (the )?common era' }
           concepts: [abbreviations, abbr-expansion]
-        - id: abbr-esq
-          says: Esq. is an abbreviation, expanded in a title or in the text beside it
+        - id: esq-marked
+          says: Esq. is marked up as an abbreviation
           pages: [letter]
-          selector: 'abbr[title*="esquire" i], :has(> abbr)'
-          text: { own: true, matches: '^\s*Esq\.?\s*$|\besquire\b' }
+          selector: abbr
+          text: { matches: '^\s*Esq\.?\s*$' }
+          concepts: [abbreviations]
+        - id: abbr-esq
+          says: Esq. is expanded, in a title or in the text straight after it
+          pages: [letter]
+          selector: 'abbr:not([title*="esquire" i])'
+          count: { min: 0 }
+          every: true
+          text: { following: true, matches: '^(?!\s*Esq\b)|^\s*Esq\.?\W{0,6}(that is,?\s*)?esquire' }
           concepts: [abbreviations, abbr-expansion]
         - id: subscripts
           says: The four subscripts in the chemical formulae are marked up
@@ -1080,6 +1096,11 @@ fixtures:
         letter:
           edits:
             - { find: "<footer>", replace: "<footer><nav aria-label=\"Site map\"><ul><li><a href=\"gear.html\">Gear</a></li></ul></nav>" }
+    - name: BCE's expansion in italics after it
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr> (<i>before the Common Era</i>)" }
   fail:
     - name: the header inside main on the home page
       pages:
@@ -1190,3 +1211,11 @@ fixtures:
             - { find: "Turning H<sub>2</sub>O into wine", replace: "</li><li>Turning H<sub>2</sub>O into wine" }
       fails: [subjects-items]
       because: Each item of a list is one of the things listed; an empty item lists nothing.
+    - name: BCE left bare, its expansion dropped into another paragraph
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr>" }
+            - { find: "<abbr>PhD</abbr>", replace: "<abbr>PhD</abbr> (before the Common Era)" }
+      fails: [abbr-bce]
+      because: An expansion explains the abbreviation it stands beside, not one in another paragraph.

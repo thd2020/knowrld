@@ -170,7 +170,8 @@ grader:
       selector: 'nav a[href]:not([aria-current="page"], [aria-current="true"], [aria-current="location"])'
       count: { min: 0 }
       every: true
-      text: { not: '\btimetables?\b' }
+      # The label is this page's name alone; a link to another page may mention timetables ("Routes and timetables").
+      text: { not: '^\W*(ferry\s+)?timetables?(\s+page)?\W*$' }
       concepts: [navigation-menus]
     - id: links-resolve
       says: Every link within the site leads to a file that exists
@@ -225,6 +226,9 @@ fixtures:
     - name: a PDF icon inside the download link carries the file type
       edits:
         - { find: "Download the winter timetable (PDF, 2 MB)", replace: "Download the winter timetable <img src=\"images/pdf.svg\" alt=\"PDF\"> (2 MB)" }
+    - name: the routes link labelled "Routes and timetables"
+      edits:
+        - { find: '<li><a href="routes.html">Routes</a></li>', replace: '<li><a href="routes.html">Routes and timetables</a></li>' }
   fail:
     - name: the download link still reading "here"
       edits: [{ find: <a href="downloads/winter-timetable.pdf" download>Download the winter timetable (PDF, 2 MB)</a>., replace: 'Download the winter timetable (PDF, 2 MB) <a href="downloads/winter-timetable.pdf" download>here</a>.' }]

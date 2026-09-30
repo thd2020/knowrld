@@ -125,6 +125,11 @@ grader:
       every: true
       text: { not: '^\s*(Keeper.s Handbook|Lighting the lamp|Trimming the wick|Cleaning the lens|Logging the weather|Storm signals|Handing over the watch)\s*$' }
       concepts: [semantics, presentational-elements]
+    - id: real-heading-elements
+      says: Every heading is an h1 to h6 element, not another element given a heading role
+      selector: '[role~="heading" i]:not(h1, h2, h3, h4, h5, h6)'
+      count: { max: 0 }
+      concepts: [semantics]
 fixtures:
   pass:
     - name: sections wrapped in section elements, the title in a header
@@ -183,6 +188,11 @@ fixtures:
       edits:
         - { find: "<p>Everything a new keeper needs for the first season on the rock.</p>", replace: "<p>Everything a new keeper needs for the first season on the rock.</p><nav><ul><li><a href=\"#lamp\">Lighting the lamp</a></li><li><a href=\"#weather\">Logging the weather</a></li><li><a href=\"#watch\">Handing over the watch</a></li></ul></nav>" }
   fail:
+    - name: a link given a heading role for Logging the weather
+      edits:
+        - { find: "<h2>Logging the weather</h2>", replace: "<a role=\"heading\" aria-level=\"2\">Logging the weather</a>" }
+      fails: [real-heading-elements]
+      because: Only the h1 to h6 elements are headings the page's outline can count on; a role on another element is a fake with extra steps.
     - name: an h1 for every section, as in the old outline algorithm
       edits:
         - { find: <h2>Lighting the lamp</h2>, replace: <h1>Lighting the lamp</h1> }

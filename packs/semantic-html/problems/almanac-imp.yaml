@@ -154,7 +154,8 @@ grader:
       selector: 'address br'
       count: { min: 0 }
       every: true
-      next: [{ is: br, absent: true }]
+      # Any element with no text (a br, an empty span) straight after a break leaves a blank line; an image does not.
+      next: [{ is: ':not(img, svg, picture, video, canvas, object, iframe, :has(img, svg, picture, video, canvas, object, iframe))', text: { matches: '^\s*$' }, absent: true }]
       concepts: [breaks-with-meaning]
     - id: address-contact-only
       says: The address holds contact details only, not the publication date
@@ -179,7 +180,8 @@ grader:
       concepts: [breaks-and-rules]
     - id: no-empty-paragraphs
       says: No empty paragraph or box is used for spacing
-      selector: 'p, div'
+      selector: 'p:not(:has(img, svg, picture, video, canvas, object, iframe)), div:not(:has(img, svg, picture, video, canvas, object, iframe))'
+      count: { min: 0 }
       every: true
       text: { matches: '\S' }
       concepts: [breaks-and-rules]
@@ -255,6 +257,9 @@ fixtures:
                       Tide House, Quay Street<br>
                       Port-Brume<br>
           replace: <div>Mira Tallow</div><div>Tide House, Quay Street</div><div>Port-Brume</div>
+    - name: a paragraph holding only a picture of the tide curve
+      edits:
+        - { find: "<p>Readings for", replace: "<p><img src=\"/images/tide-curve.png\" alt=\"Tide curve for 5 to 7 January, peaking at 5.2 metres on the evening of the 6th\"></p><p>Readings for" }
   fail:
     - name: the dash left in the range
       edits:
@@ -313,6 +318,16 @@ fixtures:
           replace: Mira Tallow, Tide House, Quay Street, Port-Brume, <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a><br><br><br>
       fails: [address-no-blank-lines]
       because: The line breaks must separate the details; piled up at the end they only add empty lines.
+    - name: the contact details on one line, with empty spans slipped between the line breaks
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: Mira Tallow, Tide House, Quay Street, Port-Brume, <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a><br><span></span><br><span> </span><br>
+      fails: [address-no-blank-lines]
+      because: An empty span between two breaks still leaves a blank line.
     - name: spacing made with empty divs
       edits:
         - { find: "<p>Readings for", replace: "<div>&nbsp;</div><div>&nbsp;</div><p>Readings for" }

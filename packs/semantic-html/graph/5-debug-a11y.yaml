@@ -290,7 +290,7 @@ nodes:
           - No alt attribute at all, since the image has no meaning
           - alt="icon" so screen readers know what it is
         answer: 0
-        explain: An empty alt makes a screen reader recognise the image without describing it; it just says "image" or similar. Without any alt, many read out the file name or URL.
+        explain: An empty alt marks the image as decoration, which non-visual browsers may leave out, so screen readers pass over it. Without any alt, many read out the file name or URL.
       - prompt: What may a screen reader do with an image that has no alt?
         choices:
           - Skip it silently, as if the image were not on the page

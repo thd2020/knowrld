@@ -189,6 +189,31 @@ describe("multi-page grading", () => {
   });
 });
 
+describe("text, rendering and the heading outline", () => {
+  it("reads text without script, style, template or noscript contents", () => {
+    const d = doc(`<p>Tide<script>var x = 1;</script><style>p{}</style><template>t</template><noscript>n</noscript> tables</p>`);
+    expect(pass(d, { selector: "p", text: { matches: "^Tide tables$" } }).pass).toBe(true);
+  });
+
+  it("with rendered, skips hidden elements and hidden text", () => {
+    const d = doc(`<p hidden>Members only</p><p>Archive<span style="display:none"> (members only)</span></p><p class="gone">members only</p>`, "<style>.gone { display: none }</style>");
+    expect(pass(d, { selector: "p", text: { matches: "members only" } }).pass).toBe(true);
+    const r = pass(d, { selector: "p", rendered: true, text: { matches: "members only" } });
+    expect(r.pass).toBe(false);
+    expect(pass(doc(`<p>Archive <span aria-hidden="true">(members only)</span></p>`), { selector: "p", rendered: true, text: { matches: "members only" } }).pass).toBe(true);
+  });
+
+  it("checks a heading's parent in the outline", () => {
+    const d = doc(`<h1>Book</h1><h2>Lamp</h2><h3>Wick</h3><h2>Weather</h2><p hidden>Lamp Wick Weather Storm</p><h2>Watch</h2><h3>Storm</h3>`);
+    const storm = { selector: "h3", text: { matches: "^Storm$" }, under: { matches: "^Weather$" } };
+    expect(pass(d, storm).pass).toBe(false);
+    expect(pass(d, { ...storm, every: true, text: undefined, selector: "h3:last-of-type" }).detail).toMatch(/sits under <h2> whose text|sits under <h2>, whose text/);
+    expect(pass(d, { selector: "h3", text: { matches: "^Wick$" }, under: { matches: "^Lamp$" } }).pass).toBe(true);
+    expect(pass(d, { selector: "h1", under: { matches: "." } }).detail).toMatch(/no heading of a higher rank/);
+    expect(pass(doc("<p>x</p>"), { selector: "p", under: { matches: "." } }).detail).toMatch(/not a visible heading/);
+  });
+});
+
 describe("axe checks", () => {
   const d = doc("<p>x</p>");
   it("fail when the host did not run the rules", () => {

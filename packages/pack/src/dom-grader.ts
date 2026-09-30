@@ -139,6 +139,51 @@ function resolveHref(href: string, page: GradedPage, pages: GradedPage[], files:
   return `href="${href}": no element has id="${frag}" on ${where}`;
 }
 
+const NOT_TEXT = new Set(["SCRIPT", "STYLE", "TEMPLATE", "NOSCRIPT"]);
+
+// Rendered as far as the DOM can tell: no hidden attribute on it or an ancestor, and no computed
+// display: none (on it or an ancestor) or visibility: hidden. Unlike isHidden, aria-hidden does not
+// count: aria-hidden content is still on screen.
+export function isRendered(el: Element): boolean {
+  if (el.closest("[hidden]")) return false;
+  const view = el.ownerDocument.defaultView;
+  try {
+    for (let e: Element | null = el; e; e = e.parentElement) {
+      const s = view?.getComputedStyle(e);
+      if (s && (s.display === "none" || (e === el && s.visibility === "hidden"))) return false;
+    }
+  } catch {
+    // No computed styles in this DOM; attributes alone decide.
+  }
+  return true;
+}
+
+// An element's text, without the contents of script, style, template and noscript, and with
+// `rendered`, without anything hidden. With `own`, only its own text nodes.
+export function textOf(el: Element, opts: { own?: boolean; rendered?: boolean } = {}): string {
+  let out = "";
+  for (const n of el.childNodes) {
+    if (n.nodeType === 3) out += n.nodeValue ?? "";
+    else if (n.nodeType === 1 && !opts.own) {
+      const c = n as Element;
+      if (NOT_TEXT.has(c.tagName.toUpperCase())) continue;
+      if (opts.rendered && !isRendered(c)) continue;
+      out += textOf(c, opts);
+    }
+  }
+  return out;
+}
+
+// The heading's parent in the outline: the nearest earlier visible heading of a higher rank.
+function parentHeading(el: Element): Element | null | undefined {
+  const all = [...el.ownerDocument.querySelectorAll("h1, h2, h3, h4, h5, h6, [role=heading]")].filter((h) => !isHidden(h));
+  const i = all.indexOf(el);
+  if (i < 0) return undefined;
+  const level = headingLevel(el);
+  for (let j = i - 1; j >= 0; j--) if (headingLevel(all[j]!) < level) return all[j]!;
+  return null;
+}
+
 function outlineFails(el: Element, start: number | undefined): string | undefined {
   const heads = [...el.querySelectorAll("h1, h2, h3, h4, h5, h6, [role=heading]")].filter((h) => !isHidden(h));
   const levels = heads.map(headingLevel);
@@ -182,6 +227,7 @@ function select(c: DomCheck, doc: Document): Element[] | string {
   }
   if (c.within) els = els.filter((e) => e.parentElement?.closest(c.within!));
   if (c.role) els = els.filter((e) => computedRole(e) === c.role);
+  if (c.rendered) els = els.filter(isRendered);
   return els;
 }
 
@@ -227,10 +273,14 @@ function assess(
       }
     }
     if (c.text) {
-      const t = c.text.own
-        ? [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.nodeValue).join("")
-        : (el.textContent ?? "");
-      const why = textFails(t, c.text, "text");
+      const why = textFails(textOf(el, { own: c.text.own, rendered: c.rendered }), c.text, "text");
+      if (why) return why;
+    }
+    if (c.under) {
+      const parent = parentHeading(el);
+      if (parent === undefined) return "is not a visible heading";
+      if (parent === null) return "has no heading of a higher rank before it";
+      const why = textFails(parent.textContent ?? "", c.under, `sits under ${tag(parent)}, whose text`);
       if (why) return why;
     }
     if (c.name) {

@@ -43,7 +43,9 @@ A DOM check first selects elements, then asserts something about them.
 - **Asserting on the selection.** `unique` names an attribute (or `text`) whose values must all differ, for example `unique: id` on `[id]`.
 - **Asserting on elements.** These must hold for one selected element, or for every one with `every: true`:
   - `attr`: an attribute is present, absent, equal to a value or matching a pattern;
-  - `text`: the text matches or must not match a pattern (`own: true` looks only at the element's own text nodes, to find loose text);
+  - `text`: the text matches or must not match a pattern (`own: true` looks only at the element's own text nodes, to find loose text); text never includes script, style, template or noscript contents);
+  - `rendered: true` keeps only rendered elements (none inside `hidden`, `display: none` or `visibility: hidden`), and `text` then reads rendered text only;
+  - `under`: the element is a heading whose parent in the outline, the nearest earlier heading of a higher rank, has text matching the pattern;
   - `name`: the accessible name, as a screen reader would announce it (aria-labelledby, aria-label, alt, content, title), matches or must not match;
   - `style`: a computed style;
   - `datetime`: the element's machine-readable date or time (its `datetime` attribute, or its text when it has none) is valid under the HTML standard's date and time microsyntaxes;

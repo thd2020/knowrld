@@ -115,8 +115,8 @@ grader:
       attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\s*\(\s*\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
       concepts: [native-controls]
     - id: keyboard-reachable
-      says: No link or button is taken out of the keyboard's reach with a negative tabindex, inert or aria-hidden
-      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *)'
+      says: No link or button is taken out of the keyboard's reach with a negative tabindex, inert, aria-hidden or a disabled fieldset (a duplicate link hidden from both, as in a card, is fine)
+      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *, fieldset[disabled] *):not(a[href]:not([href^="#"])[aria-hidden="true"][tabindex^="-"])'
       count: { max: 0 }
       concepts: [native-controls, skip-links]
     - id: buttons-enabled
@@ -185,6 +185,10 @@ fixtures:
         - { find: '<a href="#main-content">Skip to main content</a>', replace: "" }
         - { find: "<header>", replace: "<header><a href=\"#main-content\">Skip to main content</a>" }
         - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket ()"' }
+    - name: the product picture also linked, hidden from keyboards and screen readers as a duplicate
+      edits:
+        - find: <img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard">
+          replace: <a href="/lanterns/storm-lantern.html" aria-hidden="true" tabindex="-1"><img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard"></a>
   fail:
     - name: a div given a button role and a tabindex
       edits:
@@ -248,3 +252,9 @@ fixtures:
         - { find: '<a href="#main-content">', replace: '<a href="#main-content" tabindex="-1">' }
       fails: [keyboard-reachable]
       because: A skip link exists for keyboard users; one they cannot tab to skips nothing.
+    - name: the buttons inside a disabled fieldset
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<fieldset disabled><button type="button" onclick="addToBasket()">' }
+        - { find: 'Add to basket</button>', replace: 'Add to basket</button></fieldset>' }
+      fails: [keyboard-reachable]
+      because: A disabled fieldset disables every control in it; nobody can press the button.

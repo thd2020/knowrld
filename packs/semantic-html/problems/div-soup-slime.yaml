@@ -10,7 +10,7 @@ statement: |
   - the related climbs, which sit beside the post rather than in it;
   - the site's footer.
 
-  Leave nothing hidden in the markup. Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
+  Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
 starter:
   html: |
     <!doctype html>
@@ -160,11 +160,6 @@ grader:
       selector: ':not(header)[role~="banner"], :not(footer)[role~="contentinfo"], :not(main)[role~="main"], :not(nav)[role~="navigation"], :not(aside)[role~="complementary"], :not(article)[role~="article"]'
       count: { max: 0 }
       concepts: [landmarks, non-semantic-wrappers]
-    - id: nothing-hidden
-      says: Nothing is hidden on the page; every part of it is for readers
-      selector: '[hidden], [style*="display:none" i], [style*="display: none" i]'
-      count: { max: 0 }
-      concepts: [page-regions]
     - id: menu-list
       says: The menu is still a list of links
       selector: ':is(header:has(h1) nav, header:has(h1) + nav) ul > li > a'
@@ -351,6 +346,12 @@ fixtures:
     - name: a second, smaller nav in the footer
       edits:
         - { find: "<p>© 2027 High Paths, the blog of the Spire Club.</p>", replace: "<nav aria-label=\"Legal\"><ul><li><a href=\"/privacy.html\">Privacy</a></li></ul></nav><p>© 2027 High Paths, the blog of the Spire Club.</p>" }
+    - name: an SVG icon sprite kept out of sight with display:none
+      edits:
+        - { find: "<div class=\"page-width\">", replace: "<svg style=\"display: none\"><symbol id=\"icon-rope\" viewBox=\"0 0 16 16\"><circle cx=\"8\" cy=\"8\" r=\"6\"/></symbol></svg><div class=\"page-width\">" }
+    - name: a reply form hidden until someone asks to comment
+      edits:
+        - { find: "<h3>Comments</h3>", replace: "<h3>Comments</h3><form hidden><label>Your comment <textarea name=\"comment\"></textarea></label><button>Post</button></form>" }
   fail:
     - name: the related climbs in a second main
       edits:

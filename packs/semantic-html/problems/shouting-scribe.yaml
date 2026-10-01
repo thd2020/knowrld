@@ -1,0 +1,229 @@
+id: shouting-scribe
+statement: |
+  The Shouting Scribe paints every word it cares about bold, italic or underlined, and a screen reader hears none of it. Rewrite the Hollow Oak Apothecary's notice so that each phrase is marked for what it *means*, not how it should look:
+
+  - the safety warning **Do not touch the blue flask** is important;
+  - in *We open after the evening bells, not before*, the stress on **after** is what changes the sentence's meaning;
+  - the mandrake's species name, **Mandragora officinarum**, is set off from the prose as a taxonomic name;
+  - **caveat emptor** is an idiom from another language, Latin, and a screen reader should know which;
+  - in the customer's review, draw the reader's eye to the product names **Moonwater Tonic** and **Ember Salve** without calling them important;
+  - the customer's misspelling, **recieve**, is kept as she wrote it and annotated as a misspelling;
+  - in the search results, highlight the word that matched the search in each result.
+
+  Underlining on the web says "link", so apart from the annotated misspelling (and real links) nothing is underlined: not with an element, an inline style, a bottom border or a style rule. Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>This week at the apothecary – Hollow Oak Apothecary</title>
+      </head>
+      <body>
+        <h1><u>Hollow Oak Apothecary</u></h1>
+        <p><b>Do not touch the blue flask.</b> Its fumes blister the skin.</p>
+        <p>We open <i>after</i> the evening bells, not before.</p>
+        <p>This week's root is the mandrake, <b>Mandragora officinarum</b>. Buy what you like, but remember: <u>caveat emptor</u>.</p>
+        <h2>What customers say</h2>
+        <blockquote>
+          <p>The <i>Moonwater Tonic</i> cured my cough in a day. I did not <b>recieve</b> the <i>Ember Salve</i> in time for the frost, but it came in the end.</p>
+        </blockquote>
+        <p>Tamsin, a regular, whose spelling we keep as she wrote it.</p>
+        <h2>Search results for "salve"</h2>
+        <ul>
+          <li><u>Ember Salve</u>, 3 silver</li>
+          <li><u>Salve of Quiet Sleep</u>, 5 silver</li>
+        </ul>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>This week at the apothecary – Hollow Oak Apothecary</title>
+      </head>
+      <body>
+        <h1>Hollow Oak Apothecary</h1>
+        <p><strong>Do not touch the blue flask.</strong> Its fumes blister the skin.</p>
+        <p>We open <em>after</em> the evening bells, not before.</p>
+        <p>This week's root is the mandrake, <i>Mandragora officinarum</i>. Buy what you like, but remember: <i lang="la">caveat emptor</i>.</p>
+        <h2>What customers say</h2>
+        <blockquote>
+          <p>The <b>Moonwater Tonic</b> cured my cough in a day. I did not <u>recieve</u> the <b>Ember Salve</b> in time for the frost, but it came in the end.</p>
+        </blockquote>
+        <p>Tamsin, a regular, whose spelling we keep as she wrote it.</p>
+        <h2>Search results for "salve"</h2>
+        <ul>
+          <li>Ember <mark>Salve</mark>, 3 silver</li>
+          <li><mark>Salve</mark> of Quiet Sleep, 5 silver</li>
+        </ul>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: warning
+      says: The warning about the blue flask is marked as important
+      selector: strong
+      text: { matches: 'Do not touch the blue flask' }
+      concepts: [emphasis-and-importance, strong-and-b]
+    - id: strong-for-importance
+      says: Strong importance is kept for the warning
+      selector: strong
+      count: { min: 0 }
+      every: true
+      text: { matches: 'Do not touch the blue flask|fumes blister' }
+      concepts: [strong-and-b]
+    - id: stress
+      says: The stress on "after" is marked as emphasis, and nothing else is
+      selector: em
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*after\s*$' }
+      concepts: [emphasis-and-importance, em-and-i]
+    - id: species
+      says: The species name is set off from the prose
+      selector: i
+      text: { matches: '^\s*Mandragora officinarum\s*$' }
+      concepts: [em-and-i]
+    - id: latin
+      says: The Latin idiom is set off and marked as Latin
+      selector: 'i:lang(la)'
+      text: { matches: '^\s*caveat emptor\s*$' }
+      concepts: [em-and-i, language-tags]
+    - id: i-set-off-only
+      says: Idiomatic text is used only for the species name and the Latin idiom
+      selector: i
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: '^\s*(Mandragora officinarum|caveat emptor)\s*$' }
+      concepts: [em-and-i, presentational-elements]
+    - id: products
+      says: The review draws attention to the two product names, without importance
+      selector: 'blockquote b'
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: '^\s*(Moonwater Tonic|Ember Salve)\s*$' }
+      concepts: [strong-and-b]
+    - id: b-keywords-only
+      says: Bold text is used only to draw attention to product names
+      selector: b
+      count: { min: 0 }
+      every: true
+      text: { matches: '^\s*(Moonwater Tonic|Ember Salve|Salve of Quiet Sleep)\s*$' }
+      concepts: [strong-and-b, presentational-elements]
+    - id: misspelling
+      says: The misspelling is the only underlined text
+      selector: u
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*recieve\s*$' }
+      concepts: [u-annotation]
+    - id: no-decorative-underline
+      says: Nothing but the misspelling (and links) is underlined, not with an inline style, a border, a box shadow or a style rule
+      selector: ':is([style*="underline" i], [style*="border-bottom" i], [style*="box-shadow" i]):not(u, a)'
+      count: { max: 0 }
+      concepts: [u-annotation, presentational-elements]
+    - id: no-underline-rules
+      says: No style rule underlines anything but u or a link (judged by the last part of each selector)
+      selector: style
+      count: { min: 0 }
+      every: true
+      text: { not: '(?:^|[{}])\s*(?:[^{};@]*,\s*)?(?:[^{};,@]*[\s>+~])?(?!(?:u|a)(?![\w-]))[^{};,\s>+~]+\s*(?:,[^{};@]*)?\{[^}]*(?:underline|border-bottom)' }
+      concepts: [u-annotation, presentational-elements]
+    - id: search-matches
+      says: The matched word is highlighted in each search result
+      selector: 'li mark'
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: '^\s*salve\s*$' }
+      concepts: [inline-semantics]
+    - id: mark-for-matches
+      says: Highlighting is kept for the search matches
+      selector: mark
+      count: { min: 2, max: 2 }
+      concepts: [inline-semantics]
+fixtures:
+  pass:
+    - name: a longer warning, the language on a wrapper, an annotated misspelling
+      edits:
+        - find: <p><strong>Do not touch the blue flask.</strong> Its fumes blister the skin.</p>
+          replace: '<p><strong>Warning: Do not touch the blue flask. Its fumes blister the skin.</strong></p>'
+        - find: <i lang="la">caveat emptor</i>
+          replace: <span lang="la"><i>caveat emptor</i></span>
+        - find: <u>recieve</u>
+          replace: <u class="spelling" title="misspelled">recieve</u>
+    - name: the shop name styled through a class, product names bold in the results too
+      edits:
+        - find: <h1>Hollow Oak Apothecary</h1>
+          replace: <h1><span class="shop-name">Hollow Oak Apothecary</span></h1>
+        - find: <li>Ember <mark>Salve</mark>, 3 silver</li>
+          replace: <li><b>Ember <mark>Salve</mark></b>, 3 silver</li>
+        - find: <li><mark>Salve</mark> of Quiet Sleep, 5 silver</li>
+          replace: <li><b><mark>Salve</mark> of Quiet Sleep</b>, 5 silver</li>
+    - name: both warning sentences important, the idiom with a regional Latin tag
+      edits:
+        - find: <p><strong>Do not touch the blue flask.</strong> Its fumes blister the skin.</p>
+          replace: <p><strong>Do not touch the blue flask.</strong> <strong>Its fumes blister the skin.</strong></p>
+        - find: <i lang="la">caveat emptor</i>
+          replace: <i lang="la-x-classic">caveat emptor</i>
+    - name: the heading links home, with an inline underline on the link
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1><a href=\"/\" style=\"text-decoration: underline\">Hollow Oak Apothecary</a></h1>" }
+    - name: style rules that underline only u and links
+      edits:
+        - { find: "</head>", replace: "<style>body { font-family: serif; } u { text-decoration: red wavy underline; } mark { background: gold; } a:hover { text-decoration: underline; } nav a, u.spelling { text-decoration: underline; }</style></head>" }
+  fail:
+    - name: the decorative underline kept on the shop name
+      edits: [{ find: <h1>Hollow Oak Apothecary</h1>, replace: <h1><u>Hollow Oak Apothecary</u></h1> }]
+      fails: [misspelling]
+      because: An underline on the web says "link"; u is for annotations such as a misspelling.
+    - name: the Latin idiom without its language
+      edits: [{ find: <i lang="la">caveat emptor</i>, replace: <i>caveat emptor</i> }]
+      fails: [latin]
+      because: Without lang, a screen reader reads the Latin with English pronunciation.
+    - name: emphasis used for the species name
+      edits: [{ find: <i>Mandragora officinarum</i>, replace: <em>Mandragora officinarum</em> }]
+      fails: [species, i-set-off-only, stress]
+      because: A taxonomic name is set off, not stressed; em would change how the sentence is spoken.
+    - name: product names marked as important
+      edits:
+        - { find: <b>Moonwater Tonic</b>, replace: <strong>Moonwater Tonic</strong> }
+        - { find: <b>Ember Salve</b>, replace: <strong>Ember Salve</strong> }
+      fails: [products, strong-for-importance]
+      because: The product names only need attention; strong claims they matter more than the rest.
+    - name: whole product names highlighted in the results
+      edits:
+        - find: <li>Ember <mark>Salve</mark>, 3 silver</li>
+          replace: <li><mark>Ember Salve</mark>, 3 silver</li>
+      fails: [search-matches]
+      because: Only the word that matched the search is relevant to the reader's search.
+    - name: strong importance on "after"
+      edits: [{ find: <em>after</em>, replace: <strong>after</strong> }]
+      fails: [stress, strong-for-importance]
+      because: The word is stressed to change the meaning, not marked as more important.
+    - name: the heading underlined with an inline style
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"text-decoration: underline\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: Underlined text reads as a link whatever draws the line, so decoration by inline style is the same mistake as u.
+    - name: the heading underlined with an inline box shadow
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"box-shadow: 0 2px 0 currentColor\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: A line drawn under the text by a shadow is still an underline.
+    - name: the heading underlined by a style rule
+      edits:
+        - { find: "</head>", replace: "<style>h1 { text-decoration: underline; }</style></head>" }
+      fails: [no-underline-rules]
+      because: An underline reads as a link wherever it comes from, the stylesheet included.
+    - name: the heading underlined with a bottom border
+      edits:
+        - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"border-bottom: 1px solid\">Hollow Oak Apothecary</h1>" }
+      fails: [no-decorative-underline]
+      because: A bottom border under text draws the same line as an underline.
+    - name: a rule that underlines links and the heading together
+      edits:
+        - { find: "</head>", replace: "<style>a, h1 { text-decoration: underline; }</style></head>" }
+      fails: [no-underline-rules]
+      because: Listing a beside h1 does not make the heading a link; it is still underlined for decoration.

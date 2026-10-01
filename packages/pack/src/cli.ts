@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { loadPack, type Issue } from "./load.ts";
 import { validatePack } from "./validate.ts";
+import { fixtureCode, problemPages, problemStages, siteFiles } from "./problem.ts";
 
 const [command, dir, ...rest] = process.argv.slice(2);
 if (!command || !dir) {
@@ -27,7 +28,16 @@ if (command === "validate") {
   const out = rest[rest.indexOf("-o") + 1];
   if (!out || !rest.includes("-o")) throw new Error("selftest needs -o <file>");
   mkdirSync(dirname(out), { recursive: true });
-  const cases = pack.problems.map((p) => ({ id: p.id, starter: p.starter, solution: p.solution, checks: p.grader.checks }));
+  // Each case: the pages with starter and reference solution, the stages of checks, the site's
+  // other files, and the fixture answers that must pass or fail.
+  const cases = pack.problems.map((p) => ({
+    id: p.id,
+    pages: problemPages(p),
+    stages: problemStages(p),
+    files: siteFiles(p),
+    pass: (p.fixtures?.pass ?? []).map((f) => ({ name: f.name, code: fixtureCode(p, f) })),
+    fail: (p.fixtures?.fail ?? []).map((f) => ({ name: f.name, code: fixtureCode(p, f), fails: f.fails ?? [] })),
+  }));
   writeFileSync(out, JSON.stringify(cases));
   console.log(`wrote ${out}`);
 } else if (command === "verify") {

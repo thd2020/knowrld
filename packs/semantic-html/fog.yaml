@@ -1,0 +1,816 @@
+# The Semantic HTML region's map beyond its quoted pages: MDN pages listed, not taught here.
+# Computed by tools/semantic-html/fog.mjs (engine repo) from the tome index of mdn/content at dd70ed064388b0fac4338321f727c8840a508b64.
+# tier country: a page the road links to that belongs to this region but is not quoted, or one promoted by judgement
+# (JUDGED_COUNTRY in fog.mjs: the landmark roles, aria-labelledby, the search element and four glossary terms) (45).
+# tier wilderness: a page the road links to that belongs to a later region (its home), or a page one link
+# beyond a quoted country page (104; homes: css, forms, interactive, javascript, media, obsolete, tables). Glossary pages beyond the country are
+# kept only when a quoted passage links to them. 4 deprecated or non-standard pages beyond the road are left out.
+# Titles and URLs only; no MDN text is quoted here.
+pages:
+  - slug: Glossary/Accessible_name
+    title: Accessible name
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Accessible_name
+  - slug: Glossary/BCP_47_language_tag
+    title: BCP 47 language tag
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag
+  - slug: Glossary/Boolean/HTML
+    title: Boolean attribute (HTML)
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Boolean/HTML
+  - slug: Glossary/Card_sorting
+    title: Card sorting
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Card_sorting
+  - slug: Glossary/Character_reference
+    title: Character reference
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Character_reference
+  - slug: Glossary/Doctype
+    title: Doctype
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Doctype
+  - slug: Glossary/DOM
+    title: DOM (Document Object Model)
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/DOM
+  - slug: Glossary/Domain_name
+    title: Domain name
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Domain_name
+  - slug: Glossary/Element
+    title: Element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Element
+  - slug: Glossary/Head
+    title: Head
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Head
+  - slug: Glossary/HTML
+    title: HTML
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/HTML
+  - slug: Glossary/Information_architecture
+    title: Information architecture
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Information_architecture
+  - slug: Glossary/Metadata
+    title: Metadata
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Metadata
+  - slug: Glossary/Percent-encoding
+    title: Percent-encoding
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding
+  - slug: Glossary/SSG
+    title: Static site generator (SSG)
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/SSG
+  - slug: Glossary/Tag
+    title: Tag
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Tag
+  - slug: Glossary/URL
+    title: URL
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/URL
+  - slug: Glossary/Void_element
+    title: Void element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Void_element
+  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
+    title: "ARIA: aria-labelledby attribute"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby
+  - slug: Web/Accessibility/ARIA/Reference/Roles
+    title: WAI-ARIA Roles
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles
+  - slug: Web/Accessibility/ARIA/Reference/Roles/banner_role
+    title: "ARIA: banner role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/banner_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/complementary_role
+    title: "ARIA: complementary role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/complementary_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/main_role
+    title: "ARIA: main role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/main_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/navigation_role
+    title: "ARIA: navigation role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/navigation_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/presentation_role
+    title: "ARIA: presentation role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/presentation_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/search_role
+    title: "ARIA: search role"
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/search_role
+  - slug: Web/HTML/Reference/Elements
+    title: HTML elements reference
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements
+  - slug: Web/HTML/Reference/Elements/body
+    title: <body> HTML document body element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/body
+  - slug: Web/HTML/Reference/Elements/button
+    title: <button> HTML button element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button
+  - slug: Web/HTML/Reference/Elements/code
+    title: <code> HTML inline code element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/code
+  - slug: Web/HTML/Reference/Elements/dd
+    title: <dd> HTML description details element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dd
+  - slug: Web/HTML/Reference/Elements/div
+    title: <div> HTML content division element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/div
+  - slug: Web/HTML/Reference/Elements/head
+    title: <head> HTML document metadata (header) element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/head
+  - slug: Web/HTML/Reference/Elements/link
+    title: <link> HTML external resource link element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/link
+  - slug: Web/HTML/Reference/Elements/p
+    title: <p> HTML paragraph element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p
+  - slug: Web/HTML/Reference/Elements/q
+    title: <q> HTML inline quotation element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/q
+  - slug: Web/HTML/Reference/Elements/samp
+    title: <samp> HTML sample output element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/samp
+  - slug: Web/HTML/Reference/Elements/script
+    title: <script> HTML script element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script
+  - slug: Web/HTML/Reference/Elements/search
+    title: <search> HTML generic search element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/search
+  - slug: Web/HTML/Reference/Elements/span
+    title: <span> HTML content span element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/span
+  - slug: Web/HTML/Reference/Elements/ul
+    title: <ul> HTML unordered list element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul
+  - slug: Web/HTML/Reference/Elements/var
+    title: <var> HTML variable element
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/var
+  - slug: Web/HTML/Reference/Global_attributes/class
+    title: class HTML global attribute
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/class
+  - slug: Web/HTML/Reference/Global_attributes/tabindex
+    title: tabindex HTML global attribute
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex
+  - slug: Web/HTML/Reference/Global_attributes/title
+    title: title HTML global attribute
+    region: semantic-html
+    tier: country
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/title
+  - slug: Glossary/Accessibility
+    title: Accessibility
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Accessibility
+  - slug: Glossary/Browser
+    title: Browser
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Browser
+  - slug: Glossary/Viewport
+    title: Viewport
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Viewport
+  - slug: Glossary/XHTML
+    title: XHTML
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Glossary/XHTML
+  - slug: Web/Accessibility/ARIA
+    title: ARIA
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA
+  - slug: Web/Accessibility/ARIA/Reference/Roles/article_role
+    title: "ARIA: article role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/article_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/document_role
+    title: "ARIA: document role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/document_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/generic_role
+    title: "ARIA: generic role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/generic_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/group_role
+    title: "ARIA: group role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/group_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/heading_role
+    title: "ARIA: heading role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/heading_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/link_role
+    title: "ARIA: link role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/link_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/list_role
+    title: "ARIA: list role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/listitem_role
+    title: "ARIA: listitem role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/listitem_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/none_role
+    title: "ARIA: none role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/none_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/note_role
+    title: "ARIA: note role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/note_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/separator_role
+    title: "ARIA: separator role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/separator_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/structural_roles
+    title: "ARIA: document structural roles"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/structural_roles
+  - slug: Web/Accessibility/ARIA/Reference/Roles/term_role
+    title: "ARIA: term role"
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/term_role
+  - slug: Web/HTML/Guides/Content_categories
+    title: Content categories
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Content_categories
+  - slug: Web/HTML/Guides/Microdata
+    title: Using microdata in HTML
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Microdata
+  - slug: Web/HTML/Reference/Attributes/content
+    title: content HTML attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/content
+  - slug: Web/HTML/Reference/Attributes/rel
+    title: rel HTML attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel
+  - slug: Web/HTML/Reference/Attributes/rel/noopener
+    title: rel="noopener" HTML attribute value
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/noopener
+  - slug: Web/HTML/Reference/Attributes/rel/noreferrer
+    title: rel="noreferrer" HTML attribute value
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/noreferrer
+  - slug: Web/HTML/Reference/Elements/base
+    title: <base> HTML document base URL element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/base
+  - slug: Web/HTML/Reference/Elements/bdo
+    title: <bdo> HTML bidirectional text override element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/bdo
+  - slug: Web/HTML/Reference/Elements/data
+    title: <data> HTML data element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/data
+  - slug: Web/HTML/Reference/Elements/del
+    title: <del> HTML deleted text element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/del
+  - slug: Web/HTML/Reference/Elements/hgroup
+    title: <hgroup> HTML heading group element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/hgroup
+  - slug: Web/HTML/Reference/Elements/ins
+    title: <ins> HTML inserted text element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ins
+  - slug: Web/HTML/Reference/Elements/meta/http-equiv
+    title: <meta http-equiv> HTML attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/http-equiv
+  - slug: Web/HTML/Reference/Elements/meta/name
+    title: <meta name> HTML attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/name
+  - slug: Web/HTML/Reference/Elements/meta/name/theme-color
+    title: <meta name="theme-color"> HTML attribute value
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/name/theme-color
+  - slug: Web/HTML/Reference/Elements/rp
+    title: <rp> HTML ruby fallback parenthesis element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rp
+  - slug: Web/HTML/Reference/Elements/rt
+    title: <rt> HTML ruby text element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rt
+  - slug: Web/HTML/Reference/Elements/ruby
+    title: <ruby> HTML ruby annotation element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ruby
+  - slug: Web/HTML/Reference/Elements/style
+    title: <style> HTML style information element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/style
+  - slug: Web/HTML/Reference/Elements/wbr
+    title: <wbr> HTML line break opportunity element
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr
+  - slug: Web/HTML/Reference/Global_attributes
+    title: Global attributes
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes
+  - slug: Web/HTML/Reference/Global_attributes/headingoffset
+    title: headingoffset HTML global attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/headingoffset
+  - slug: Web/HTML/Reference/Global_attributes/headingreset
+    title: headingreset HTML global attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/headingreset
+  - slug: Web/HTML/Reference/Global_attributes/translate
+    title: translate HTML global attribute
+    region: semantic-html
+    tier: wilderness
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/translate
+  - slug: Glossary/Block/CSS
+    title: Block (CSS)
+    region: semantic-html
+    tier: wilderness
+    home: css
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Block/CSS
+  - slug: Glossary/CSS
+    title: CSS
+    region: semantic-html
+    tier: wilderness
+    home: css
+    url: https://developer.mozilla.org/en-US/docs/Glossary/CSS
+  - slug: Web/Accessibility/ARIA/Reference/Roles/checkbox_role
+    title: "ARIA: checkbox role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/checkbox_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/form_role
+    title: "ARIA: form role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/form_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/listbox_role
+    title: "ARIA: listbox role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/listbox_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/option_role
+    title: "ARIA: option role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/option_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/radio_role
+    title: "ARIA: radio role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/radio_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/radiogroup_role
+    title: "ARIA: radiogroup role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/radiogroup_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/switch_role
+    title: "ARIA: switch role"
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/switch_role
+  - slug: Web/HTML/Reference/Elements/form
+    title: <form> HTML form element
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form
+  - slug: Web/HTML/Reference/Elements/input
+    title: <input> HTML input element
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input
+  - slug: Web/HTML/Reference/Elements/label
+    title: <label> HTML label element
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
+  - slug: Web/HTML/Reference/Elements/select
+    title: <select> HTML select element
+    region: semantic-html
+    tier: wilderness
+    home: forms
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select
+  - slug: Web/Accessibility/ARIA/Guides/Live_regions
+    title: ARIA live regions
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions
+  - slug: Web/Accessibility/ARIA/Guides/Techniques
+    title: "Using ARIA: Roles, states, and properties"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Techniques
+  - slug: Web/Accessibility/ARIA/Reference/Attributes
+    title: ARIA states and properties (attributes)
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes
+  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-describedby
+    title: "ARIA: aria-describedby attribute"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-describedby
+  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-label
+    title: "ARIA: aria-label attribute"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-label
+  - slug: Web/Accessibility/ARIA/Reference/Attributes/aria-selected
+    title: "ARIA: aria-selected attribute"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-selected
+  - slug: Web/Accessibility/ARIA/Reference/Roles/alert_role
+    title: "ARIA: alert role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/alert_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/alertdialog_role
+    title: "ARIA: alertdialog role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/alertdialog_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/application_role
+    title: "ARIA: application role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/application_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/button_role
+    title: "ARIA: button role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/button_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/dialog_role
+    title: "ARIA: dialog role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/dialog_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/feed_role
+    title: "ARIA: feed role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/feed_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/log_role
+    title: "ARIA: log role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/log_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/marquee_role
+    title: "ARIA: marquee role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/marquee_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/menu_role
+    title: "ARIA: menu role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/menu_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/menubar_role
+    title: "ARIA: menubar role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/menubar_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/menuitem_role
+    title: "ARIA: menuitem role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/menuitem_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/menuitemcheckbox_role
+    title: "ARIA: menuitemcheckbox role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/menuitemcheckbox_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/menuitemradio_role
+    title: "ARIA: menuitemradio role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/menuitemradio_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/section_role
+    title: "ARIA: section role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/section_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/status_role
+    title: "ARIA: status role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/status_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/tab_role
+    title: "ARIA: tab role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/tab_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/tablist_role
+    title: "ARIA: tablist role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/tablist_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/tabpanel_role
+    title: "ARIA: tabpanel role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/tabpanel_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/toolbar_role
+    title: "ARIA: toolbar role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/toolbar_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/tree_role
+    title: "ARIA: tree role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/tree_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/treeitem_role
+    title: "ARIA: treeitem role"
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/treeitem_role
+  - slug: Web/HTML/Reference/Elements/details
+    title: <details> HTML details disclosure element
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
+  - slug: Web/HTML/Reference/Elements/menu
+    title: <menu> HTML menu element
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/menu
+  - slug: Web/HTML/Reference/Elements/noscript
+    title: <noscript> HTML noscript element
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/noscript
+  - slug: Web/HTML/Reference/Elements/summary
+    title: <summary> HTML disclosure summary element
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
+  - slug: Web/HTML/Reference/Elements/template
+    title: <template> HTML content template element
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/template
+  - slug: Web/HTML/Reference/Global_attributes/hidden
+    title: hidden HTML global attribute
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden
+  - slug: Web/HTML/Reference/Global_attributes/itemprop
+    title: itemprop HTML global attribute
+    region: semantic-html
+    tier: wilderness
+    home: interactive
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/itemprop
+  - slug: Glossary/Compile
+    title: Compile
+    region: semantic-html
+    tier: wilderness
+    home: javascript
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Compile
+  - slug: Glossary/JavaScript
+    title: JavaScript
+    region: semantic-html
+    tier: wilderness
+    home: javascript
+    url: https://developer.mozilla.org/en-US/docs/Glossary/JavaScript
+  - slug: Glossary/Python
+    title: Python
+    region: semantic-html
+    tier: wilderness
+    home: javascript
+    url: https://developer.mozilla.org/en-US/docs/Glossary/Python
+  - slug: Web/HTML/Guides/Responsive_images
+    title: Using responsive images in HTML
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Responsive_images
+  - slug: Web/HTML/Reference/Elements/area
+    title: <area> HTML image map area element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/area
+  - slug: Web/HTML/Reference/Elements/canvas
+    title: <canvas> HTML graphics canvas element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas
+  - slug: Web/HTML/Reference/Elements/figcaption
+    title: <figcaption> HTML figure caption element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption
+  - slug: Web/HTML/Reference/Elements/figure
+    title: <figure> HTML figure with optional caption element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure
+  - slug: Web/HTML/Reference/Elements/iframe
+    title: <iframe> HTML inline frame element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe
+  - slug: Web/HTML/Reference/Elements/img
+    title: <img> HTML image embed element
+    region: semantic-html
+    tier: wilderness
+    home: media
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img
+  - slug: Web/HTML/Reference/Elements/acronym
+    title: <acronym> HTML acronym or abbreviation element
+    region: semantic-html
+    tier: wilderness
+    home: obsolete
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/acronym
+  - slug: Web/Accessibility/ARIA/Reference/Roles/gridcell_role
+    title: "ARIA: gridcell role"
+    region: semantic-html
+    tier: wilderness
+    home: tables
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/gridcell_role
+  - slug: Web/Accessibility/ARIA/Reference/Roles/row_role
+    title: "ARIA: row role"
+    region: semantic-html
+    tier: wilderness
+    home: tables
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/row_role
+  - slug: Web/HTML/Reference/Elements/caption
+    title: <caption> HTML table caption element
+    region: semantic-html
+    tier: wilderness
+    home: tables
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/caption
+  - slug: Web/HTML/Reference/Elements/th
+    title: <th> HTML table header element
+    region: semantic-html
+    tier: wilderness
+    home: tables
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th

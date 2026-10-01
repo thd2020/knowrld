@@ -1,0 +1,335 @@
+id: almanac-imp
+statement: |
+  The Almanac Imp scrambles dates, shortens words until nobody can read them aloud, and spaces text with rows of line breaks. Restore the Tide Readers' almanac entry:
+
+  - The first time **GTR** appears, write out what it stands for, *Guild of Tide Readers*, in the text, and mark the abbreviation up as one. The unit **hPa** is a short technical term: mark it up as an abbreviation and give its expansion, *hectopascals*, as a title.
+  - Write dates so they read aloud clearly: no dashes between numbers, and months in full. The range becomes *5 to 7 January 2027*.
+  - Mark up the start and end of that range, the peak at *6.40pm on 6 January 2027* (local time), the *first week of 2027* and the publication date, *28 December 2026*, as times with machine-readable values.
+  - The 2 in H2O is a subscript; the *rd* of *3rd* is a superscript.
+  - The author's contact details, and nothing else, go in the entry's footer as the article's contact information, one detail per line (with line breaks, paragraphs or a list). The publication date stays outside them.
+  - Paragraphs are paragraphs, not text separated by pairs of line breaks or spaced out with empty paragraphs, and no text lies outside them; the horizontal rule here only draws a line, so it goes.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>The spring tides of January – Tide Readers' Almanac</title>
+      </head>
+      <body>
+        <article>
+          <h1>The spring tides of January</h1>
+          The GTR has published its tables for the spring tides of 5–7 Jan 2027.<br><br>
+          The highest water comes on the 3rd tide of the series, at 6.40pm on 6 Jan 2027, when the sea will stand 5.2 metres above chart datum and the air pressure should fall below 990 hPa.<br><br>
+          Readings for the first week of 2027 will be posted each morning. Remember that sea water is not pure H2O: every litre holds about 35 grams of salt.<br><br>
+          <hr>
+          <div class="footer">
+            Published 28 Dec 2026<br>
+            Mira Tallow<br>
+            Tide House, Quay Street<br>
+            Port-Brume<br>
+            mira@tidereaders.example
+          </div>
+        </article>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>The spring tides of January – Tide Readers' Almanac</title>
+      </head>
+      <body>
+        <article>
+          <h1>The spring tides of January</h1>
+          <p>The Guild of Tide Readers (<abbr>GTR</abbr>) has published its tables for the spring tides of <time datetime="2027-01-05">5</time> to <time datetime="2027-01-07">7 January 2027</time>.</p>
+          <p>The highest water comes on the 3<sup>rd</sup> tide of the series, at <time datetime="2027-01-06T18:40">6.40pm on 6 January 2027</time>, when the sea will stand 5.2 metres above chart datum and the air pressure should fall below 990 <abbr title="hectopascals">hPa</abbr>.</p>
+          <p>Readings for <time datetime="2027-W01">the first week of 2027</time> will be posted each morning. Remember that sea water is not pure H<sub>2</sub>O: every litre holds about 35 grams of salt.</p>
+          <footer>
+            <p>Published <time datetime="2026-12-28">28 December 2026</time></p>
+            <address>
+              Mira Tallow<br>
+              Tide House, Quay Street<br>
+              Port-Brume<br>
+              <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+            </address>
+          </footer>
+        </article>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: gtr-abbr
+      says: GTR is marked up as an abbreviation
+      selector: abbr
+      text: { matches: '^\s*GTR\s*$' }
+      concepts: [abbreviations]
+    - id: gtr-expanded
+      says: GTR is written out in the text where it first appears
+      selector: ':is(p, li, h1, h2):has(abbr)'
+      first: true
+      text: { matches: 'Guild of Tide Readers[\s\S]*GTR|GTR[\s\S]*Guild of Tide Readers' }
+      concepts: [abbr-expansion, clear-language]
+    - id: hpa-title
+      says: hPa is an abbreviation whose title gives its expansion
+      selector: abbr
+      text: { matches: '^\s*hPa\s*$' }
+      attr: { name: title, matches: '^\s*hectopascals?\s*$' }
+      concepts: [abbr-expansion]
+    - id: clear-dates
+      says: Dates read aloud clearly, with no dashes between numbers and no shortened months
+      selector: article
+      text: { not: '\d\s*[-–—]\s*\d|\b(Jan|Dec)\b\.?' }
+      concepts: [clear-language]
+    - id: range-text
+      says: The range reads "5 to 7 January 2027"
+      selector: article
+      text: { matches: '5\s+to\s+7\s+January\s+2027' }
+      concepts: [clear-language]
+    - id: times-valid
+      says: Every time element has a valid machine-readable value
+      selector: time
+      count: { min: 5 }
+      every: true
+      datetime: true
+      concepts: [time-datetime]
+    - id: range-start
+      says: The start of the range is machine-readable
+      selector: time
+      attr: { name: datetime, matches: '^2027-01-05$' }
+      concepts: [times-and-dates]
+    - id: range-end
+      says: The end of the range is machine-readable
+      selector: time
+      attr: { name: datetime, matches: '^2027-01-07$' }
+      concepts: [times-and-dates]
+    - id: peak
+      says: The peak has a machine-readable date and time
+      selector: time
+      attr: { name: datetime, matches: '^2027-01-06[T ]18:40(:00(\.0{1,3})?)?(Z|[+-]\d{2}:?\d{2})?$' }
+      concepts: [time-datetime]
+    - id: week
+      says: The first week of 2027 is a machine-readable week
+      selector: time
+      attr: { name: datetime, matches: '^2027-W01$' }
+      concepts: [time-datetime]
+    - id: published
+      says: The publication date is machine-readable
+      selector: time
+      attr: { name: datetime, matches: '^2026-12-28$' }
+      concepts: [times-and-dates]
+    - id: subscript
+      says: The 2 in H2O is a subscript, and nothing else is
+      selector: sub
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*2\s*$' }
+      concepts: [superscript-subscript]
+    - id: formula
+      says: The subscript sits in the formula H2O
+      selector: ':has(> sub)'
+      text: { matches: 'H2O' }
+      concepts: [superscript-subscript]
+    - id: superscript
+      says: The ordinal's "rd" is a superscript, and nothing else is
+      selector: sup
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*rd\s*$' }
+      concepts: [superscript-subscript]
+    - id: address
+      says: The author's contact details are the article's contact information, in its footer
+      selector: 'article footer address'
+      count: { min: 1, max: 1 }
+      text: { matches: 'Mira Tallow[\s\S]*Port-Brume' }
+      concepts: [contact-address]
+    - id: address-lines
+      says: Each contact detail sits on its own line within the address, split by line breaks, paragraphs, divs or list items
+      selector: 'address br, address p, address div, address li'
+      count: { min: 3 }
+      concepts: [contact-address, breaks-with-meaning]
+    - id: address-no-blank-lines
+      says: No two line breaks in the address come together, so no line is left empty
+      selector: 'address br'
+      count: { min: 0 }
+      every: true
+      # Any element with no text (a br, an empty span) straight after a break leaves a blank line; an image does not.
+      next: [{ is: ':not(img, svg, picture, video, canvas, object, iframe, :has(img, svg, picture, video, canvas, object, iframe))', text: { matches: '^\s*$' }, absent: true }]
+      concepts: [breaks-with-meaning]
+    - id: address-contact-only
+      says: The address holds contact details only, not the publication date
+      selector: address
+      text: { not: 'Published|2026' }
+      concepts: [contact-address]
+    - id: no-br-spacing
+      says: No line breaks are used for spacing outside the address
+      selector: 'br:not(address br)'
+      count: { max: 0 }
+      concepts: [breaks-with-meaning]
+    - id: no-hr
+      says: No horizontal rule is left where there is no change of topic
+      selector: hr
+      count: { max: 0 }
+      concepts: [breaks-with-meaning]
+    - id: paragraphs
+      says: The entry's text is in paragraphs, with no loose text
+      selector: 'body, article, article > div, article > section'
+      every: true
+      text: { own: true, not: '\S' }
+      concepts: [breaks-and-rules]
+    - id: no-empty-paragraphs
+      says: No empty paragraph or box is used for spacing
+      selector: 'p:not(:has(img, svg, picture, video, canvas, object, iframe)), div:not(:has(img, svg, picture, video, canvas, object, iframe))'
+      count: { min: 0 }
+      every: true
+      text: { matches: '\S' }
+      concepts: [breaks-and-rules]
+fixtures:
+  pass:
+    - name: each end of the range written out in full, seconds on the peak, the email as text
+      edits:
+        - find: <time datetime="2027-01-05">5</time> to <time datetime="2027-01-07">7 January 2027</time>
+          replace: <time datetime="2027-01-05">5</time> to <time datetime="2027-01-07">7 January</time> 2027
+        - find: <time datetime="2027-01-06T18:40">
+          replace: <time datetime="2027-01-06T18:40:00">
+        - find: <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: mira@tidereaders.example
+    - name: the publication date in a header, a space in the datetime, a title on GTR too
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>The spring tides of January – Tide Readers' Almanac</title>
+          </head>
+          <body>
+            <article>
+              <header>
+                <h1>The spring tides of January</h1>
+                <p>Published <time datetime="2026-12-28">28 December 2026</time></p>
+              </header>
+              <p>The Guild of Tide Readers (<abbr title="Guild of Tide Readers">GTR</abbr>) has published its tables for the spring tides of <time datetime="2027-01-05">5</time> to <time datetime="2027-01-07">7 January 2027</time>.</p>
+              <p>The highest water comes on the 3<sup>rd</sup> tide of the series, at <time datetime="2027-01-06 18:40">6.40pm on 6 January 2027</time>, when the sea will stand 5.2 metres above chart datum and the air pressure should fall below 990 <abbr title="hectopascal">hPa</abbr>.</p>
+              <p>Readings for <time datetime="2027-W01">week 1 of 2027</time> will be posted each morning.</p>
+              <p>Remember that sea water is not pure <span class="formula">H<sub>2</sub>O</span>: every litre holds about 35 grams of salt.</p>
+              <footer>
+                <address>
+                  Mira Tallow<br>
+                  Tide House, Quay Street<br>
+                  Port-Brume<br>
+                  <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+                </address>
+              </footer>
+            </article>
+          </body>
+        </html>
+    - name: the abbreviation before its expansion, the address lines in a paragraph
+      edits:
+        - find: The Guild of Tide Readers (<abbr>GTR</abbr>) has published
+          replace: The <abbr>GTR</abbr> (Guild of Tide Readers) has published
+        - find: |-
+            <address>
+                  Mira Tallow<br>
+                  Tide House, Quay Street<br>
+                  Port-Brume<br>
+                  <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+                </address>
+          replace: |-
+            <address>
+                  <p>Mira Tallow<br>
+                  Tide House, Quay Street<br>
+                  Port-Brume<br>
+                  <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a></p>
+                </address>
+    - name: the contact details as a list inside the address
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: <ul><li>Mira Tallow</li><li>Tide House, Quay Street</li><li>Port-Brume</li><li><a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a></li></ul>
+    - name: the contact lines as divs inside the address
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+          replace: <div>Mira Tallow</div><div>Tide House, Quay Street</div><div>Port-Brume</div>
+    - name: a paragraph holding only a picture of the tide curve
+      edits:
+        - { find: "<p>Readings for", replace: "<p><img src=\"/images/tide-curve.png\" alt=\"Tide curve for 5 to 7 January, peaking at 5.2 metres on the evening of the 6th\"></p><p>Readings for" }
+  fail:
+    - name: the dash left in the range
+      edits:
+        - find: <time datetime="2027-01-05">5</time> to <time datetime="2027-01-07">7 January 2027</time>
+          replace: <time datetime="2027-01-05">5</time>–<time datetime="2027-01-07">7 January 2027</time>
+      fails: [clear-dates, range-text]
+      because: A screen reader may read "5–7" as "five dash seven" or "five minus seven".
+    - name: a datetime written the way people write dates
+      edits: [{ find: <time datetime="2027-01-06T18:40">, replace: <time datetime="06/01/2027 18:40"> }]
+      fails: [times-valid, peak]
+      because: Machines need the standard format, year first, with a T or a space before the time.
+    - name: the publication date inside the address
+      edits:
+        - find: |-
+            <p>Published <time datetime="2026-12-28">28 December 2026</time></p>
+                <address>
+          replace: |-
+            <address>
+                  Published <time datetime="2026-12-28">28 December 2026</time><br>
+      fails: [address-contact-only]
+      because: The address element holds contact information only; a date belongs in time, outside it.
+    - name: pairs of line breaks kept between paragraphs
+      edits:
+        - find: |-
+            7 January 2027</time>.</p>
+                <p>The highest water
+          replace: |-
+            7 January 2027</time>.<br><br>
+                The highest water
+      fails: [no-br-spacing]
+      because: Line breaks do not make paragraphs; screen readers announce the breaks and not the structure.
+    - name: the decorative rule kept
+      edits: [{ find: "    <footer>", replace: "    <hr>\n      <footer>" }]
+      fails: [no-hr]
+      because: hr marks a change of topic; this one only draws a line.
+    - name: GTR expanded only in a title
+      edits: [{ find: The Guild of Tide Readers (<abbr>GTR</abbr>), replace: The <abbr title="Guild of Tide Readers">GTR</abbr> }]
+      fails: [gtr-expanded]
+      because: On first use the expansion belongs in the text, where every reader sees it.
+    - name: the 2 in the formula raised instead of lowered
+      edits: [{ find: H<sub>2</sub>O, replace: H<sup>2</sup>O }]
+      fails: [subscript, superscript, formula]
+      because: The number of atoms in a chemical formula is a subscript.
+    - name: spacing made with empty paragraphs
+      edits:
+        - { find: "<p>Readings for", replace: "<p>&nbsp;</p><p>&nbsp;</p><p>Readings for" }
+      fails: [no-empty-paragraphs]
+      because: An empty paragraph is spacing, which is the stylesheet's job, as much as a pair of line breaks is.
+    - name: the contact details on one line, with the line breaks piled up after them
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: Mira Tallow, Tide House, Quay Street, Port-Brume, <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a><br><br><br>
+      fails: [address-no-blank-lines]
+      because: The line breaks must separate the details; piled up at the end they only add empty lines.
+    - name: the contact details on one line, with empty spans slipped between the line breaks
+      edits:
+        - find: |-
+            Mira Tallow<br>
+                      Tide House, Quay Street<br>
+                      Port-Brume<br>
+                      <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a>
+          replace: Mira Tallow, Tide House, Quay Street, Port-Brume, <a href="mailto:mira@tidereaders.example">mira@tidereaders.example</a><br><span></span><br><span> </span><br>
+      fails: [address-no-blank-lines]
+      because: An empty span between two breaks still leaves a blank line.
+    - name: spacing made with empty divs
+      edits:
+        - { find: "<p>Readings for", replace: "<div>&nbsp;</div><div>&nbsp;</div><p>Readings for" }
+      fails: [no-empty-paragraphs]
+      because: An empty box is spacing, the stylesheet's job, whatever element holds it.

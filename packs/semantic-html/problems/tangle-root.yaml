@@ -1,0 +1,179 @@
+id: tangle-root
+statement: |
+  The Tangle Root grows through careless markup. The Warden of the Wood wrote this notice in a hurry, and the browser, which never refuses a page, has guessed at what was meant. Open the preview: half the page has turned to italics, the heading has eaten everything after it, and the map link has vanished.
+
+  Repair the markup so the page shows what the Warden meant:
+
+  - only *old oak road* and *roots* are emphasised;
+  - the second-level heading is just **Tools**;
+  - the image's alternative text reads **Map of the oak road**;
+  - the link to `https://wardens.example/oak-road` reads **Warden's map**;
+  - only *brambles*, *roots* and the warning **Never cut the heartwood.** carry strong importance.
+
+  Change only the markup: every word of the notice, from its heading to the signature, stays where it is, and its five paragraphs stay paragraphs.
+
+  Work the way a validator teaches you: fix one tangle, look at the page again, and watch how one mistake was causing several. Some end tags, such as those of `li` and `p`, may be left out under the rules of HTML, and the browser closes them for you; the ones that matter here are the ones it cannot guess.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>The oak road bargain – Wardens of the Wood</title>
+      </head>
+      <body>
+        <h1>The oak road bargain</h1>
+        <p>Whoever clears the <em>old oak road may keep what grows along it.
+        <h2>Tools
+        <p>Bring a saw, shears and a lantern.</p>
+        <ol>
+          <li>Cut the <strong>brambles</strong> first
+          <li>Then the <strong><em>roots</strong></em>
+          <li>Last of all, the vines
+        </ol>
+        <img src="images/oak-road-map.png" alt=Map of the oak road width="320" height="200">
+        <p>Read the <a href="https://wardens.example/oak-road>Warden's map</a> before you start.</p>
+        <p><strong>Never cut the heartwood.</p>
+        <p>Signed, the Warden of the Oak Road, "who keeps the wood".</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>The oak road bargain – Wardens of the Wood</title>
+      </head>
+      <body>
+        <h1>The oak road bargain</h1>
+        <p>Whoever clears the <em>old oak road</em> may keep what grows along it.</p>
+        <h2>Tools</h2>
+        <p>Bring a saw, shears and a lantern.</p>
+        <ol>
+          <li>Cut the <strong>brambles</strong> first</li>
+          <li>Then the <strong><em>roots</em></strong></li>
+          <li>Last of all, the vines</li>
+        </ol>
+        <img src="images/oak-road-map.png" alt="Map of the oak road" width="320" height="200">
+        <p>Read the <a href="https://wardens.example/oak-road">Warden's map</a> before you start.</p>
+        <p><strong>Never cut the heartwood.</strong></p>
+        <p>Signed, the Warden of the Oak Road, "who keeps the wood".</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: em-contained
+      says: Only "old oak road" and "roots" are emphasised
+      selector: em
+      count: { min: 2, max: 2 }
+      every: true
+      text: { matches: '^\s*(old oak road|roots)\s*$' }
+      concepts: [nesting-elements, permissive-parsing]
+    - id: heading
+      says: The second-level heading reads just "Tools"
+      selector: h2
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*Tools\s*$' }
+      concepts: [nesting-elements, permissive-parsing]
+    - id: map-alt
+      says: The map's alternative text is the whole phrase "Map of the oak road"
+      selector: 'img[src$="oak-road-map.png"]'
+      attr: { name: alt, matches: '^\s*Map of the oak road\s*$' }
+      concepts: [attribute-quotes]
+    - id: map-link
+      says: The link goes to the Warden's map and its text is "Warden's map"
+      selector: a
+      count: { min: 1, max: 1 }
+      attr: { name: href, matches: '^https://wardens\.example/oak-road/?$' }
+      text: { matches: '^\s*(the\s+)?Warden.s map\s*$' }
+      concepts: [attribute-quotes, html-validator]
+    - id: strong-contained
+      says: Only "brambles", "roots" and the warning carry strong importance
+      selector: strong
+      count: { min: 3, max: 3 }
+      every: true
+      text: { matches: '^\s*(brambles|roots|Never cut the heartwood\.?)\s*$' }
+      concepts: [nesting-elements, permissive-parsing]
+    - id: nested-inside
+      says: The emphasis and the importance on "roots" sit inside one another
+      selector: 'strong > em, em > strong'
+      text: { matches: '^\s*roots\s*$' }
+      concepts: [nesting-elements]
+    - id: title-kept
+      says: The notice keeps its top-level heading, The oak road bargain
+      selector: h1
+      count: { min: 1, max: 1 }
+      text: { matches: '^\s*The oak road bargain\s*$' }
+      concepts: [html-validator]
+    - id: text-kept
+      says: The rest of the notice is still there, in its order, from the heading to the signature
+      selector: body
+      text: { matches: 'The oak road bargain\s*Whoever clears the old oak road may keep what grows along it\.\s*Tools\s*Bring a saw, shears and a lantern\.\s*Cut the brambles first\s*Then the roots\s*Last of all, the vines\s*Read the Warden.s map before you start\.\s*Never cut the heartwood\.\s*Signed, the Warden of the Oak Road, .who keeps the wood.\.\s*$' }
+      concepts: [html-validator]
+    - id: paragraphs-kept
+      says: The notice's five paragraphs are still paragraphs
+      selector: 'body p'
+      count: { min: 5, max: 5 }
+      concepts: [html-validator]
+    - id: steps
+      says: The three steps are still a list
+      selector: 'ol > li'
+      count: { min: 3, max: 3 }
+      concepts: [html-validator]
+fixtures:
+  pass:
+    - name: end tags of li and p left to the parser
+      edits:
+        - find: <li>Cut the <strong>brambles</strong> first</li>
+          replace: <li>Cut the <strong>brambles</strong> first
+        - find: <li>Then the <strong><em>roots</em></strong></li>
+          replace: <li>Then the <strong><em>roots</em></strong>
+        - find: <p>Bring a saw, shears and a lantern.</p>
+          replace: <p>Bring a saw, shears and a lantern.
+    - name: emphasis outside the importance, single-quoted attributes
+      edits:
+        - find: <strong><em>roots</em></strong>
+          replace: <em><strong>roots</strong></em>
+        - find: alt="Map of the oak road"
+          replace: alt='Map of the oak road'
+        - find: <a href="https://wardens.example/oak-road">
+          replace: <a href='https://wardens.example/oak-road/'>
+    - name: link text taking in the article, quotes escaped in the signature
+      edits:
+        - find: <p>Read the <a href="https://wardens.example/oak-road">Warden's map</a> before you start.</p>
+          replace: <p>Read <a href="https://wardens.example/oak-road">the Warden's map</a> before you start.</p>
+        - find: '"who keeps the wood"'
+          replace: '&quot;who keeps the wood&quot;'
+  fail:
+    - name: the emphasis closed but the heading left open
+      edits: [{ find: <h2>Tools</h2>, replace: <h2>Tools }]
+      fails: [heading]
+      because: With no end tag, the heading runs on and swallows the list, the map and the link.
+    - name: the alt text quoted with mismatched marks
+      edits: [{ find: alt="Map of the oak road", replace: alt="Map of the oak road' }]
+      fails: [map-alt]
+      because: The double quote never closes, so the attribute value runs on into the next attributes.
+    - name: the link's quote closed with the wrong mark
+      edits: [{ find: href="https://wardens.example/oak-road", replace: href="https://wardens.example/oak-road' }]
+      fails: [map-link]
+      because: Mixing quote marks leaves the href unfinished, so the link text disappears into it.
+    - name: the warning's importance closed a paragraph too late
+      edits:
+        - find: <p><strong>Never cut the heartwood.</strong></p>
+          replace: <p><strong>Never cut the heartwood.</p>
+        - find: <p>Signed, the Warden of the Oak Road, "who keeps the wood".</p>
+          replace: <p>Signed, the Warden of the Oak Road, "who keeps the wood".</strong></p>
+      fails: [strong-contained]
+      because: The browser carries the open strong into the signature, which then shouts too.
+    - name: the emphasis on the road never closed
+      edits: [{ find: <em>old oak road</em>, replace: <em>old oak road }]
+      fails: [em-contained]
+      because: An open em spreads to everything after it.
+    - name: the heading and the signature deleted instead of repaired
+      edits:
+        - { find: "<h1>The oak road bargain</h1>", replace: "" }
+        - { find: "<p>Signed, the Warden of the Oak Road, \"who keeps the wood\".</p>", replace: "" }
+      fails: [title-kept, text-kept, paragraphs-kept]
+      because: A repair keeps the Warden's words; deleting what the browser mangled only hides the tangle.

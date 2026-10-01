@@ -1,0 +1,175 @@
+# Road, part 3: the structure of pages and sites (Learn: Structuring documents).
+nodes:
+  - id: page-regions
+    kind: concept
+    title: The regions of a page
+    region: semantic-html
+    tier: road
+    requires: [semantics]
+    says: Most pages share the same lands. A header across the top, a navigation bar, the main content, a sidebar, a footer. Name each by its job, and a screen reader can take you straight there.
+    cites:
+      - structuring-documents#common-components
+      - structuring-documents#functionality
+      - structuring-documents#section-tags
+    check:
+      - prompt: Which part of a website definitely varies from page to page?
+        choices: ["The header with the logo", "The footer with the copyright", "The main content"]
+        answer: 2
+        explain: The main content holds the unique content of each page; the header, navigation and footer usually stay the same.
+      - prompt: Which element marks up a sidebar?
+        choices: ["<section>", "<nav>", "<aside>"]
+        answer: 2
+        explain: The sidebar is aside, often placed inside main.
+      - prompt: Why mark up page sections by what they do?
+        choices:
+          - So the page downloads faster
+          - So the layout still works when CSS fails to load
+          - So assistive technology can find the navigation or the main content
+        answer: 2
+        explain: Screen readers can recognize the elements that represent sections and help with tasks like "find the main navigation".
+
+  - id: sectioning-elements
+    kind: concept
+    title: main, article, section and aside
+    region: semantic-html
+    tier: road
+    requires: [page-regions]
+    says: main once, for what is unique to this page. article for a piece that stands alone. section for one part or theme, opened by a heading. aside for the related, not the central.
+    cites:
+      - structuring-documents#main-article-section-aside
+      - el-section#summary
+    check:
+      - prompt: A single blog post that makes sense on its own belongs in which element?
+        choices: ["<section>", "<aside>", "<article>"]
+        answer: 2
+        explain: article encloses a block of related content that makes sense on its own without the rest of the page.
+      - prompt: How many <main> elements should a page use?
+        choices: ["One per article", "One", "As many as needed"]
+        answer: 1
+        explain: Use main only once per page, for the content unique to that page.
+      - prompt: A mini map is one part of the page's functionality. Which element fits it?
+        choices:
+          - <section>, opened with a heading
+          - <article>, since it could be shared
+          - <aside>, since maps are extras
+        answer: 0
+        explain: section groups a single part of the page that is one piece of functionality, like a mini map, and should begin with a heading.
+
+  - id: header-nav-footer
+    kind: concept
+    title: header, nav and footer
+    region: semantic-html
+    tier: road
+    requires: [page-regions]
+    says: header gathers the introduction, the site's banner when it sits in body, only its own part's when it sits in an article. nav holds the main navigation. footer closes a page or a section with its end matter.
+    cites:
+      - structuring-documents#header-nav-footer
+      - el-nav#summary
+    check:
+      - prompt: A header inside an <article> defines what?
+        choices:
+          - The global header of the whole site
+          - A header for that article only
+          - Nothing; header must be a child of body
+        answer: 1
+        explain: As a child of body, header is the global header; inside an article or section it is a specific header for that section.
+      - prompt: What belongs in <nav>?
+        choices:
+          - Every link on the page, including those in text
+          - Secondary links such as a footer's legal links
+          - The page's main navigation links
+        answer: 2
+        explain: nav contains the main navigation functionality for the page. Secondary links would not go in it.
+
+  - id: non-semantic-wrappers
+    kind: concept
+    title: div and span, the wrappers without meaning
+    region: semantic-html
+    tier: road
+    requires: [sectioning-elements, attributes]
+    says: When no element fits, div wraps a block and span wraps a phrase, each named with a class. They carry no meaning, so they are the last choice, not the first.
+    cites:
+      - structuring-documents#non-semantic
+      - structuring-documents#span
+      - structuring-documents#div
+      - structuring-documents#div-warning
+    check:
+      - prompt: When is a <div> the right choice?
+        choices:
+          - For every block, since it is the most flexible
+          - When no semantic block element fits
+          - Instead of main, to keep the page simple
+        answer: 1
+        explain: div is a non-semantic block element to use only if you can't think of a better semantic block element.
+      - prompt: What is the difference between <div> and <span>?
+        choices:
+          - div has meaning; span has none
+          - span is for CSS only and div for scripts only
+          - div is block level, span inline; neither has meaning
+        answer: 2
+        explain: span is an inline non-semantic element; div is a block level non-semantic element.
+      - prompt: A shopping cart widget can be opened from any page and is not part of the main content. Which element should wrap it?
+        choices:
+          - <aside>, since it is related to the page
+          - <div>, with a heading
+          - <section>, since it is a feature
+        answer: 1
+        explain: It isn't an aside or part of the main content, so a div is fine, with a heading as a signpost for screen reader users.
+
+  - id: breaks-and-rules
+    kind: concept
+    title: Line breaks and thematic breaks
+    region: semantic-html
+    tier: road
+    requires: [void-elements, whitespace-and-comments]
+    says: br breaks a line where the lines themselves matter, in an address or a poem. hr marks a change of topic or scene; the line it draws is incidental.
+    cites:
+      - structuring-documents#br
+      - structuring-documents#hr
+    check:
+      - prompt: Which content needs <br>?
+        choices:
+          - The space between two paragraphs
+          - The end of every sentence
+          - The lines of a postal address or poem
+        answer: 2
+        explain: br is the only way to force a rigid structure of fixed short lines, such as a postal address or a poem.
+      - prompt: What does <hr> mean?
+        choices:
+          - A thematic change, such as a new scene
+          - A purely decorative line
+          - The end of the page
+        answer: 0
+        explain: hr denotes a thematic change, such as a change in topic or scene. Visually it just looks like a line.
+
+  - id: information-architecture
+    kind: concept
+    title: Planning a site
+    region: semantic-html
+    tier: road
+    requires: [page-regions, navigation-menus]
+    says: Before the pages, the plan. Note what every page shares, sort the rest into groups, then sketch a sitemap of boxes and the paths between them.
+    cites:
+      - structuring-documents#information-architecture
+      - structuring-documents#common-to-every-page
+      - structuring-documents#sort-into-groups
+      - structuring-documents#sitemap
+    check:
+      - prompt: What is information architecture?
+        choices:
+          - Choosing a server for the site
+          - The CSS layout of a single page
+          - Planning how a site's pages are arranged and linked
+        answer: 2
+        explain: Planning the structure of a multi-page website, including how pages are arranged and link to one another, is information architecture.
+      - prompt: In a small site, how should most pages be reached?
+        choices: ["Only through the site's search box", "From the main navigation", "Only from links in the footer"]
+        answer: 1
+        explain: Most of the pages in a small site should be available from the main navigation, with some exceptions.
+      - prompt: You are planning a travel site. Which content belongs on every page?
+        choices:
+          - The navigation menu and the footer
+          - This week's special offers and holiday deals
+          - The latest reviews of the most popular hotel
+        answer: 0
+        explain: Elements such as the navigation menu and the footer content are common to most, if not all, pages.

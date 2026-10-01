@@ -1,0 +1,229 @@
+id: false-herald
+statement: |
+  The False Herald dresses plain text up as headings. The Lighthouse Keepers' handbook *looks* organised, with a big title and bold section names, but its "headings" are a styled span, bold lines and a paragraph with a large font. To a screen reader listing the headings on the page, the handbook is empty; to one that finds a few, it jumps from the title straight to a third level, and every section claims to be the page's main heading.
+
+  Make every heading a real heading, in one unbroken hierarchy:
+
+  - **Keeper's Handbook** is the page's single top-level heading;
+  - **Lighting the lamp**, **Logging the weather** and **Handing over the watch** are its sections;
+  - **Trimming the wick** and **Cleaning the lens** belong to *Lighting the lamp*, and **Storm signals** belongs to *Logging the weather*;
+  - going down the page, never skip a level.
+
+  How big a heading looks is the stylesheet's job, not the heading level's: keep the classes if you like, and choose each level for its place in the hierarchy.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Keeper's Handbook – Lighthouse Keepers' Guild</title>
+      </head>
+      <body>
+        <span class="big">Keeper's Handbook</span>
+        <p>Everything a new keeper needs for the first season on the rock.</p>
+
+        <h3>Lighting the lamp</h3>
+        <p>Light the lamp at sunset, every night, whatever the weather.</p>
+        <b>Trimming the wick</b>
+        <p>A crooked wick smokes the glass. Trim it square before you light it.</p>
+        <b>Cleaning the lens</b>
+        <p>Polish the lens each morning with a dry cloth, never with water.</p>
+
+        <h1>Logging the weather</h1>
+        <p>Write the wind, the sea and the sky in the log every four hours.</p>
+        <p style="font-size: 1.4em; font-weight: bold">Storm signals</p>
+        <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>
+
+        <h1>Handing over the watch</h1>
+        <p>Read the log aloud to the next keeper before you sleep.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Keeper's Handbook – Lighthouse Keepers' Guild</title>
+      </head>
+      <body>
+        <h1>Keeper's Handbook</h1>
+        <p>Everything a new keeper needs for the first season on the rock.</p>
+
+        <h2>Lighting the lamp</h2>
+        <p>Light the lamp at sunset, every night, whatever the weather.</p>
+        <h3>Trimming the wick</h3>
+        <p>A crooked wick smokes the glass. Trim it square before you light it.</p>
+        <h3>Cleaning the lens</h3>
+        <p>Polish the lens each morning with a dry cloth, never with water.</p>
+
+        <h2>Logging the weather</h2>
+        <p>Write the wind, the sea and the sky in the log every four hours.</p>
+        <h3>Storm signals</h3>
+        <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>
+
+        <h2>Handing over the watch</h2>
+        <p>Read the log aloud to the next keeper before you sleep.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: one-h1
+      says: Keeper's Handbook is the single top-level heading
+      selector: h1
+      count: { min: 1, max: 1 }
+      name: { matches: '^\s*Keeper.s Handbook\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: sections
+      says: The three sections have second-level headings, named as the statement names them
+      selector: h2
+      count: { min: 3, max: 3 }
+      every: true
+      name: { matches: '^\s*(Lighting the lamp|Logging the weather|Handing over the watch)\s*$' }
+      concepts: [headings]
+    - id: subsections
+      says: The three subsections have third-level headings
+      selector: h3
+      count: { min: 3, max: 3 }
+      every: true
+      name: { matches: '^\s*(Trimming the wick|Cleaning the lens|Storm signals)\s*$' }
+      concepts: [headings]
+    - id: outline
+      says: Going down the page, no heading level is skipped
+      selector: body
+      outline: { start: 1 }
+      concepts: [heading-navigation]
+    - id: storm-under-weather
+      says: Storm signals sits under Logging the weather in the heading outline
+      selector: h3
+      text: { matches: '^\s*Storm signals\s*$' }
+      under: { matches: '^\s*Logging the weather\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: wick-under-lamp
+      says: Trimming the wick sits under Lighting the lamp in the heading outline
+      selector: h3
+      text: { matches: '^\s*Trimming the wick\s*$' }
+      under: { matches: '^\s*Lighting the lamp\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: lens-under-lamp
+      says: Cleaning the lens sits under Lighting the lamp in the heading outline
+      selector: h3
+      text: { matches: '^\s*Cleaning the lens\s*$' }
+      under: { matches: '^\s*Lighting the lamp\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: sections-under-title
+      says: The three sections sit under Keeper's Handbook
+      selector: h2
+      every: true
+      under: { matches: '^\s*Keeper.s Handbook\s*$' }
+      concepts: [headings, heading-navigation]
+    - id: no-fake-headings
+      says: No span, bold text or paragraph is posing as a heading
+      selector: ':is(span, b, strong, p, div):not(:is(h1, h2, h3, h4, h5, h6) *)'
+      count: { min: 0 }
+      every: true
+      text: { not: '^\s*(Keeper.s Handbook|Lighting the lamp|Trimming the wick|Cleaning the lens|Logging the weather|Storm signals|Handing over the watch)\s*$' }
+      concepts: [semantics, presentational-elements]
+    - id: real-heading-elements
+      says: Every heading is an h1 to h6 element, not another element given a heading role
+      selector: '[role~="heading" i]:not(h1, h2, h3, h4, h5, h6)'
+      count: { max: 0 }
+      concepts: [semantics]
+fixtures:
+  pass:
+    - name: sections wrapped in section elements, the title in a header
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Keeper's Handbook – Lighthouse Keepers' Guild</title>
+          </head>
+          <body>
+            <header>
+              <h1 class="big">Keeper's Handbook</h1>
+              <p>Everything a new keeper needs for the first season on the rock.</p>
+            </header>
+            <section>
+              <h2>Lighting the lamp</h2>
+              <p>Light the lamp at sunset, every night, whatever the weather.</p>
+              <section>
+                <h3>Trimming the wick</h3>
+                <p>A crooked wick smokes the glass. Trim it square before you light it.</p>
+              </section>
+              <section>
+                <h3>Cleaning the lens</h3>
+                <p>Polish the lens each morning with a dry cloth, never with water.</p>
+              </section>
+            </section>
+            <section>
+              <h2>Logging the weather</h2>
+              <p>Write the wind, the sea and the sky in the log every four hours.</p>
+              <section>
+                <h3>Storm signals</h3>
+                <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>
+              </section>
+            </section>
+            <section>
+              <h2>Handing over the watch</h2>
+              <p>Read the log aloud to the next keeper before you sleep.</p>
+            </section>
+          </body>
+        </html>
+    - name: sizes kept with classes and inline style on real headings
+      edits:
+        - { find: <h1>Keeper's Handbook</h1>, replace: '<h1 class="big" style="font-size: 3em">Keeper''s Handbook</h1>' }
+        - { find: <h3>Storm signals</h3>, replace: '<h3 style="font-size: 1.4em">Storm signals</h3>' }
+        - { find: <h3>Trimming the wick</h3>, replace: <h3 class="small"><b>Trimming</b> the wick</h3> }
+    - name: a heading with a span inside it for an icon
+      edits:
+        - { find: <h2>Handing over the watch</h2>, replace: '<h2><span class="icon" aria-hidden="true">⚓</span> Handing over the watch</h2>' }
+    - name: the classes kept on a span inside the h1, and bold kept inside real headings
+      edits:
+        - { find: "<h1>Keeper's Handbook</h1>", replace: "<h1><span class=\"big\">Keeper's Handbook</span></h1>" }
+        - { find: "<h3>Storm signals</h3>", replace: "<h3><b>Storm signals</b></h3>" }
+        - { find: "<h2>Handing over the watch</h2>", replace: "<h2><strong>Handing over the watch</strong></h2>" }
+    - name: a table of contents at the top
+      edits:
+        - { find: "<p>Everything a new keeper needs for the first season on the rock.</p>", replace: "<p>Everything a new keeper needs for the first season on the rock.</p><nav><ul><li><a href=\"#lamp\">Lighting the lamp</a></li><li><a href=\"#weather\">Logging the weather</a></li><li><a href=\"#watch\">Handing over the watch</a></li></ul></nav>" }
+  fail:
+    - name: a link given a heading role for Logging the weather
+      edits:
+        - { find: "<h2>Logging the weather</h2>", replace: "<a role=\"heading\" aria-level=\"2\">Logging the weather</a>" }
+      fails: [real-heading-elements]
+      because: Only the h1 to h6 elements are headings the page's outline can count on; a role on another element is a fake with extra steps.
+    - name: an h1 for every section, as in the old outline algorithm
+      edits:
+        - { find: <h2>Lighting the lamp</h2>, replace: <h1>Lighting the lamp</h1> }
+        - { find: <h2>Logging the weather</h2>, replace: <h1>Logging the weather</h1> }
+        - { find: <h2>Handing over the watch</h2>, replace: <h1>Handing over the watch</h1> }
+      fails: [one-h1, sections]
+      because: There is no outline algorithm; a page should have one h1 and nested levels below it.
+    - name: third-level headings straight under the title
+      edits:
+        - { find: <h2>Lighting the lamp</h2>, replace: <h3>Lighting the lamp</h3> }
+        - { find: <h3>Trimming the wick</h3>, replace: <h4>Trimming the wick</h4> }
+        - { find: <h3>Cleaning the lens</h3>, replace: <h4>Cleaning the lens</h4> }
+      fails: [outline, sections, subsections]
+      because: Jumping from h1 to h3 leaves a screen reader user looking for the missing level.
+    - name: a bold line left in place of a subheading
+      edits: [{ find: <h3>Storm signals</h3>, replace: <p><b>Storm signals</b></p> }]
+      fails: [subsections, no-fake-headings]
+      because: Bold text looks like a heading but is not announced as one.
+    - name: a span given an ARIA heading role instead of a heading element
+      edits: [{ find: <h1>Keeper's Handbook</h1>, replace: '<span class="big" role="heading" aria-level="1">Keeper''s Handbook</span>' }]
+      fails: [one-h1, no-fake-headings]
+      because: The statement asks for real heading elements; ARIA is for when no element fits, and here one does.
+    - name: Storm signals moved under Handing over the watch
+      edits:
+        - { find: "<h3>Storm signals</h3>\n    <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>", replace: "" }
+        - { find: "<p>Read the log aloud to the next keeper before you sleep.</p>", replace: "<p>Read the log aloud to the next keeper before you sleep.</p><h3>Storm signals</h3><p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>" }
+      fails: [storm-under-weather]
+      because: The statement puts Storm signals under Logging the weather; right levels in the wrong section still break the outline.
+    - name: Storm signals moved under Handing over the watch, with a hidden paragraph listing the headings in order
+      edits:
+        - { find: "<h3>Storm signals</h3>\n    <p>When the glass falls fast, raise the storm cone and wake the second keeper.</p>", replace: "" }
+        - { find: "<p>Read the log aloud to the next keeper before you sleep.</p>", replace: "<p>Read the log aloud to the next keeper before you sleep.</p><h3>Storm signals</h3><p>When the glass falls fast, raise the storm cone and wake the second keeper.</p><p hidden>Lighting the lamp Trimming the wick Cleaning the lens Logging the weather Storm signals Handing over the watch</p>" }
+      fails: [storm-under-weather]
+      because: The outline is made of headings; text elsewhere on the page does not move a heading into another section.

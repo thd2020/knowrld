@@ -1,0 +1,17 @@
+format: 0
+id: semantic-html
+title: Semantic HTML
+version: 0.2.0
+summary: >-
+  The first region of the front-end world at full depth: HTML syntax, the document head,
+  text semantics, page structure, links, debugging, and HTML as the basis of accessibility.
+license: CC-BY-SA-4.0
+blueprint:
+  title: MDN Learn web development, Structuring content with HTML (without forms, tables and media) and Accessibility, HTML
+  url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content
+  license: CC-BY-SA-2.5+
+regions:
+  - id: semantic-html
+    title: Semantic HTML
+    summary: Mark up documents by meaning, from the element and the head to landmarks, links and accessible structure.
+final: semantic-citadel

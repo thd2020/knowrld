@@ -1,0 +1,195 @@
+id: echo-parrot
+statement: |
+  The Echo Parrot repeats what others said and never says who. The Wayfarers' Library page quotes two works, but the quotations are plain paragraphs in italics, the attribution sits inside the quotation as if the author had written their own name into the text, and nothing records where the words came from.
+
+  Mark the quotations up for what they are:
+
+  - the two paragraphs from **The Salt Roads** are one block quotation, whose source is `https://library.example/salt-roads#chapter-3`;
+  - the line from **The Lamplighter's Wager** is an inline quotation, whose source is `https://library.example/lamplighter`; the browser adds its quotation marks, so do not type your own;
+  - the attribution, *Ysolde Marr, The Salt Roads*, goes outside the block quotation;
+  - the title of each work, and only the title, is marked as the title of a creative work. You may link a title to its source.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Words for the road – Wayfarers' Library</title>
+      </head>
+      <body>
+        <h1>Words for the road</h1>
+        <p>This month's reading is about leaving home.</p>
+        <div class="quote">
+          <p><i>Every road out of the harbour smells of salt for the first mile, and of the harbour for the rest of your life.</i></p>
+          <p><i>You do not leave a place. You carry it, lighter each year, until one day you set it down without noticing.</i></p>
+          <p>Ysolde Marr, The Salt Roads</p>
+        </div>
+        <p>As the old lamplighter says in The Lamplighter's Wager, "a lit window is a promise that someone is still awake."</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Words for the road – Wayfarers' Library</title>
+      </head>
+      <body>
+        <h1>Words for the road</h1>
+        <p>This month's reading is about leaving home.</p>
+        <blockquote cite="https://library.example/salt-roads#chapter-3">
+          <p>Every road out of the harbour smells of salt for the first mile, and of the harbour for the rest of your life.</p>
+          <p>You do not leave a place. You carry it, lighter each year, until one day you set it down without noticing.</p>
+        </blockquote>
+        <p>Ysolde Marr, <cite>The Salt Roads</cite></p>
+        <p>As the old lamplighter says in <cite>The Lamplighter's Wager</cite>, <q cite="https://library.example/lamplighter">a lit window is a promise that someone is still awake.</q></p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: blockquote
+      says: The two paragraphs from The Salt Roads are one block quotation
+      selector: blockquote
+      count: { min: 1, max: 1 }
+      text: { matches: 'smells of salt[\s\S]*set it down without noticing' }
+      concepts: [quotations]
+    - id: blockquote-paragraphs
+      says: The block quotation keeps its two paragraphs
+      selector: 'blockquote p'
+      count: { min: 2, max: 2 }
+      concepts: [quotations]
+    - id: blockquote-source
+      says: The block quotation records its source URL in a cite attribute
+      selector: blockquote
+      attr: { name: cite, equals: 'https://library.example/salt-roads#chapter-3' }
+      concepts: [quotations, quote-attribution]
+    - id: attribution-outside
+      says: The attribution is outside the block quotation
+      selector: blockquote
+      text: { not: 'Ysolde Marr|The Salt Roads' }
+      concepts: [quote-attribution]
+    - id: attribution-kept
+      says: The attribution still names the author and the work
+      selector: 'body :not(blockquote, blockquote *, :has(blockquote))'
+      text: { matches: '^(?=[\s\S]*Ysolde Marr)(?=[\s\S]*The Salt Roads)' }
+      concepts: [quote-attribution]
+    - id: inline-quote
+      says: The lamplighter's line is an inline quotation with its source URL
+      selector: q
+      count: { min: 1, max: 1 }
+      attr: { name: cite, equals: 'https://library.example/lamplighter' }
+      text: { matches: 'a lit window is a promise' }
+      concepts: [quotations]
+    - id: no-typed-quotes
+      says: The inline quotation has no typed quotation marks of its own
+      selector: q
+      text: { not: '^\s*["“”''‘’]|["“”''‘’]\s*$' }
+      concepts: [quotations]
+    - id: no-quote-marks-around
+      says: No typed quotation marks are left around the inline quotation
+      selector: 'p:has(q)'
+      text: { not: '["“”]' }
+      concepts: [quotations]
+    - id: titles
+      says: Each work's title is marked as the title of a creative work
+      selector: cite
+      count: { min: 2 }
+      text: { matches: 'The Salt Roads' }
+      concepts: [quote-attribution]
+    - id: titles-only
+      says: Only titles of works are in cite, not people's names
+      selector: cite
+      count: { min: 2 }
+      every: true
+      text: { matches: '^\s*(The Salt Roads|The Lamplighter.s Wager)\s*$' }
+      concepts: [quote-attribution]
+    - id: no-italic-quote
+      says: The quoted words are not dressed up with idiomatic-text italics
+      selector: 'blockquote i, q i'
+      count: { max: 0 }
+      concepts: [quotations, em-and-i]
+fixtures:
+  pass:
+    - name: a figure with the attribution in its caption
+      edits:
+        - find: <blockquote cite="https://library.example/salt-roads#chapter-3">
+          replace: |-
+            <figure>
+                  <blockquote cite="https://library.example/salt-roads#chapter-3">
+        - find: |-
+            </blockquote>
+                <p>Ysolde Marr, <cite>The Salt Roads</cite></p>
+          replace: |-
+            </blockquote>
+                  <figcaption>Ysolde Marr, <cite>The Salt Roads</cite></figcaption>
+                </figure>
+    - name: titles linked to their sources, attribution before the quotation
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Words for the road – Wayfarers' Library</title>
+          </head>
+          <body>
+            <h1>Words for the road</h1>
+            <p>This month's reading is about leaving home.</p>
+            <p>Ysolde Marr writes in <a href="https://library.example/salt-roads#chapter-3"><cite>The Salt Roads</cite></a>:</p>
+            <blockquote cite="https://library.example/salt-roads#chapter-3">
+              <p>Every road out of the harbour smells of salt for the first mile, and of the harbour for the rest of your life.</p>
+              <p>You do not leave a place. You carry it, lighter each year, until one day you set it down without noticing.</p>
+            </blockquote>
+            <p>
+              As the old lamplighter says,
+              <q cite="https://library.example/lamplighter">a lit window is a promise that someone is still awake.</q>
+              (<cite><a href="https://library.example/lamplighter">The Lamplighter's Wager</a></cite>)
+            </p>
+          </body>
+        </html>
+    - name: the attribution in a paragraph of its own after the inline quotation too
+      edits:
+        - find: <p>Ysolde Marr, <cite>The Salt Roads</cite></p>
+          replace: <p class="attribution">From <cite>The Salt Roads</cite>, by Ysolde Marr</p>
+  fail:
+    - name: the attribution left inside the block quotation
+      edits:
+        - find: |-
+            set it down without noticing.</p>
+                </blockquote>
+                <p>Ysolde Marr, <cite>The Salt Roads</cite></p>
+          replace: |-
+            set it down without noticing.</p>
+                  <footer>Ysolde Marr, <cite>The Salt Roads</cite></footer>
+                </blockquote>
+      fails: [attribution-outside, attribution-kept]
+      because: Attribution must be outside the blockquote; inside, it reads as part of the quoted text.
+    - name: the source given only as a link, with no cite attribute
+      edits:
+        - { find: <blockquote cite="https://library.example/salt-roads#chapter-3">, replace: <blockquote> }
+      fails: [blockquote-source]
+      because: The statement asks for the source URL on the quotation itself.
+    - name: the author's name marked as a cited title
+      edits:
+        - { find: <p>Ysolde Marr, <cite>The Salt Roads</cite></p>, replace: '<p><cite>Ysolde Marr</cite>, <cite>The Salt Roads</cite></p>' }
+      fails: [titles-only]
+      because: cite marks the title of a work, not the name of a person.
+    - name: typed quotation marks inside the inline quotation
+      edits:
+        - find: <q cite="https://library.example/lamplighter">a lit window is a promise that someone is still awake.</q>
+          replace: <q cite="https://library.example/lamplighter">"a lit window is a promise that someone is still awake."</q>
+      fails: [no-typed-quotes, no-quote-marks-around]
+      because: The browser already draws quotation marks around q, so the reader sees them twice.
+    - name: each quoted paragraph its own block quotation
+      edits:
+        - find: |-
+            the rest of your life.</p>
+                  <p>You do not leave
+          replace: |-
+            the rest of your life.</p>
+                </blockquote>
+                <blockquote cite="https://library.example/salt-roads#chapter-3">
+                  <p>You do not leave
+      fails: [blockquote]
+      because: The two paragraphs are one continuous quotation.

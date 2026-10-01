@@ -1,0 +1,149 @@
+id: code-gremlin
+statement: |
+  The Code Gremlin eats code samples. The Lamplighters' tutorial showed a line of HTML, but the browser read it as HTML: the example became a real paragraph and its tags vanished. Everything else that should look like code is a styled span or a bold word.
+
+  Mark the tutorial up so each piece says what it is:
+
+  - **lightLamp()** is a piece of code within a sentence;
+  - the example is a block of code, shown exactly as written, tags and all: `<p class="spell">Light!</p>`. Keep its characters from being read as markup;
+  - **Ctrl+S** is a keyboard shortcut made of two keys, each marked as a key. MDN writes them side by side, `Ctrl` + `S`; wrapping the pair in one more keyboard-input element is also allowed;
+  - **Lamp lit.** is what the program prints;
+  - **flame** is the name of a variable.
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Summoning a paragraph – Lamplighters' Tutorials</title>
+      </head>
+      <body>
+        <h1>Summoning a paragraph</h1>
+        <p>To light the lamp from a script, call <span class="mono">lightLamp()</span>.</p>
+        <p>To make a paragraph, write this:</p>
+        <pre>
+    <p class="spell">Light!</p>
+        </pre>
+        <p>Save your work with <b>Ctrl+S</b>.</p>
+        <p>When the spell works, the console prints <span class="mono">Lamp lit.</span></p>
+        <p>The variable <i>flame</i> holds the lamp's brightness.</p>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Summoning a paragraph – Lamplighters' Tutorials</title>
+      </head>
+      <body>
+        <h1>Summoning a paragraph</h1>
+        <p>To light the lamp from a script, call <code>lightLamp()</code>.</p>
+        <p>To make a paragraph, write this:</p>
+        <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+        <p>Save your work with <kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>.</p>
+        <p>When the spell works, the console prints <samp>Lamp lit.</samp></p>
+        <p>The variable <var>flame</var> holds the lamp's brightness.</p>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: inline-code
+      says: lightLamp() is marked as code within the sentence
+      selector: 'code:not(pre code)'
+      text: { matches: '^\s*lightLamp\(\)\s*$' }
+      concepts: [computer-code]
+    - id: code-block
+      says: The example is a code block that keeps its whitespace
+      selector: 'pre code'
+      count: { min: 1 }
+      concepts: [computer-code, code-family]
+    - id: shown-as-written
+      says: The block shows the example's tags as text
+      selector: pre
+      text: { matches: '<p class=["'']spell["'']>\s*Light!\s*</p>' }
+      concepts: [character-references, code-family]
+    - id: not-rendered
+      says: The example is not turned into a real paragraph
+      selector: 'pre p, pre :is(h1, h2, h3, div, ul, ol)'
+      count: { max: 0 }
+      concepts: [character-references]
+    - id: keys
+      says: The shortcut is keyboard input made of two keys, Ctrl and S, each its own kbd
+      selector: 'kbd:not(:has(kbd))'
+      count: { min: 2 }
+      every: true
+      text: { matches: '^\s*(Ctrl|S|Cmd|Command|⌘|Control)\s*$' }
+      concepts: [code-family]
+    - id: shortcut
+      says: The two keys sit side by side, with or without an outer kbd around them
+      selector: ':has(> kbd + kbd)'
+      count: { min: 1 }
+      text: { matches: 'Ctrl\W{0,5}S' }
+      concepts: [code-family]
+    - id: output
+      says: The program's output is marked as sample output
+      selector: samp
+      text: { matches: '^\s*Lamp lit\.?\s*$' }
+      concepts: [computer-code]
+    - id: variable
+      says: flame is marked as a variable name
+      selector: var
+      text: { matches: '^\s*flame\s*$' }
+      concepts: [computer-code]
+fixtures:
+  pass:
+    - name: only the less-than signs escaped, a language class on the code
+      edits:
+        - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+          replace: <pre><code class="language-html">&lt;p class="spell">Light!&lt;/p></code></pre>
+    - name: numeric character references, spaces around the plus, the output as a block
+      edits:
+        - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+          replace: <pre><code>&#60;p class=&quot;spell&quot;&#62;Light!&#60;/p&#62;</code></pre>
+        - find: <kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>
+          replace: <kbd><kbd>Ctrl</kbd> + <kbd>S</kbd></kbd>
+        - find: <p>When the spell works, the console prints <samp>Lamp lit.</samp></p>
+          replace: |-
+            <p>When the spell works, the console prints:</p>
+                <pre><samp>Lamp lit.</samp></pre>
+    - name: the example on several lines with indentation kept
+      edits:
+        - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+          replace: |-
+            <pre><code>&lt;p class="spell"&gt;
+              Light!
+            &lt;/p&gt;</code></pre>
+    - name: the two keys side by side with no outer kbd, as MDN Learn writes them
+      edits:
+        - { find: "<kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>", replace: "<kbd>Ctrl</kbd> + <kbd>S</kbd>" }
+    - name: the Mac shortcut given too
+      edits:
+        - { find: "<kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>", replace: "<kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd> (<kbd><kbd>Cmd</kbd>+<kbd>S</kbd></kbd> on a Mac)" }
+  fail:
+    - name: the example pasted into the code block unescaped
+      edits:
+        - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+          replace: <pre><code><p class="spell">Light!</p></code></pre>
+      fails: [shown-as-written, not-rendered]
+      because: Inside pre the text is still parsed as HTML, so the tags become a real paragraph.
+    - name: the whole shortcut as one key
+      edits: [{ find: <kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>, replace: <kbd>Ctrl+S</kbd> }]
+      fails: [keys, shortcut]
+      because: A key combination is keys nested inside one kbd, one per key.
+    - name: the output marked as code
+      edits: [{ find: <samp>Lamp lit.</samp>, replace: <code>Lamp lit.</code> }]
+      fails: [output]
+      because: code is what you write; samp is what the program prints back.
+    - name: the variable in idiomatic italics
+      edits: [{ find: <var>flame</var>, replace: <i>flame</i> }]
+      fails: [variable]
+      because: var names a variable; i only sets text off from the prose.
+    - name: the example in a paragraph instead of a code block
+      edits:
+        - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
+          replace: <p><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></p>
+      fails: [code-block, shown-as-written]
+      because: A block of code belongs in pre, which keeps its whitespace as written.

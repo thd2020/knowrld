@@ -1,0 +1,260 @@
+id: mimic-button
+statement: |
+  The Mimic lurks in the Lantern Shop, dressed up as buttons. A shape that looks like a button is really a div, and a "link" goes nowhere. A mouse can still click them, but a keyboard can't reach them. A screen reader can't tell what they are. And a link to `#` breaks opening in a new tab, bookmarking and copying.
+
+  Unmask it:
+
+  - The three controls on the storm lantern's page do something. They go nowhere. **Add to basket** puts the lantern in the basket. **Zoom in** enlarges the picture where it is. **Show details** opens the description. Make each one a real button whose label makes sense read alone, and keep calling the same function when it is pressed.
+  - Every page of the shop repeats its header and menu. Give keyboard users a way past them: make the first focusable thing in the body a link that jumps to the main content. Give the `main` element an id for it to point to.
+path: /lanterns/storm-lantern.html
+files:
+  - path: /index.html
+  - path: /lanterns/index.html
+  - path: /oil.html
+  - path: /shop.js
+  - path: /images/storm-lantern.jpg
+starter:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Storm lantern – The Lantern Shop</title>
+        <script src="/shop.js" defer></script>
+      </head>
+      <body>
+        <header>
+          <p>The Lantern Shop</p>
+          <nav>
+            <ul>
+              <li><a href="/index.html">Home</a></li>
+              <li><a href="/lanterns/index.html">Lanterns</a></li>
+              <li><a href="/oil.html">Lamp oil</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <h1>Storm lantern</h1>
+          <img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard">
+          <p>Twelve crowns. Burns for eighteen hours on one filling.</p>
+          <div class="button" onclick="addToBasket()">Add to basket</div>
+          <a href="#" onclick="zoomIn()">Zoom in</a>
+          <span class="button" onclick="showDetails()">Show details</span>
+          <p id="details" hidden>A storm lantern keeps its flame in any wind. The glass is guarded by a wire cage.</p>
+        </main>
+      </body>
+    </html>
+solution:
+  html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Storm lantern – The Lantern Shop</title>
+        <script src="/shop.js" defer></script>
+      </head>
+      <body>
+        <a href="#main-content">Skip to main content</a>
+        <header>
+          <p>The Lantern Shop</p>
+          <nav>
+            <ul>
+              <li><a href="/index.html">Home</a></li>
+              <li><a href="/lanterns/index.html">Lanterns</a></li>
+              <li><a href="/oil.html">Lamp oil</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main id="main-content">
+          <h1>Storm lantern</h1>
+          <img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard">
+          <p>Twelve crowns. Burns for eighteen hours on one filling.</p>
+          <button type="button" onclick="addToBasket()">Add to basket</button>
+          <button type="button" onclick="zoomIn()">Zoom in</button>
+          <button type="button" onclick="showDetails()">Show details</button>
+          <p id="details" hidden>A storm lantern keeps its flame in any wind. The glass is guarded by a wire cage.</p>
+        </main>
+      </body>
+    </html>
+grader:
+  type: dom
+  checks:
+    - id: no-div-buttons
+      says: No div or span, or anything else that is not a button, pretends to be one
+      selector: ':is(div, span, p, li, img)[onclick], [role="button"]:not(button)'
+      count: { max: 0 }
+      concepts: [native-controls, links-vs-buttons]
+    - id: no-fake-links
+      says: 'No link leads to "#" or "javascript:", and no anchor without an href acts as a control'
+      selector: 'a[href="#"], a[href^="javascript:" i], a:not([href])'
+      count: { max: 0 }
+      concepts: [links-vs-buttons]
+    - id: basket
+      says: Add to basket is a button that calls addToBasket()
+      role: button
+      attr: { name: onclick, matches: '\baddToBasket\s*\(\s*\)' }
+      name: { matches: '\badd\b[\s\S]*\bbasket\b' }
+      concepts: [links-vs-buttons, accessibility-tree]
+    - id: zoom
+      says: Zoom in is a button that calls zoomIn()
+      role: button
+      attr: { name: onclick, matches: '\bzoomIn\s*\(\s*\)' }
+      name: { matches: '\bzoom\b' }
+      concepts: [links-vs-buttons, accessibility-tree]
+    - id: details
+      says: Show details is a button that calls showDetails()
+      role: button
+      attr: { name: onclick, matches: '\bshowDetails\s*\(\s*\)' }
+      name: { matches: '\bdetails\b|\bdescription\b' }
+      concepts: [links-vs-buttons, accessibility-tree]
+    - id: same-actions
+      says: Each of the three buttons still calls its function when pressed
+      selector: ':is(button, input[type="button" i]):is([onclick*="addToBasket"], [onclick*="zoomIn"], [onclick*="showDetails"])'
+      count: { min: 3 }
+      every: true
+      attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\s*\(\s*\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
+      concepts: [native-controls]
+    - id: keyboard-reachable
+      says: No link or button is taken out of the keyboard's reach with a negative tabindex, inert, aria-hidden or a disabled fieldset (a duplicate link hidden from both, as in a card, is fine)
+      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *, fieldset[disabled] *):not(a[href]:not([href^="#"])[aria-hidden="true"][tabindex^="-"])'
+      count: { max: 0 }
+      concepts: [native-controls, skip-links]
+    - id: buttons-enabled
+      says: The buttons can be pressed; none is disabled
+      selector: ':is(button, input)[disabled]'
+      count: { max: 0 }
+      concepts: [native-controls]
+    - id: labels-alone
+      says: Every button's label makes sense on its own
+      role: button
+      count: { min: 3 }
+      every: true
+      name: { matches: '\w', not: '^\W*(click|click me|click here|here|go|ok|button)\W*$' }
+      concepts: [links-vs-buttons]
+    - id: skip-link
+      says: The first focusable thing in the body is a link that jumps to the main element
+      selector: 'body :is(a[href], button, input, select, textarea, [tabindex])'
+      first: true
+      name: { matches: 'skip|jump|main|content' }
+      resolves: { to: main }
+      concepts: [skip-links]
+    - id: skip-before-header
+      says: The skip link comes before the menu, at the top of the body or first in the header
+      selector: 'a[href^="#"]'
+      name: { matches: 'skip|jump|main|content' }
+      precedes: 'nav'
+      concepts: [skip-links, source-order]
+    - id: main-id
+      says: The main element has an id for the skip link to target
+      selector: main
+      count: { min: 1, max: 1 }
+      attr: { name: id, matches: '\S' }
+      concepts: [main-element, skip-links]
+fixtures:
+  pass:
+    - name: an input button, the skip link wrapped in a div, main's id "content"
+      edits:
+        - find: <a href="#main-content">Skip to main content</a>
+          replace: <div class="skip"><a href="#content">Skip to content</a></div>
+        - find: <main id="main-content">
+          replace: <main id="content">
+        - find: <button type="button" onclick="zoomIn()">Zoom in</button>
+          replace: <input type="button" value="Zoom in" onclick="zoomIn()">
+    - name: labels from aria-label and hidden icons, a button element with no type
+      edits:
+        - find: <a href="#main-content">Skip to main content</a>
+          replace: <a class="skip-link" href="#main-content">Jump to the lantern</a>
+        - find: <button type="button" onclick="zoomIn()">Zoom in</button>
+          replace: <button type="button" onclick="zoomIn()" aria-label="Zoom in on the picture">+</button>
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <button onclick="addToBasket()"><img src="/images/basket.svg" alt=""> Add to basket</button>
+    - name: the details button labelled for the description, the id named "main"
+      edits:
+        - find: <a href="#main-content">Skip to main content</a>
+          replace: <a href="#main">Skip navigation</a>
+        - find: <main id="main-content">
+          replace: <main id="main">
+        - find: <button type="button" onclick="showDetails()">Show details</button>
+          replace: <button type="button" onclick="showDetails();">Read the description</button>
+    - name: an extra menu button in the header, and return false after a call
+      edits:
+        - { find: "<nav>", replace: "<button type=\"button\" onclick=\"toggleMenu()\" aria-expanded=\"false\">Menu</button><nav>" }
+        - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket(); return false;"' }
+    - name: the skip link first inside the header, and a space before a call's brackets
+      edits:
+        - { find: '<a href="#main-content">Skip to main content</a>', replace: "" }
+        - { find: "<header>", replace: "<header><a href=\"#main-content\">Skip to main content</a>" }
+        - { find: 'onclick="addToBasket()"', replace: 'onclick="addToBasket ()"' }
+    - name: the product picture also linked, hidden from keyboards and screen readers as a duplicate
+      edits:
+        - find: <img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard">
+          replace: <a href="/lanterns/storm-lantern.html" aria-hidden="true" tabindex="-1"><img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard"></a>
+  fail:
+    - name: a div given a button role and a tabindex
+      edits:
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <div role="button" tabindex="0" onclick="addToBasket()">Add to basket</div>
+      fails: [no-div-buttons, same-actions]
+      because: A role does not give a div a button's keyboard behaviour; the button element comes with it.
+    - name: the zoom control left as a link to "#"
+      edits:
+        - find: <button type="button" onclick="zoomIn()">Zoom in</button>
+          replace: <a href="#" onclick="zoomIn()">Zoom in</a>
+      fails: [no-fake-links, zoom, same-actions]
+      because: An anchor is for navigation to a proper URL; an action in place is a button.
+    - name: the zoom control as a javascript link
+      edits:
+        - find: <button type="button" onclick="zoomIn()">Zoom in</button>
+          replace: <a href="javascript:void(0)" onclick="zoomIn()">Zoom in</a>
+      fails: [no-fake-links, zoom, same-actions]
+      because: '"javascript:" is not a URL anyone can open, bookmark or copy.'
+    - name: the skip link after the menu
+      edits:
+        - find: <a href="#main-content">Skip to main content</a>
+          replace: ''
+        - find: </header>
+          replace: |-
+            </header>
+                <a href="#main-content">Skip to main content</a>
+      fails: [skip-link, skip-before-header]
+      because: A skip link must come before the repeated content it skips.
+    - name: the skip link to an id main does not have
+      edits: [{ find: <main id="main-content">, replace: <main> }]
+      fails: [skip-link, main-id]
+      because: The fragment must match an id; with no id on main the link leads nowhere.
+    - name: the skip link aimed at the page title in the header
+      edits:
+        - find: <p>The Lantern Shop</p>
+          replace: <p id="shop-name">The Lantern Shop</p>
+        - find: <a href="#main-content">Skip to main content</a>
+          replace: <a href="#shop-name">Skip to main content</a>
+      fails: [skip-link]
+      because: The skip link must land at the start of the main content, past the header and menu.
+    - name: every button labelled "Click me"
+      edits:
+        - { find: '>Add to basket</button>', replace: '>Click me</button>' }
+        - { find: '>Zoom in</button>', replace: '>Click me</button>' }
+        - { find: '>Show details</button>', replace: '>Click me</button>' }
+      fails: [basket, zoom, details, labels-alone]
+      because: Screen reader users may list the buttons out of context, where "Click me" says nothing.
+    - name: the basket button disabled
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<button type="button" disabled onclick="addToBasket()">' }
+      fails: [buttons-enabled]
+      because: A disabled button cannot be pressed by anyone, so the control is lost, not fixed.
+    - name: the basket button taken out of the tab order
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<button type="button" tabindex="-1" onclick="addToBasket()">' }
+      fails: [keyboard-reachable]
+      because: A button with tabindex="-1" can no longer be reached with Tab, which is the whole point of using a button.
+    - name: the skip link taken out of the tab order
+      edits:
+        - { find: '<a href="#main-content">', replace: '<a href="#main-content" tabindex="-1">' }
+      fails: [keyboard-reachable]
+      because: A skip link exists for keyboard users; one they cannot tab to skips nothing.
+    - name: the buttons inside a disabled fieldset
+      edits:
+        - { find: '<button type="button" onclick="addToBasket()">', replace: '<fieldset disabled><button type="button" onclick="addToBasket()">' }
+        - { find: 'Add to basket</button>', replace: 'Add to basket</button></fieldset>' }
+      fails: [keyboard-reachable]
+      because: A disabled fieldset disables every control in it; nobody can press the button.

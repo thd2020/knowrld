@@ -1,5 +1,5 @@
 // Uniform views of a problem, whether it has one page or several, one list of checks or stages.
-import type { DomCheck, Fixture, ProblemFile, SiteFile, Stage } from "./schema.ts";
+import type { DomCheck, Fixture, ProblemFile, SiteFile, Stage, WriteTask } from "./schema.ts";
 
 export interface Code {
   html: string;
@@ -83,4 +83,25 @@ export function starterCode(p: ProblemFile): Record<string, Code> {
 
 export function solutionCode(p: ProblemFile): Record<string, Code> {
   return Object.fromEntries(problemPages(p).map((pg) => [pg.id, pg.solution]));
+}
+
+// A writing task graded as a one-page problem with a blank starter unless it gives one.
+export function taskProblem(t: WriteTask): ProblemFile {
+  return {
+    id: `${t.concept}--${t.id}`,
+    statement: t.prompt,
+    starter: t.starter ?? { html: "", css: "" },
+    solution: t.solution,
+    grader: { type: "dom", checks: t.checks },
+    ...(t.fixtures ? { fixtures: t.fixtures } : {}),
+  };
+}
+
+// The teaching line for each check, taken from the wrong fixtures: the `because` of the fixture
+// that fails the check while failing the fewest others. Checks no fixture fails get none.
+export function becauseLines(p: ProblemFile): Record<string, string> {
+  const out: Record<string, string> = {};
+  const wrong = [...(p.fixtures?.fail ?? [])].filter((f) => f.because && f.fails?.length).sort((a, b) => a.fails!.length - b.fails!.length);
+  for (const f of wrong) for (const id of f.fails!) out[id] ??= f.because!;
+  return out;
 }

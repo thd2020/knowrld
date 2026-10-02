@@ -8,6 +8,7 @@ my-pack/
   sources/*.yaml   official sources and the excerpts cut from them
   graph/*.yaml     nodes: concepts, problems and projects
   problems/*.yaml  what a problem asks, its starter code, a reference solution and its checks
+  write/*.yaml     optional: short writing tasks the concepts' characters set
   fog.yaml         optional: pages around the region, listed but not taught
 ```
 
@@ -69,6 +70,12 @@ A grader has either `checks` or `stages`. A stage has an id, a title, a line say
 ### Fixtures
 
 `fixtures.pass` lists other correct answers and `fixtures.fail` lists plausible wrong ones, so tests can show that a grader accepts any valid answer and rejects the mistakes it is meant to catch. A fixture is a full page (`html`), or the reference solution with `edits` (each `find` must occur in it); in a multi-page problem, `pages` overrides some pages. A wrong fixture names the check ids it must fail in `fails` and says why in `because`. Fixtures are test data and are never shipped to players.
+
+A wrong fixture's `because` is also the teaching line for the checks it fails: an engine may show it to a player whose answer fails one of those checks (`becauseLines` picks, for each check, the fixture that fails it while failing the fewest others). Write it as a sentence a learner can act on.
+
+## Writing tasks
+
+`write/*.yaml` lists `tasks`, each set by one concept's character. A task has an `id`, the `concept` it belongs to, a `prompt` that states the goal (what the page must do, never a checklist of the answer), the excerpts that teach it in `cites`, a reference `solution`, `checks` and optional `fixtures`, exactly as a one-page problem has. The editor starts blank unless the task gives a `starter`, for example a few lines to fix. Tasks are graded as a one-page problem (`taskProblem`), so the same rules hold: the solution passes every check, the starter (blank or given) fails at least one, and each wrong fixture fails the checks it names. An engine can draw a different task, or a different retrieval question, each time it tests a concept, so a retry or a review measures the idea and not a remembered answer.
 
 ## Licence classes
 

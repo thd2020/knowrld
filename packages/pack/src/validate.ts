@@ -1,7 +1,7 @@
 import { excerptConflict } from "./licence.ts";
 import type { Issue, LoadedPack } from "./load.ts";
 import type { ProblemFile } from "./schema.ts";
-import { allChecks, fixtureCode, problemPages } from "./problem.ts";
+import { allChecks, fixtureCode, problemPages, taskProblem } from "./problem.ts";
 
 function badPattern(re: string | undefined): boolean {
   if (re === undefined) return false;
@@ -126,6 +126,22 @@ export function validatePack(pack: LoadedPack): Issue[] {
   for (const p of problems) {
     for (const m of validateProblem(p)) err(`problems/${p.id}`, m);
     for (const c of allChecks(p)) for (const n of c.concepts ?? []) if (!nodeIds.has(n)) err(`problems/${p.id}`, `check ${c.id} names unknown concept ${n}`);
+  }
+
+  const tasks = pack.tasks ?? [];
+  const taskKeys = new Set<string>();
+  for (const t of tasks) {
+    const where = `write/${t.concept}#${t.id}`;
+    const key = `${t.concept}#${t.id}`;
+    if (taskKeys.has(key)) err(where, "duplicate task id");
+    taskKeys.add(key);
+    const owner = nodes.find((n) => n.id === t.concept);
+    if (!owner) err(where, `unknown concept ${t.concept}`);
+    else if (owner.kind !== "concept") err(where, `${t.concept} is not a concept`);
+    for (const c of t.cites) if (!excerpts.has(c)) err(where, `cites unknown excerpt ${c}`);
+    const p = taskProblem(t);
+    for (const m of validateProblem(p)) err(where, m);
+    for (const c of t.checks) for (const n of c.concepts ?? []) if (!nodeIds.has(n)) err(where, `check ${c.id} names unknown concept ${n}`);
   }
 
   const { cycle } = topoOrder(nodes);

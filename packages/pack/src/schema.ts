@@ -221,6 +221,22 @@ export const Fixture = FixturePage.extend({
   because: z.string().optional(),
 });
 
+// A short writing task a concept's keeper sets: the player writes a construct from a blank editor
+// (or fixes a few given lines) and it is graded like a one-page problem. The prompt states the goal,
+// never a checklist of the answer. `cites` names the excerpts that teach it.
+export const WriteTask = z.object({
+  id,
+  concept: id,
+  prompt: z.string(),
+  cites: z.array(z.string().regex(/^[a-z0-9-]+#[a-z0-9-]+$/)).min(1),
+  // Code already in the editor; blank when absent.
+  starter: Code.optional(),
+  solution: Code,
+  checks: z.array(DomCheck).min(1),
+  fixtures: z.object({ pass: z.array(Fixture).default([]), fail: z.array(Fixture).default([]) }).optional(),
+});
+export const WriteFile = z.object({ tasks: z.array(WriteTask).min(1) });
+
 export const ProblemFile = z
   .object({
     id,
@@ -255,3 +271,4 @@ export type ProblemPage = z.infer<typeof ProblemPage>;
 export type SiteFile = z.infer<typeof SiteFile>;
 export type Stage = z.infer<typeof Stage>;
 export type Fixture = z.infer<typeof Fixture>;
+export type WriteTask = z.infer<typeof WriteTask>;

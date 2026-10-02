@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom";
 import { fileURLToPath } from "node:url";
 import { loadPack, validatePack, excerptConflict, topoOrder } from "../src/index.ts";
 import { composeDocument, gradeSite, type GradedPage } from "../src/dom-grader.ts";
-import { allChecks, fixtureCode, problemPages, siteFiles, solutionCode, starterCode, type Code } from "../src/problem.ts";
+import { allChecks, becauseLines, fixtureCode, problemPages, siteFiles, solutionCode, starterCode, taskProblem, type Code } from "../src/problem.ts";
 import type { DomCheck, ProblemFile } from "../src/schema.ts";
 import type { LoadedPack } from "../src/load.ts";
 import { FogFile } from "../src/schema.ts";
@@ -139,7 +139,7 @@ for (const packName of ["web-basics", "semantic-html"]) {
   describe(`${packName}: graders against starters, solutions and fixtures`, () => {
     const { pack } = loadPack(fileURLToPath(new URL(`../../../packs/${packName}`, import.meta.url)));
     it("has problems to grade", () => expect(pack!.problems.length).toBeGreaterThan(0));
-    for (const p of pack!.problems) {
+    for (const p of [...pack!.problems, ...(pack!.tasks ?? []).map(taskProblem)]) {
       it(`${p.id}: the reference solution passes every portable check`, () => {
         expect(failing(p, solutionCode(p))).toEqual([]);
       });
@@ -161,3 +161,11 @@ for (const packName of ["web-basics", "semantic-html"]) {
     }
   });
 }
+
+describe("semantic-html writing tasks", () => {
+  const { pack } = loadPack(fileURLToPath(new URL("../../../packs/semantic-html", import.meta.url)));
+  it("derives a teaching line for failing checks from the wrong fixtures", () => {
+    const scribe = pack!.problems.find((p) => p.id === "shouting-scribe")!;
+    expect(becauseLines(scribe).latin).toMatch(/English pronunciation/);
+  });
+});

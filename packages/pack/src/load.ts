@@ -8,7 +8,9 @@ import {
   GraphFile,
   ProblemFile,
   FogFile,
+  WriteFile,
   type FogPage,
+  type WriteTask,
   type SourceDoc,
   type GraphNode,
 } from "./schema.ts";
@@ -27,6 +29,8 @@ export interface LoadedPack {
   problems: ProblemFile[];
   // Optional fog.yaml: wilderness pages beyond the country. Empty when absent.
   fog?: FogPage[];
+  // Optional write/*.yaml: the concepts' writing tasks. Empty when absent.
+  tasks?: WriteTask[];
 }
 
 function yamlFiles(dir: string): string[] {
@@ -70,6 +74,7 @@ export function loadPack(dir: string): { pack?: LoadedPack; issues: Issue[] } {
   });
   const fogFile = join(dir, "fog.yaml");
   const fog = existsSync(fogFile) ? (read(FogFile, fogFile, issues)?.pages ?? []) : [];
+  const tasks = yamlFiles(join(dir, "write")).flatMap((f) => read(WriteFile, f, issues)?.tasks ?? []);
   if (!manifest) return { issues };
-  return { pack: { dir, manifest, sources, nodes, problems, fog }, issues };
+  return { pack: { dir, manifest, sources, nodes, problems, fog, tasks }, issues };
 }

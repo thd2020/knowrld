@@ -1,0 +1,500 @@
+# Writing tasks for the road, part 4: links.
+tasks:
+  - id: closed-map-shop
+    concept: hyperlinks
+    prompt: The fact that the map shop is closed until spring lives only in this link's title, so keyboard and touchscreen users never learn it. Make sure every reader meets it, and keep the link.
+    cites: [creating-links#title-hover-only]
+    starter:
+      html: |
+        <p>Buy your maps at <a href="/shop.html" title="Closed until spring">the map shop</a>.</p>
+    solution:
+      html: |
+        <p>Buy your maps at <a href="/shop.html">the map shop</a> (closed until spring).</p>
+    checks:
+      - id: link
+        says: The link to the shop is still there
+        selector: 'a[href="/shop.html"]'
+        text: { matches: 'map shop' }
+      - id: visible
+        says: The closure is in the page's text, where everyone meets it
+        selector: p
+        rendered: true
+        text: { matches: 'closed until spring' }
+    fixtures:
+      pass:
+        - name: the closure inside the link text
+          html: '<p>Buy your maps at <a href="/shop.html">the map shop (closed until spring)</a>.</p>'
+        - name: the title kept as well
+          html: '<p>Buy your maps at <a href="/shop.html" title="Closed until spring">the map shop</a>, which is closed until spring.</p>'
+      fail:
+        - name: the title made longer
+          html: '<p>Buy your maps at <a href="/shop.html" title="Closed until spring, sorry">the map shop</a>.</p>'
+          fails: [visible]
+          because: A link's title shows only on mouse hover, so information people need goes in the text itself.
+
+  - id: lantern-tale
+    concept: hyperlinks
+    prompt: "Write the sentence Read the full tale of the lost lantern. with the words the full tale of the lost lantern as a link to /tales/lantern.html."
+    cites: [creating-links#anchor, creating-links#url]
+    solution:
+      html: |
+        <p>Read <a href="/tales/lantern.html">the full tale of the lost lantern</a>.</p>
+    checks:
+      - id: link
+        says: The words link to the tale
+        selector: 'a'
+        attr: { name: href, equals: /tales/lantern.html }
+        text: { matches: '^\s*the full tale of the lost lantern\s*$' }
+    fixtures:
+      fail:
+        - name: the address in a src attribute
+          html: '<p>Read <a src="/tales/lantern.html">the full tale of the lost lantern</a>.</p>'
+          fails: [link]
+          because: A link's destination goes in its href attribute.
+
+  - id: fair-card
+    concept: hyperlinks
+    prompt: "Make the whole announcement, the heading Autumn fair and the paragraph Stalls, music and cider., one link to /fair.html."
+    cites: [creating-links#block-links]
+    solution:
+      html: |
+        <a href="/fair.html">
+          <h2>Autumn fair</h2>
+          <p>Stalls, music and cider.</p>
+        </a>
+    checks:
+      - id: heading
+        says: The heading is inside the link
+        selector: 'a[href="/fair.html"] :is(h1, h2, h3, h4)'
+        text: { matches: 'Autumn fair' }
+      - id: paragraph
+        says: The paragraph is inside the same link
+        selector: 'a[href="/fair.html"] p'
+        text: { matches: 'Stalls, music and cider' }
+    fixtures:
+      fail:
+        - name: only the heading text linked
+          html: '<h2><a href="/fair.html">Autumn fair</a></h2><p>Stalls, music and cider.</p>'
+          fails: [paragraph]
+          because: Block-level elements can be wrapped in one a element, which makes the whole block a link.
+
+  - id: bread-recipe
+    concept: relative-paths
+    prompt: "This page is /recipes/soup.html. Link the words bread recipe to /recipes/bread.html with a path written from where this page sits."
+    cites: [creating-links#same-directory]
+    solution:
+      html: |
+        <p>Serve it with the <a href="bread.html">bread recipe</a>.</p>
+    checks:
+      - id: relative
+        says: The link is a relative path to the file in the same folder
+        selector: a
+        attr: { name: href, matches: '^(\./)?bread\.html$' }
+        text: { matches: 'bread recipe' }
+    fixtures:
+      fail:
+        - name: the folder named again
+          html: '<p>Serve it with the <a href="recipes/bread.html">bread recipe</a>.</p>'
+          fails: [relative]
+          because: From /recipes/soup.html, recipes/bread.html points to /recipes/recipes/bread.html; a file in the same folder needs only its name.
+
+  - id: all-tales
+    concept: relative-paths
+    prompt: "This page is /tales/winter/index.html. Link the words all tales to /tales/index.html with a relative path."
+    cites: [creating-links#up-a-directory]
+    solution:
+      html: |
+        <p>Back to <a href="../index.html">all tales</a>.</p>
+    checks:
+      - id: up
+        says: The link goes up one folder, relatively
+        selector: a
+        attr: { name: href, matches: '^\.\./(index\.html)?$' }
+    fixtures:
+      fail:
+        - name: a root-relative path
+          html: '<p>Back to <a href="/tales/index.html">all tales</a>.</p>'
+          fails: [up]
+          because: This task asks for a path relative to the page; ../ goes up one folder from where the page sits.
+        - name: the same folder
+          html: '<p>Back to <a href="index.html">all tales</a>.</p>'
+          fails: [up]
+          because: index.html alone is the winter folder's own index; going up a folder takes ../ first.
+
+  - id: river-map
+    concept: relative-paths
+    prompt: "This page is /index.html, at the top of the site. Link the words river map to /maps/river.html with a path relative to this page."
+    cites: [creating-links#subdirectory]
+    solution:
+      html: |
+        <p>See the <a href="maps/river.html">river map</a>.</p>
+    checks:
+      - id: down
+        says: The link goes down into the maps folder
+        selector: a
+        attr: { name: href, matches: '^(\./)?maps/river\.html$' }
+    fixtures:
+      fail:
+        - name: a backslash
+          html: '<p>See the <a href="maps\river.html">river map</a>.</p>'
+          fails: [down]
+          because: Paths in URLs use forward slashes to go down into a folder.
+
+  - id: weather-almanac
+    concept: absolute-urls
+    prompt: "Link the words the weather almanac to the page forecast.html at the top of another site, www.vale-weather.example, served over https."
+    cites: [creating-links#absolute-relative, creating-links#internal-external]
+    solution:
+      html: |
+        <p>Check <a href="https://www.vale-weather.example/forecast.html">the weather almanac</a> before you sail.</p>
+    checks:
+      - id: absolute
+        says: The link is an absolute URL to the other site's page
+        selector: a
+        attr: { name: href, matches: '^https://www\.vale-weather\.example/forecast\.html$' }
+    fixtures:
+      fail:
+        - name: no protocol
+          html: '<p>Check <a href="www.vale-weather.example/forecast.html">the weather almanac</a> before you sail.</p>'
+          fails: [absolute]
+          because: Without https:// the browser reads the address as a path on this site; an external link needs the full URL.
+
+  - id: inside-and-out
+    concept: absolute-urls
+    prompt: "Write two links: an internal one, our history, to /about.html on this site, and an external one, the river guild, to the page about.html at the top of the site www.river-guild.example."
+    cites: [creating-links#internal-external, creating-links#absolute-relative]
+    solution:
+      html: |
+        <p>Read <a href="/about.html">our history</a> or visit <a href="https://www.river-guild.example/about.html">the river guild</a>.</p>
+    checks:
+      - id: internal
+        says: Our history links within this site
+        selector: a
+        text: { matches: 'our history' }
+        attr: { name: href, matches: '^(/|\./)?about\.html$' }
+      - id: external
+        says: The river guild links to the other site with a full URL
+        selector: a
+        text: { matches: 'river guild' }
+        attr: { name: href, matches: '^https?://www\.river-guild\.example/about\.html$' }
+    fixtures:
+      fail:
+        - name: the external link without its site
+          html: '<p>Read <a href="/about.html">our history</a> or visit <a href="/about.html">the river guild</a>.</p>'
+          fails: [external]
+          because: A relative path stays on this site; reaching another site takes its absolute URL.
+
+  - id: see-prices
+    concept: document-fragments
+    prompt: Make the words see prices below jump to the Prices heading further down this page.
+    cites: [creating-links#fragment, creating-links#fragment-same-page]
+    starter:
+      html: |
+        <p>Fresh bread every morning; see prices below.</p>
+        <h2>Opening hours</h2>
+        <p>Dawn to dusk.</p>
+        <h2>Prices</h2>
+        <p>Two copper a loaf.</p>
+    solution:
+      html: |
+        <p>Fresh bread every morning; <a href="#prices">see prices below</a>.</p>
+        <h2>Opening hours</h2>
+        <p>Dawn to dusk.</p>
+        <h2 id="prices">Prices</h2>
+        <p>Two copper a loaf.</p>
+    checks:
+      - id: target
+        says: The Prices heading has an id
+        selector: 'h2[id]'
+        text: { matches: '^\s*Prices\s*$' }
+      - id: jump
+        says: The words link to it on this page
+        selector: 'a[href^="#"]'
+        text: { matches: 'see prices' }
+        resolves: { to: 'h2' }
+    fixtures:
+      fail:
+        - name: the link without the hash
+          edits: [{ find: 'href="#prices"', replace: 'href="prices"' }]
+          fails: [jump]
+          because: A fragment link is a hash followed by the target's id.
+
+  - id: mailing-address
+    concept: document-fragments
+    prompt: "This page is /index.html. Link the words our mailing address to the element with the id mailing-address on the page /contact.html."
+    cites: [creating-links#fragment-hash]
+    solution:
+      html: |
+        <p>Write to us at <a href="contact.html#mailing-address">our mailing address</a>.</p>
+    checks:
+      - id: fragment
+        says: The link names the page, then the id after a hash
+        selector: a
+        attr: { name: href, matches: '^(/|\./)?contact\.html#mailing-address$' }
+    fixtures:
+      fail:
+        - name: the id before the page
+          html: '<p>Write to us at <a href="#mailing-address/contact.html">our mailing address</a>.</p>'
+          fails: [fragment]
+          because: The fragment goes at the end of the path, after a hash.
+
+  - id: two-seasons
+    concept: document-fragments
+    prompt: "The link should reach the Winter heading, but two headings share one id. Give the Winter heading the id winter, point the link at it, and keep every id unique."
+    cites: [attr-id#unique, creating-links#fragment-same-page]
+    starter:
+      html: |
+        <p><a href="#season">Jump to winter</a></p>
+        <h2 id="season">Summer</h2>
+        <p>Long days at the lake.</p>
+        <h2 id="season">Winter</h2>
+        <p>Skating on the millpond.</p>
+    solution:
+      html: |
+        <p><a href="#winter">Jump to winter</a></p>
+        <h2 id="summer">Summer</h2>
+        <p>Long days at the lake.</p>
+        <h2 id="winter">Winter</h2>
+        <p>Skating on the millpond.</p>
+    checks:
+      - id: unique
+        says: No two elements share an id
+        selector: '[id]'
+        unique: id
+      - id: reaches
+        says: The link lands on the Winter heading
+        selector: a
+        resolves: { to: 'h2#winter' }
+    fixtures:
+      fail:
+        - name: the duplicate left on Summer
+          edits: [{ find: '<h2 id="summer">', replace: '<h2 id="winter">' }]
+          fails: [unique]
+          because: An id must be unique in the whole document; with two, a link reaches the first.
+
+  - id: ferry-timetable
+    concept: link-text
+    prompt: "Write a sentence linking to the ferry timetable at /ferry/times.html, with link text that makes sense when a screen reader lists it on its own."
+    cites: [creating-links#accessible-links, creating-links#link-tips, accessible-html#labels-out-of-context]
+    solution:
+      html: |
+        <p>Check the <a href="/ferry/times.html">ferry timetable</a> before you travel.</p>
+    checks:
+      - id: link
+        says: A link goes to the timetable
+        selector: 'a[href="/ferry/times.html"]'
+      - id: says-where
+        says: Its text says where it leads
+        selector: 'a[href="/ferry/times.html"]'
+        text: { matches: 'timetable', not: '^\s*(click here|here|more|read more|link)\s*$|https?:|/ferry' }
+    fixtures:
+      fail:
+        - name: click here
+          html: '<p>For the ferry timetable, <a href="/ferry/times.html">click here</a>.</p>'
+          fails: [says-where]
+          because: Screen reader users often hear a page's links as a list, out of context, so the link text alone must say where it leads.
+        - name: the address as text
+          html: '<p>Timetable: <a href="/ferry/times.html">/ferry/times.html</a></p>'
+          fails: [says-where]
+          because: An address read out letter by letter says little; the link text should name the destination.
+
+  - id: fair-moved
+    concept: link-text
+    prompt: "Write The autumn fair has moved to the meadow. with a link to /fair.html whose text alone says where it leads."
+    cites: [creating-links#link-tips, accessible-html#labels-out-of-context]
+    solution:
+      html: |
+        <p>The <a href="/fair.html">autumn fair</a> has moved to the meadow.</p>
+    checks:
+      - id: says-where
+        says: The link's own text names the fair
+        selector: 'a[href="/fair.html"]'
+        text: { matches: 'fair', not: '^\s*(here|click here|more|this)\s*$' }
+    fixtures:
+      fail:
+        - name: a link on here
+          html: '<p>The autumn fair has moved to the meadow. Details <a href="/fair.html">here</a>.</p>'
+          fails: [says-where]
+          because: A link named here tells a reader nothing when it is heard out of context.
+
+  - id: map-download
+    concept: link-signposts
+    prompt: "Link to the map /maps/vale.pdf so that the browser downloads it, and say in the link's text that it is a PDF of 2 MB."
+    cites: [creating-links#signposts, creating-links#download]
+    solution:
+      html: |
+        <p><a href="/maps/vale.pdf" download>Map of the Vale (PDF, 2 MB)</a></p>
+    checks:
+      - id: download
+        says: The link downloads the PDF
+        selector: 'a[href="/maps/vale.pdf"]'
+        attr: { name: download, present: true }
+      - id: signpost
+        says: Its text says the file type and size
+        selector: 'a[href="/maps/vale.pdf"]'
+        text: { matches: '(?=.*PDF)(?=.*2\s*MB)' }
+    fixtures:
+      fail:
+        - name: no warning in the text
+          html: '<p><a href="/maps/vale.pdf" download>Map of the Vale</a></p>'
+          fails: [signpost]
+          because: A link that downloads a file should say so in its text, with the type and size, before anyone follows it.
+
+  - id: weather-new-tab
+    concept: link-signposts
+    prompt: "Link the words weather forecast to https://weather.example so that it opens in a new tab, and warn readers in the link's text that it does."
+    cites: [creating-links#new-tab, accessible-html#new-tab-indicator]
+    solution:
+      html: |
+        <p><a href="https://weather.example" target="_blank">Weather forecast (opens in a new tab)</a></p>
+    checks:
+      - id: new-tab
+        says: The link opens in a new tab
+        selector: 'a[href^="https://weather.example"]'
+        attr: { name: target, equals: _blank }
+      - id: warned
+        says: Its text says so
+        selector: 'a[href^="https://weather.example"]'
+        text: { matches: 'new (tab|window)' }
+    fixtures:
+      fail:
+        - name: a silent new tab
+          html: '<p><a href="https://weather.example" target="_blank">Weather forecast</a></p>'
+          fails: [warned]
+          because: A new tab breaks the back button; a link that opens one should say so, so no reader is surprised.
+
+  - id: order-a-cake
+    concept: email-links
+    prompt: "Write a link with the text Order a cake that opens a new email to baker@hollowoak.example with the subject Birthday cake already filled in."
+    cites: [creating-links#mailto, creating-links#mailto-details, creating-links#mailto-encoding]
+    solution:
+      html: |
+        <a href="mailto:baker@hollowoak.example?subject=Birthday%20cake">Order a cake</a>
+    checks:
+      - id: mailto
+        says: The link opens an email to the baker
+        selector: a
+        attr: { name: href, matches: '^mailto:baker@hollowoak\.example(\?|$)' }
+        text: { matches: 'Order a cake' }
+      - id: subject
+        says: The subject is set, URL-encoded
+        selector: a
+        attr: { name: href, matches: '\?(.*&)?subject=Birthday(%20|\+)cake(&|$)' }
+    fixtures:
+      fail:
+        - name: a space left in the subject
+          html: '<a href="mailto:baker@hollowoak.example?subject=Birthday cake">Order a cake</a>'
+          fails: [subject]
+          because: Each value in a mailto URL must be URL-encoded; a space is written %20.
+        - name: the subject as an attribute
+          html: '<a href="mailto:baker@hollowoak.example" subject="Birthday cake">Order a cake</a>'
+          fails: [subject]
+          because: Extra mail fields go in the mailto URL itself, after a question mark, as name=value pairs.
+
+  - id: ask-the-guild
+    concept: email-links
+    prompt: "Write a link, Ask the guild, that opens an email to guild@vale.example, with a copy to clerk@vale.example and the subject Guild question."
+    cites: [creating-links#mailto-details, creating-links#mailto-encoding]
+    solution:
+      html: |
+        <a href="mailto:guild@vale.example?cc=clerk@vale.example&amp;subject=Guild%20question">Ask the guild</a>
+    checks:
+      - id: to
+        says: The email goes to the guild
+        selector: a
+        attr: { name: href, matches: '^mailto:guild@vale\.example\?' }
+      - id: cc
+        says: The clerk gets a copy
+        selector: a
+        attr: { name: href, matches: '^[^?]*\?([^?&]*&)*cc=clerk@vale\.example(&[^?]*)?$' }
+      - id: subject
+        says: The subject is set and URL-encoded
+        selector: a
+        attr: { name: href, matches: '^[^?]*\?([^?&]*&)*subject=Guild(%20|\+)question(&[^?]*)?$' }
+    fixtures:
+      pass:
+        - name: subject first
+          html: '<a href="mailto:guild@vale.example?subject=Guild%20question&cc=clerk@vale.example">Ask the guild</a>'
+      fail:
+        - name: two question marks
+          html: '<a href="mailto:guild@vale.example?cc=clerk@vale.example?subject=Guild%20question">Ask the guild</a>'
+          fails: [cc, subject]
+          because: One question mark starts the fields; each further field is joined with an ampersand.
+
+  - id: tell-a-friend
+    concept: email-links
+    prompt: Write a link, Tell a friend, that opens a new email with no recipient filled in, so the reader picks one.
+    cites: [creating-links#mailto-empty]
+    solution:
+      html: |
+        <a href="mailto:">Tell a friend</a>
+    checks:
+      - id: empty
+        says: The link opens a new email with no address
+        selector: a
+        attr: { name: href, matches: '^mailto:(\?.*)?$' }
+    fixtures:
+      fail:
+        - name: a made-up address
+          html: '<a href="mailto:friend@example.org">Tell a friend</a>'
+          fails: [empty]
+          because: "The address in a mailto link is optional; with mailto: alone, the reader fills in the recipient."
+
+  - id: breads-menu
+    concept: navigation-menus
+    prompt: "Write the navigation menu for the Breads page of a bakery whose pages are Home (/), Breads (/breads.html) and Visit (/visit.html). Mark which page the reader is on."
+    cites: [creating-links#nav-menu, creating-links#nav-list, attr-aria-current#styled-current]
+    solution:
+      html: |
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/breads.html" aria-current="page">Breads</a></li>
+            <li><a href="/visit.html">Visit</a></li>
+          </ul>
+        </nav>
+    checks:
+      - id: list
+        says: The menu is a list of links inside nav
+        selector: 'nav :is(ul, ol) > li > a'
+        count: { min: 3, max: 3 }
+      - id: current
+        says: The Breads link is marked as the current page
+        selector: 'a[aria-current="page"]'
+        count: { min: 1, max: 1 }
+        text: { matches: 'Breads' }
+    fixtures:
+      fail:
+        - name: the current page shown by a class
+          html: '<nav><ul><li><a href="/">Home</a></li><li><a href="/breads.html" class="current">Breads</a></li><li><a href="/visit.html">Visit</a></li></ul></nav>'
+          fails: [current]
+          because: A class only styles the link; aria-current="page" tells assistive technology which page is the current one.
+
+  - id: tales-menu
+    concept: navigation-menus
+    prompt: "Write the site's main menu as a navigation region holding a list of links: Home (/), Tales (/tales.html) and Maps (/maps.html)."
+    cites: [creating-links#nav-list, el-nav#summary]
+    solution:
+      html: |
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/tales.html">Tales</a></li>
+            <li><a href="/maps.html">Maps</a></li>
+          </ul>
+        </nav>
+    checks:
+      - id: nav
+        says: The menu is a nav
+        selector: nav
+        count: { min: 1 }
+      - id: list
+        says: Its links are items of a list
+        selector: 'nav li > a[href]'
+        count: { min: 3, max: 3 }
+    fixtures:
+      fail:
+        - name: links in a paragraph
+          html: '<nav><p><a href="/">Home</a> | <a href="/tales.html">Tales</a> | <a href="/maps.html">Maps</a></p></nav>'
+          fails: [list]
+          because: A navigation menu is a list of links, so screen readers announce how many there are.

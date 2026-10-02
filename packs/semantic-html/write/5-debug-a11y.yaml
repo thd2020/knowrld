@@ -1,0 +1,600 @@
+# Writing tasks for the road, part 5: debugging HTML and HTML as the basis of accessibility.
+tasks:
+  - id: bold-spill
+    concept: permissive-parsing
+    prompt: The browser quietly repaired this markup, and now the second paragraph is bold too. Fix the source so that only the word deep is strong.
+    cites: [debugging-html#permissive, debugging-html#dom-inspector]
+    starter:
+      html: |
+        <p>The well is <strong>deep.</p>
+        <p>Do not lean over it.</p>
+    solution:
+      html: |
+        <p>The well is <strong>deep</strong>.</p>
+        <p>Do not lean over it.</p>
+    checks:
+      - id: deep
+        says: Only deep is strong
+        selector: strong
+        count: { min: 1 }
+        every: true
+        text: { matches: '^\s*deep\.?\s*$' }
+      - id: second
+        says: The second paragraph is plain text again
+        selector: p
+        text: { matches: 'Do not lean' }
+    fixtures:
+      fail:
+        - name: the strong closed after both paragraphs
+          html: "<p>The well is <strong>deep.</p>\n<p>Do not lean over it.</p></strong>"
+          fails: [deep]
+          because: The browser closes an unclosed strong where it can and reopens it in the next paragraph; close it where the important text ends.
+
+  - id: swallowed-paragraph
+    concept: permissive-parsing
+    prompt: Half of this page has vanished, though the browser reports no error. Find what swallowed it and fix it.
+    cites: [debugging-html#permissive, debugging-html#error-types]
+    starter:
+      html: |
+        <p class="note>Bring water.</p>
+        <p>Bring bread.</p>
+    solution:
+      html: |
+        <p class="note">Bring water.</p>
+        <p>Bring bread.</p>
+    checks:
+      - id: note
+        says: The first paragraph has the class note and its text
+        selector: p.note
+        text: { matches: 'Bring water' }
+      - id: both
+        says: Both paragraphs are on the page
+        selector: p
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: the class dropped and the quote still open elsewhere
+          html: "<p>Bring water.</p>\n<p class=\"x>Bring bread.</p>"
+          fails: [note, both]
+          because: An attribute value whose closing quote is missing runs on into the markup after it, which then never reaches the page.
+
+  - id: stray-items
+    concept: html-validator
+    prompt: "The validator reports: Element li not allowed as child of element body. Fix the markup so that the breads are a proper list."
+    cites: [debugging-html#validator, debugging-html#line-numbers]
+    starter:
+      html: |
+        <p>Our breads:</p>
+        <li>Rye</li>
+        <li>Spelt</li>
+    solution:
+      html: |
+        <p>Our breads:</p>
+        <ul>
+          <li>Rye</li>
+          <li>Spelt</li>
+        </ul>
+    checks:
+      - id: items
+        says: Both breads are list items
+        selector: li
+        count: { min: 2, max: 2 }
+      - id: in-a-list
+        says: Every list item sits in a list
+        selector: 'li:not(ul > li, ol > li, menu > li)'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the items wrapped in a div
+          html: "<p>Our breads:</p><div><li>Rye</li><li>Spelt</li></div>"
+          fails: [in-a-list]
+          because: A list item must be the child of a list, ul or ol; the validator names the element and where it sits.
+
+  - id: duplicate-ids
+    concept: html-validator
+    prompt: "The validator reports: Duplicate ID hours. Fix it so the page validates, keeping an id on both elements."
+    cites: [debugging-html#validator, debugging-html#fix-a-few, attr-id#unique]
+    starter:
+      html: |
+        <h2 id="hours">Opening hours</h2>
+        <p id="hours">Dawn to dusk.</p>
+    solution:
+      html: |
+        <h2 id="hours">Opening hours</h2>
+        <p id="hours-text">Dawn to dusk.</p>
+    checks:
+      - id: kept
+        says: Both elements keep an id
+        selector: '[id]'
+        count: { min: 2 }
+      - id: unique
+        says: No two ids are the same
+        selector: '[id]'
+        unique: id
+    fixtures:
+      fail:
+        - name: the duplicate kept
+          html: '<h2 id="hours">Opening hours</h2><p id="hours">Dawn to dusk.</p>'
+          fails: [unique]
+          because: An id must be unique in the whole document; the validator reports every duplicate.
+
+  - id: ring-the-bell
+    concept: semantic-html-accessibility
+    prompt: Write a control labelled Ring the bell that keyboard users can reach with Tab and press with Enter or Space, using no scripting and no tabindex.
+    cites: [accessible-html#button-keyboard, accessible-html#posh]
+    solution:
+      html: |
+        <button type="button">Ring the bell</button>
+    checks:
+      - id: button
+        says: The control is a button
+        role: button
+        name: { matches: 'Ring the bell' }
+      - id: native
+        says: It is a real button element, needing no tabindex
+        selector: button
+        text: { matches: 'Ring the bell' }
+      - id: no-tabindex
+        says: No tabindex is needed
+        selector: '[tabindex]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: a div made focusable
+          html: '<div role="button" tabindex="0">Ring the bell</div>'
+          fails: [native, no-tabindex]
+          because: A button element can be focused and pressed with the keyboard out of the box; a div needs tabindex and scripts to imitate it.
+
+  - id: finding-the-mill
+    concept: semantic-html-accessibility
+    prompt: "Write a short guide a screen reader can navigate: a heading, Finding the mill, followed by its three steps in order: follow the river; cross the stone bridge; turn left at the oak."
+    cites: [accessible-html#posh, accessible-html#other-benefits]
+    solution:
+      html: |
+        <h2>Finding the mill</h2>
+        <ol>
+          <li>Follow the river.</li>
+          <li>Cross the stone bridge.</li>
+          <li>Turn left at the oak.</li>
+        </ol>
+    checks:
+      - id: heading
+        says: The guide has a heading
+        selector: 'h1, h2, h3'
+        text: { matches: 'Finding the mill' }
+      - id: steps
+        says: The steps are an ordered list of three
+        selector: 'ol > li'
+        count: { min: 3, max: 3 }
+    fixtures:
+      fail:
+        - name: lines with breaks
+          html: "<h2>Finding the mill</h2><p>1. Follow the river.<br>2. Cross the stone bridge.<br>3. Turn left at the oak.</p>"
+          fails: [steps]
+          because: Numbers typed into a paragraph are just text; an ol tells a screen reader there is a list of three steps.
+
+  - id: ferry-rules
+    concept: screen-reader-structure
+    prompt: This notice fakes its heading with bold text and its paragraphs with line breaks, so a screen reader finds no structure. Mark it up as what it is.
+    cites: [accessible-html#bad-semantics, accessible-html#text-structure]
+    starter:
+      html: |
+        <b style="font-size: 2em">Ferry rules</b><br><br>
+        Keep your hands inside the boat.<br><br>
+        Pay the ferryman before you board.
+    solution:
+      html: |
+        <h1>Ferry rules</h1>
+        <p>Keep your hands inside the boat.</p>
+        <p>Pay the ferryman before you board.</p>
+    checks:
+      - id: heading
+        says: Ferry rules is a heading
+        selector: 'h1, h2'
+        text: { matches: '^\s*Ferry rules\s*$' }
+      - id: paragraphs
+        says: Each rule is a paragraph
+        selector: p
+        count: { min: 2, max: 2 }
+      - id: no-breaks
+        says: No line breaks fake the structure
+        selector: br
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the heading fixed, the breaks kept
+          html: "<h1>Ferry rules</h1><p>Keep your hands inside the boat.<br><br>Pay the ferryman before you board.</p>"
+          fails: [paragraphs, no-breaks]
+          because: A screen reader moves by headings and paragraphs; line breaks give it one long block instead.
+
+  - id: fair-questions
+    concept: screen-reader-structure
+    prompt: Screen reader users list this page's headings to find a question and hear only the page title. Make each question a heading under it, and leave the answers as they are.
+    cites: [accessible-html#screen-reader-navigation, accessible-html#text-structure]
+    starter:
+      html: |
+        <h1>Questions about the fair</h1>
+        <p><b>Can I bring my dog?</b></p>
+        <p>Yes, on a lead.</p>
+        <p><b>Is there food?</b></p>
+        <p>Bread, cheese and cider.</p>
+    solution:
+      html: |
+        <h1>Questions about the fair</h1>
+        <h2>Can I bring my dog?</h2>
+        <p>Yes, on a lead.</p>
+        <h2>Is there food?</h2>
+        <p>Bread, cheese and cider.</p>
+    checks:
+      - id: questions
+        says: Each question is a heading
+        selector: 'h2, h3, h4, h5, h6'
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '\?\s*$' }
+      - id: outline
+        says: The questions sit one level below the title
+        selector: body
+        outline: { start: 1 }
+      - id: answers
+        says: The answers stay paragraphs
+        selector: p
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: questions as h4
+          edits:
+            - { find: "<h2>Can I bring my dog?</h2>", replace: "<h4>Can I bring my dog?</h4>" }
+            - { find: "<h2>Is there food?</h2>", replace: "<h4>Is there food?</h4>" }
+          fails: [outline]
+          because: Heading levels are the page's outline, so the questions under an h1 are h2s.
+
+  - id: market-day
+    concept: clear-language
+    prompt: "The notice reads Market on Wed. Ask the VTC. Rewrite it in clear language: the day in full, and the VTC, the Vale Trading Council, spelled out where it first appears, with the abbreviation still marked."
+    cites: [accessible-html#clear-language, el-abbr#expand-first]
+    starter:
+      html: |
+        <p>Market on Wed. Ask the VTC.</p>
+    solution:
+      html: |
+        <p>Market on Wednesday. Ask the Vale Trading Council (<abbr>VTC</abbr>).</p>
+    checks:
+      - id: day
+        says: The day is written in full
+        selector: p
+        text: { matches: 'Wednesday', not: '\bWed\b' }
+      - id: expanded
+        says: The council's name is spelled out in the text
+        selector: p
+        text: { matches: 'Vale Trading Council' }
+      - id: marked
+        says: VTC is still marked as an abbreviation
+        selector: abbr
+        text: { matches: '^\s*VTC\s*$' }
+    fixtures:
+      fail:
+        - name: the expansion hidden in a title
+          html: '<p>Market on Wednesday. Ask the <abbr title="Vale Trading Council">VTC</abbr>.</p>'
+          fails: [expanded]
+          because: Expand an abbreviation in plain text the first time it is used; a title is hidden from many readers.
+
+  - id: opening-days
+    concept: clear-language
+    prompt: Write the smithy's opening times, nine in the morning until five in the afternoon, from Monday until Friday, in clear language that a screen reader reads well, with no dashes between the numbers or days and no shortened day names.
+    cites: [accessible-html#clear-language]
+    solution:
+      html: |
+        <p>Open from 9am to 5pm, Monday to Friday.</p>
+    checks:
+      - id: days
+        says: The days are written in full, joined by a word
+        selector: p
+        text: { matches: 'Monday (to|until|through) Friday', not: '\b(Mon|Fri)\b' }
+      - id: no-dashes
+        says: No dash stands between numbers or days
+        selector: p
+        text: { not: '\w\s*[–—]\s*\w|\d\s*(am|pm)?\s*-\s*\d|day\s*-' }
+    fixtures:
+      fail:
+        - name: dashes and short days
+          html: "<p>Open 9am–5pm, Mon–Fri.</p>"
+          fails: [days, no-dashes]
+          because: Screen readers stumble on dashes and shortened words; write ranges as from 9am to 5pm and days in full.
+
+  - id: credits-last
+    concept: source-order
+    prompt: Screen reader users hear the storyteller's credits before the story itself. Fix the order in the source so that a reader meets the header, then the main content, then the footer.
+    cites: [accessible-html#source-order, accessible-html#sectioning-example]
+    starter:
+      html: |
+        <footer><p>Told by Wren Thatcher.</p></footer>
+        <header><h1>The Lost Lantern</h1></header>
+        <main><p>Once, by the river, a lantern went out.</p></main>
+    solution:
+      html: |
+        <header><h1>The Lost Lantern</h1></header>
+        <main><p>Once, by the river, a lantern went out.</p></main>
+        <footer><p>Told by Wren Thatcher.</p></footer>
+    checks:
+      - id: header-first
+        says: The header comes before the main content
+        selector: header
+        precedes: main
+      - id: footer-last
+        says: The footer comes after the main content
+        selector: main
+        precedes: footer
+    fixtures:
+      fail:
+        - name: the footer moved between
+          html: "<header><h1>The Lost Lantern</h1></header><footer><p>Told by Wren Thatcher.</p></footer><main><p>Once, by the river, a lantern went out.</p></main>"
+          fails: [footer-last]
+          because: The source order is the reading order; the stylesheet can place things anywhere, but the content must make sense in source order.
+
+  - id: gazette-bones
+    concept: source-order
+    prompt: "Write the bones of the Vale Gazette's page in the order a reader should meet them: a header with the title The Vale Gazette, the main navigation with a link to /, the main content with the paragraph Rain is due on Friday., and a footer with © The Vale Gazette."
+    cites: [accessible-html#sectioning, accessible-html#sectioning-example, accessible-html#source-order]
+    solution:
+      html: |
+        <header><h1>The Vale Gazette</h1></header>
+        <nav><a href="/">Home</a></nav>
+        <main><p>Rain is due on Friday.</p></main>
+        <footer><p>© The Vale Gazette</p></footer>
+    checks:
+      - id: header
+        says: The header comes first
+        selector: header
+        precedes: 'nav, main, footer'
+        text: { matches: 'Vale Gazette' }
+      - id: nav
+        says: The navigation comes before the main content
+        selector: nav
+        precedes: main
+      - id: main
+        says: The main content comes before the footer
+        selector: main
+        precedes: footer
+        text: { matches: 'Rain is due' }
+    fixtures:
+      pass:
+        - name: the nav inside the header
+          html: '<header><h1>The Vale Gazette</h1><nav><a href="/">Home</a></nav></header><main><p>Rain is due on Friday.</p></main><footer><p>© The Vale Gazette</p></footer>'
+      fail:
+        - name: the main content after the footer
+          html: '<header><h1>The Vale Gazette</h1></header><nav><a href="/">Home</a></nav><footer><p>© The Vale Gazette</p></footer><main><p>Rain is due on Friday.</p></main>'
+          fails: [main]
+          because: Content should make sense in its source order, which is the order screen readers read it in.
+
+  - id: play-the-tune
+    concept: native-controls
+    prompt: This control works with a mouse, but keyboard users can neither reach it nor press it. Replace it with the element that does both by default.
+    cites: [accessible-html#div-buttons, accessible-html#fake-button-fix, accessible-html#fake-button-enter]
+    starter:
+      html: |
+        <div class="btn" onclick="playTune()">Play the tune</div>
+    solution:
+      html: |
+        <button class="btn" onclick="playTune()">Play the tune</button>
+    checks:
+      - id: button
+        says: The control is a real button
+        selector: button
+        text: { matches: 'Play the tune' }
+      - id: no-fake
+        says: No other element carries the click handler
+        selector: '[onclick]:not(button)'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: tabindex added to the div
+          html: '<div class="btn" tabindex="0" onclick="playTune()">Play the tune</div>'
+          fails: [button, no-fake]
+          because: tabindex lets the div take focus, but Enter and Space still do nothing; a button does all of this natively.
+
+  - id: save-and-clear
+    concept: native-controls
+    prompt: Write two controls, Save the map and Clear the map, that keyboard users can reach and press without any scripting for focus or keys and without tabindex.
+    cites: [accessible-html#div-buttons, accessible-html#tabindex]
+    solution:
+      html: |
+        <button type="button">Save the map</button>
+        <button type="button">Clear the map</button>
+    checks:
+      - id: buttons
+        says: Both controls are buttons
+        selector: button
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*(Save|Clear) the map\s*$' }
+      - id: no-tabindex
+        says: No tabindex is needed
+        selector: '[tabindex]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: spans with tabindex
+          html: '<span tabindex="0">Save the map</span><span tabindex="0">Clear the map</span>'
+          fails: [buttons, no-tabindex]
+          because: Buttons are focusable and can be pressed with Enter or Space by default; spans need tabindex and scripts to fake it.
+
+  - id: bell-not-link
+    concept: links-vs-buttons
+    prompt: This link goes nowhere; it only runs a script that rings the bell. Use the element that is meant for actions.
+    cites: [accessible-html#fake-button-links, accessible-html#keyboard-default]
+    starter:
+      html: |
+        <a href="#" onclick="ringBell()">Ring the bell</a>
+    solution:
+      html: |
+        <button type="button" onclick="ringBell()">Ring the bell</button>
+    checks:
+      - id: button
+        says: The action is a button
+        selector: button
+        text: { matches: 'Ring the bell' }
+      - id: no-fake-link
+        says: No link pretends to be a button
+        selector: 'a[href="#"], a[href^="javascript:" i]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: a javascript URL
+          html: '<a href="javascript:void(0)" onclick="ringBell()">Ring the bell</a>'
+          fails: [button, no-fake-link]
+          because: Links lead somewhere; an action that stays on the page is a button.
+
+  - id: records-and-sort
+    concept: links-vs-buttons
+    prompt: "Write two controls: Guild records, which takes the reader to /records.html, and Sort by name, which reorders the list on this page. Use the right element for each."
+    cites: [accessible-html#fake-button-links, accessible-html#meaningful-labels]
+    solution:
+      html: |
+        <a href="/records.html">Guild records</a>
+        <button type="button">Sort by name</button>
+    checks:
+      - id: link
+        says: Guild records is a link to the page
+        selector: 'a[href="/records.html"]'
+        text: { matches: 'Guild records' }
+      - id: button
+        says: Sort by name is a button
+        selector: button
+        text: { matches: 'Sort by name' }
+    fixtures:
+      fail:
+        - name: both as buttons
+          html: '<button onclick="location.href=''/records.html''">Guild records</button><button type="button">Sort by name</button>'
+          fails: [link]
+          because: Going to another page is navigation, which is what links are for; buttons are for actions on this page.
+
+  - id: skip-lands
+    concept: skip-links
+    prompt: The skip link points at an id that does not exist, so it goes nowhere. Make it land on the page's main content.
+    cites: [accessible-html#skip-link, el-main#skip-target]
+    starter:
+      html: |
+        <a href="#content">Skip to main content</a>
+        <header><h1>Maps of the Vale</h1></header>
+        <nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav>
+        <main>
+          <p>Choose a map below.</p>
+        </main>
+    solution:
+      html: |
+        <a href="#content">Skip to main content</a>
+        <header><h1>Maps of the Vale</h1></header>
+        <nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav>
+        <main id="content">
+          <p>Choose a map below.</p>
+        </main>
+    checks:
+      - id: lands
+        says: The skip link lands on main
+        selector: 'body > a:first-child'
+        resolves: { to: main }
+    fixtures:
+      fail:
+        - name: the id on the header
+          edits:
+            - { find: '<main id="content">', replace: "<main>" }
+            - { find: "<header>", replace: '<header id="content">' }
+          fails: [lands]
+          because: A skip link jumps past the header and menu to the beginning of the main content.
+
+  - id: skip-first
+    concept: skip-links
+    prompt: The skip link sits after the menu, so keyboard users have already tabbed through everything it should let them skip. Move it to where it does its job.
+    cites: [el-a#skip-link, accessible-html#skip-link]
+    starter:
+      html: |
+        <header><h1>Maps of the Vale</h1></header>
+        <nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav>
+        <a href="#main">Skip to main content</a>
+        <main id="main"><p>Choose a map below.</p></main>
+    solution:
+      html: |
+        <a href="#main">Skip to main content</a>
+        <header><h1>Maps of the Vale</h1></header>
+        <nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav>
+        <main id="main"><p>Choose a map below.</p></main>
+    checks:
+      - id: first
+        says: The skip link is the first thing in the body
+        selector: 'body > :first-child'
+        resolves: { to: main }
+    fixtures:
+      fail:
+        - name: inside the header, after the title
+          html: '<header><h1>Maps of the Vale</h1><a href="#main">Skip to main content</a></header><nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav><main id="main"><p>Choose a map below.</p></main>'
+          fails: [first]
+          because: A skip link goes as close as possible to the opening body tag, so it is the first thing a keyboard reaches.
+
+  - id: leaf-icon
+    concept: text-alternatives
+    prompt: "Write the heading Herbs of the Vale with the decorative icon leaf.png in front of it. The icon adds nothing a reader needs, so screen readers should pass over it."
+    cites: [accessible-html#empty-alt]
+    solution:
+      html: |
+        <h2><img src="leaf.png" alt=""> Herbs of the Vale</h2>
+    checks:
+      - id: empty-alt
+        says: The icon has an empty alt
+        selector: 'img[src="leaf.png"]'
+        attr: { name: alt, equals: "" }
+      - id: name
+        says: The heading is announced as just its words
+        selector: 'h1, h2, h3'
+        name: { matches: '^\s*Herbs of the Vale\s*$' }
+    fixtures:
+      fail:
+        - name: no alt at all
+          html: '<h2><img src="leaf.png"> Herbs of the Vale</h2>'
+          fails: [empty-alt]
+          because: Without alt, screen readers may read the file name; alt="" tells them the image is decoration to skip.
+        - name: an alt that describes the decoration
+          html: '<h2><img src="leaf.png" alt="green leaf icon"> Herbs of the Vale</h2>'
+          fails: [empty-alt, name]
+          because: A decorative image's description is only noise in front of the heading.
+
+  - id: ford-map
+    concept: text-alternatives
+    prompt: "Show the map ford.png. Its whole point is that the ford is two miles north of the mill; give it alternative text that says what the picture tells."
+    cites: [accessible-html#missing-alt, accessible-html#alt-content]
+    solution:
+      html: |
+        <img src="ford.png" alt="Map: the ford lies two miles north of the mill">
+    checks:
+      - id: alt
+        says: The alt says what the map shows
+        selector: 'img[src="ford.png"]'
+        attr: { name: alt, matches: '(?=.*ford)(?=.*north)(?=.*mill)' }
+    fixtures:
+      fail:
+        - name: the file name as alt
+          html: '<img src="ford.png" alt="ford.png">'
+          fails: [alt]
+          because: The alt should give a direct representation of what the image conveys, not its file name.
+
+  - id: logo-home
+    concept: text-alternatives
+    prompt: "Make the shop's logo, logo.png, which shows the words The Copper Kettle, a link to the home page, /, so that screen reader users hear where it leads."
+    cites: [creating-links#image-link, accessible-html#alt-content]
+    solution:
+      html: |
+        <a href="/"><img src="logo.png" alt="The Copper Kettle, home page"></a>
+    checks:
+      - id: link
+        says: The logo is a link to the home page
+        selector: 'a[href="/"] img[src="logo.png"]'
+      - id: name
+        says: The link's name comes from the logo's alt and names the shop
+        selector: 'a[href="/"]'
+        name: { matches: 'Copper Kettle' }
+    fixtures:
+      fail:
+        - name: the logo without alt
+          html: '<a href="/"><img src="logo.png"></a>'
+          fails: [name]
+          because: An image that is a link's only content gives the link its name through its alt text.

@@ -164,6 +164,17 @@ for (const packName of ["web-basics", "semantic-html"]) {
 
 describe("semantic-html writing tasks", () => {
   const { pack } = loadPack(fileURLToPath(new URL("../../../packs/semantic-html", import.meta.url)));
+  const road = pack!.nodes.filter((n) => n.kind === "concept" && n.tier === "road");
+  it("gives every road concept at least two writing tasks, each tied to one of its own excerpts or a new one", () => {
+    for (const n of road) {
+      const own = (pack!.tasks ?? []).filter((t) => t.concept === n.id);
+      expect(own.length, n.id).toBeGreaterThanOrEqual(2);
+    }
+  });
+  it("starts most tasks from a blank editor", () => {
+    const tasks = pack!.tasks ?? [];
+    expect(tasks.filter((t) => !t.starter?.html.trim()).length / tasks.length).toBeGreaterThan(0.6);
+  });
   it("derives a teaching line for failing checks from the wrong fixtures", () => {
     const scribe = pack!.problems.find((p) => p.id === "shouting-scribe")!;
     expect(becauseLines(scribe).latin).toMatch(/English pronunciation/);

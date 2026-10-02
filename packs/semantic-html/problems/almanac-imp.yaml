@@ -1,13 +1,16 @@
 id: almanac-imp
 statement: |
-  The Almanac Imp scrambles dates, shortens words until nobody can read them aloud, and spaces text with rows of line breaks. Restore the Tide Readers' almanac entry:
+  The Almanac Imp scrambles dates, shortens words until nobody can read them aloud, and spaces text with rows of line breaks. Restore the Tide Readers' almanac entry, so that it reads aloud clearly, machines can read its dates, and its parts are what they look like.
 
-  - The first time **GTR** appears, write out what it stands for, *Guild of Tide Readers*, in the text, and mark the abbreviation up as one. The unit **hPa** is a short technical term: mark it up as an abbreviation and give its expansion, *hectopascals*, as a title.
-  - Write dates so they read aloud clearly: no dashes between numbers, and months in full. The range becomes *5 to 7 January 2027*.
-  - Mark up the start and end of that range, the peak at *6.40pm on 6 January 2027* (local time), the *first week of 2027* and the publication date, *28 December 2026*, as times with machine-readable values.
-  - The 2 in H2O is a subscript; the *rd* of *3rd* is a superscript.
-  - The author's contact details, and nothing else, go in the entry's footer as the article's contact information, one detail per line (with line breaks, paragraphs or a list). The publication date stays outside them.
-  - Paragraphs are paragraphs, not text separated by pairs of line breaks or spaced out with empty paragraphs, and no text lies outside them; the horizontal rule here only draws a line, so it goes.
+  What the Tide Readers can tell you:
+
+  - **GTR** stands for *Guild of Tide Readers*, and **hPa**, a unit too technical to spell out in the sentence, for *hectopascals*;
+  - the spring tides run from 5 to 7 January 2027 and peak at 6.40pm on 6 January 2027, local time; the entry covers the first week of 2027 and was published on 28 December 2026;
+  - the 2 in H2O sits below the line and the *rd* of *3rd* above it;
+  - the author's contact details close the entry, and the publication date is not one of them;
+  - the horizontal rule only draws a line.
+
+  No text should lie loose outside a paragraph.
 starter:
   html: |
     <!doctype html>

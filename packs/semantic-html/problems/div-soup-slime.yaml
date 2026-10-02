@@ -2,15 +2,9 @@ id: div-soup-slime
 statement: |
   The Div-Soup Slime is a page made of nothing but boxes. The climbing club's blog looks fine, but every part of it is a `div`, so a screen reader cannot offer "skip to the main content" or "go to the navigation", and the sidebar is read out before the site's own name.
 
-  Rebuild the page with elements that say what each part is:
+  Rebuild the page so each part says what it is. Look at what the page holds: the site's name and its menu, a blog post that would make sense shared on its own, with two parts and a comments section, comments that each stand on their own, a box of related climbs beside the post, and the site's closing line. A screen reader should meet them in a sensible order.
 
-  - the site's header, holding the site name, and the main navigation menu, inside the header or straight after it;
-  - the page's main content: the blog post, which stands on its own, with its two parts and its comments section, each part starting with its heading;
-  - each comment, which also stands on its own inside the post;
-  - the related climbs, which sit beside the post rather than in it;
-  - the site's footer.
-
-  Put the parts in a sensible reading order: header and menu, then the main content with the post before the related climbs, then the footer. The `div class="page-width"` only centres the page for the stylesheet, so it stays a `div`.
+  The `div class="page-width"` only centres the page for the stylesheet.
 starter:
   html: |
     <!doctype html>

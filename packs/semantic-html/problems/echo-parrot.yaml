@@ -2,12 +2,7 @@ id: echo-parrot
 statement: |
   The Echo Parrot repeats what others said and never says who. The Wayfarers' Library page quotes two works, but the quotations are plain paragraphs in italics, the attribution sits inside the quotation as if the author had written their own name into the text, and nothing records where the words came from.
 
-  Mark the quotations up for what they are:
-
-  - the two paragraphs from **The Salt Roads** are one block quotation, whose source is `https://library.example/salt-roads#chapter-3`;
-  - the line from **The Lamplighter's Wager** is an inline quotation, whose source is `https://library.example/lamplighter`; the browser adds its quotation marks, so do not type your own;
-  - the attribution, *Ysolde Marr, The Salt Roads*, goes outside the block quotation;
-  - the title of each work, and only the title, is marked as the title of a creative work. You may link a title to its source.
+  What the librarian knows: the two paragraphs come from **The Salt Roads**, chapter three, online at `https://library.example/salt-roads#chapter-3`, and its author is Ysolde Marr. The single line in the middle of a sentence comes from **The Lamplighter's Wager**, at `https://library.example/lamplighter`. Mark the quotations up so that the page records their sources, credits each work by its title, and keeps the words that were quoted apart from the words that credit them. The browser supplies the quotation marks of a quotation inside a sentence.
 starter:
   html: |
     <!doctype html>

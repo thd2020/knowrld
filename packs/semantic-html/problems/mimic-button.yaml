@@ -2,10 +2,7 @@ id: mimic-button
 statement: |
   The Mimic lurks in the Lantern Shop, dressed up as buttons. A shape that looks like a button is really a div, and a "link" goes nowhere. A mouse can still click them, but a keyboard can't reach them. A screen reader can't tell what they are. And a link to `#` breaks opening in a new tab, bookmarking and copying.
 
-  Unmask it:
-
-  - The three controls on the storm lantern's page do something. They go nowhere. **Add to basket** puts the lantern in the basket. **Zoom in** enlarges the picture where it is. **Show details** opens the description. Make each one a real button whose label makes sense read alone, and keep calling the same function when it is pressed.
-  - Every page of the shop repeats its header and menu. Give keyboard users a way past them: make the first focusable thing in the body a link that jumps to the main content. Give the `main` element an id for it to point to.
+  Unmask it. The three controls on the storm lantern's page, **Add to basket**, **Zoom in** and **Show details**, each do something on this page; none of them goes anywhere. Keep each one calling the same function, with a label that makes sense read alone. And every page of the shop repeats its header and menu, so keyboard users need a way straight past them to the main content.
 path: /lanterns/storm-lantern.html
 files:
   - path: /index.html

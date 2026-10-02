@@ -1,16 +1,15 @@
 id: shouting-scribe
 statement: |
-  The Shouting Scribe paints every word it cares about bold, italic or underlined, and a screen reader hears none of it. Rewrite the Hollow Oak Apothecary's notice so that each phrase is marked for what it *means*, not how it should look:
+  The Shouting Scribe paints every word it cares about bold, italic or underlined, and a screen reader hears none of it. Rewrite the Hollow Oak Apothecary's notice so that each phrase is marked for what it *means*, not how it should look. What the shopkeeper meant:
 
-  - the safety warning **Do not touch the blue flask** is important;
-  - in *We open after the evening bells, not before*, the stress on **after** is what changes the sentence's meaning;
-  - the mandrake's species name, **Mandragora officinarum**, is set off from the prose as a taxonomic name;
-  - **caveat emptor** is an idiom from another language, Latin, and a screen reader should know which;
-  - in the customer's review, draw the reader's eye to the product names **Moonwater Tonic** and **Ember Salve** without calling them important;
-  - the customer's misspelling, **recieve**, is kept as she wrote it and annotated as a misspelling;
-  - in the search results, highlight the word that matched the search in each result.
+  - **Do not touch the blue flask** could save a customer's skin;
+  - the shop opens *after* the evening bells, not before, and a reader should hear where the voice falls;
+  - **Mandragora officinarum** is the mandrake's species name, and **caveat emptor** is a Latin idiom a screen reader would mispronounce as English;
+  - in the customer's review, the eye should catch the product names **Moonwater Tonic** and **Ember Salve**, though they matter no more than the rest;
+  - the customer's spelling **recieve** is kept as she wrote it, and flagged as a misspelling;
+  - in the search results, a reader should spot which word matched the search.
 
-  Underlining on the web says "link", so apart from the annotated misspelling (and real links) nothing is underlined: not with an element, an inline style, a bottom border or a style rule. Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
+  Underlining on the web says "link". Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
 starter:
   html: |
     <!doctype html>

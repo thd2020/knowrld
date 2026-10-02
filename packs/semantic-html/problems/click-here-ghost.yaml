@@ -13,13 +13,7 @@ statement: |
       └── guild-logo.svg
   ```
 
-  Lay the ghost to rest:
-
-  - Every link's text says where it leads. No "click here" or "here", no URLs, and no "link" or "link to" in the text. The text readers see is what counts: an `aria-label` must not say something the visible text does not.
-  - The logo is the only content of the link to the home page, so its alt text must name that destination.
-  - The winter timetable link downloads a file. Mark it as a download, and warn readers in the link text that it is a PDF of 2 MB.
-  - The storm warnings link opens in a new tab. Either say so in the link, or let it open in the same tab.
-  - Turn the menu into a list of links. This page is the timetables page, so the menu must not offer a working link to it. Remove that link, or keep it and mark it as the current page.
+  Lay the ghost to rest: every link should tell a reader, heard on its own, where it leads and what will happen when they follow it. The logo is the only thing inside the link to the home page. The winter timetable is a file to keep, not a page to read. The storm warnings link opens a new tab. The menu at the top is a set of links, and one of them points at the page the reader is already on.
 path: /timetables.html
 files:
   - path: /index.html

@@ -2,14 +2,9 @@ id: false-herald
 statement: |
   The False Herald dresses plain text up as headings. The Lighthouse Keepers' handbook *looks* organised, with a big title and bold section names, but its "headings" are a styled span, bold lines and a paragraph with a large font. To a screen reader listing the headings on the page, the handbook is empty; to one that finds a few, it jumps from the title straight to a third level, and every section claims to be the page's main heading.
 
-  Make every heading a real heading, in one unbroken hierarchy:
+  The handbook is called **Keeper's Handbook**. It has three sections, **Lighting the lamp**, **Logging the weather** and **Handing over the watch**; **Trimming the wick** and **Cleaning the lens** are parts of lighting the lamp, and **Storm signals** is part of logging the weather. Make its headings say so to anyone listing them.
 
-  - **Keeper's Handbook** is the page's single top-level heading;
-  - **Lighting the lamp**, **Logging the weather** and **Handing over the watch** are its sections;
-  - **Trimming the wick** and **Cleaning the lens** belong to *Lighting the lamp*, and **Storm signals** belongs to *Logging the weather*;
-  - going down the page, never skip a level.
-
-  How big a heading looks is the stylesheet's job, not the heading level's: keep the classes if you like, and choose each level for its place in the hierarchy.
+  How big a heading looks is the stylesheet's job: keep the classes if you like.
 starter:
   html: |
     <!doctype html>

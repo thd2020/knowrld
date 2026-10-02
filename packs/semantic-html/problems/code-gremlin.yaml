@@ -2,13 +2,7 @@ id: code-gremlin
 statement: |
   The Code Gremlin eats code samples. The Lamplighters' tutorial showed a line of HTML, but the browser read it as HTML: the example became a real paragraph and its tags vanished. Everything else that should look like code is a styled span or a bold word.
 
-  Mark the tutorial up so each piece says what it is:
-
-  - **lightLamp()** is a piece of code within a sentence;
-  - the example is a block of code, shown exactly as written, tags and all: `<p class="spell">Light!</p>`. Keep its characters from being read as markup;
-  - **Ctrl+S** is a keyboard shortcut made of two keys, each marked as a key. MDN writes them side by side, `Ctrl` + `S`; wrapping the pair in one more keyboard-input element is also allowed;
-  - **Lamp lit.** is what the program prints;
-  - **flame** is the name of a variable.
+  The tutorial has five kinds of computer text in it: a function name inside a sentence, **lightLamp()**; a whole example to be shown exactly as written, tags and all, `<p class="spell">Light!</p>`; a shortcut the reader presses, **Ctrl+S**; what the program prints back, **Lamp lit.**; and the name of a variable, **flame**. Mark each up as what it is.
 starter:
   html: |
     <!doctype html>

@@ -2,14 +2,7 @@ id: wall-golem
 statement: |
   The Wall-of-Text Golem is a recipe with no structure. The cook of the Mill Kitchen pressed Enter between the lines, but the browser ignores line breaks in the source and shows one solid block. A reader skimming for the ingredients, a search engine weighing the headings, and a screen reader user asking for the list of headings all hit the same wall.
 
-  Give the recipe its structure:
-
-  - the recipe's name is the page's single top-level heading;
-  - **Ingredients**, **Method** and **Storing it** are the three subheadings;
-  - the introduction and the storage advice are paragraphs;
-  - the ingredients are a list whose order does not matter;
-  - the method is a list whose order does;
-  - the last two lines of the method are two ways of doing step four, so they belong in their own list inside step four.
+  Give the recipe the structure its text already has. It has a name, an introduction, three parts (**Ingredients**, **Method** and **Storing it**), a set of ingredients you can gather in any order, steps you must follow in order, and advice on storing it. Read the method closely: its last two lines are not steps of their own.
 
   Leave no text lying loose in the body.
 starter:

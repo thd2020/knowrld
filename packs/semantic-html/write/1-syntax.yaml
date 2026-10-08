@@ -4,7 +4,7 @@
 tasks:
   - id: inn-sign
     concept: html-elements
-    prompt: The inn's sign should read The Sleeping Fox as the page's top-level heading, with the paragraph Rooms for the night, two silver below it.
+    prompt: "The inn's sign should read “The Sleeping Fox” as the page's top-level heading, with the paragraph “Rooms for the night, two silver” below it."
     cites: [basic-html-syntax#opening-tag, basic-html-syntax#closing-tag]
     solution:
       html: |
@@ -32,7 +32,7 @@ tasks:
 
   - id: crier-notice
     concept: html-elements
-    prompt: "The market crier has two announcements, each a paragraph of its own: Fresh bread at dawn. and Apples by the basket."
+    prompt: "The market crier has two announcements, each a paragraph of its own: “Fresh bread at dawn.” and “Apples by the basket.”"
     cites: [basic-html-syntax#what-is-html, basic-html-syntax#opening-tag, basic-html-syntax#closing-tag]
     solution:
       html: |
@@ -60,7 +60,7 @@ tasks:
 
   - id: hungry-dragon
     concept: nesting-elements
-    prompt: "Write the paragraph The dragon is very hungry. so that only the word very is marked as strongly important."
+    prompt: "Write the paragraph “The dragon is very hungry.” so that only the word “very” is marked as strongly important."
     cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap]
     solution:
       html: |
@@ -84,7 +84,7 @@ tasks:
 
   - id: new-bakery
     concept: nesting-elements
-    prompt: A heading on the bakery's page reads Our new bakery, with the word new stressed.
+    prompt: "A heading on the bakery's page reads “Our new bakery”, with the word “new” stressed."
     cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap]
     solution:
       html: |
@@ -108,7 +108,7 @@ tasks:
 
   - id: sleeping-fox-picture
     concept: void-elements
-    prompt: Put the picture fox.png on the page, described for anyone who cannot see it as A red fox asleep in the hay.
+    prompt: "Put the picture “fox.png” on the page, described for anyone who cannot see it as “A red fox asleep in the hay”."
     cites: [basic-html-syntax#void, basic-html-syntax#void-slash]
     solution:
       html: |
@@ -134,7 +134,7 @@ tasks:
 
   - id: two-portraits
     concept: void-elements
-    prompt: "In one paragraph, show two pictures side by side: owl.png, a barn owl on a post, and hare.png, a hare in the long grass. Describe each for someone who cannot see it."
+    prompt: "In one paragraph, show two pictures side by side: “owl.png”, a barn owl on a post, and “hare.png”, a hare in the long grass. Describe each for someone who cannot see it."
     cites: [basic-html-syntax#void]
     solution:
       html: |
@@ -157,7 +157,7 @@ tasks:
 
   - id: dry-well
     concept: attributes
-    prompt: "Write the paragraph The well is dry. and give it the class warning, so the stylesheet can find it."
+    prompt: "Write the paragraph “The well is dry.” and give it the class “warning”, so the stylesheet can find it."
     cites: [basic-html-syntax#attributes, basic-html-syntax#attribute-parts]
     solution:
       html: |
@@ -201,7 +201,7 @@ tasks:
 
   - id: miller-well
     concept: attribute-quotes
-    prompt: "Show the picture well.png with the alternative text The miller's well, apostrophe and all."
+    prompt: "Show the picture “well.png” with the alternative text “The miller's well”, apostrophe and all."
     cites: [basic-html-syntax#quotes-inside, basic-html-syntax#quote-styles]
     solution:
       html: |
@@ -223,7 +223,7 @@ tasks:
 
   - id: two-classes
     concept: attribute-quotes
-    prompt: "Give the paragraph Closed on feast days. two classes at once: notice and small."
+    prompt: "Give the paragraph “Closed on feast days.” two classes at once: “notice” and “small”."
     cites: [basic-html-syntax#unquoted-values, basic-html-syntax#always-quote]
     solution:
       html: |
@@ -242,7 +242,7 @@ tasks:
 
   - id: bridge-news
     concept: document-skeleton
-    prompt: "From a blank editor, write a complete HTML page titled Bridge news. Its only content is the paragraph The bridge is open again."
+    prompt: "From a blank editor, write a complete HTML page titled “Bridge news”. Its only content is the paragraph “The bridge is open again.”"
     cites: [basic-html-syntax#doctype, basic-html-syntax#html-root, basic-html-syntax#head, basic-html-syntax#body]
     solution:
       html: |
@@ -281,7 +281,7 @@ tasks:
 
   - id: lantern-festival
     concept: document-skeleton
-    prompt: "From a blank editor, write a complete page for the lantern festival: titled Lantern festival, with a top-level heading Lantern festival and the paragraph Bring a lantern to the square at dusk."
+    prompt: "From a blank editor, write a complete page for the lantern festival: titled “Lantern festival”, with a top-level heading “Lantern festival” and the paragraph “Bring a lantern to the square at dusk.”"
     cites: [basic-html-syntax#doctype, basic-html-syntax#head, basic-html-syntax#body]
     solution:
       html: |
@@ -321,7 +321,7 @@ tasks:
 
   - id: scribe-note
     concept: whitespace-and-comments
-    prompt: "Write the paragraph The fair opens at noon. and, above it, leave the next scribe the note check the date with the mayor, where the browser will not show it."
+    prompt: "Write the paragraph “The fair opens at noon.” and, above it, leave the next scribe the note “check the date with the mayor”, where the browser will not show it."
     cites: [basic-html-syntax#comments]
     solution:
       html: |
@@ -373,7 +373,7 @@ tasks:
 
   - id: angle-brackets
     concept: character-references
-    prompt: "Write a paragraph that shows, as text on the page: Use <b> to draw the eye."
+    prompt: "Write a paragraph that shows, as text on the page: “Use <b> to draw the eye.”"
     cites: [basic-html-syntax#special-chars, basic-html-syntax#character-references, basic-html-syntax#reference-example]
     solution:
       html: |
@@ -396,7 +396,7 @@ tasks:
 
   - id: show-a-reference
     concept: character-references
-    prompt: "Write a paragraph that shows, exactly as printed here: Type &lt; for a less-than sign."
+    prompt: "Write a paragraph that shows, exactly as printed here: “Type &lt; for a less-than sign.”"
     cites: [basic-html-syntax#character-references, basic-html-syntax#special-chars]
     solution:
       html: |
@@ -415,7 +415,7 @@ tasks:
 
   - id: ferry-description
     concept: head-and-metadata
-    prompt: "Give this page the description search engines show under its title: Opening hours and fares of the Hollow Oak ferry."
+    prompt: "Give this page the description search engines show under its title: “Opening hours and fares of the Hollow Oak ferry.”"
     cites: [webpage-metadata#name-content, webpage-metadata#description-seo]
     solution:
       html: |
@@ -475,7 +475,7 @@ tasks:
 
   - id: bookmark-name
     concept: page-title
-    prompt: "When someone bookmarks this page, the bookmark should read Ferry times – Hollow Oak."
+    prompt: "When someone bookmarks this page, the bookmark should read “Ferry times – Hollow Oak”."
     cites: [webpage-metadata#title-metadata, webpage-metadata#title-bookmark]
     solution:
       html: |
@@ -494,7 +494,7 @@ tasks:
 
   - id: tab-and-heading
     concept: page-title
-    prompt: "Write a page whose browser tab reads Recipes, while the big heading on the page itself reads Grandmother's recipes."
+    prompt: "Write a page whose browser tab reads “Recipes”, while the big heading on the page itself reads “Grandmother's recipes”."
     cites: [webpage-metadata#h1-on-page, webpage-metadata#title-metadata]
     solution:
       html: |
@@ -526,7 +526,7 @@ tasks:
 
   - id: cafe-head
     concept: character-encoding
-    prompt: "Write the head of the Café du Pont's page: it must tell the browser the page is UTF-8 before anything else, and title the page Café du Pont."
+    prompt: "Write the head of the Café du Pont's page: it must tell the browser the page is UTF-8 before anything else, and title the page “Café du Pont”."
     cites: [webpage-metadata#charset, el-meta#charset]
     solution:
       html: |
@@ -560,8 +560,8 @@ tasks:
 
   - id: crepes-page
     concept: character-encoding
-    prompt: "From a blank editor, write a complete page in UTF-8, titled Crêpes, with the paragraph Crêpes every Sunday."
-    cites: [basic-html-syntax#charset, webpage-metadata#charset]
+    prompt: "From a blank editor, write a complete page in UTF-8, titled “Crêpes”, with the paragraph “Crêpes every Sunday.”"
+    cites: [basic-html-syntax#charset, webpage-metadata#charset, basic-html-syntax#doctype, basic-html-syntax#body]
     solution:
       html: |
         <!doctype html>
@@ -599,7 +599,7 @@ tasks:
 
   - id: wait-for-the-page
     concept: head-resources
-    prompt: "In the head, load the script map.js so that it runs only once the whole page has been parsed, without moving it to the end of the body."
+    prompt: "In the head, load the script “map.js” so that it runs only once the whole page has been parsed, without moving it to the end of the body."
     cites: [webpage-metadata#script-defer]
     solution:
       html: |
@@ -627,7 +627,7 @@ tasks:
 
   - id: style-and-icon
     concept: head-resources
-    prompt: Make this page use the stylesheet village.css and show the icon fox.ico in its browser tab.
+    prompt: "Make this page use the stylesheet “village.css” and show the icon “fox.ico” in its browser tab."
     cites: [webpage-metadata#link-stylesheet, webpage-metadata#favicon-link]
     solution:
       html: |
@@ -656,7 +656,7 @@ tasks:
 
   - id: two-scripts-wait
     concept: head-resources
-    prompt: "The page needs two scripts, lanterns.js and then weather.js, loaded from the head, and neither may run before the page has been parsed."
+    prompt: "The page needs two scripts, “lanterns.js” and then “weather.js”, loaded from the head, and neither may run before the page has been parsed."
     cites: [webpage-metadata#script-defer]
     solution:
       html: |
@@ -687,7 +687,7 @@ tasks:
 
   - id: british-page
     concept: document-language
-    prompt: "Begin a page written in British English: the root element, and inside it the paragraph Colour the lanterns gold."
+    prompt: "Begin a page written in British English: the root element, and inside it the paragraph “Colour the lanterns gold.”"
     cites: [webpage-metadata#lang]
     solution:
       html: |
@@ -714,7 +714,7 @@ tasks:
 
   - id: japanese-greeting
     concept: document-language
-    prompt: "This English page quotes a traveller's Japanese greeting, こんにちは. Mark that part so screen readers and search engines know it is Japanese."
+    prompt: "This English page quotes a traveller's Japanese greeting, “こんにちは”. Mark that part so screen readers and search engines know it is Japanese."
     cites: [webpage-metadata#lang-parts, webpage-metadata#lang]
     starter:
       html: |

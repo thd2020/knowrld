@@ -2,7 +2,7 @@
 tasks:
   - id: herbal-outline
     concept: headings
-    prompt: "Write the headings of a herbal, with no other text: the book's title, Herbal of the Vale; its two chapters, Roots and Leaves; and within Roots, a section called Mandrake."
+    prompt: "Write the headings of a herbal, with no other text: the book's title, “Herbal of the Vale”; its two chapters, “Roots” and “Leaves”; and within “Roots”, a section called “Mandrake”."
     cites: [headings-and-paragraphs#six-levels, headings-and-paragraphs#story-example, headings-and-paragraphs#hierarchy-rules]
     solution:
       html: |
@@ -44,7 +44,7 @@ tasks:
 
   - id: joining-the-guild
     concept: headings
-    prompt: "Write one part of the guild's page: a second-level heading, Joining the guild, followed by two paragraphs: Bring a letter from your master. and Pay one silver at the door."
+    prompt: "Write one part of the guild's page: a second-level heading, “Joining the guild”, followed by two paragraphs: “Bring a letter from your master.” and “Pay one silver at the door.”"
     cites: [headings-and-paragraphs#paragraph, headings-and-paragraphs#six-levels]
     solution:
       html: |
@@ -210,7 +210,7 @@ tasks:
 
   - id: deadly-mushroom
     concept: emphasis-and-importance
-    prompt: "Mark up the warning Keep away from the black mushroom: even one bite is deadly. All of even one bite is deadly is important, and within it the word one is stressed."
+    prompt: "Mark up the warning “Keep away from the black mushroom: even one bite is deadly.” All of “even one bite is deadly” is important, and within it the word one is stressed."
     cites: [emphasis-and-importance#nest-strong-em, emphasis-and-importance#em, emphasis-and-importance#strong]
     solution:
       html: |
@@ -238,7 +238,7 @@ tasks:
 
   - id: whose-cheese
     concept: emphasis-and-importance
-    prompt: "Write I did not take the cheese. twice, as two paragraphs that mean different things: in the first, I is the stressed word; in the second, cheese is."
+    prompt: "Write “I did not take the cheese.” twice, as two paragraphs that mean different things: in the first, I is the stressed word; in the second, “cheese” is."
     cites: [emphasis-and-importance#em]
     solution:
       html: |
@@ -266,7 +266,7 @@ tasks:
 
   - id: hedgehog-name
     concept: presentational-elements
-    prompt: "Write The hedgehog, Erinaceus europaeus, sleeps all winter. Set the species name apart from the prose, as books traditionally do, without stressing it."
+    prompt: "Write “The hedgehog, Erinaceus europaeus, sleeps all winter.” Set the species name apart from the prose, as books traditionally do, without stressing it."
     cites: [emphasis-and-importance#i-b-u-meanings, emphasis-and-importance#best-rule]
     solution:
       html: |
@@ -289,7 +289,7 @@ tasks:
 
   - id: cake-names
     concept: presentational-elements
-    prompt: "Write Our Honey Cake and Plum Tart sell out by noon. and draw the reader's eye to the two cake names, without claiming they are more important than the rest."
+    prompt: "Write “Our Honey Cake and Plum Tart sell out by noon.” and draw the reader's eye to the two cake names, without claiming they are more important than the rest."
     cites: [emphasis-and-importance#i-b-u-meanings, emphasis-and-importance#best-rule]
     solution:
       html: |
@@ -314,7 +314,7 @@ tasks:
 
   - id: potion-recipe
     concept: lists
-    prompt: "Write the potion recipe as two lists: what you need, in no particular order (nettle, honey, river water), and the method, in order (boil the water; add the nettle; stir in the honey)."
+    prompt: "Write the potion recipe as two lists: what you need, in no particular order (“nettle”, “honey”, “river water”), and the method, in order (“Boil the water.”, “Add the nettle.”, “Stir in the honey.”)."
     cites: [lists#unordered, lists#ordered]
     solution:
       html: |
@@ -389,7 +389,7 @@ tasks:
 
   - id: herb-terms
     concept: description-lists
-    prompt: "Write a glossary of two terms and their meanings: Tincture, herbs steeped in strong spirit; Poultice, a warm paste laid on the skin."
+    prompt: "Write a glossary of two terms and their meanings: “Tincture”, herbs steeped in strong spirit; “Poultice”, a warm paste laid on the skin."
     cites: [lists#description-purpose, lists#dl-dt-dd, lists#dl-example]
     solution:
       html: |
@@ -423,7 +423,7 @@ tasks:
 
   - id: ember-two-meanings
     concept: description-lists
-    prompt: "In the village glossary, Ember has two meanings: a glowing piece of coal, and the name of the innkeeper's cat. Write the entry."
+    prompt: "In the village glossary, “Ember” has two meanings: a glowing piece of coal, and the name of the innkeeper's cat. Write the entry."
     cites: [lists#multiple-descriptions, lists#dl-dt-dd]
     solution:
       html: |
@@ -451,7 +451,7 @@ tasks:
 
   - id: mayors-words
     concept: quotations
-    prompt: "The notice board quotes the mayor's harvest speech at length: We gather what the year has given, and we share it. The speech is published at /speeches/harvest.html. Quote it as a block, recording where it comes from."
+    prompt: "The notice board quotes the mayor's harvest speech at length: “We gather what the year has given, and we share it.” The speech is published at “/speeches/harvest.html”. Quote it as a block, recording where it comes from."
     cites: [advanced-text-features#blockquote]
     solution:
       html: |
@@ -476,7 +476,7 @@ tasks:
 
   - id: millers-saying
     concept: quotations
-    prompt: "Write the sentence The miller's almanac says Slow wheels grind fine flour. with the saying as an inline quotation that records its source, https://example.org/almanac, and with the book's title, The Miller's Almanac, credited on the page."
+    prompt: "Write the sentence “The Miller's Almanac says Slow wheels grind fine flour.” with the saying as an inline quotation that records its source, “https://example.org/almanac”, and with the book's title, “The Miller's Almanac”, credited on the page."
     cites: [advanced-text-features#inline-q, advanced-text-features#cite-element, advanced-text-features#cite-attribute-hidden]
     solution:
       html: |
@@ -503,7 +503,7 @@ tasks:
 
   - id: guild-abbreviation
     concept: abbreviations
-    prompt: "Write The GV council meets on Monday. GV stands for Guild of the Vale; keep the sentence short, but make the expansion available to readers."
+    prompt: "Write “The GV council meets on Monday.” GV stands for “Guild of the Vale”; keep the sentence short, but make the expansion available to readers."
     cites: [advanced-text-features#abbr, advanced-text-features#abbr-title]
     solution:
       html: |
@@ -526,7 +526,7 @@ tasks:
 
   - id: ferry-company
     concept: abbreviations
-    prompt: "Write two sentences: The Hollow Oak Ferry Company (HOFC) runs the river crossing. and The HOFC sails at noon. Spell the name out in the text where it first appears, and mark the abbreviation each time."
+    prompt: "Write two sentences: “The Hollow Oak Ferry Company (HOFC) runs the river crossing.” and “The HOFC sails at noon.” Spell the name out in the text where it first appears, and mark the abbreviation each time."
     cites: [advanced-text-features#abbr-choices, advanced-text-features#abbr]
     solution:
       html: |
@@ -553,7 +553,7 @@ tasks:
 
   - id: page-author
     concept: contact-address
-    prompt: "End the page with its author's contact details: Written by Wren Thatcher, at the Old Mill, River Road."
+    prompt: "End the page with its author's contact details: “Written by Wren Thatcher, at the Old Mill, River Road.”"
     cites: [advanced-text-features#address, el-address#usage]
     solution:
       html: |
@@ -601,7 +601,7 @@ tasks:
 
   - id: rust-formula
     concept: superscript-subscript
-    prompt: "Write Rust is mostly Fe2O3. so that the 2 and the 3 sit below the line, as chemical formulas need."
+    prompt: "Write “Rust is mostly Fe2O3.” so that the 2 and the 3 sit below the line, as chemical formulas need."
     cites: [advanced-text-features#sup-sub, el-sub#formula-uses]
     solution:
       html: |
@@ -622,7 +622,7 @@ tasks:
 
   - id: square-and-date
     concept: superscript-subscript
-    prompt: "Write The field is x2 paces across, and the fair was on the 1st of May. with the 2 as an exponent and the st raised."
+    prompt: "Write “The field is x2 paces across, and the fair was on the 1st of May.” with the 2 as an exponent and the “st” raised."
     cites: [advanced-text-features#sup-sub, el-sup#uses]
     solution:
       html: |
@@ -645,7 +645,7 @@ tasks:
 
   - id: save-keys
     concept: computer-code
-    prompt: "Write Press Ctrl + S and the editor replies Saved. Mark what the player types on the keyboard and what the program prints."
+    prompt: "Write “Press Ctrl + S and the editor replies Saved.” Mark what the player types on the keyboard and what the program prints."
     cites: [advanced-text-features#code-elements, advanced-text-features#code-examples]
     solution:
       html: |
@@ -693,7 +693,7 @@ tasks:
 
   - id: area-variables
     concept: computer-code
-    prompt: "Write The area is w × h, where w is the width and h the height. Mark w and h as variables each time they appear."
+    prompt: "Write “The area is w × h, where w is the width and h the height.” Mark “w” and “h” as variables each time they appear."
     cites: [advanced-text-features#code-elements]
     solution:
       html: |
@@ -714,7 +714,7 @@ tasks:
 
   - id: festival-day
     concept: times-and-dates
-    prompt: "Write The lantern festival is on 21 June 2027. so that machines can read the date."
+    prompt: "Write “The lantern festival is on 21 June 2027.” so that machines can read the date."
     cites: [advanced-text-features#time, advanced-text-features#time-why]
     solution:
       html: |
@@ -737,7 +737,7 @@ tasks:
 
   - id: gates-close
     concept: times-and-dates
-    prompt: "Write The gates close at 9.30pm on 1 November 2027. so that machines can read the date and the time together."
+    prompt: "Write “The gates close at 9.30pm on 1 November 2027.” so that machines can read the date and the time together."
     cites: [advanced-text-features#time-formats, advanced-text-features#time]
     solution:
       html: |

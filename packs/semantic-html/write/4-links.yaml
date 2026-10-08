@@ -2,7 +2,7 @@
 tasks:
   - id: closed-map-shop
     concept: hyperlinks
-    prompt: The fact that the map shop is closed until spring lives only in this link's title, so keyboard and touchscreen users never learn it. Make sure every reader meets it, and keep the link.
+    prompt: "The fact that the map shop is “closed until spring” lives only in the title of the link “the map shop”, so keyboard and touchscreen users never learn it. Make sure every reader meets it, and keep the link."
     cites: [creating-links#title-hover-only]
     starter:
       html: |
@@ -34,7 +34,7 @@ tasks:
 
   - id: lantern-tale
     concept: hyperlinks
-    prompt: "Write the sentence Read the full tale of the lost lantern. with the words the full tale of the lost lantern as a link to /tales/lantern.html."
+    prompt: "Write the sentence “Read the full tale of the lost lantern.” with the words “the full tale of the lost lantern” as a link to “/tales/lantern.html”."
     cites: [creating-links#anchor, creating-links#url]
     solution:
       html: |
@@ -54,7 +54,7 @@ tasks:
 
   - id: fair-card
     concept: hyperlinks
-    prompt: "Make the whole announcement, the heading Autumn fair and the paragraph Stalls, music and cider., one link to /fair.html."
+    prompt: "Make the whole announcement, the heading “Autumn fair” and the paragraph “Stalls, music and cider.”, one link to “/fair.html”."
     cites: [creating-links#block-links]
     solution:
       html: |
@@ -80,7 +80,7 @@ tasks:
 
   - id: bread-recipe
     concept: relative-paths
-    prompt: "This page is /recipes/soup.html. Link the words bread recipe to /recipes/bread.html with a path written from where this page sits."
+    prompt: "This page is /recipes/soup.html. Link the words “bread recipe” to /recipes/bread.html with a path written from where this page sits."
     cites: [creating-links#same-directory]
     solution:
       html: |
@@ -100,7 +100,7 @@ tasks:
 
   - id: all-tales
     concept: relative-paths
-    prompt: "This page is /tales/winter/index.html. Link the words all tales to /tales/index.html with a relative path."
+    prompt: "This page is /tales/winter/index.html. Link the words “all tales” to /tales/index.html with a relative path."
     cites: [creating-links#up-a-directory]
     solution:
       html: |
@@ -123,7 +123,7 @@ tasks:
 
   - id: river-map
     concept: relative-paths
-    prompt: "This page is /index.html, at the top of the site. Link the words river map to /maps/river.html with a path relative to this page."
+    prompt: "This page is /index.html, at the top of the site. Link the words “river map” to /maps/river.html with a path relative to this page."
     cites: [creating-links#subdirectory]
     solution:
       html: |
@@ -142,7 +142,7 @@ tasks:
 
   - id: weather-almanac
     concept: absolute-urls
-    prompt: "Link the words the weather almanac to the page forecast.html at the top of another site, www.vale-weather.example, served over https."
+    prompt: "Link the words “the weather almanac” to the page “forecast.html” at the top of another site, “www.vale-weather.example”, served over https."
     cites: [creating-links#absolute-relative, creating-links#internal-external]
     solution:
       html: |
@@ -161,7 +161,7 @@ tasks:
 
   - id: inside-and-out
     concept: absolute-urls
-    prompt: "Write two links: an internal one, our history, to /about.html on this site, and an external one, the river guild, to the page about.html at the top of the site www.river-guild.example."
+    prompt: "Write two links: an internal one, “our history”, to “/about.html” on this site, and an external one, “the river guild”, to the page about.html at the top of the site www.river-guild.example."
     cites: [creating-links#internal-external, creating-links#absolute-relative]
     solution:
       html: |
@@ -186,7 +186,7 @@ tasks:
 
   - id: see-prices
     concept: document-fragments
-    prompt: Make the words see prices below jump to the Prices heading further down this page.
+    prompt: "Make the words “see prices below” jump to the “Prices” heading further down this page."
     cites: [creating-links#fragment, creating-links#fragment-same-page]
     starter:
       html: |
@@ -221,7 +221,7 @@ tasks:
 
   - id: mailing-address
     concept: document-fragments
-    prompt: "This page is /index.html. Link the words our mailing address to the element with the id mailing-address on the page /contact.html."
+    prompt: "This page is /index.html. Link the words “our mailing address” to the element with the id “mailing-address” on the page “/contact.html”."
     cites: [creating-links#fragment-hash]
     solution:
       html: |
@@ -240,7 +240,7 @@ tasks:
 
   - id: two-seasons
     concept: document-fragments
-    prompt: "The link should reach the Winter heading, but two headings share one id. Give the Winter heading the id winter, point the link at it, and keep every id unique."
+    prompt: "The link should reach the “Winter” heading, but two headings share one id. Give the “Winter” heading the id “winter”, point the link at it, and keep every id unique."
     cites: [attr-id#unique, creating-links#fragment-same-page]
     starter:
       html: |
@@ -274,7 +274,7 @@ tasks:
 
   - id: ferry-timetable
     concept: link-text
-    prompt: "Write a sentence linking to the ferry timetable at /ferry/times.html, with link text that makes sense when a screen reader lists it on its own."
+    prompt: "Write a sentence linking to the “ferry timetable” at “/ferry/times.html”, with link text that makes sense when a screen reader lists it on its own."
     cites: [creating-links#accessible-links, creating-links#link-tips, accessible-html#labels-out-of-context]
     solution:
       html: |
@@ -300,7 +300,7 @@ tasks:
 
   - id: fair-moved
     concept: link-text
-    prompt: "Write The autumn fair has moved to the meadow. with a link to /fair.html whose text alone says where it leads."
+    prompt: "Write “The autumn fair has moved to the meadow.” with a link to “/fair.html” whose text alone says where it leads."
     cites: [creating-links#link-tips, accessible-html#labels-out-of-context]
     solution:
       html: |
@@ -319,7 +319,7 @@ tasks:
 
   - id: map-download
     concept: link-signposts
-    prompt: "Link to the map /maps/vale.pdf so that the browser downloads it, and say in the link's text that it is a PDF of 2 MB."
+    prompt: "Link to the map “/maps/vale.pdf” so that the browser downloads it, and say in the link's text that it is a PDF of 2 MB."
     cites: [creating-links#signposts, creating-links#download]
     solution:
       html: |
@@ -342,7 +342,7 @@ tasks:
 
   - id: weather-new-tab
     concept: link-signposts
-    prompt: "Link the words weather forecast to https://weather.example so that it opens in a new tab, and warn readers in the link's text that it does."
+    prompt: "Link the words “Weather forecast” to “https://weather.example” so that it opens in a new tab, and warn readers in the link's text that it does, with “(opens in a new tab)”."
     cites: [creating-links#new-tab, accessible-html#new-tab-indicator]
     solution:
       html: |
@@ -365,7 +365,7 @@ tasks:
 
   - id: order-a-cake
     concept: email-links
-    prompt: "Write a link with the text Order a cake that opens a new email to baker@hollowoak.example with the subject Birthday cake already filled in."
+    prompt: "Write a link with the text “Order a cake” that opens a new email to “baker@hollowoak.example” with the subject “Birthday cake” already filled in."
     cites: [creating-links#mailto, creating-links#mailto-details, creating-links#mailto-encoding]
     solution:
       html: |
@@ -393,7 +393,7 @@ tasks:
 
   - id: ask-the-guild
     concept: email-links
-    prompt: "Write a link, Ask the guild, that opens an email to guild@vale.example, with a copy to clerk@vale.example and the subject Guild question."
+    prompt: "Write a link, “Ask the guild”, that opens an email to “guild@vale.example”, with a copy to “clerk@vale.example” and the subject “Guild question”."
     cites: [creating-links#mailto-details, creating-links#mailto-encoding]
     solution:
       html: |
@@ -423,7 +423,7 @@ tasks:
 
   - id: tell-a-friend
     concept: email-links
-    prompt: Write a link, Tell a friend, that opens a new email with no recipient filled in, so the reader picks one.
+    prompt: "Write a link, “Tell a friend”, that opens a new email with no recipient filled in, so the reader picks one."
     cites: [creating-links#mailto-empty]
     solution:
       html: |
@@ -442,7 +442,7 @@ tasks:
 
   - id: breads-menu
     concept: navigation-menus
-    prompt: "Write the navigation menu for the Breads page of a bakery whose pages are Home (/), Breads (/breads.html) and Visit (/visit.html). Mark which page the reader is on."
+    prompt: "Write the navigation menu for the “Breads” page of a bakery whose pages are “Home” (/), “Breads” (“/breads.html”) and “Visit” (“/visit.html”). Mark which page the reader is on."
     cites: [creating-links#nav-menu, creating-links#nav-list, attr-aria-current#styled-current]
     solution:
       html: |
@@ -472,7 +472,7 @@ tasks:
 
   - id: tales-menu
     concept: navigation-menus
-    prompt: "Write the site's main menu as a navigation region holding a list of links: Home (/), Tales (/tales.html) and Maps (/maps.html)."
+    prompt: "Write the site's main menu as a navigation region holding a list of links: “Home” (/), “Tales” (“/tales.html”) and “Maps” (“/maps.html”)."
     cites: [creating-links#nav-list, el-nav#summary]
     solution:
       html: |

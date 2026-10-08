@@ -2,7 +2,7 @@
 tasks:
   - id: smithy-regions
     concept: page-regions
-    prompt: "Write the three regions of the smithy's page: an introduction holding its name, The Hollow Oak Smithy, as the top heading; the content unique to this page, a paragraph Horseshoes made while you wait.; and a closing region with © The Hollow Oak Smithy."
+    prompt: "Write the three regions of the smithy's page: an introduction holding its name, “The Hollow Oak Smithy”, as the top heading; the content unique to this page, a paragraph “Horseshoes made while you wait.”; and a closing region with “© The Hollow Oak Smithy”."
     cites: [structuring-documents#common-components, structuring-documents#section-tags]
     solution:
       html: |
@@ -75,7 +75,7 @@ tasks:
 
   - id: two-recipes
     concept: sectioning-elements
-    prompt: "The page holds two recipes, each of which would make sense on its own if another site shared it: Barley soup (Simmer barley with leeks.) and Oat cakes (Bake oats with honey.). Write them, each with its heading, inside the page's main content."
+    prompt: "The page holds two recipes, each of which would make sense on its own if another site shared it: “Barley soup” (“Simmer barley with leeks.”) and “Oat cakes” (“Bake oats with honey.”). Write them, each with its heading, inside the page's main content."
     cites: [structuring-documents#main-article-section-aside, el-section#summary]
     solution:
       html: |
@@ -114,7 +114,7 @@ tasks:
 
   - id: mill-aside
     concept: sectioning-elements
-    prompt: "Write the page's main content, a paragraph The mill has turned since 1702., and beside it a box of related notes, The river also feeds the tannery., that is only indirectly related to it."
+    prompt: "Write the page's main content, a paragraph “The mill has turned since 1702.”, and beside it a box of related notes, “The river also feeds the tannery.”, that is only indirectly related to it."
     cites: [structuring-documents#main-article-section-aside]
     solution:
       html: |
@@ -203,7 +203,7 @@ tasks:
 
   - id: shared-footer
     concept: header-nav-footer
-    prompt: "Write the closing region that ends every page of the site: © The Copper Kettle and, on its own line below, Open daily from noon."
+    prompt: "Write the closing region that ends every page of the site: “© The Copper Kettle” and, on its own line below, “Open daily from noon.”"
     cites: [structuring-documents#header-nav-footer]
     solution:
       html: |
@@ -225,7 +225,7 @@ tasks:
 
   - id: pet-name
     concept: non-semantic-wrappers
-    prompt: "Write The cat's name is Ember. and wrap Ember so the stylesheet can colour it with the class pet-name. Nothing about the word has a special meaning."
+    prompt: "Write “The cat's name is Ember.” and wrap “Ember” so the stylesheet can colour it with the class “pet-name”. Nothing about the word has a special meaning."
     cites: [structuring-documents#non-semantic, structuring-documents#span]
     solution:
       html: |
@@ -248,7 +248,7 @@ tasks:
 
   - id: card-wrapper
     concept: non-semantic-wrappers
-    prompt: Group these two paragraphs in one block with the class card so the stylesheet can draw a box around them. They have no shared meaning beyond that.
+    prompt: "Group these two paragraphs in one block with the class “card” so the stylesheet can draw a box around them. They have no shared meaning beyond that."
     cites: [structuring-documents#div, structuring-documents#non-semantic]
     starter:
       html: |
@@ -306,7 +306,7 @@ tasks:
 
   - id: letter-address
     concept: breaks-and-rules
-    prompt: "Write the address on the letter as one paragraph with each part on its own short line: Wren Thatcher, The Old Mill, River Road."
+    prompt: "Write the address on the letter as one paragraph with each part on its own short line: “Wren Thatcher”, “The Old Mill”, “River Road”."
     cites: [structuring-documents#br]
     solution:
       html: |
@@ -330,7 +330,7 @@ tasks:
 
   - id: scene-change
     concept: breaks-and-rules
-    prompt: "Write two paragraphs of a story, The lamps went out. and Morning came grey and cold., with a thematic break between them, where the scene changes."
+    prompt: "Write two paragraphs of a story, “The lamps went out.” and “Morning came grey and cold.”, with a thematic break between them, where the scene changes."
     cites: [structuring-documents#hr]
     solution:
       html: |
@@ -352,7 +352,7 @@ tasks:
 
   - id: every-page
     concept: information-architecture
-    prompt: "The bakery's sitemap has three pages: Home (/), Breads (/breads.html) and Visit (/visit.html). Write the parts every page shares: a header with the name The Rye Loaf, a navigation menu to the three pages, and a footer with © The Rye Loaf."
+    prompt: "The bakery's sitemap has three pages: “Home” (/), “Breads” (“/breads.html”) and “Visit” (“/visit.html”). Write the parts every page shares: a header with the name “The Rye Loaf”, a navigation menu to the three pages, and a footer with “© The Rye Loaf”."
     cites: [structuring-documents#common-to-every-page, structuring-documents#sitemap]
     solution:
       html: |
@@ -394,7 +394,7 @@ tasks:
 
   - id: sort-the-goods
     concept: information-architecture
-    prompt: "Sort the bakery's goods into two groups, as a list of groups each with its own list: Breads (rye, spelt) and Cakes (honey cake, plum tart)."
+    prompt: "Sort the bakery's goods into two groups, as a list of groups each with its own list: “Breads” (“rye”, “spelt”) and “Cakes” (“honey cake”, “plum tart”)."
     cites: [structuring-documents#sort-into-groups]
     solution:
       html: |

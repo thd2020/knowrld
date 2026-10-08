@@ -2,7 +2,7 @@
 tasks:
   - id: bold-spill
     concept: permissive-parsing
-    prompt: The browser quietly repaired this markup, and now the second paragraph is bold too. Fix the source so that only the word deep is strong.
+    prompt: "The browser quietly repaired this markup, and now the second paragraph is bold too. Fix the source so that only the word “deep” is strong."
     cites: [debugging-html#permissive, debugging-html#dom-inspector]
     starter:
       html: |
@@ -92,7 +92,7 @@ tasks:
 
   - id: duplicate-ids
     concept: html-validator
-    prompt: "The validator reports: Duplicate ID hours. Fix it so the page validates, keeping an id on both elements."
+    prompt: "The validator reports: Duplicate ID “hours”. Fix it so the page validates, keeping an id on both elements."
     cites: [debugging-html#validator, debugging-html#fix-a-few, attr-id#unique]
     starter:
       html: |
@@ -120,7 +120,7 @@ tasks:
 
   - id: ring-the-bell
     concept: semantic-html-accessibility
-    prompt: Write a control labelled Ring the bell that keyboard users can reach with Tab and press with Enter or Space, using no scripting and no tabindex.
+    prompt: "Write a control labelled “Ring the bell” that keyboard users can reach with Tab and press with Enter or Space, using no scripting and no tabindex."
     cites: [accessible-html#button-keyboard, accessible-html#posh]
     solution:
       html: |
@@ -147,7 +147,7 @@ tasks:
 
   - id: finding-the-mill
     concept: semantic-html-accessibility
-    prompt: "Write a short guide a screen reader can navigate: a heading, Finding the mill, followed by its three steps in order: follow the river; cross the stone bridge; turn left at the oak."
+    prompt: "Write a short guide a screen reader can navigate: a heading, “Finding the mill”, followed by its three steps in order: “Follow the river.”, “Cross the stone bridge.”, “Turn left at the oak.”"
     cites: [accessible-html#posh, accessible-html#other-benefits]
     solution:
       html: |
@@ -251,7 +251,7 @@ tasks:
 
   - id: market-day
     concept: clear-language
-    prompt: "The notice reads Market on Wed. Ask the VTC. Rewrite it in clear language: the day in full, and the VTC, the Vale Trading Council, spelled out where it first appears, with the abbreviation still marked."
+    prompt: "The notice reads “Market on Wed. Ask the VTC.” Rewrite it in clear language: the day in full, and “VTC”, the “Vale Trading Council”, spelled out where it first appears, with the abbreviation still marked."
     cites: [accessible-html#clear-language, el-abbr#expand-first]
     starter:
       html: |
@@ -334,7 +334,7 @@ tasks:
 
   - id: gazette-bones
     concept: source-order
-    prompt: "Write the bones of the Vale Gazette's page in the order a reader should meet them: a header with the title The Vale Gazette, the main navigation with a link to /, the main content with the paragraph Rain is due on Friday., and a footer with © The Vale Gazette."
+    prompt: "Write the bones of the Vale Gazette's page in the order a reader should meet them: a header with the title “The Vale Gazette”, the main navigation with a link to /, the main content with the paragraph “Rain is due on Friday.”, and a footer with “© The Vale Gazette”."
     cites: [accessible-html#sectioning, accessible-html#sectioning-example, accessible-html#source-order]
     solution:
       html: |
@@ -395,7 +395,7 @@ tasks:
 
   - id: save-and-clear
     concept: native-controls
-    prompt: Write two controls, Save the map and Clear the map, that keyboard users can reach and press without any scripting for focus or keys and without tabindex.
+    prompt: "Write two controls, “Save the map” and “Clear the map”, that keyboard users can reach and press without any scripting for focus or keys and without tabindex."
     cites: [accessible-html#div-buttons, accessible-html#tabindex]
     solution:
       html: |
@@ -447,7 +447,7 @@ tasks:
 
   - id: records-and-sort
     concept: links-vs-buttons
-    prompt: "Write two controls: Guild records, which takes the reader to /records.html, and Sort by name, which reorders the list on this page. Use the right element for each."
+    prompt: "Write two controls: “Guild records”, which takes the reader to “/records.html”, and “Sort by name”, which reorders the list on this page. Use the right element for each."
     cites: [accessible-html#fake-button-links, accessible-html#meaningful-labels]
     solution:
       html: |
@@ -471,7 +471,7 @@ tasks:
 
   - id: skip-lands
     concept: skip-links
-    prompt: The skip link points at an id that does not exist, so it goes nowhere. Make it land on the page's main content.
+    prompt: "The skip link points at an id that does not exist, so it goes nowhere. Make it land on the page's main “content”."
     cites: [accessible-html#skip-link, el-main#skip-target]
     starter:
       html: |
@@ -533,7 +533,7 @@ tasks:
 
   - id: leaf-icon
     concept: text-alternatives
-    prompt: "Write the heading Herbs of the Vale with the decorative icon leaf.png in front of it. The icon adds nothing a reader needs, so screen readers should pass over it."
+    prompt: "Write the heading “Herbs of the Vale” with the decorative icon “leaf.png” in front of it. The icon adds nothing a reader needs, so screen readers should pass over it."
     cites: [accessible-html#empty-alt]
     solution:
       html: |
@@ -560,7 +560,7 @@ tasks:
 
   - id: ford-map
     concept: text-alternatives
-    prompt: "Show the map ford.png. Its whole point is that the ford is two miles north of the mill; give it alternative text that says what the picture tells."
+    prompt: "Show the map “ford.png”. Its whole point is that the ford is two miles north of the mill; give it alternative text that says what the picture tells."
     cites: [accessible-html#missing-alt, accessible-html#alt-content]
     solution:
       html: |
@@ -579,7 +579,7 @@ tasks:
 
   - id: logo-home
     concept: text-alternatives
-    prompt: "Make the shop's logo, logo.png, which shows the words The Copper Kettle, a link to the home page, /, so that screen reader users hear where it leads."
+    prompt: "Make the shop's logo, “logo.png”, which shows the words “The Copper Kettle”, a link to the home page, /, so that screen reader users hear where it leads."
     cites: [creating-links#image-link, accessible-html#alt-content]
     solution:
       html: |

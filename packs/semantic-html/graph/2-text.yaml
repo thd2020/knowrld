@@ -32,6 +32,20 @@ nodes:
           - Breads, since it comes just before it
         answer: 1
         explain: Like the chapters and subsections in MDN's story, each h3 is a subsection of the h2 above it.
+      - prompt: "In a story, the h1 is the story's title and each chapter has an h2. What marks a subsection inside a chapter?"
+        choices:
+          - "An h3"
+          - "A bold p"
+          - "Another h1"
+        answer: 0
+        explain: "h2 represents subheadings and h3 sub-subheadings, such as the subsections of each chapter."
+      - prompt: "Your page needs five heading levels. What should you consider?"
+        choices:
+          - "Using h1 for all five so that every heading looks equally important"
+          - "Spreading the content over several pages"
+          - "Skipping straight from h1 to h5 to save levels"
+        answer: 1
+        explain: "Aim for no more than three levels per page; with a deep hierarchy, spread the content over multiple pages if possible."
 
   - id: why-structure
     kind: concept
@@ -66,6 +80,20 @@ nodes:
           - Marking content up with fitting semantic elements
         answer: 2
         explain: Technical SEO means tagging the content with semantic HTML, so crawlers find the content you want indexed.
+      - prompt: "A recipe's text is split only by pressing Enter, with no elements. How does it look in the browser?"
+        choices:
+          - "As a numbered list"
+          - "As neat paragraphs, one per line break you typed"
+          - "As one big chunk of text"
+        answer: 2
+        explain: "With no elements to give it structure, the browser does not know what is a heading or a paragraph, and shows one big chunk."
+      - prompt: "A page has no headings. What does a screen reader user have to do?"
+        choices:
+          - "Listen to the whole page read out loud"
+          - "Nothing different, since screen readers make their own headings"
+          - "Switch the screen reader to read only the links instead"
+        answer: 0
+        explain: "Screen readers read out the headings as an outline; without headings their users are forced to listen to the whole document."
 
   - id: semantics
     kind: concept
@@ -101,6 +129,20 @@ nodes:
           - Which element has the shortest name?
         answer: 0
         explain: Ask which elements best describe or represent the data you are going to populate. How it looks is for CSS.
+      - prompt: "Which is a semantic question to ask about an element?"
+        choices:
+          - "What colour and size does this element have by default?"
+          - "What role does it have?"
+          - "How big is it?"
+        answer: 1
+        explain: "Semantics is the meaning, the purpose or role an element has, rather than what it looks like."
+      - prompt: "You style an h1 with CSS so it looks small and plain. Is it still the top-level heading?"
+        choices:
+          - "No; it becomes a paragraph once it looks like one"
+          - "Only if the font size stays above 32 pixels"
+          - "Yes; its meaning stays"
+        answer: 2
+        explain: "The h1 carries the role of a top-level heading. You can style it to look like anything; its semantic value is still used by search engines and screen readers."
 
   - id: emphasis-and-importance
     kind: concept
@@ -132,6 +174,20 @@ nodes:
           - The words become links to a glossary
         answer: 0
         explain: Stressing "glad" and "late" makes the sentence sound sarcastic or passive-aggressive rather than relieved.
+      - prompt: "How might a screen reader treat em and strong?"
+        choices:
+          - "It can speak them in a different tone of voice"
+          - "It reads them twice"
+          - "It skips them, since they only change the font"
+        answer: 0
+        explain: "em and strong are recognised by screen readers, which can be configured to speak them in a different tone of voice."
+      - prompt: "In \"if you drink it, you may die\", die is stressed inside a strongly important phrase. How can that be marked up?"
+        choices:
+          - "Only one of em or strong, since they cannot be combined"
+          - "<strong>you may <em>die</em></strong>"
+          - "<strong>you may <em>die</strong></em>"
+        answer: 1
+        explain: "You can nest strong and em inside one another if desired, as long as they nest properly."
 
   - id: presentational-elements
     kind: concept
@@ -167,6 +223,20 @@ nodes:
           - Made them identical to strong, em and ins
         answer: 1
         explain: HTML5 redefined b, i and u with new, somewhat confusing, semantic roles.
+      - prompt: "Which is a fitting use of <b>?"
+        choices:
+          - "A warning that the liquid is highly toxic"
+          - "A word you stress to change the sentence's meaning"
+          - "A product name"
+        answer: 2
+        explain: "b conveys a meaning traditionally conveyed by bold, such as keywords or product names. A warning's importance is strong; stress is em."
+      - prompt: "Which is a fitting use of <u>?"
+        choices:
+          - "A misspelling, marked as such"
+          - "A heading that should stand out from the paragraph"
+          - "Text that the reader should click to go to another page"
+        answer: 0
+        explain: "u conveys a meaning traditionally shown by underline, such as a proper name or a misspelling. Links are what people expect to be underlined."
 
   - id: lists
     kind: concept
@@ -196,6 +266,20 @@ nodes:
           - As a separate list after the whole ol
         answer: 0
         explain: Closely related sub-instructions can go in their own list, nested inside the li of the step they belong to.
+      - prompt: "A shopping list of milk, eggs and bread can be bought in any order. Which list fits?"
+        choices:
+          - "<ol>, since the items are numbered as you shop"
+          - "<ul>"
+          - "<dl>, with each item as a term"
+        answer: 1
+        explain: "Unordered lists mark up items whose order doesn't matter, like a grocery shopping list."
+      - prompt: "What is the only element allowed to be a direct item of <ol>?"
+        choices:
+          - "<ul>"
+          - "<p>"
+          - "<li>"
+        answer: 2
+        explain: "An ordered list has the same structure as an unordered one; each item is wrapped in li."
 
   - id: description-lists
     kind: concept
@@ -221,6 +305,27 @@ nodes:
           - Only if the list is ordered
         answer: 1
         explain: It is permitted to have a single term with multiple descriptions.
+      - prompt: "In a dl of drama terms, which element holds the word \"soliloquy\"?"
+        choices:
+          - "<dt>"
+          - "<dd>, the description definition"
+          - "<li>, as in the other kinds of list"
+        answer: 0
+        explain: "Each term is wrapped in a dt (description term), and each description in a dd."
+      - prompt: "An FAQ pairs each question with its answer. Which markup fits?"
+        choices:
+          - "A ul with each question and answer in one li together"
+          - "A dl, the question in dt and the answer in dd"
+          - "An ol"
+        answer: 1
+        explain: "Description lists mark up items and their descriptions, such as terms and definitions, or questions and answers."
+      - prompt: "Which wrapper holds dt and dd elements?"
+        choices:
+          - "<ol>, with one numbered item per term"
+          - "<ul>, the same wrapper as a bulleted list"
+          - "<dl>"
+        answer: 2
+        explain: "Description lists use a different wrapper than the other list types, the dl element."
 
   - id: quotations
     kind: concept
@@ -253,6 +358,20 @@ nodes:
         choices: ["<q>", "<blockquote>", "<cite>"]
         answer: 0
         explain: Inline quotations use q; block-level quoted content uses blockquote.
+      - prompt: "You quote two whole paragraphs from another site. Which element wraps them?"
+        choices:
+          - "<blockquote>"
+          - "<cite>"
+          - "<q>"
+        answer: 0
+        explain: "Block-level content quoted from somewhere else goes inside blockquote, with the source URL in its cite attribute."
+      - prompt: "Where does the URL of a quote's source go on a <q>?"
+        choices:
+          - "Inside a cite element, nested within the q"
+          - "In a cite attribute"
+          - "In an href attribute, as on a link"
+        answer: 1
+        explain: "Inline quotations work like block quotes, with the source's URL in a cite attribute."
 
   - id: abbreviations
     kind: concept
@@ -278,6 +397,27 @@ nodes:
           - Never; the expansion goes in a footnote
         answer: 0
         explain: Expand in plain text on first use. Use title when an in-text expansion makes little sense, as with LGTM.
+      - prompt: "An article first mentions NASA. How is it best written?"
+        choices:
+          - "<acronym>NASA</acronym>, the element for acronyms"
+          - "<abbr>NASA</abbr> alone, with no expansion anywhere"
+          - "The full name in the text, with <abbr>NASA</abbr>"
+        answer: 2
+        explain: "Provide a full expansion in plain text on first use, along with abbr; NASA is useful information for everyone."
+      - prompt: "A chat transcript writes LGTM. Where does the expansion go?"
+        choices:
+          - "In the title attribute of its abbr"
+          - "Spelled out in brackets every time it appears in the text"
+          - "Nowhere"
+        answer: 0
+        explain: "Acronyms like LGTM are written to save space, so writing them out makes little sense; the expansion goes in title."
+      - prompt: "Should you use the <acronym> element?"
+        choices:
+          - "Yes, for acronyms, keeping abbr for abbreviations"
+          - "No; abbr covers both"
+          - "Only when the acronym is spoken as a word, like NASA"
+        answer: 1
+        explain: "acronym was removed from the spec in favour of abbr for both abbreviations and acronyms; it should not be used."
 
   - id: contact-address
     kind: concept
@@ -313,6 +453,20 @@ nodes:
           - Neither; address is only for email addresses
         answer: 0
         explain: address represents contact information for the document itself, here its writer. The recipient's address is just part of the content.
+      - prompt: "Which content can an <address> hold?"
+        choices:
+          - "The date the page was published, beside the author's name"
+          - "A list of shop addresses"
+          - "A name, a phone number and an email"
+        answer: 2
+        explain: "address wraps contact details, which can include a name, a phone number and an email. A publication date belongs in time."
+      - prompt: "Where is an <address> typically placed?"
+        choices:
+          - "In the footer of the current section"
+          - "At the very top of the body, before the main heading"
+          - "In the head, beside the author meta element"
+        answer: 0
+        explain: "An address element can typically be placed inside the footer of the current section."
 
   - id: superscript-subscript
     kind: concept
@@ -342,6 +496,20 @@ nodes:
         choices: ["x<sup>2</sup>", "x<sub>2</sub>", "x<span class=\"sup\">2</span>"]
         answer: 0
         explain: Exponents are raised, so they use sup.
+      - prompt: "A logo shows a raised letter in the brand name. How is the raise done?"
+        choices:
+          - "With <sup> around the raised letter in the name"
+          - "With CSS vertical-align"
+          - "With <sub>"
+        answer: 1
+        explain: "Styling a wordmark with a raised baseline should be done with CSS, such as vertical-align, not sup."
+      - prompt: "How do you write the 8 in C8H10N4O2, caffeine's formula?"
+        choices:
+          - "C<sup>8</sup>, raised above the line"
+          - "C8, since numbers in formulas need no element"
+          - "C<sub>8</sub>"
+        answer: 2
+        explain: "The number of atoms of an element in a chemical formula is a subscript, marked up with sub."
 
   - id: computer-code
     kind: concept
@@ -369,6 +537,20 @@ nodes:
         choices: ["<code>", "<kbd>", "<var>"]
         answer: 2
         explain: var is for specifically marking up variable names.
+      - prompt: "Which element marks up keys the user presses, such as Ctrl + A?"
+        choices:
+          - "<kbd>"
+          - "<samp>"
+          - "<var>"
+        answer: 0
+        explain: "kbd marks up keyboard and other input entered into the computer."
+      - prompt: "An inline mention of the font element is written in a paragraph. Which markup fits?"
+        choices:
+          - "<pre>&lt;font&gt;</pre> in the middle of the sentence"
+          - "<code>&lt;font&gt;</code>"
+          - "<var><font></var>, the tag written as it is"
+        answer: 1
+        explain: "code marks up generic pieces of computer code, and the angle brackets are written as character references."
 
   - id: times-and-dates
     kind: concept
@@ -397,3 +579,17 @@ nodes:
         choices: ["2016-04", "2016-W04", "W4-2016"]
         answer: 1
         explain: A week number is written with a W, as in 2016-W04. 2016-04 would be April 2016.
+      - prompt: "An event is at 7.30pm on 20 January 2016. Which markup lets software add it to a calendar?"
+        choices:
+          - "<time datetime=\"20/01/16 at 7.30 in the evening\">7.30pm, 20 January 2016</time>"
+          - "<time>7.30pm, 20 January 2016</time> with no attribute"
+          - "<time datetime=\"2016-01-20T19:30\">7.30pm, 20 January 2016</time>"
+        answer: 2
+        explain: "The datetime attribute carries an unambiguous, machine-readable date and time; the text can stay as people write it."
+      - prompt: "Which datetime value gives just a year and a month?"
+        choices:
+          - "2016-01"
+          - "January 2016, as people write it"
+          - "01/2016"
+        answer: 0
+        explain: "For just a year and month, datetime takes the form 2016-01."

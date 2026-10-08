@@ -30,6 +30,20 @@ nodes:
           - Search engines refuse to index invalid HTML
         answer: 0
         explain: You always get something running, but the browser doesn't always get it right. It is better to write correct markup.
+      - prompt: "Your code's syntax is correct, but the page does something you did not intend. What kind of error is that?"
+        choices:
+          - "A logic error"
+          - "A parsing error that stops the page from loading"
+          - "A syntax error, the kind a typo makes"
+        answer: 0
+        explain: "Logic errors are those where the syntax is correct but the code does not do what you intended; they are often harder to fix."
+      - prompt: "In the DOM inspector you select a node. What happens on the page?"
+        choices:
+          - "The page reloads"
+          - "The element is highlighted in the viewport"
+          - "The element's source is checked by the validator"
+        answer: 1
+        explain: "Hovering over or selecting a node in the DOM inspector highlights that element in the viewport."
 
   - id: html-validator
     kind: concept
@@ -54,6 +68,27 @@ nodes:
         choices: ["The CSS rules applied to the element", "A line and column number", "The browser that would fail on it"]
         answer: 1
         explain: Each message comes with a line and column number.
+      - prompt: "You fix one early error and revalidate. Several other messages vanish too. Why?"
+        choices:
+          - "The validator only reports the first ten errors it finds"
+          - "Revalidating always hides warnings that were already shown"
+          - "One problem often causes many errors"
+        answer: 2
+        explain: "Several errors can often be caused by a single problem, in a domino effect; fixing it removes the others."
+      - prompt: "What does the HTML validator take as input?"
+        choices:
+          - "An HTML document"
+          - "Only CSS files"
+          - "A screenshot of the page as it renders in a browser"
+        answer: 0
+        explain: "The validator takes an HTML document as input and reports what is wrong with the HTML."
+      - prompt: "Who maintains the Markup Validation Service?"
+        choices:
+          - "The search engines that index the pages"
+          - "The W3C"
+          - "Each browser maker, one validator per browser"
+        answer: 1
+        explain: "The HTML validator is created and maintained by the W3C."
 
   - id: semantic-html-accessibility
     kind: concept
@@ -89,6 +124,20 @@ nodes:
           - Keep the markup and add role attributes everywhere
         answer: 0
         explain: The goal isn't all or nothing; every improvement you can make helps the cause of accessibility.
+      - prompt: "Which keys activate a focused <button>?"
+        choices:
+          - "Only a mouse click, never a key"
+          - "Tab"
+          - "Space, Return or Enter"
+        answer: 2
+        explain: "Native buttons are keyboard accessible; Tab moves between them and Space, Return or Enter activates one."
+      - prompt: "Does semantic HTML take longer to write than markup built from divs?"
+        choices:
+          - "Not if you do it consistently from the start"
+          - "Only for pages that have more than one heading"
+          - "Yes, about twice as long on a typical project"
+        answer: 0
+        explain: "Semantic HTML takes no longer to write than non-semantic markup if you do it consistently from the start of a project."
 
   - id: screen-reader-structure
     kind: concept
@@ -117,6 +166,27 @@ nodes:
           - The same experience as with headings
         answer: 0
         explain: Without semantic structure there is nothing to use as signposts, so the page is read out all at once.
+      - prompt: "How does a screen reader pace its reading on a well-structured page?"
+        choices:
+          - "Only the headings"
+          - "It stops after each element, at the user's pace"
+          - "It reads the whole page in one go without stopping"
+        answer: 1
+        explain: "On a page with good semantics, the screen reader stops after each element, letting the user go at a comfortable pace."
+      - prompt: "A screen reader user wants the next section. What can many screen readers do?"
+        choices:
+          - "Only read on from the top until they reach it"
+          - "Jump to the next line break in the source"
+          - "Jump to the next heading"
+        answer: 2
+        explain: "You can jump to the next or previous heading in many screen readers."
+      - prompt: "Which markup gives a screen reader the best signposts?"
+        choices:
+          - "Headings, paragraphs and lists"
+          - "Spans styled with large font sizes, and br between them"
+          - "Bold text in one paragraph"
+        answer: 0
+        explain: "One of the best accessibility aids for a screen reader user is an excellent text structure with headings, paragraphs and lists."
 
   - id: clear-language
     kind: concept
@@ -143,6 +213,27 @@ nodes:
           - Everyone, including second-language readers
         answer: 2
         explain: Clear language helps people with cognitive disabilities, readers whose first language differs, younger people, and everyone else.
+      - prompt: "How should \"Jan\" be written for clarity?"
+        choices:
+          - "<abbr>Jan</abbr>, with no expansion"
+          - "January"
+          - "Jan., with a full stop to show it is short"
+        answer: 1
+        explain: "Expand abbreviations; instead of writing Jan, write January."
+      - prompt: "Your text uses an acronym many times. What should you do?"
+        choices:
+          - "Expand it in full every single time it appears"
+          - "Never expand it"
+          - "Expand it at least once, then use <abbr>"
+        answer: 2
+        explain: "Expand acronyms at least once or twice, then use the abbr element to describe them."
+      - prompt: "Which phrase reads out most clearly on a screen reader?"
+        choices:
+          - "Open 9 to 5, Monday to Friday"
+          - "Open 9-5 M-F, the whole year round"
+          - "Open 9–5 Mon–Fri"
+        answer: 0
+        explain: "Avoid dashes where you can and expand abbreviations; write 5 to 7 rather than 5–7."
 
   - id: source-order
     kind: concept
@@ -170,6 +261,27 @@ nodes:
           - Inside the header, so it is read early
         answer: 1
         explain: Get the source order right to start with; you can always place content where you want using CSS.
+      - prompt: "Which element suits a repeating content unit, such as one of many posts?"
+        choices:
+          - "<footer>, after each post's last paragraph"
+          - "<article>"
+          - "<nav>, since readers move between the posts"
+        answer: 1
+        explain: "Sectioning elements such as article for repeating content units give screen readers extra clues about the content."
+      - prompt: "What do nav, footer and article give a screen reader?"
+        choices:
+          - "A different voice"
+          - "Nothing, since they only change the layout of the page"
+          - "Extra clues about the content they are navigating"
+        answer: 2
+        explain: "Sectioning elements provide extra semantics for screen readers to give users extra clues about the content."
+      - prompt: "You lay out a page and the source order no longer reads logically. What should you fix?"
+        choices:
+          - "The source order"
+          - "Nothing; screen readers read the page in the visual order"
+          - "The tabindex of every element, numbered in the order shown"
+        answer: 0
+        explain: "Content should make logical sense in its source order, which is what screen reader users get read out; CSS can place it later."
 
   - id: native-controls
     kind: concept
@@ -205,6 +317,20 @@ nodes:
           - Nothing; divs are focusable
         answer: 0
         explain: Focus via tabindex, a role for screen readers and JavaScript for the Enter key. Better to use the right element in the first place.
+      - prompt: "You need an element focusable only by script or as a link target, not by Tab. Which tabindex fits?"
+        choices:
+          - "tabindex=\"0\", the most useful value"
+          - "tabindex=\"-1\""
+          - "tabindex=\"1\""
+        answer: 1
+        explain: "tabindex=\"-1\" lets an element that is not normally tabbable receive focus programmatically or as the target of links."
+      - prompt: "A fake div button has tabindex=\"0\" and role=\"button\". What is still missing?"
+        choices:
+          - "An id, so that the Tab key is able to find it on the page"
+          - "Nothing; it now works exactly like a button"
+          - "Activation with the Enter key, which needs script"
+        answer: 2
+        explain: "tabindex lets you tab to it, but activating it with Enter or Return needs extra JavaScript. Better to use a real button."
 
   - id: links-vs-buttons
     kind: concept
@@ -236,6 +362,20 @@ nodes:
           - Screen readers read out only a button's first word
         answer: 0
         explain: Screen reader users sometimes bring up a list of buttons and form controls, so a label like "Click here" tells them nothing.
+      - prompt: "When should you use an anchor?"
+        choices:
+          - "For navigation to a proper URL"
+          - "For any control that runs a script when clicked"
+          - "For anything that should look underlined"
+        answer: 0
+        explain: "In general you should only use an anchor for navigation using a proper URL; an action is a button."
+      - prompt: "How can you tell which element has keyboard focus?"
+        choices:
+          - "It is announced only by a screen reader, never shown"
+          - "It is given a highlighted default style"
+          - "It moves to the top"
+        answer: 1
+        explain: "Focused elements are given a highlighted default style in every browser, so you can tell what element is focused."
 
   - id: skip-links
     kind: concept
@@ -270,6 +410,20 @@ nodes:
           - Mouse users on large screens
         answer: 0
         explain: Skip links help people who navigate with switch control, voice command or other aids, for whom repeated links are laborious.
+      - prompt: "How is a skip link usually kept out of sight?"
+        choices:
+          - "It is written inside an HTML comment"
+          - "It is left out of the page until a script adds it"
+          - "CSS hides it offscreen until it is focused"
+        answer: 2
+        explain: "Usually CSS hides a skip link offscreen until focused."
+      - prompt: "Which link skips to <main id=\"content\">?"
+        choices:
+          - "<a href=\"#content\">Skip to main content</a>"
+          - "<a href=\"content.html\">Skip to main content</a>"
+          - "<a href=\"#main\">Skip to main content</a>"
+        answer: 0
+        explain: "The skip link's fragment matches the id on main, which makes main its target."
 
   - id: text-alternatives
     kind: concept
@@ -312,3 +466,10 @@ nodes:
           - The photographer's name and camera
         answer: 0
         explain: The alt should be brief and include the information the image conveys that is not duplicated in the surrounding text.
+      - prompt: "A photo of Fluffy is a small avatar beside her review of a dog food. Which alt fits?"
+        choices:
+          - "alt=\"photo.jpg\""
+          - "alt=\"Fluffy\""
+          - "alt=\"Fluffy, a tri-color terrier with very short hair, with a tennis ball\""
+        answer: 1
+        explain: "The right alt depends on context. As an avatar beside a review, alt=\"Fluffy\" is appropriate."

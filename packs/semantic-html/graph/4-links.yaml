@@ -31,6 +31,20 @@ nodes:
           - Search engines penalize it
         answer: 0
         explain: A title is only revealed on mouse hover, so keyboard and touchscreen users have trouble reaching it. Put important information in the text.
+      - prompt: "You want the words \"the Mozilla homepage\" to link to https://www.mozilla.org/en-US/. What do you write?"
+        choices:
+          - "<a href=\"https://www.mozilla.org/en-US/\">the Mozilla homepage</a>"
+          - "<a>the Mozilla homepage</a> https://www.mozilla.org/en-US/"
+          - "<link href=\"https://www.mozilla.org/en-US/\">the Mozilla homepage</link>"
+        answer: 0
+        explain: "A basic link wraps the content in an a element whose href holds the web address."
+      - prompt: "What does every resource a hyperlink can point to have?"
+        choices:
+          - "A title that the browser shows on hover"
+          - "A URL"
+          - "An id"
+        answer: 1
+        explain: "Each resource on the web has an address, known as a URL, which hyperlinks point to."
 
   - id: relative-paths
     kind: concept
@@ -60,6 +74,20 @@ nodes:
         choices: ["contacts.html", "../contacts.html", "index.html/contacts.html"]
         answer: 0
         explain: A file in the same directory is reached by its file name alone, or with ./ in front.
+      - prompt: "In the top-level index.html, which path reaches projects/index.html?"
+        choices:
+          - "index.html#projects, a fragment of this page"
+          - "../projects/index.html"
+          - "projects/index.html"
+        answer: 2
+        explain: "To go down into a directory, write the directory's name, a forward slash, then the file's name."
+      - prompt: "The link ../pdfs/project-brief.pdf sits in projects/index.html. You move projects/index.html deeper into another folder. What happens?"
+        choices:
+          - "The link breaks, since it is relative to the moved file"
+          - "The browser finds it anyway"
+          - "The link still works, because relative paths follow the file"
+        answer: 0
+        explain: "With relative URLs, moving either the linking file or the linked file to a different location breaks the link."
 
   - id: absolute-urls
     kind: concept
@@ -95,6 +123,20 @@ nodes:
           - https://www.example.com/pdfs/projects/index.html
         answer: 2
         explain: All links resolve relative to the current document's URL, so from pdfs/index.html the link lands on /pdfs/projects/index.html, which doesn't exist.
+      - prompt: "An internal link can be written as https://www.example.com/projects/ or as projects. Which is recommended, and why?"
+        choices:
+          - "The full URL, so that the link can never point anywhere else"
+          - "projects, which still works if the site moves domain"
+          - "Either; neither one is easier to keep working than the other"
+        answer: 1
+        explain: "The path without the full domain is recommended for portability; full URL links all need changing if the site moves to another domain."
+      - prompt: "A link to another site points at a resource. What must its href be?"
+        choices:
+          - "A relative path with two dots, like ../project-brief.pdf"
+          - "A path starting with a slash, like /pdfs/project-brief.pdf"
+          - "The full URL, including the domain name"
+        answer: 2
+        explain: "When specifying an external link, you always have to include the full URL as the path."
 
   - id: document-fragments
     kind: concept
@@ -127,6 +169,20 @@ nodes:
           - An id must be unique in the whole document
         answer: 2
         explain: The id attribute defines an identifier that must be unique within the entire document.
+      - prompt: "From another page, how do you link to the element with id=\"mailing_address\" in contacts.html?"
+        choices:
+          - "contacts.html#mailing_address"
+          - "contacts.html?id=mailing_address, as a query term"
+          - "#contacts.html, with the hash before the file name"
+        answer: 0
+        explain: "Include the id at the end of the path, preceded by a hash symbol."
+      - prompt: "What is the most typical element to give an id so it can be linked to?"
+        choices:
+          - "A paragraph somewhere in the middle of a section"
+          - "A heading"
+          - "The body element"
+        answer: 1
+        explain: "The most typical use of a document fragment is linking to a specific heading."
 
   - id: link-text
     kind: concept
@@ -166,6 +222,13 @@ nodes:
           - Yes, as long as the colour is not red or green
         answer: 1
         explain: Colour should not be used as the sole method of distinguishing links from the text around them.
+      - prompt: "Why put keywords in link text?"
+        choices:
+          - "So that screen readers spell out each keyword letter by letter"
+          - "So that the link looks different from the text around it"
+          - "Search engines index the target by it"
+        answer: 2
+        explain: "Search engines use link text to index target files, so keywords that describe what is linked help."
 
   - id: link-signposts
     kind: concept
@@ -198,6 +261,20 @@ nodes:
           - Search engines ignore links with a target
         answer: 0
         explain: Opening links in a new tab can disorient users who are used to the back button, and screen reader users may lose their place.
+      - prompt: "A link downloads a 10 MB PDF report. Which link text is best?"
+        choices:
+          - "Download the sales report (PDF, 10MB)"
+          - "https://www.example.com/reports/large-report.pdf"
+          - "Click here"
+        answer: 0
+        explain: "If a link downloads a resource, say so in the text. People on low bandwidth can avoid multi-megabyte files."
+      - prompt: "Which attribute and value open a link in a new tab?"
+        choices:
+          - "download=\"_blank\""
+          - "target=\"_blank\""
+          - "rel=\"new-tab\""
+        answer: 1
+        explain: "Opening a link in a new tab is done by setting the target attribute to \"_blank\"."
 
   - id: email-links
     kind: concept
@@ -230,6 +307,20 @@ nodes:
           - Inside the link text, after a colon
         answer: 0
         explain: Each field and its value is a query term. A ? separates them from the address and & separates the fields.
+      - prompt: "You want a \"Share\" link that lets readers email anyone they choose. What is its href?"
+        choices:
+          - "mailto:everyone, as a placeholder for any address"
+          - "share:email, the scheme for sharing links"
+          - "mailto:, with no address"
+        answer: 2
+        explain: "The address is optional. With href=\"mailto:\", a new email opens with no destination address."
+      - prompt: "Which href sets the subject \"Hello there\" correctly?"
+        choices:
+          - "mailto:nowhere@mozilla.org?subject=Hello%20there"
+          - "mailto:nowhere@mozilla.org subject=\"Hello there\""
+          - "mailto:nowhere@mozilla.org&subject=Hello there"
+        answer: 0
+        explain: "A question mark separates the address from the fields, and spaces in a value must be percent-escaped."
 
   - id: navigation-menus
     kind: concept
@@ -265,6 +356,20 @@ nodes:
           - Search engines rank sites higher for it
         answer: 0
         explain: The same structure and menu on every page gives the impression of staying in the same place while different content comes up.
+      - prompt: "The menu link to the current page is kept but styled differently. What tells assistive technology?"
+        choices:
+          - "target=\"_self\" on that link"
+          - "aria-current=\"page\" on that link"
+          - "A class=\"current\" on that link, styled in bold"
+        answer: 1
+        explain: "When a link in a set is styled to show the user is on that page, set aria-current=\"page\" on it."
+      - prompt: "In a multi-step checkout, the current step's icon looks different. What goes on its container?"
+        choices:
+          - "An h1"
+          - "aria-current=\"page\", as for the links in a menu"
+          - "aria-current=\"step\""
+        answer: 2
+        explain: "In a multi-step process, the current step's container should have aria-current=\"step\"."
 
   - id: anchor-attributes
     kind: concept
@@ -294,3 +399,17 @@ nodes:
         choices: ["phone:+1-800-555-0123", "tel:+1(800)555-0123", "call://18005550123"]
         answer: 1
         explain: Telephone links use the tel URL scheme. What happens depends on the device.
+      - prompt: "A link inside an iframe should load in the topmost browsing context. Which target value fits?"
+        choices:
+          - "_top"
+          - "_self, the current browsing context"
+          - "_blank, which usually opens a new tab"
+        answer: 0
+        explain: "_top loads the URL in the topmost browsing context, the highest one that is an ancestor of the current one."
+      - prompt: "What does target=\"_blank\" also do, without any rel attribute?"
+        choices:
+          - "It makes the link open in the same tab instead"
+          - "It gives the same behaviour as rel=\"noopener\""
+          - "It turns the link into a download of the target file"
+        answer: 1
+        explain: "target=\"_blank\" implicitly gives the same rel behaviour as rel=\"noopener\", which does not set window.opener."

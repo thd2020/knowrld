@@ -36,6 +36,20 @@ nodes:
           - Fine, since browsers compute the outline
         answer: 0
         explain: Nested h1 elements in sectioning elements were allowed in older versions of HTML, but never best practice, and are now non-conforming.
+      - prompt: "What can a user agent build from a page's headings automatically?"
+        choices:
+          - "A table of contents"
+          - "A stylesheet that sizes each level of heading"
+          - "The tab's title"
+        answer: 0
+        explain: "Heading information can be used by user agents to construct a table of contents for a document automatically."
+      - prompt: "Is a page with two h1 elements, side by side and not nested, allowed by the standard?"
+        choices:
+          - "No; the page fails to render the second one"
+          - "Allowed, though one h1 is best practice"
+          - "Yes, and two is the recommended number for a page"
+        answer: 1
+        explain: "Multiple h1 elements are allowed if not nested, but a page should generally have a single h1 that describes its content."
 
   - id: header-footer-context
     kind: concept
@@ -63,6 +77,27 @@ nodes:
           - Nothing; footers must be children of body
         answer: 1
         explain: A footer represents a footer for its nearest ancestor sectioning content. Only when that is the body does it apply to the whole page.
+      - prompt: "A header sits directly in body, outside any article or section. Which landmark role does it have?"
+        choices:
+          - "region, as any section of a page does"
+          - "contentinfo"
+          - "banner"
+        answer: 2
+        explain: "A header not nested in sectioning content or main has the same meaning as the site-wide banner landmark."
+      - prompt: "The nearest sectioning ancestor of a footer is the body. What does the footer apply to?"
+        choices:
+          - "The whole page"
+          - "Nothing, until it is given an accessible name"
+          - "Only the last section that comes before it"
+        answer: 0
+        explain: "When the nearest ancestor sectioning content or sectioning root is the body, the footer applies to the whole page."
+      - prompt: "Where does information about an article's author go inside its footer?"
+        choices:
+          - "In a cite element"
+          - "In an address element"
+          - "In a small element, like other fine print"
+        answer: 1
+        explain: "Enclose information about the author in an address element, which can be included in the footer."
 
   - id: main-element
     kind: concept
@@ -94,6 +129,20 @@ nodes:
           - A list of the page's links
         answer: 0
         explain: main behaves like a main landmark, which assistive technology can use to quickly identify and navigate to the main content.
+      - prompt: "A page's whole purpose is a search form. Can that form go inside <main>?"
+        choices:
+          - "Only if the form is wrapped in a nav element first"
+          - "No; search forms always stay out of main"
+          - "Yes, since it is the page's main function"
+        answer: 2
+        explain: "Repeated content such as search forms stays out of main, unless the search form is the main function of the page."
+      - prompt: "Should you write <div role=\"main\"> or <main>?"
+        choices:
+          - "<main>, unless legacy browsers matter"
+          - "<div role=\"main\">, which more screen readers understand"
+          - "Both, the div inside the main, to be safe"
+        answer: 0
+        explain: "Prefer the main element over declaring role=\"main\", unless there are legacy browser support concerns."
 
   - id: nav-element
     kind: concept
@@ -121,6 +170,27 @@ nodes:
           - They can't; all navs sound the same
         answer: 0
         explain: Labelled, they are announced as "Primary navigation" and "Footer navigation" instead of two unnamed nav sections.
+      - prompt: "A footer holds a short list of links to terms and privacy. Must they be in a <nav>?"
+        choices:
+          - "Yes; every list of links must be in a nav element"
+          - "No; footer links often need no nav"
+          - "Only external links"
+        answer: 1
+        explain: "nav is for major blocks of navigation links; the footer often has a list of links that don't need to be in a nav."
+      - prompt: "Which markup labels a nav with its own heading?"
+        choices:
+          - "<nav id=\"primary-navigation\" role=\"navigation\"><h2>Primary navigation</h2>"
+          - "<nav title=\"Primary navigation\" aria-label=\"navigation\"><h2 class=\"title\">Primary navigation</h2>"
+          - "<nav aria-labelledby=\"primary-navigation\"><h2 id=\"primary-navigation\">Primary navigation</h2>"
+        answer: 2
+        explain: "Sectioning content can be labelled with aria-labelledby pointing at the id of a heading that describes its purpose."
+      - prompt: "What does a screen reader announce for two navs labelled \"Primary navigation\" and \"Footer navigation\"?"
+        choices:
+          - "Two nav sections, each by its name"
+          - "Only the links, without saying they are in a nav"
+          - "One nav, since the second one is ignored"
+        answer: 0
+        explain: "The screen reader announces two nav sections, one called \"Primary navigation\" and one \"Footer navigation\"."
 
   - id: landmarks
     kind: concept
@@ -154,6 +224,13 @@ nodes:
         choices: ['<div role="navigation">', '<div class="nav">', "<nav>"]
         answer: 2
         explain: Prefer the semantic HTML element over an ARIA role; a class adds no semantics at all.
+      - prompt: "Why are landmarks useful to assistive technology?"
+        choices:
+          - "They change how the sections look on the screen"
+          - "They help users find and jump to content quickly"
+          - "They make the page load faster on slow connections"
+        answer: 1
+        explain: "Landmarks allow assistive technologies to navigate and to find content quickly."
 
   - id: choosing-sections
     kind: concept
@@ -185,6 +262,20 @@ nodes:
           - Only when it is longer than a line
         answer: 1
         explain: Do not use aside for parenthesized text; that text is part of the main flow.
+      - prompt: "A blog comment makes sense on its own and could be syndicated. Which element suits it?"
+        choices:
+          - "<aside>, as the comment is not the post itself"
+          - "<section>"
+          - "<article>"
+        answer: 2
+        explain: "A standalone, atomic unit of content that makes sense syndicated, such as a blog post or comment, is an article."
+      - prompt: "How is an article usually identified?"
+        choices:
+          - "By a heading as one of its children"
+          - "By an id attribute on the article element"
+          - "By a title attribute that names the article"
+        answer: 0
+        explain: "Each article should be identified, typically by including a heading element as a child of the article."
 
   - id: em-and-i
     kind: concept
@@ -213,6 +304,20 @@ nodes:
           - It was removed from HTML5
         answer: 1
         explain: i was once presentational; it now marks text set off from the normal prose, such as a technical term or a thought.
+      - prompt: "In \"I love carrots\", the word love is stressed to change the meaning. Which element marks it?"
+        choices:
+          - "<i>, since stressed words are set in italics"
+          - "<em>"
+          - "<b>"
+        answer: 1
+        explain: "em represents stress emphasis that changes the meaning of a sentence; i sets text off from the prose without stress."
+      - prompt: "You want a pull-quote in italics for looks alone. What should you use?"
+        choices:
+          - "<i>, the element for italic text"
+          - "<em>, since it is italic by default"
+          - "CSS font-style"
+        answer: 2
+        explain: "Neither em nor i is for purely decorative purposes; to display text in italic type, use the CSS font-style property."
 
   - id: strong-and-b
     kind: concept
@@ -242,6 +347,20 @@ nodes:
         choices: ["<b>", "<em>", "<strong>"]
         answer: 2
         explain: strong gives portions of a sentence added importance, as in MDN's "Warning! This is very dangerous."
+      - prompt: "Two parts of a sentence are both important, one more than the other. How can strong express that?"
+        choices:
+          - "Nest strong in strong"
+          - "It cannot"
+          - "By giving the second strong a weight attribute"
+        answer: 0
+        explain: "Both strong and em can be nested to increase the relative degree of importance or stress emphasis."
+      - prompt: "Which element marks text of particular relevance, rather than importance?"
+        choices:
+          - "<b>, which draws the eye to text"
+          - "<mark>"
+          - "<strong>, for text that matters more"
+        answer: 1
+        explain: "strong represents importance, em emphasis and mark relevance; b conveys no such special meaning."
 
   - id: u-annotation
     kind: concept
@@ -268,6 +387,27 @@ nodes:
           - A hyperlink with no href
         answer: 0
         explain: u was restored in HTML5 with a semantic meaning, to mark text as having some form of non-textual annotation.
+      - prompt: "A book title appears in a paragraph. Should it be underlined with <u>?"
+        choices:
+          - "Only foreign books"
+          - "Yes; book titles are traditionally underlined"
+          - "No; u is not for titles of books"
+        answer: 2
+        explain: "You should not use u to underline text for presentation or to denote titles of books."
+      - prompt: "In Chinese text, which use of <u> is valid?"
+        choices:
+          - "A proper name mark"
+          - "Underlining the heading of each section"
+          - "Underlining the words that are links"
+        answer: 0
+        explain: "Valid uses include applying a proper name mark to denote proper names in Chinese text."
+      - prompt: "What happened to <u> between HTML 4 and HTML 5?"
+        choices:
+          - "It was removed for good"
+          - "It was deprecated, then restored with a new meaning"
+          - "It was kept exactly as it was, simply a way to underline text"
+        answer: 1
+        explain: "u was deprecated in HTML 4 and restored in HTML 5 with a semantic meaning, a non-textual annotation."
 
   - id: inline-semantics
     kind: concept
@@ -301,6 +441,13 @@ nodes:
         choices: ["<cite>", "<mark>", "<small>"]
         answer: 2
         explain: small represents side-comments and small print, like copyright and legal text.
+      - prompt: "An article corrects a paragraph and wants to show what was removed. Which element marks the removed text?"
+        choices:
+          - "<small>, so the removed text shows less"
+          - "<s>, for text that is no longer accurate"
+          - "<del>"
+        answer: 2
+        explain: "s is not appropriate for document edits; for those, use del and ins."
 
   - id: abbr-expansion
     kind: concept
@@ -329,6 +476,27 @@ nodes:
           - The full expansion and nothing else
         answer: 2
         explain: If present, title must contain the full description of the abbreviation and nothing else.
+      - prompt: "You can expand an abbreviation in the text. Should you also add a title?"
+        choices:
+          - "No; use title only if expanding in the text is not possible"
+          - "Yes, with a longer explanation than the text itself gives"
+          - "Yes, every single abbr element on a page needs its own title"
+        answer: 0
+        explain: "Only include a title if expanding the abbreviation in the text is not possible; a mismatch can be jarring."
+      - prompt: "An abbr has title=\"HyperText Markup Language, the language of web pages\". What is wrong?"
+        choices:
+          - "The title is too short to be useful"
+          - "The title must hold the expansion and nothing else"
+          - "Nothing; a title may explain the term in any words"
+        answer: 1
+        explain: "If present, title must contain the full description and nothing else."
+      - prompt: "Where does an abbreviation's expansion first belong?"
+        choices:
+          - "Only in a tooltip that shows on hover"
+          - "In a footnote"
+          - "In plain text, on first use"
+        answer: 2
+        explain: "Provide a full expansion of the term in plain text on first use, along with the abbr."
 
   - id: time-datetime
     kind: concept
@@ -359,6 +527,20 @@ nodes:
         choices: ["7.30pm", "half past seven", "19:30"]
         answer: 2
         explain: A time is written on a 24-hour clock as hours and minutes, like 19:30.
+      - prompt: "Which time element is valid without a datetime attribute?"
+        choices:
+          - "<time>2016-01-20</time>"
+          - "<time><b>2016-01-20</b></time>"
+          - "<time>the twentieth of January</time>"
+        answer: 0
+        explain: "Without datetime, the element must not have element descendants and its text must be the machine-readable value."
+      - prompt: "What can the datetime value of <time> help with?"
+        choices:
+          - "Styling dates in a different colour from text"
+          - "Search results and features such as reminders"
+          - "Showing the date in the reader's own language"
+        answer: 1
+        explain: "The datetime attribute translates dates into a machine-readable format, for better search results or features such as reminders."
 
   - id: quote-attribution
     kind: concept
@@ -387,6 +569,27 @@ nodes:
           - A title attribute on the q
         answer: 0
         explain: To reference the source of quoted material in a blockquote or q, use the cite attribute on the element.
+      - prompt: "How is a blockquote usually rendered?"
+        choices:
+          - "In italics"
+          - "In a box at the side of the page"
+          - "With indentation"
+        answer: 2
+        explain: "A blockquote is usually rendered visually by indentation."
+      - prompt: "Which markup credits a quotation correctly?"
+        choices:
+          - "<blockquote><p>…</p></blockquote><p>— Ada</p>"
+          - "<blockquote cite=\"Ada\"><p>…</p></blockquote>"
+          - "<blockquote><p>…</p><p>— Ada</p></blockquote>"
+        answer: 0
+        explain: "Attribution for the quotation must be placed outside the blockquote; cite holds a URL, not a name."
+      - prompt: "Which element marks up the title of a creative work?"
+        choices:
+          - "<i>, the element for titles of books"
+          - "<cite>"
+          - "<q>, around the title of the work"
+        answer: 1
+        explain: "cite is used to mark up the title of a creative work."
 
   - id: list-rules
     kind: concept
@@ -422,6 +625,20 @@ nodes:
           - The markup is invalid
         answer: 1
         explain: Several dt in a row are terms all defined by the immediately following dd.
+      - prompt: "Which list is ordered?"
+        choices:
+          - "The colours that a T-shirt in the shop window comes in"
+          - "The members of a club, listed in no particular order at all"
+          - "Ingredients listed in decreasing proportion on a label"
+        answer: 2
+        explain: "Ingredients in decreasing proportion are an ordered list; changing the order changes the meaning."
+      - prompt: "Can a ul hold an ol inside one of its items?"
+        choices:
+          - "Yes; lists nest and alternate freely"
+          - "Only as the last item"
+          - "No; nested lists must be of the same kind"
+        answer: 0
+        explain: "ol and ul may nest as deeply as desired, alternating between them as needed."
 
   - id: list-attributes
     kind: concept
@@ -454,6 +671,20 @@ nodes:
           - It turns the whole description list into a two-column table
         answer: 0
         explain: HTML allows a div around each name-value group, useful for microdata, global attributes on a whole group, or styling.
+      - prompt: "An ol must continue from 7 at its third item. What goes on that li?"
+        choices:
+          - "type=\"7\", which sets the item's number"
+          - "value=\"7\""
+          - "start=\"7\", as on the ol element itself"
+        answer: 1
+        explain: "The li's value attribute sets its ordinal value; the items after it continue from there."
+      - prompt: "The numbering style of a list is decoration only. How should you set it?"
+        choices:
+          - "With a value on each li"
+          - "With the type attribute on the ol"
+          - "With CSS list-style-type"
+        answer: 2
+        explain: "Unless the type of numbering matters, as in legal documents, use the CSS list-style-type property instead of type."
 
   - id: breaks-with-meaning
     kind: concept
@@ -482,6 +713,27 @@ nodes:
           - A paragraph of underscores that runs across the width
         answer: 1
         explain: hr is now defined semantically as a thematic break; to draw a line, use CSS.
+      - prompt: "A page builds its paragraphs from text and <br><br>. What may a screen reader do?"
+        choices:
+          - "Announce the breaks but not the content between them"
+          - "Read each part out as a separate, well-formed paragraph of its own"
+          - "Skip both the br elements and all of the text between them"
+        answer: 0
+        explain: "Screen readers may announce the presence of br but not the content between; it is confusing and frustrating."
+      - prompt: "Which content is a fit for <hr>?"
+        choices:
+          - "A thin line under every heading, for looks"
+          - "A shift of topic within a section"
+          - "Gaps in a list"
+        answer: 1
+        explain: "hr represents a thematic break, such as a change of scene or a shift of topic within a section."
+      - prompt: "How is <hr> defined today?"
+        choices:
+          - "As a horizontal line of a fixed width"
+          - "As a margin between two block elements"
+          - "In semantic terms"
+        answer: 2
+        explain: "hr is now defined in semantic terms rather than presentational ones; draw lines with CSS borders."
 
   - id: title-quality
     kind: concept
@@ -514,6 +766,20 @@ nodes:
           - Search engines ignore any title written entirely in lowercase
         answer: 0
         explain: If a title is just a list of words, algorithms often reduce the page's position in search results.
+      - prompt: "A title is 90 characters long. What might happen in search results?"
+        choices:
+          - "The end of it may be cut off"
+          - "The page is dropped"
+          - "Search engines show it in full on two lines"
+        answer: 0
+        explain: "Search engines typically display about the first 55 to 60 characters; text beyond that may be lost."
+      - prompt: "A glossary page about the word \"landmark\". Which title fits?"
+        choices:
+          - "Landmark"
+          - "Landmark: a section users can jump to"
+          - "Glossary glossary terms words landmark"
+        answer: 1
+        explain: "Avoid one- or two-word titles; use a descriptive phrase, or a term-definition pairing for glossary pages."
 
   - id: language-tags
     kind: concept
@@ -542,6 +808,27 @@ nodes:
           - Nothing; the page lang covers it
         answer: 1
         explain: WCAG Success Criterion 3.1.2 requires the language of each part in another language to be specified.
+      - prompt: "The html element has a valid lang. What else is announced properly as a result?"
+        choices:
+          - "Only the text inside the body"
+          - "The names of the files the page links to"
+          - "The page's title"
+        answer: 2
+        explain: "A valid lang on html ensures metadata in the head, such as the title, is announced properly too."
+      - prompt: "How many language tags does one lang attribute hold?"
+        choices:
+          - "A single language tag"
+          - "Two"
+          - "As many as the page uses, separated by commas"
+        answer: 0
+        explain: "The lang attribute contains a single BCP 47 language tag."
+      - prompt: "A page is mostly English with one Welsh paragraph. Which language goes on html?"
+        choices:
+          - "Welsh, since it is the less common language"
+          - "English"
+          - "Both, written one after the other"
+        answer: 1
+        explain: "The language tag on html should describe the language of the majority of the content."
 
   - id: code-family
     kind: concept
@@ -570,6 +857,27 @@ nodes:
           - One key within a larger input
         answer: 2
         explain: kbd within kbd represents an actual key or other unit of input as part of a larger input.
+      - prompt: "A <pre> begins with a newline right after its opening tag. What happens to it?"
+        choices:
+          - "It shows as a blank line at the top"
+          - "All newlines go"
+          - "The first newline is stripped"
+        answer: 2
+        explain: "If leading newlines follow the opening pre tag, the first newline character is stripped by the parser."
+      - prompt: "The system echoes back what the user typed. Which markup represents that?"
+        choices:
+          - "<kbd> inside <samp>"
+          - "<samp> inside <kbd>, the reverse"
+          - "<code> inside <var>, for code and its variable"
+        answer: 0
+        explain: "A kbd nested inside samp represents input that has been echoed back to the user by the system."
+      - prompt: "The user chooses the File menu shown on screen. Which markup represents that?"
+        choices:
+          - "<kbd> inside <samp>, for echoed input"
+          - "<samp> inside <kbd>"
+          - "<kbd> inside <kbd>"
+        answer: 1
+        explain: "A samp inside kbd represents input based on text the system presents, such as the names of menus."
 
   - id: accessibility-tree
     kind: concept
@@ -595,6 +903,27 @@ nodes:
           - Only the text "Save", since elements have no roles
         answer: 0
         explain: Objects in the tree have a name (how to refer to it) and a role (what kind of thing it is), among other properties.
+      - prompt: "A link's text is \"Read more\". What is its name in the accessibility tree?"
+        choices:
+          - "link, which is its role"
+          - "The URL that its href points to"
+          - "Read more"
+        answer: 2
+        explain: "The name is how we refer to the thing; a link with the text \"Read more\" has \"Read more\" as its name."
+      - prompt: "In the accessibility tree, what does a role answer?"
+        choices:
+          - "What it is, such as a button"
+          - "What it is called, such as Save"
+          - "Where it sits on the page"
+        answer: 0
+        explain: "The role says what kind of thing it is, for example a button, a nav bar or a list of items."
+      - prompt: "What uses the accessibility tree?"
+        choices:
+          - "Search engines, to rank the page against other pages for a query"
+          - "Assistive technologies, through accessibility APIs"
+          - "The CSS engine"
+        answer: 1
+        explain: "The accessibility tree is used by platform accessibility APIs to give assistive technologies, such as screen readers, a representation."
 
   - id: meta-kinds
     kind: concept
@@ -618,3 +947,24 @@ nodes:
         choices: ["http-equiv", "name", "itemprop"]
         answer: 1
         explain: With name set, meta provides document-level metadata that applies to the whole page.
+      - prompt: "Which meta acts as a pragma directive, standing in for an HTTP header?"
+        choices:
+          - "A meta with name, like the description"
+          - "A meta with charset, giving the encoding"
+          - "A meta with http-equiv"
+        answer: 2
+        explain: "With the http-equiv attribute, meta acts as a pragma directive simulating what an HTTP header could give."
+      - prompt: "Which meta provides user-defined metadata?"
+        choices:
+          - "A meta with itemprop"
+          - "A charset meta"
+          - "A meta with name=\"author\""
+        answer: 0
+        explain: "With the itemprop attribute set, meta provides user-defined metadata."
+      - prompt: "The page's title must go in the head. Which element holds it?"
+        choices:
+          - "A meta with name=\"title\""
+          - "<title>"
+          - "A meta with itemprop=\"title\""
+        answer: 1
+        explain: "meta represents metadata that other meta-related elements, such as title, cannot represent; the title has its own element."

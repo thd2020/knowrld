@@ -27,6 +27,20 @@ nodes:
           - So assistive technology can find the navigation or the main content
         answer: 2
         explain: Screen readers can recognize the elements that represent sections and help with tasks like "find the main navigation".
+      - prompt: "A news article page has a box with the author's bio and links to related articles. Which region is that?"
+        choices:
+          - "A sidebar"
+          - "The footer, the place for common information on every page"
+          - "The header, since it introduces the article's author"
+        answer: 0
+        explain: "A sidebar holds peripheral info, usually contextual to the main content, such as the author's bio or related links."
+      - prompt: "Which element marks up the strip of copyright notices and fine print at the bottom of the page?"
+        choices:
+          - "<nav>"
+          - "<footer>"
+          - "<aside>"
+        answer: 1
+        explain: "The footer is a strip across the bottom that generally holds fine print, copyright notices or contact info."
 
   - id: sectioning-elements
     kind: concept
@@ -54,6 +68,20 @@ nodes:
           - <aside>, since maps are extras
         answer: 0
         explain: section groups a single part of the page that is one piece of functionality, like a mini map, and should begin with a heading.
+      - prompt: "A glossary of terms sits beside an article, related to it but not part of its flow. Which element fits?"
+        choices:
+          - "<main>, a second one just for the glossary"
+          - "<section>, opened with its own heading"
+          - "<aside>"
+        answer: 2
+        explain: "aside contains content indirectly related to the main content, such as glossary entries, an author biography or related links."
+      - prompt: "Where should <main> be placed?"
+        choices:
+          - "Directly inside <body>, and ideally not nested in other elements"
+          - "Inside the header, after the site's logo and title"
+          - "Inside each article"
+        answer: 0
+        explain: "Use main only once per page and put it directly inside body; ideally it is not nested in other elements."
 
   - id: header-nav-footer
     kind: concept
@@ -80,6 +108,27 @@ nodes:
           - The page's main navigation links
         answer: 2
         explain: nav contains the main navigation functionality for the page. Secondary links would not go in it.
+      - prompt: "A header is a direct child of <body>. What does it define?"
+        choices:
+          - "A header for the first section of the content only"
+          - "The global header of the page"
+          - "The title of the document shown in the tab"
+        answer: 1
+        explain: "A header that is a child of body defines the global header of the webpage."
+      - prompt: "Which of these is a common example of a navigation section?"
+        choices:
+          - "A recipe's ingredients"
+          - "A paragraph that mentions one link in passing"
+          - "A table of contents"
+        answer: 2
+        explain: "Common examples of navigation sections are menus, tables of contents and indexes."
+      - prompt: "Do a few secondary links belong in <nav>?"
+        choices:
+          - "No; nav holds the main navigation"
+          - "Only if there are more than three of them together"
+          - "Yes, every link on the page belongs in a nav element"
+        answer: 0
+        explain: "nav contains the main navigation functionality for the page. Secondary links would not go in the navigation."
 
   - id: non-semantic-wrappers
     kind: concept
@@ -115,6 +164,20 @@ nodes:
           - <section>, since it is a feature
         answer: 1
         explain: It isn't an aside or part of the main content, so a div is fine, with a heading as a signpost for screen reader users.
+      - prompt: "A play's script has an editor's note for the director, with no special meaning, inside a paragraph. Which element wraps it?"
+        choices:
+          - "<div class=\"editor-note\">, a block inside the paragraph"
+          - "<span class=\"editor-note\">"
+          - "<aside>"
+        answer: 1
+        explain: "span is an inline non-semantic element for content you do not want to give any specific meaning; a class labels it."
+      - prompt: "Why give a div or span a class?"
+        choices:
+          - "So the browser treats it as a section with a heading"
+          - "So it gets meaning for screen readers and search engines"
+          - "So it can be targeted easily"
+        answer: 2
+        explain: "Use div and span preferably with a suitable class attribute, a label so they can be easily targeted. They still carry no meaning."
 
   - id: breaks-and-rules
     kind: concept
@@ -141,6 +204,27 @@ nodes:
           - The end of the page
         answer: 0
         explain: hr denotes a thematic change, such as a change in topic or scene. Visually it just looks like a line.
+      - prompt: "A story changes scene from Ron's battle to Harry at home. What marks the change between the paragraphs?"
+        choices:
+          - "<hr>"
+          - "A new h1"
+          - "<br>, two of them, to leave a gap between the scenes"
+        answer: 0
+        explain: "hr denotes a thematic change in the text, such as a change of scene."
+      - prompt: "You want more space between two paragraphs. Should you add <br> elements?"
+        choices:
+          - "Yes, each br adds one line of space between paragraphs"
+          - "No; br is for fixed short lines such as a poem's"
+          - "Only inside the second paragraph, at its start"
+        answer: 1
+        explain: "br is the way to force a series of fixed short lines, as in a postal address or a poem; it is not for spacing."
+      - prompt: "What does an <hr> look like by default?"
+        choices:
+          - "A blank gap the height of one line"
+          - "A bold heading that names the new scene"
+          - "A horizontal line"
+        answer: 2
+        explain: "Visually an hr just looks like a horizontal line; its meaning is a thematic change."
 
   - id: information-architecture
     kind: concept
@@ -173,3 +257,17 @@ nodes:
           - The latest reviews of the most popular hotel
         answer: 0
         explain: Elements such as the navigation menu and the footer content are common to most, if not all, pages.
+      - prompt: "You have listed flights, accommodation, transport and things to do. What is the next step?"
+        choices:
+          - "Sort the items into groups"
+          - "Choose the colours"
+          - "Write one page for every item, each linked from the homepage"
+        answer: 0
+        explain: "Next, sort the content items into groups, to see what might live together on different pages, much like card sorting."
+      - prompt: "On a rough sitemap, where does the homepage usually sit?"
+        choices:
+          - "Off to one side, apart from the other pages"
+          - "At the top or at the center"
+          - "At the bottom, below every other page it leads to"
+        answer: 1
+        explain: "The homepage will probably be at the top or the center, linking to most if not all of the others."

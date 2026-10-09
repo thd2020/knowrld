@@ -180,13 +180,13 @@ nodes:
           - "Jump to the next heading"
         answer: 2
         explain: "You can jump to the next or previous heading in many screen readers."
-      - prompt: "As a screen reader reads through a well-structured page, what does it tell its user?"
+      - prompt: "A page uses bold spans instead of headings. Can a screen reader user pull up a useful table of contents?"
         choices:
-          - "Only the words, all run together"
-          - "What each element is, such as a heading"
-          - "The colour and size of each piece of text"
-        answer: 1
-        explain: "The screen reader reads each heading out as you progress, notifying you what is a heading, what is a paragraph, and so on."
+          - "No; there are no signposts to build it from"
+          - "Yes, the reader guesses headings from bold text"
+          - "Yes, as long as the spans are in source order"
+        answer: 0
+        explain: "Without semantics the screen reader hasn't got anything to use as signposts, so you can't retrieve a useful table of contents."
 
   - id: clear-language
     kind: concept
@@ -275,13 +275,13 @@ nodes:
           - "Extra clues about the content they are navigating"
         answer: 2
         explain: "Sectioning elements provide extra semantics for screen readers to give users extra clues about the content."
-      - prompt: "You lay out a page and the source order no longer reads logically. What should you fix?"
+      - prompt: "The design draws the sidebar on the right, but it reads best last. What puts it on the right?"
         choices:
-          - "The source order"
-          - "Nothing; screen readers read the page in the visual order"
-          - "The tabindex of every element, numbered in the order shown"
-        answer: 0
-        explain: "Content should make logical sense in its source order, which is what screen reader users get read out; CSS can place it later."
+          - "Moving it to the top of the source, to match the design"
+          - "CSS"
+          - "A tabindex on each link in the sidebar"
+        answer: 1
+        explain: "Get the source order right to start with; you can always place content where you want using CSS later on."
 
   - id: native-controls
     kind: concept

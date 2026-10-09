@@ -864,20 +864,20 @@ nodes:
           - "The first newline is stripped"
         answer: 2
         explain: "If leading newlines follow the opening pre tag, the first newline character is stripped by the parser."
-      - prompt: "The system echoes back what the user typed. Which markup represents that?"
+      - prompt: "A <pre> holds a terminal session. Which element marks the lines the computer printed?"
         choices:
-          - "<kbd> inside <samp>"
-          - "<samp> inside <kbd>, the reverse"
-          - "<code> inside <var>, for code and its variable"
+          - "<samp>"
+          - "<kbd>, since the user typed the command"
+          - "<code>, since it is all computer code"
         answer: 0
-        explain: "A kbd nested inside samp represents input that has been echoed back to the user by the system."
-      - prompt: "The user chooses the File menu shown on screen. Which markup represents that?"
+        explain: "pre commonly contains code, samp and kbd, to represent computer code, computer output and user input respectively."
+      - prompt: "Does the parser strip the first newline after an opening <pre> tag in XHTML too?"
         choices:
-          - "<kbd> inside <samp>, for echoed input"
-          - "<samp> inside <kbd>"
-          - "<kbd> inside <kbd>"
-        answer: 1
-        explain: "A samp inside kbd represents input based on text the system presents, such as the names of menus."
+          - "Yes, in every kind of document"
+          - "Only when a space follows it"
+          - "No; the HTML parser does that, and XHTML is left alone"
+        answer: 2
+        explain: "The first newline is stripped by the HTML parser; this does not apply when using XHTML."
 
   - id: accessibility-tree
     kind: concept

@@ -124,13 +124,13 @@ nodes:
           - Only when the br sits inside a heading element
         answer: 1
         explain: The closing slash on a void element is a different style of markup. It isn't wrong, but it is not needed.
-      - prompt: "Which of these is a void element?"
+      - prompt: "How many paragraphs does <p>This is a single paragraph, but we are going to <br />break it onto two lines.</p> make?"
         choices:
-          - "<br>"
-          - "<strong>"
-          - "<p>"
-        answer: 0
-        explain: "The br element is a single tag that inserts a line break; it cannot contain other HTML content."
+          - "Two, one on each side of the br"
+          - "One, broken onto two lines"
+          - "None, since br ends the paragraph early"
+        answer: 1
+        explain: "The br element inserts a line break into a line of text; the text stays a single paragraph."
       - prompt: "You want a line of a paragraph to break onto two lines. What goes at the break?"
         choices:
           - "A blank line in the source"

@@ -180,13 +180,13 @@ nodes:
           - "Jump to the next heading"
         answer: 2
         explain: "You can jump to the next or previous heading in many screen readers."
-      - prompt: "Which markup gives a screen reader the best signposts?"
+      - prompt: "As a screen reader reads through a well-structured page, what does it tell its user?"
         choices:
-          - "Headings, paragraphs and lists"
-          - "Spans styled with large font sizes, and br between them"
-          - "Bold text in one paragraph"
-        answer: 0
-        explain: "One of the best accessibility aids for a screen reader user is an excellent text structure with headings, paragraphs and lists."
+          - "Only the words, all run together"
+          - "What each element is, such as a heading"
+          - "The colour and size of each piece of text"
+        answer: 1
+        explain: "The screen reader reads each heading out as you progress, notifying you what is a heading, what is a paragraph, and so on."
 
   - id: clear-language
     kind: concept

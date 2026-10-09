@@ -365,13 +365,13 @@ nodes:
           - "<q>"
         answer: 0
         explain: "Block-level content quoted from somewhere else goes inside blockquote, with the source URL in its cite attribute."
-      - prompt: "Where does the URL of a quote's source go on a <q>?"
+      - prompt: "Can the title inside a <cite> element be a link to the quotation's source?"
         choices:
-          - "Inside a cite element, nested within the q"
-          - "In a cite attribute"
-          - "In an href attribute, as on a link"
+          - "No; cite may hold only plain text"
+          - "Yes, there is no reason it cannot"
+          - "Only on a blockquote, never beside a q"
         answer: 1
-        explain: "Inline quotations work like block quotes, with the source's URL in a cite attribute."
+        explain: "cite holds the title of the quoted resource, and there is no reason you couldn't link that text to the source."
 
   - id: abbreviations
     kind: concept
@@ -496,13 +496,13 @@ nodes:
         choices: ["x<sup>2</sup>", "x<sub>2</sub>", "x<span class=\"sup\">2</span>"]
         answer: 0
         explain: Exponents are raised, so they use sup.
-      - prompt: "A logo shows a raised letter in the brand name. How is the raise done?"
+      - prompt: "In French, mademoiselle is abbreviated with the letters lle raised. How is that written?"
         choices:
-          - "With <sup> around the raised letter in the name"
-          - "With CSS vertical-align"
-          - "With <sub>"
+          - "M<sub>lle</sub>, lowered below the line"
+          - "M<sup>lle</sup>"
+          - "Mlle, with CSS that enlarges the letters"
         answer: 1
-        explain: "Styling a wordmark with a raised baseline should be done with CSS, such as vertical-align, not sup."
+        explain: "Superior lettering, as in M<sup>lle</sup> for mademoiselle, is an acceptable use of sup."
       - prompt: "How do you write the 8 in C8H10N4O2, caffeine's formula?"
         choices:
           - "C<sup>8</sup>, raised above the line"

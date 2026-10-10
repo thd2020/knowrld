@@ -44,13 +44,13 @@ nodes:
           - "<p>My cat is very grumpy</p> at the top of the body"
         answer: 1
         explain: "Enclosing the text in h1 tags makes it a top-level heading; the closing tag needs its slash."
-      - prompt: "A paragraph's closing tag was left out. What can you expect?"
+      - prompt: "What can happen if you forget a required closing tag?"
         choices:
-          - "The paragraph is dropped"
-          - "The browser always repairs it exactly as you meant"
-          - "Peculiar results, since the browser cannot tell where it ends"
+          - "The browser always drops the element"
+          - "The browser always reconstructs your intended structure"
+          - "The page can behave unexpectedly"
         answer: 2
-        explain: "The closing tag marks where an element ends. Leaving it out is a common beginner error that can produce peculiar results."
+        explain: "A closing tag marks the end of an element. Omitting a required closing tag is a beginner mistake that can produce unexpected results."
 
   - id: nesting-elements
     kind: concept

@@ -599,8 +599,8 @@ tasks:
 
   - id: wait-for-the-page
     concept: head-resources
-    prompt: "In the head, load the script “map.js” so that it runs only once the whole page has been parsed, without moving it to the end of the body."
-    cites: [webpage-metadata#script-defer]
+    prompt: "In the head, load the external classic JavaScript script “map.js” so that it runs only once the HTML has been parsed, without moving it to the end of the body. Follow the recommended JavaScript markup and omit the type attribute."
+    cites: [webpage-metadata#script-defer, el-script#defer-scope, el-script#type-classic, el-script#data-block]
     solution:
       html: |
         <head>
@@ -614,12 +614,32 @@ tasks:
         says: The script waits until the page has been parsed
         selector: 'head > script[src="map.js"]'
         attr: { name: defer, present: true }
+      - id: no-async
+        says: async does not override deferred execution
+        selector: 'head > script[src="map.js"][async]'
+        count: { max: 0 }
+      - id: classic
+        says: The JavaScript script omits the type attribute
+        selector: 'head > script[src="map.js"][type]'
+        count: { max: 0 }
     fixtures:
       fail:
+        - name: a data block instead of executable JavaScript
+          html: '<head><script src="map.js" type="application/json" defer></script></head>'
+          fails: [classic]
+          because: This type creates a nonexecuting data block. Omit type for the requested classic JavaScript script.
+        - name: a module instead of the requested classic script
+          html: '<head><script src="map.js" type="module" defer></script></head>'
+          fails: [classic]
+          because: Module scripts defer by default, but this exercise asks for an external classic script.
+        - name: async overrides defer
+          html: '<head><script src="map.js" defer async></script></head>'
+          fails: [no-async]
+          because: When an external classic script has both async and defer, async takes precedence, so execution need not wait for HTML parsing.
         - name: the script without defer
           html: '<head><script src="map.js"></script></head>'
           fails: [deferred]
-          because: Without defer the browser runs the script as soon as it meets it, before the HTML it needs has loaded; defer waits for the whole page.
+          because: Without defer or async, this external classic script executes when the parser reaches it. defer delays execution until HTML parsing finishes.
         - name: the code inside the element instead of a src
           html: '<head><script defer>map.js</script></head>'
           fails: [in-head, deferred]
@@ -656,8 +676,8 @@ tasks:
 
   - id: two-scripts-wait
     concept: head-resources
-    prompt: "The page needs two scripts, “lanterns.js” and then “weather.js”, loaded from the head, and neither may run before the page has been parsed."
-    cites: [webpage-metadata#script-defer]
+    prompt: "Load the external classic JavaScript scripts “lanterns.js” and “weather.js” from the head. They must execute in that declaration order, and neither may run before HTML parsing finishes. Follow the recommended JavaScript markup and omit both type attributes."
+    cites: [webpage-metadata#script-defer, el-script#defer-scope, el-script#type-classic, el-script#data-block]
     solution:
       html: |
         <head>
@@ -678,8 +698,28 @@ tasks:
         says: lanterns.js comes before weather.js
         selector: 'script[src="lanterns.js"]'
         precedes: 'script[src="weather.js"]'
+      - id: no-async
+        says: Neither script uses async
+        selector: 'head > script[src][async]'
+        count: { max: 0 }
+      - id: classic
+        says: Both JavaScript scripts omit the type attribute
+        selector: 'head > script[src][type]'
+        count: { max: 0 }
     fixtures:
       fail:
+        - name: data blocks instead of executable JavaScript
+          html: '<head><script src="lanterns.js" type="application/json" defer></script><script src="weather.js" type="application/json" defer></script></head>'
+          fails: [classic]
+          because: These type values create nonexecuting data blocks. Omit type for the requested classic JavaScript scripts.
+        - name: modules instead of the requested classic scripts
+          html: '<head><script src="lanterns.js" type="module" defer></script><script src="weather.js" type="module" defer></script></head>'
+          fails: [classic]
+          because: Module scripts defer by default, but these requested scripts are classic scripts.
+        - name: async overrides deferred order
+          html: '<head><script src="lanterns.js" defer async></script><script src="weather.js" defer></script></head>'
+          fails: [no-async]
+          because: async overrides defer on the first script, so the required parsing boundary and declaration order are not guaranteed.
         - name: only the first deferred
           html: '<head><script src="lanterns.js" defer></script><script src="weather.js"></script></head>'
           fails: [wait]

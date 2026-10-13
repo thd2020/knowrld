@@ -157,12 +157,12 @@ tasks:
         - name: no protocol
           html: '<p>Check <a href="www.vale-weather.example/forecast.html">the weather almanac</a> before you sail.</p>'
           fails: [absolute]
-          because: Without https:// the browser reads the address as a path on this site; an external link needs the full URL.
+          because: www.vale-weather.example/forecast.html has neither a scheme nor a leading double slash, so the browser resolves it as a relative path. This exercise requires the destination's HTTPS address.
 
   - id: inside-and-out
     concept: absolute-urls
     prompt: "Write two links: an internal one, “our history”, to “/about.html” on this site, and an external one, “the river guild”, to the page about.html at the top of the site www.river-guild.example."
-    cites: [creating-links#internal-external, creating-links#absolute-relative]
+    cites: [creating-links#internal-external, creating-links#absolute-relative, el-a#relative-url-example]
     solution:
       html: |
         <p>Read <a href="/about.html">our history</a> or visit <a href="https://www.river-guild.example/about.html">the river guild</a>.</p>
@@ -173,16 +173,19 @@ tasks:
         text: { matches: 'our history' }
         attr: { name: href, matches: '^(/|\./)?about\.html$' }
       - id: external
-        says: The river guild links to the other site with a full URL
+        says: The river guild links to the other site's page
         selector: a
         text: { matches: 'river guild' }
-        attr: { name: href, matches: '^https?://www\.river-guild\.example/about\.html$' }
+        attr: { name: href, matches: '^(https?:)?//www\.river-guild\.example/about\.html$' }
     fixtures:
+      pass:
+        - name: scheme-relative external destination
+          html: '<p>Read <a href="/about.html">our history</a> or visit <a href="//www.river-guild.example/about.html">the river guild</a>.</p>'
       fail:
         - name: the external link without its site
           html: '<p>Read <a href="/about.html">our history</a> or visit <a href="/about.html">the river guild</a>.</p>'
           fails: [external]
-          because: A relative path stays on this site; reaching another site takes its absolute URL.
+          because: With no base element, /about.html uses the current document's host. Include the river guild's host in an absolute or scheme-relative URL.
 
   - id: see-prices
     concept: document-fragments

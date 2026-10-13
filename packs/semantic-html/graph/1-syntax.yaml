@@ -9,12 +9,13 @@ nodes:
     title: Elements and tags
     region: semantic-html
     tier: road
-    says: Every part of a page is marked up by an element. An opening tag, the content, then a closing tag with a slash before the name. Learn those three and the rest follows.
+    says: An ordinary non-void element has an opening tag, its content, and a closing tag with a slash before the name. Void elements have no closing tag. Learn to recognise the pieces of an ordinary element first.
     cites:
       - basic-html-syntax#what-is-html
       - basic-html-syntax#opening-tag
       - basic-html-syntax#closing-tag
       - basic-html-syntax#tags-case
+      - basic-html-syntax#void
     check:
       - prompt: What marks where an element ends?
         choices:
@@ -298,18 +299,22 @@ nodes:
     region: semantic-html
     tier: road
     requires: [html-elements]
-    says: In almost every element the parser folds each run of spaces and newlines into one space, so indent for your own eyes. A comment between <!-- and --> vanishes from the rendered page, but anyone who opens the page source can still read it.
+    says: Indent for your own eyes. Ordinary paragraph spaces and newlines remain in the DOM; default CSS usually collapses them for display. A comment between <!-- and --> is invisible on the rendered page, but anyone who opens the source can still read it.
     cites:
-      - basic-html-syntax#whitespace
       - basic-html-syntax#comments
+      - css-whitespace#dom-preservation
+      - css-whitespace#default-display
+      - css-whitespace#collapse-setting
+      - css-whitespace#collapse-summary
+      - el-pre#whitespace
     check:
-      - prompt: You type five spaces between two words in a paragraph. What renders?
+      - prompt: With default paragraph styling, you type five spaces between two words. What renders?
         choices:
           - Five spaces, exactly as typed
           - No space; the words run together
           - One space
         answer: 2
-        explain: In almost all elements the parser reduces each sequence of whitespace to a single space. <pre> is an exception.
+        explain: The DOM retains those spaces. Default CSS whitespace processing collapses the run to one displayed space.
       - prompt: What does the browser do with an HTML comment?
         choices:
           - Shows it in small grey text
@@ -317,20 +322,20 @@ nodes:
           - Reports it in the console as a warning
         answer: 1
         explain: Browsers ignore comments, so they are invisible to the user. They are notes in the code for whoever reads it.
-      - prompt: "You indent nested elements with many spaces and new lines. How does the page render that whitespace?"
+      - prompt: "With default paragraph styling, you put several spaces and a newline between two English words. How does that whitespace display?"
         choices:
           - "The indentation becomes a margin on the left of each element"
           - "Each run of it becomes a single space"
           - "Every space and new line shows exactly as written"
         answer: 1
-        explain: "The parser reduces each sequence of whitespace to a single space when rendering, in almost all elements."
-      - prompt: "In which element is whitespace an exception to the folding rule?"
+        explain: "Default CSS whitespace processing converts the newline and collapses the spaces into one displayed space. The DOM retains the original whitespace."
+      - prompt: "Which element preserves spaces and newlines with the browser's default styling?"
         choices:
           - "<strong>"
           - "<p>"
           - "<pre>"
         answer: 2
-        explain: "In almost all elements whitespace is reduced to one space; pre is the exception named."
+        explain: "The browser's default styling for <pre> preserves spaces and newlines. CSS can change whitespace processing on any element."
       - prompt: "Why leave a comment in your HTML?"
         choices:
           - "To explain the code to whoever works on it next"
@@ -534,12 +539,15 @@ nodes:
     region: semantic-html
     tier: road
     requires: [head-and-metadata]
-    says: From the head you send for help. A link element fetches an icon or a stylesheet; a script with defer waits until the page is read, and it always needs its closing tag.
+    says: From the head you send for help. A link element fetches an icon or a stylesheet. An external classic script with defer and no async runs after HTML parsing; defer does not delay an inline classic script. A script element needs its closing tag.
     cites:
       - webpage-metadata#favicon
       - webpage-metadata#favicon-link
       - webpage-metadata#link-stylesheet
       - webpage-metadata#script-defer
+      - el-script#defer-scope
+      - el-script#parallel-download
+      - dom-content-loaded#resource-boundary
     check:
       - prompt: Which element adds a favicon?
         choices:
@@ -548,13 +556,13 @@ nodes:
           - <img rel="favicon" src="/favicon.ico">
         answer: 0
         explain: A favicon is added with a link element in the head that references the path to the icon file.
-      - prompt: What does defer do on a script element?
+      - prompt: What does defer do on an external classic script without async?
         choices:
           - Runs the script only after the user clicks the page
-          - Loads the script after the HTML has been parsed
+          - Executes the script after the HTML has been parsed
           - Moves the script to the end of the body
         answer: 1
-        explain: defer makes the browser load the JavaScript after parsing the HTML, so the script never looks for elements that do not exist yet.
+        explain: The script can download while HTML parsing continues. defer delays execution until parsing finishes; a queried element must still exist in the document.
       - prompt: Is <script> a void element?
         choices:
           - Yes, write it as a single tag
@@ -569,13 +577,13 @@ nodes:
           - "<script src=\"my-css-file.css\" defer=\"defer\"></script>"
         answer: 1
         explain: "A link element with rel=\"stylesheet\" and an href to the file attaches a stylesheet."
-      - prompt: "Why add defer to a script in the head?"
+      - prompt: "Why add defer to an external classic script in the head without async?"
         choices:
           - "So the script loads and runs before anything else on the page"
           - "So it caches longer"
-          - "So it runs after the HTML is all loaded"
+          - "So it runs after HTML parsing finishes"
         answer: 2
-        explain: "defer guarantees the HTML is all loaded before the JavaScript runs, so it cannot fail on an element that does not exist yet."
+        explain: "defer delays execution until HTML parsing finishes. It does not create missing elements or wait for every image and other resource to load."
 
   - id: document-language
     kind: concept

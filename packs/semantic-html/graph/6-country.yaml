@@ -198,12 +198,13 @@ nodes:
     region: semantic-html
     tier: country
     requires: [header-footer-context, main-element, nav-element, choosing-sections]
-    says: Landmarks are the places a screen reader can jump to, and the sectioning elements make them for you. header in body is the banner, nav the navigation, main the main, aside the complementary, footer in body the contentinfo. A section is a region only once it has a name.
+    says: Landmarks are places a screen reader can jump to. A body-level header is the banner, nav is navigation, main is main, and a body-level footer is contentinfo. Aside is complementary unless it is unnamed and nested in sectioning content, where its role is generic. A section is a region only once it has a name.
     cites:
       - role-landmark#description
       - role-landmark#html-elements
       - role-region#section-named
       - role-contentinfo#one-per-page
+      - el-aside#usage
     check:
       - prompt: Which element gives the complementary landmark?
         choices: ["<aside>", "<section>", "<footer>"]
@@ -692,8 +693,9 @@ nodes:
     region: semantic-html
     tier: country
     requires: [breaks-and-rules, screen-reader-structure]
-    says: Never build paragraphs from br. Screen readers may announce the breaks and not what lies between. Use p and set the gaps with CSS margin. Draw lines with borders, and keep hr for a change of topic.
+    says: Never build paragraphs from br. Use p and set the gaps with CSS margin. Reserve br for meaningful line breaks and hr for a change of topic.
     cites:
+      - el-br#summary
       - el-br#not-margins
       - el-br#screen-readers
       - el-hr#summary
@@ -715,11 +717,11 @@ nodes:
         explain: hr is now defined semantically as a thematic break; to draw a line, use CSS.
       - prompt: "A page builds its paragraphs from text and <br><br>. What may a screen reader do?"
         choices:
-          - "Announce the breaks but not the content between them"
+          - "Announce line breaks without treating the text as semantic paragraphs"
           - "Read each part out as a separate, well-formed paragraph of its own"
           - "Skip both the br elements and all of the text between them"
         answer: 0
-        explain: "Screen readers may announce the presence of br but not the content between; it is confusing and frustrating."
+        explain: "Screen readers may announce line breaks. br does not supply paragraph semantics; use p elements for paragraphs. It does not make neighboring text disappear."
       - prompt: "Which content is a fit for <hr>?"
         choices:
           - "A thin line under every heading, for looks"
@@ -741,7 +743,7 @@ nodes:
     region: semantic-html
     tier: country
     requires: [page-title, semantic-html-accessibility]
-    says: A title is the first thing a screen reader says and the hook in a search result. Make it unique to the page, purpose first and site name after, and never a blob of keywords.
+    says: A screen reader commonly announces the title when entering a page, and the title is a hook in a search result. Make it unique to the page, purpose first and site name after, and never a blob of keywords.
     cites:
       - el-title#text-only
       - el-title#seo

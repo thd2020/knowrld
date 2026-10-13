@@ -451,18 +451,12 @@ sources:
           - 263
           - 267
       - id: script-defer
-        text: |-
-          - The {{htmlelement("script")}} element should also go into the head, and should include a `src` attribute containing the path to the JavaScript you want to load, and `defer` (a [boolean attribute](/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax#boolean_attributes)), which instructs the browser to load the JavaScript after the page has finished parsing the HTML. The `defer` attribute is useful as it guarantees the HTML is all loaded before the JavaScript runs so that you don't get errors due to JavaScript trying to access an HTML element that doesn't exist on the page yet. There are [several ways](/en-US/docs/Learn_web_development/Core/Scripting/What_is_JavaScript#script_loading_strategies) to handle loading JavaScript on your page, but this is the most reliable one to use for modern browsers.
-
-            ```html
-            <script src="my-js-file.js" defer></script>
-            ```
-
+        text: |2-
             > [!NOTE]
             > The `<script>` element may look like a {{glossary("void element")}}, but it's not, and so needs a closing tag. Instead of pointing to an external script file, you can also choose to put your script inside the `<script>` element.
         verbatim: true
         lines:
-          - 269
+          - 275
           - 276
       - id: lang
         text: |-
@@ -1570,16 +1564,6 @@ sources:
           - 298
       - id: internal-external
         text: |-
-          When a link points to a resource on _your_ site, it is referred to as an **internal link**. When a link points to a resource on a _different_ site, it is called an **external link**.
-
-          When specifying an external link, you always have to include the full URL as the path, for example:
-
-          ```html
-          <a href="https://www.some-other-site.com">projects</a>
-          ```
-
-          You can't reference a location on a different site with a path like `/pdfs/project-brief.pdf` or `projects/index.html`, as they are both relative to a location on your own site, and the browser needs the website's domain name to be able to find it.
-
           When specifying an internal link, you can use a relative or absolute path, or a full URL. In our example, these links are equivalent:
 
           ```html
@@ -1591,7 +1575,7 @@ sources:
           We recommend the latter without the full domain name, because of portability. As we said earlier, if you specify `https://www.example.com/projects/`, it will always link to `https://www.example.com/projects/`. If you then move your website to a different domain, for example `another-example.com`, your full URL links will all need to be changed. If you specify paths such as `/projects`, they will still work, as they are still relative to the directory structure.
         verbatim: true
         lines:
-          - 312
+          - 322
           - 330
       - id: fragment
         text: |-

@@ -431,11 +431,12 @@ nodes:
     region: semantic-html
     tier: road
     requires: [hyperlinks, semantic-html-accessibility]
-    says: An image a reader cannot see must speak through its alt, briefly, with only what the picture adds to the text around it. A decorative image gets an empty alt, so a screen reader notes an image without trying to describe it. An image that is the whole of a link names that link.
+    says: An image a reader cannot see must speak through its alt, briefly, with only what the picture adds to the text around it. An empty alt marks a decorative image that non-visual browsers may omit. If an image is the whole of a link, describe the link's action in its alt.
     cites:
       - accessible-html#missing-alt
       - accessible-html#alt-content
-      - accessible-html#empty-alt
+      - el-img#decorative-alt
+      - el-img#action-alt
       - creating-links#image-link
     check:
       - prompt: A decorative icon sits beside a heading. What alt should it have?

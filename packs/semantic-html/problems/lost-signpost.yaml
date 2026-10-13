@@ -96,10 +96,10 @@ grader:
       resolves: true
       concepts: [relative-paths]
     - id: partner
-      says: The partner link is a full URL to Brightforge's own site
+      says: The partner link reaches Brightforge's own site
       selector: a
       text: { matches: 'Brightforge' }
-      attr: { name: href, matches: '^https?://(www\.)?brightforge\.example(/.*)?$' }
+      attr: { name: href, matches: '^(https?:)?//(www\.)?brightforge\.example(/.*)?$' }
       concepts: [absolute-urls]
     - id: timeline
       says: The timeline link jumps to the Timeline heading on this page
@@ -134,13 +134,16 @@ grader:
       concepts: [document-fragments]
     - id: all-internal-work
       says: Every link within the site leads to a file that exists
-      selector: 'a[href]:not([href^="mailto:" i]):not([href*="://"])'
+      selector: 'a[href]:not([href^="mailto:" i]):not([href*="://"]):not([href^="//"])'
       count: { min: 5 }
       every: true
       resolves: true
       concepts: [relative-paths, information-architecture]
 fixtures:
   pass:
+    - name: scheme-relative partner destination
+      edits:
+        - { find: href="https://www.brightforge.example", replace: href="//www.brightforge.example" }
     - name: root-relative paths everywhere
       edits:
         - { find: href="../index.html", replace: href="/" }

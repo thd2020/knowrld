@@ -95,12 +95,13 @@ nodes:
     region: semantic-html
     tier: road
     requires: [relative-paths]
-    says: A full URL, with its domain, points to the same place from anywhere on the web, and a link to another site always needs one. Every other path is resolved against the address of the page it sits in, so the same path can land in two places.
+    says: A full absolute URL specifies its own destination. Relative links resolve against the document's base URL, which defaults to its address when no base element is supplied. A scheme-relative link such as //example.com can reach another host without spelling out a scheme.
     cites:
       - creating-links#absolute-relative
       - creating-links#internal-external
-      - creating-links#url-resolution
       - creating-links#trailing-slash
+      - el-base#document-base
+      - el-a#relative-url-example
     check:
       - prompt: Which of these is absolute with respect to the whole web?
         choices:
@@ -109,20 +110,20 @@ nodes:
           - ../pdfs/project-brief.pdf, since it climbs up a level
         answer: 1
         explain: /pdfs/project-brief.pdf is absolute only within your site; it is relative to the domain name. A URL with the full domain is absolute for the whole web.
-      - prompt: Why can't a link to another site use /pdfs/brief.pdf?
+      - prompt: With no base element, why can't a link to another site use /pdfs/brief.pdf?
         choices:
           - The browser needs the other site's domain to find it
           - The path needs ../ in front to leave the site
           - It works, if the other site uses the same folders
         answer: 0
-        explain: Paths like /pdfs/project-brief.pdf are relative to your own site; the browser needs the website's domain name to find a page elsewhere.
-      - prompt: The link projects/index.html sits in pdfs/index.html on www.example.com. Where does it go?
+        explain: Without a base element, a root-relative path uses the current document's host. A cross-host link can instead include the destination host in an absolute or scheme-relative URL.
+      - prompt: With no base element, the link projects/index.html sits in https://www.example.com/pdfs/index.html. Where does it go?
         choices:
           - https://www.example.com/projects/index.html
           - https://projects.example.com/index.html
           - https://www.example.com/pdfs/projects/index.html
         answer: 2
-        explain: All links resolve relative to the current document's URL, so from pdfs/index.html the link lands on /pdfs/projects/index.html, which doesn't exist.
+        explain: With no base element, this relative link resolves against the document's address, yielding https://www.example.com/pdfs/projects/index.html. The URL alone does not tell us whether that resource exists.
       - prompt: "An internal link can be written as https://www.example.com/projects/ or as projects. Which is recommended, and why?"
         choices:
           - "The full URL, so that the link can never point anywhere else"
@@ -130,13 +131,13 @@ nodes:
           - "Either; neither one is easier to keep working than the other"
         answer: 1
         explain: "The path without the full domain is recommended for portability; full URL links all need changing if the site moves to another domain."
-      - prompt: "A link to another site points at a resource. What must its href be?"
+      - prompt: "With no base element, which href reaches another host?"
         choices:
           - "A relative path with two dots, like ../project-brief.pdf"
           - "A path starting with a slash, like /pdfs/project-brief.pdf"
-          - "The full URL, including the domain name"
+          - "https://example.org/pdfs/project-brief.pdf"
         answer: 2
-        explain: "When specifying an external link, you always have to include the full URL as the path."
+        explain: "This absolute URL includes the destination host. A scheme-relative URL such as //example.org/pdfs/project-brief.pdf can also reach that host, using the base URL's scheme."
 
   - id: document-fragments
     kind: concept

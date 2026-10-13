@@ -5,7 +5,7 @@ tasks:
   - id: inn-sign
     concept: html-elements
     prompt: "The inn's sign should read “The Sleeping Fox” as the page's top-level heading, with the paragraph “Rooms for the night, two silver” below it."
-    cites: [basic-html-syntax#opening-tag, basic-html-syntax#closing-tag]
+    cites: [basic-html-syntax#opening-tag, basic-html-syntax#closing-tag, basic-html-syntax#what-is-html]
     solution:
       html: |
         <h1>The Sleeping Fox</h1>
@@ -18,7 +18,7 @@ tasks:
         text: { matches: '^\s*The Sleeping Fox\s*$' }
       - id: paragraph
         says: The price is a paragraph of its own, outside the heading
-        selector: 'p:not(h1 *)'
+        selector: 'h1 ~ p:not(h1 *), h1 ~ * p:not(h1 *), *:has(h1) ~ p:not(h1 *), *:has(h1) ~ * p:not(h1 *)'
         text: { matches: 'Rooms for the night, two silver' }
     fixtures:
       pass:
@@ -85,7 +85,7 @@ tasks:
   - id: new-bakery
     concept: nesting-elements
     prompt: "A heading on the bakery's page reads “Our new bakery”, with the word “new” stressed."
-    cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap]
+    cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap, el-em#stress-emphasis, headings-and-paragraphs#six-levels]
     solution:
       html: |
         <h2>Our <em>new</em> bakery</h2>
@@ -109,7 +109,7 @@ tasks:
   - id: sleeping-fox-picture
     concept: void-elements
     prompt: "Put the picture “fox.png” on the page, described for anyone who cannot see it as “A red fox asleep in the hay”."
-    cites: [basic-html-syntax#void, basic-html-syntax#void-slash]
+    cites: [basic-html-syntax#void, basic-html-syntax#void-slash, el-img#summary, el-img#src-example, el-img#alt-text, el-img#void-content]
     solution:
       html: |
         <img src="fox.png" alt="A red fox asleep in the hay">
@@ -134,26 +134,30 @@ tasks:
 
   - id: two-portraits
     concept: void-elements
-    prompt: "In one paragraph, show two pictures side by side: “owl.png”, a barn owl on a post, and “hare.png”, a hare in the long grass. Describe each for someone who cannot see it."
-    cites: [basic-html-syntax#void]
+    prompt: "In one paragraph, include two pictures: “owl.png”, a barn owl on a post, and “hare.png”, a hare in the long grass. Describe each for someone who cannot see it."
+    cites: [basic-html-syntax#void, el-img#summary, el-img#src-example, el-img#alt-text, el-img#void-content]
     solution:
       html: |
         <p><img src="owl.png" alt="A barn owl on a post"> <img src="hare.png" alt="A hare in the long grass"></p>
     checks:
       - id: owl
         says: The owl is shown and described
-        selector: 'p img[src="owl.png"]'
+        selector: 'p:has(img[src="hare.png"]) img[src="owl.png"]'
         attr: { name: alt, matches: 'owl' }
       - id: hare
         says: The hare is shown and described
-        selector: 'p img[src="hare.png"]'
+        selector: 'p:has(img[src="owl.png"]) img[src="hare.png"]'
         attr: { name: alt, matches: 'hare' }
+      - id: same-paragraph
+        says: Both portraits are in one paragraph
+        selector: 'p:has(img[src="owl.png"]):has(img[src="hare.png"])'
+        count: { min: 1, max: 1 }
     fixtures:
       fail:
         - name: the owl without a description
           html: '<p><img src="owl.png"> <img src="hare.png" alt="A hare in the long grass"></p>'
           fails: [owl]
-          because: Each img is one tag, and its alt attribute is the only place its description can go.
+          because: Each img is a void element. This task requires the requested text alternative in its alt attribute.
 
   - id: dry-well
     concept: attributes

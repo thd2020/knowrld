@@ -236,6 +236,40 @@ sources:
     retrieved: 2026-09-29
     raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/img/index.md
     excerpts:
+      - id: summary
+        text: The **`<img>`** [HTML](/en-US/docs/Web/HTML) element embeds an image into the document.
+        verbatim: true
+        lines:
+          - 10
+          - 10
+      - id: src-example
+        text: |-
+          ```html interactive-example
+          <img
+            class="fit-picture"
+            src="/shared-assets/images/examples/grapefruit-slice.jpg"
+            alt="Grapefruit slice atop a pile of other slices" />
+          ```
+        verbatim: true
+        lines:
+          - 14
+          - 19
+      - id: alt-text
+        text: |-
+          - `alt`
+            - : Defines text that can replace the image in the page.
+        verbatim: true
+        lines:
+          - 31
+          - 32
+      - id: void-content
+        text: |2-
+                <th scope="row">Permitted content</th>
+                <td>None; it is a {{Glossary("void element")}}.</td>
+        verbatim: true
+        lines:
+          - 439
+          - 440
       - id: decorative-alt
         text: "    Setting this attribute to an empty string (`alt=\"\"`) indicates that this image is _not_ a key part of the content (it's decoration or a tracking pixel), and that non-visual browsers may omit it from {{glossary(\"Engine/Rendering\", \"rendering\")}}. Visual browsers will also hide the broken image icon if the `alt` attribute is empty and the image failed to display."
         verbatim: true
@@ -485,6 +519,12 @@ sources:
     retrieved: 2026-09-29
     raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/em/index.md
     excerpts:
+      - id: stress-emphasis
+        text: The **`<em>`** [HTML](/en-US/docs/Web/HTML) element marks text that has stress emphasis. The `<em>` element can be nested, with each level of nesting indicating a greater degree of emphasis.
+        verbatim: true
+        lines:
+          - 10
+          - 10
       - id: i-vs-em
         text: |-
           Some developers may be confused by how multiple elements seemingly produce similar visual results. `<em>` and `<i>` are a common example, since they both italicize text. What's the difference? Which should you use?

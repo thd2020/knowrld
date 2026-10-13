@@ -17,13 +17,13 @@ nodes:
       - basic-html-syntax#tags-case
       - basic-html-syntax#void
     check:
-      - prompt: What marks where an element ends?
+      - prompt: For an element whose end tag is required, what marks where it ends?
         choices:
           - The next opening tag, which ends the one before it
           - A blank line after the element's content
           - "A closing tag: the element name after a forward slash"
         answer: 2
-        explain: The closing tag is the opening tag with a forward slash before the element name. Leaving it out is a common beginner error.
+        explain: The closing tag is the opening tag with a forward slash before the element name. Leaving out a required end tag is an error; void elements have no end tag.
       - prompt: Does <TITLE> work the same as <title>?
         choices:
           - No; the browser ignores any tag written in uppercase letters

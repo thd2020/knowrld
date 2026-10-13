@@ -504,7 +504,7 @@ tasks:
   - id: guild-abbreviation
     concept: abbreviations
     prompt: "Write “The GV council meets on Monday.” GV stands for “Guild of the Vale”; keep the sentence short, but make the expansion available to readers."
-    cites: [advanced-text-features#abbr, advanced-text-features#abbr-title]
+    cites: [advanced-text-features#abbr, advanced-text-features#abbr-title, advanced-text-features#acronym-obsolete]
     solution:
       html: |
         <p>The <abbr title="Guild of the Vale">GV</abbr> council meets on Monday.</p>
@@ -601,11 +601,11 @@ tasks:
 
   - id: rust-formula
     concept: superscript-subscript
-    prompt: "Write “Rust is mostly Fe2O3.” so that the 2 and the 3 sit below the line, as chemical formulas need."
+    prompt: "Show the formula Fe2O3, with the 2 and the 3 as subscripts."
     cites: [advanced-text-features#sup-sub, el-sub#formula-uses]
     solution:
       html: |
-        <p>Rust is mostly Fe<sub>2</sub>O<sub>3</sub>.</p>
+        <p>The formula is Fe<sub>2</sub>O<sub>3</sub>.</p>
     checks:
       - id: subscripts
         says: The 2 and the 3 are subscripts
@@ -616,7 +616,7 @@ tasks:
     fixtures:
       fail:
         - name: superscripts
-          html: "<p>Rust is mostly Fe<sup>2</sup>O<sup>3</sup>.</p>"
+          html: "<p>The formula is Fe<sup>2</sup>O<sup>3</sup>.</p>"
           fails: [subscripts]
           because: The counts in a chemical formula sit below the line, so they are sub, not sup.
 
@@ -646,7 +646,7 @@ tasks:
   - id: save-keys
     concept: computer-code
     prompt: "Write “Press Ctrl + S and the editor replies Saved.” Mark what the player types on the keyboard and what the program prints."
-    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples]
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples, advanced-text-features#code-other-elements, el-code#summary, el-pre#whitespace, css-whitespace#dom-preservation, css-whitespace#default-display, css-whitespace#collapse-summary]
     solution:
       html: |
         <p>Press <kbd>Ctrl</kbd> + <kbd>S</kbd> and the editor replies <samp>Saved</samp>.</p>
@@ -671,8 +671,8 @@ tasks:
 
   - id: code-block
     concept: computer-code
-    prompt: "Show this line of JavaScript as a block of code, keeping its spacing exactly: let lantern   = 'lit';"
-    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples]
+    prompt: "Under default pre styling, show this line of JavaScript as a block of code, preserving the displayed spacing: let lantern   = 'lit';"
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples, advanced-text-features#code-other-elements, el-code#summary, el-pre#whitespace, css-whitespace#dom-preservation, css-whitespace#default-display, css-whitespace#collapse-summary]
     solution:
       html: |
         <pre><code>let lantern   = 'lit';</code></pre>
@@ -689,12 +689,12 @@ tasks:
         - name: code without pre
           html: "<p><code>let lantern   = 'lit';</code></p>"
           fails: [block, code]
-          because: Whitespace collapses everywhere except in pre, so a block of code goes in pre, with code inside it.
+          because: Default CSS styling collapses whitespace in this paragraph/code example. Use pre’s default styling to preserve its spacing, with code inside it; source whitespace remains in the DOM.
 
   - id: area-variables
     concept: computer-code
     prompt: "Write “The area is w × h, where w is the width and h the height.” Mark “w” and “h” as variables each time they appear."
-    cites: [advanced-text-features#code-elements]
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-other-elements, el-code#summary]
     solution:
       html: |
         <p>The area is <var>w</var> × <var>h</var>, where <var>w</var> is the width and <var>h</var> the height.</p>
@@ -738,7 +738,7 @@ tasks:
   - id: gates-close
     concept: times-and-dates
     prompt: "Write “The gates close at 9.30pm on 1 November 2027.” so that machines can read the date and the time together."
-    cites: [advanced-text-features#time-formats, advanced-text-features#time]
+    cites: [advanced-text-features#time-formats, advanced-text-features#time, el-time#date-forms, el-time#time-forms, el-time#local-date-time]
     solution:
       html: |
         <p>The gates close at <time datetime="2027-11-01T21:30">9.30pm on 1 November 2027</time>.</p>

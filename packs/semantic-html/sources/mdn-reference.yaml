@@ -762,6 +762,20 @@ sources:
         lines:
           - 65
           - 65
+  - id: el-code
+    title: <code> HTML inline code element
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/code
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/code/index.md
+    excerpts:
+      - id: summary
+        text: The **`<code>`** [HTML](/en-US/docs/Web/HTML) element displays its contents styled in a fashion intended to indicate that the text is a short fragment of computer code. By default, the content text is displayed using the {{Glossary("user agent", "user agent's")}} default monospace font.
+        verbatim: true
+        lines:
+          - 10
+          - 10
   - id: el-time
     title: <time> HTML time (date) element
     url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time
@@ -789,6 +803,94 @@ sources:
         lines:
           - 51
           - 51
+      - id: date-forms
+        text: |2-
+              <tr>
+                <td>Valid month string</td>
+                <td><code><em>YYYY</em>-<em>MM</em></code></td>
+                <td><code>2011-11</code>, <code>2013-05</code></td>
+              </tr>
+              <tr>
+                <td>Valid date string</td>
+                <td><code><em>YYYY</em>-<em>MM</em>-<em>DD</em></code></td>
+                <td><code>1887-12-01</code></td>
+              </tr>
+              <tr>
+                <td>Valid yearless date string</td>
+                <td><code><em>MM</em>-<em>DD</em></code></td>
+                <td><code>11-12</code></td>
+              </tr>
+        verbatim: true
+        lines:
+          - 64
+          - 78
+      - id: time-forms
+        text: |2-
+              <tr>
+                <td>Valid time string</td>
+                <td>
+                  <code><em>HH</em>:<em>MM</em></code><br />
+                  <code><em>HH</em>:<em>MM</em>:<em>SS</em></code><br />
+                  <code><em>HH</em>:<em>MM</em>:<em>SS</em>.<em>mmm</em></code>
+                </td>
+                <td>
+                  <code>23:59</code><br />
+                  <code>12:15:47</code><br />
+                  <code>12:15:52.998</code>
+                </td>
+              </tr>
+        verbatim: true
+        lines:
+          - 79
+          - 91
+      - id: local-date-time
+        text: |2-
+              <tr>
+                <td>Valid local date and time string</td>
+                <td>
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em> <em>HH</em>:<em>MM</em></code><br />
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em> <em>HH</em>:<em>MM</em>:<em>SS</em></code><br />
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em> <em>HH</em>:<em>MM</em>:<em>SS</em>.<em>mmm</em></code><br />
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em>T<em>HH</em>:<em>MM</em></code><br />
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em>T<em>HH</em>:<em>MM</em>:<em>SS</em></code><br />
+                  <code><em>YYYY</em>-<em>MM</em>-<em>DD</em>T<em>HH</em>:<em>MM</em>:<em>SS</em>.<em>mmm</em></code>
+                </td>
+                <td>
+                  <code>2013-12-25 11:12</code><br />
+                  <code>1972-07-25 13:43:07</code><br />
+                  <code>1941-03-15 07:06:23.678</code><br />
+                  <code>2013-12-25T11:12</code><br />
+                  <code>1972-07-25T13:43:07</code><br />
+                  <code>1941-03-15T07:06:23.678</code>
+                </td>
+              </tr>
+        verbatim: true
+        lines:
+          - 92
+          - 110
+      - id: zone-offset
+        text: |2-
+              <tr>
+                <td>Valid time-zone offset string</td>
+                <td>
+                  <code>Z</code><br />
+                  <code>+<em>HHMM</em></code><br />
+                  <code>+<em>HH</em>:<em>MM</em></code><br />
+                  <code>-<em>HHMM</em></code><br />
+                  <code>-<em>HH</em>:<em>MM</em></code>
+                </td>
+                <td>
+                  <code>Z</code><br />
+                  <code>+0200</code><br />
+                  <code>+04:30</code><br />
+                  <code>-0300</code><br />
+                  <code>-08:00</code>
+                </td>
+              </tr>
+        verbatim: true
+        lines:
+          - 111
+          - 127
   - id: el-blockquote
     title: <blockquote> HTML block quotation element
     url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/blockquote

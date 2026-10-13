@@ -140,4 +140,4 @@ fixtures:
         - find: <pre><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></pre>
           replace: <p><code>&lt;p class="spell"&gt;Light!&lt;/p&gt;</code></p>
       fails: [code-block, shown-as-written]
-      because: A block of code belongs in pre, which keeps its whitespace as written.
+      because: This block belongs in pre, whose default styling preserves spacing except for a newline immediately after its opening tag.

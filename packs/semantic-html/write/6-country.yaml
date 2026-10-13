@@ -422,7 +422,7 @@ tasks:
   - id: fair-opens
     concept: time-datetime
     prompt: "Write the paragraph “The fair opens on 3 May 2027 at 10:00.” Mark “3 May 2027 at 10:00” as one time element that software can read."
-    cites: [el-time#summary, el-time#datetime-value]
+    cites: [el-time#summary, el-time#datetime-value, el-time#date-forms, el-time#time-forms, el-time#local-date-time]
     solution:
       html: |
         <p>The fair opens on <time datetime="2027-05-03T10:00">3 May 2027 at 10:00</time>.</p>
@@ -445,7 +445,7 @@ tasks:
         - name: the date as people write it
           html: "<p>The fair opens on <time datetime=\"3 May 2027 10:00\">3 May 2027 at 10:00</time>.</p>"
           fails: [valid, right-value]
-          because: The datetime attribute holds the machine-readable form, year-month-day, then T and a 24-hour time.
+          because: The datetime attribute holds the machine-readable form, year-month-day, then T or a space and a 24-hour time.
         - name: no datetime attribute
           html: "<p>The fair opens on <time>3 May 2027 at 10:00</time>.</p>"
           fails: [valid, right-value]

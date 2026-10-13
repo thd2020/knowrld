@@ -527,10 +527,16 @@ nodes:
     region: semantic-html
     tier: road
     requires: [semantics, whitespace-and-comments]
-    says: Code in code, a variable in var, what the user types in kbd, what the program prints in samp. Wrap it in pre when its spacing must survive.
+    says: Code in code, a variable in var, what the user types in kbd, what the program prints in samp. Use pre’s default styling to preserve spacing, subject to the immediate first-newline exception.
     cites:
       - advanced-text-features#code-elements
       - advanced-text-features#code-examples
+      - advanced-text-features#code-other-elements
+      - el-code#summary
+      - el-pre#whitespace
+      - css-whitespace#dom-preservation
+      - css-whitespace#default-display
+      - css-whitespace#collapse-summary
     check:
       - prompt: Which element marks up the output of a program?
         choices: ["<code>", "<kbd>", "<samp>"]
@@ -538,11 +544,11 @@ nodes:
         explain: samp is for the output of a computer program; kbd is for input.
       - prompt: Why wrap a code block in <pre>?
         choices:
-          - To keep its whitespace as written
+          - To preserve spacing under default styling
           - To run the code when the page loads
           - To colour the code by its syntax
         answer: 0
-        explain: Browsers ignore excess whitespace, but inside pre it is rendered identically to how it appears in the editor.
+        explain: Default paragraph styling collapses displayed whitespace; pre’s default styling preserves it, except for a newline immediately after its opening tag. The DOM preserves source whitespace.
       - prompt: Which element marks up a variable name such as para?
         choices: ["<code>", "<kbd>", "<var>"]
         answer: 2
@@ -573,6 +579,9 @@ nodes:
       - advanced-text-features#time
       - advanced-text-features#time-why
       - advanced-text-features#time-formats
+      - el-time#date-forms
+      - el-time#time-forms
+      - el-time#local-date-time
     check:
       - prompt: What problem does <time> solve?
         choices:
@@ -584,7 +593,7 @@ nodes:
       - prompt: Which datetime value is valid for 7.30pm on 20 January 2016?
         choices: ["2016-01-20T19:30", "20/01/2016 7.30pm", "Jan 20 2016 19:30"]
         answer: 0
-        explain: A date and time is written year-month-day, a T, then the 24-hour time, as in 2016-01-20T19:30.
+        explain: A local date and time uses year-month-day, T or a space, then the 24-hour time, as in 2016-01-20T19:30.
       - prompt: Which datetime value names the fourth week of 2016?
         choices: ["2016-04", "2016-W04", "W4-2016"]
         answer: 1

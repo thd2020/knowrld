@@ -123,8 +123,14 @@ nodes:
       - el-abbr#expand-first
       - advanced-text-features#time
       - advanced-text-features#time-formats
+      - el-time#date-forms
+      - el-time#time-forms
+      - el-time#local-date-time
       - advanced-text-features#sup-sub
       - advanced-text-features#address-scope
+      - advanced-text-features#address
+      - el-br#not-margins
+      - el-hr#semantic
 
   - id: code-gremlin
     kind: problem
@@ -137,6 +143,9 @@ nodes:
     cites:
       - advanced-text-features#code-elements
       - el-pre#escape
+      - el-pre#whitespace
+      - el-code#summary
+      - advanced-text-features#code-other-elements
       - el-kbd#nesting
       - basic-html-syntax#character-references
 

@@ -511,6 +511,9 @@ nodes:
     cites:
       - el-time#summary
       - el-time#datetime-value
+      - el-time#date-forms
+      - el-time#time-forms
+      - el-time#local-date-time
     check:
       - prompt: A <time> has no datetime attribute. Where does its value come from?
         choices:

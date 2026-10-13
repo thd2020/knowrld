@@ -1,6 +1,6 @@
 id: almanac-imp
 statement: |
-  The Almanac Imp scrambles dates, shortens words until nobody can read them aloud, and spaces text with rows of line breaks. Restore the Tide Readers' almanac entry, so that it reads aloud clearly, machines can read its dates, and its parts are what they look like.
+  The Almanac Imp scrambles dates, uses abbreviations without clear text expansions, and spaces text with rows of line breaks. Restore the Tide Readers' almanac entry, with text expansions for abbreviations, machine-readable dates and semantic markup for its parts.
 
   What the Tide Readers can tell you:
 
@@ -83,7 +83,7 @@ grader:
       attr: { name: title, matches: '^\s*hectopascals?\s*$' }
       concepts: [abbr-expansion]
     - id: clear-dates
-      says: Dates read aloud clearly, with no dashes between numbers and no shortened months
+      says: Dates use expanded month names and no dashes between numbers in the reader-facing text
       selector: article
       text: { not: '\d\s*[-–—]\s*\d|\b(Jan|Dec)\b\.?' }
       concepts: [clear-language]
@@ -293,7 +293,7 @@ fixtures:
             7 January 2027</time>.<br><br>
                 The highest water
       fails: [no-br-spacing]
-      because: Line breaks do not make paragraphs; screen readers announce the breaks and not the structure.
+      because: br elements do not supply paragraph structure; this task requires p elements for the paragraphs.
     - name: the decorative rule kept
       edits: [{ find: "    <footer>", replace: "    <hr>\n      <footer>" }]
       fails: [no-hr]

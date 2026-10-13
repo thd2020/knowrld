@@ -163,6 +163,8 @@ nodes:
       - emphasis-and-importance#em
       - emphasis-and-importance#strong
       - emphasis-and-importance#nest-strong-em
+      - el-em#i-vs-em
+      - el-i#not-presentational
     check:
       - prompt: '"This liquid is highly toxic." Which element marks up "highly toxic"?'
         choices: ["<em>", "<b>", "<strong>"]
@@ -171,10 +173,10 @@ nodes:
       - prompt: You only want italic styling, with no stress. Should you use <em>?
         choices:
           - Yes; that is exactly what em is for
-          - No; use a span with CSS, or perhaps an i
+          - No; use a span with CSS
           - Yes, but only inside a paragraph element
         answer: 1
-        explain: Browsers style em as italic, but you shouldn't use it purely to get italics.
+        explain: Browsers style em as italic, but neither em nor i is for decoration alone. Use CSS for italic styling without a semantic role.
       - prompt: In "I am <em>glad</em> you weren't <em>late</em>.", what do the em elements change?
         choices:
           - "The tone: it now sounds sarcastic"

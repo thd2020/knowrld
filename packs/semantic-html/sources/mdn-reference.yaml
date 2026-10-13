@@ -511,6 +511,34 @@ sources:
         lines:
           - 54
           - 55
+  - id: el-del
+    title: <del> HTML deleted text element
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/del
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/del/index.md
+    excerpts:
+      - id: summary
+        text: 'The **`<del>`** [HTML](/en-US/docs/Web/HTML) element represents a range of text that has been deleted from a document. This can be used when rendering "track changes" or source code diff information, for example. The {{HTMLElement("ins")}} element can be used for the opposite purpose: to indicate text that has been added to the document.'
+        verbatim: true
+        lines:
+          - 10
+          - 10
+  - id: el-ins
+    title: <ins> HTML inserted text element
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ins
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/ins/index.md
+    excerpts:
+      - id: summary
+        text: The **`<ins>`** [HTML](/en-US/docs/Web/HTML) element represents a range of text that has been added to a document. You can use the {{HTMLElement("del")}} element to similarly represent a range of text that has been deleted from the document.
+        verbatim: true
+        lines:
+          - 10
+          - 10
   - id: el-em
     title: <em> HTML emphasis element
     url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/em

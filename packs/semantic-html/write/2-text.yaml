@@ -211,7 +211,7 @@ tasks:
   - id: deadly-mushroom
     concept: emphasis-and-importance
     prompt: "Mark up the warning “Keep away from the black mushroom: even one bite is deadly.” All of “even one bite is deadly” is important, and within it the word one is stressed."
-    cites: [emphasis-and-importance#nest-strong-em, emphasis-and-importance#em, emphasis-and-importance#strong]
+    cites: [emphasis-and-importance#nest-strong-em, emphasis-and-importance#em, emphasis-and-importance#strong, el-strong#b-vs-strong, el-em#i-vs-em, el-b#uses]
     solution:
       html: |
         <p>Keep away from the black mushroom: <strong>even <em>one</em> bite is deadly</strong>.</p>
@@ -230,7 +230,7 @@ tasks:
         - name: bold and italic tags
           html: "<p>Keep away from the black mushroom: <b>even <i>one</i> bite is deadly</b>.</p>"
           fails: [important, stressed]
-          because: b and i only change how text looks; strong carries importance and em carries stress.
+          because: b and i do not express the requested importance and stress; strong carries importance and em carries stress.
         - name: stress beside the important words, not inside
           html: "<p>Keep away from the black mushroom: even <em>one</em> <strong>bite is deadly</strong>.</p>"
           fails: [important, stressed]
@@ -296,7 +296,7 @@ tasks:
         <p>Our <b>Honey Cake</b> and <b>Plum Tart</b> sell out by noon.</p>
     checks:
       - id: names
-        says: Both names are bold for attention
+        says: Both names are marked for attention
         selector: 'p b'
         count: { min: 2, max: 2 }
         every: true

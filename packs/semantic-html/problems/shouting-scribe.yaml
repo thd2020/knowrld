@@ -1,15 +1,15 @@
 id: shouting-scribe
 statement: |
-  The Shouting Scribe paints every word it cares about bold, italic or underlined, and a screen reader hears none of it. Rewrite the Hollow Oak Apothecary's notice so that each phrase is marked for what it *means*, not how it should look. What the shopkeeper meant:
+  The Shouting Scribe uses bold, italic and underlined text without marking the intended importance, stress and language of each phrase. Rewrite the Hollow Oak Apothecary's notice so that each phrase is marked for what it *means*, not how it should look. What the shopkeeper meant:
 
   - **Do not touch the blue flask** could save a customer's skin;
-  - the shop opens *after* the evening bells, not before, and a reader should hear where the voice falls;
-  - **Mandragora officinarum** is the mandrake's species name, and **caveat emptor** is a Latin idiom a screen reader would mispronounce as English;
+  - the shop opens *after* the evening bells, not before, and the stress belongs on that word;
+  - **Mandragora officinarum** is the mandrake's species name, and **caveat emptor** is a Latin idiom whose language should be identified;
   - in the customer's review, the eye should catch the product names **Moonwater Tonic** and **Ember Salve**, though they matter no more than the rest;
   - the customer's spelling **recieve** is kept as she wrote it, and flagged as a misspelling;
   - in the search results, a reader should spot which word matched the search.
 
-  Underlining on the web says "link". Bold and italics are for the stylesheet to decide; the markup says only what each phrase means.
+  Underlining is strongly associated with links. For this exercise, reserve underline-like decoration for the spelling annotation and links; avoid decorative underlines, bottom borders and box shadows on other text. This is an exercise readability requirement. Bold and italics are for the stylesheet to decide; the markup says what each phrase means.
 starter:
   html: |
     <!doctype html>
@@ -113,18 +113,18 @@ grader:
       text: { matches: '^\s*(Moonwater Tonic|Ember Salve|Salve of Quiet Sleep)\s*$' }
       concepts: [strong-and-b, presentational-elements]
     - id: misspelling
-      says: The misspelling is the only underlined text
+      says: In this exercise, only the misspelling and links may be underlined
       selector: u
       count: { min: 1, max: 1 }
       text: { matches: '^\s*recieve\s*$' }
       concepts: [u-annotation]
     - id: no-decorative-underline
-      says: Nothing but the misspelling (and links) is underlined, not with an inline style, a border, a box shadow or a style rule
+      says: In this exercise, underline-like decoration is reserved for the misspelling and links, including inline styles, bottom borders and box shadows
       selector: ':is([style*="underline" i], [style*="border-bottom" i], [style*="box-shadow" i]):not(u, a)'
       count: { max: 0 }
       concepts: [u-annotation, presentational-elements]
     - id: no-underline-rules
-      says: No style rule underlines anything but u or a link (judged by the last part of each selector)
+      says: For this exercise, style rules reserve underline-like decoration for u or links (judged by the last part of each selector)
       selector: style
       count: { min: 0 }
       every: true
@@ -176,11 +176,11 @@ fixtures:
     - name: the decorative underline kept on the shop name
       edits: [{ find: <h1>Hollow Oak Apothecary</h1>, replace: <h1><u>Hollow Oak Apothecary</u></h1> }]
       fails: [misspelling]
-      because: An underline on the web says "link"; u is for annotations such as a misspelling.
+      because: Underlining is strongly associated with links; this exercise reserves u for annotations such as the misspelling.
     - name: the Latin idiom without its language
       edits: [{ find: <i lang="la">caveat emptor</i>, replace: <i>caveat emptor</i> }]
       fails: [latin]
-      because: Without lang, a screen reader reads the Latin with English pronunciation.
+      because: This Latin idiom needs its language identified rather than an assumption of English pronunciation. Use lang="la" to identify Latin.
     - name: emphasis used for the species name
       edits: [{ find: <i>Mandragora officinarum</i>, replace: <em>Mandragora officinarum</em> }]
       fails: [species, i-set-off-only, stress]
@@ -205,24 +205,24 @@ fixtures:
       edits:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"text-decoration: underline\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
-      because: Underlined text reads as a link whatever draws the line, so decoration by inline style is the same mistake as u.
+      because: This exercise reserves underline-like styling for the spelling annotation and links, not the heading.
     - name: the heading underlined with an inline box shadow
       edits:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"box-shadow: 0 2px 0 currentColor\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
-      because: A line drawn under the text by a shadow is still an underline.
+      because: This exercise disallows decorative box shadows on the heading as an underline-like treatment.
     - name: the heading underlined by a style rule
       edits:
         - { find: "</head>", replace: "<style>h1 { text-decoration: underline; }</style></head>" }
       fails: [no-underline-rules]
-      because: An underline reads as a link wherever it comes from, the stylesheet included.
+      because: This exercise reserves underline-like styling for the spelling annotation and links.
     - name: the heading underlined with a bottom border
       edits:
         - { find: "<h1>Hollow Oak Apothecary</h1>", replace: "<h1 style=\"border-bottom: 1px solid\">Hollow Oak Apothecary</h1>" }
       fails: [no-decorative-underline]
-      because: A bottom border under text draws the same line as an underline.
+      because: This exercise disallows decorative bottom borders on the heading as an underline-like treatment.
     - name: a rule that underlines links and the heading together
       edits:
         - { find: "</head>", replace: "<style>a, h1 { text-decoration: underline; }</style></head>" }
       fails: [no-underline-rules]
-      because: Listing a beside h1 does not make the heading a link; it is still underlined for decoration.
+      because: This exercise allows underline styling for links but not for the heading itself.

@@ -72,6 +72,10 @@ nodes:
       - el-strong#em-vs-strong
       - el-i#uses
       - el-u#use-cases
+      - el-b#uses
+      - el-mark#usage
+      - attr-lang#summary
+      - emphasis-and-importance#underline-links
 
   - id: glossary-sphinx
     kind: problem

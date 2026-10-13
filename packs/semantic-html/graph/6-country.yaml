@@ -422,6 +422,8 @@ nodes:
       - el-dfn#summary
       - el-small#summary
       - el-s#summary
+      - el-del#summary
+      - el-ins#summary
     check:
       - prompt: Search results highlight the words that matched. Which element?
         choices: ["<strong>", "<mark>", "<em>"]

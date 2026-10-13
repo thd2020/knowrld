@@ -398,12 +398,12 @@ nodes:
     region: semantic-html
     tier: road
     requires: [document-skeleton, attributes]
-    says: The head is never shown on the page. It speaks about the page, to browsers and to search engines. Many of its meta elements pair a name with content, such as the author and a description.
+    says: Valid head metadata describes the page for browsers and search engines rather than appearing as body content. Many of its meta elements pair a name with content, such as the author and a description.
     cites:
       - webpage-metadata#head-not-displayed
       - webpage-metadata#name-content
-      - webpage-metadata#description-seo
-      - webpage-metadata#keywords-ignored
+      - meta-name#description
+      - meta-name#keywords
     check:
       - prompt: In <meta name="description" content="...">, what does name say?
         choices:
@@ -412,13 +412,13 @@ nodes:
           - The file name the page is saved under on the server
         answer: 1
         explain: name specifies the type of meta element, what type of information it contains. content holds the actual metadata.
-      - prompt: Why do search engines ignore the keywords meta element?
+      - prompt: What does keywords metadata contain?
         choices:
-          - Spammers stuffed it with keywords, biasing results
+          - Words relevant to the page, separated by commas
           - It was never part of HTML
           - It only works when it is placed inside the body
         answer: 0
-        explain: The keywords meta element is ignored because spammers filled it with hundreds of keywords. A good description still helps.
+        explain: Keywords metadata contains relevant words separated by commas. A description instead gives a short, accurate summary.
       - prompt: How is the author of a page recorded in the head?
         choices:
           - <address name="author">…</address> in the head
@@ -426,20 +426,20 @@ nodes:
           - <meta name="author" content="…">
         answer: 2
         explain: The author is one of the meta elements with name and content attributes.
-      - prompt: "You put text inside the head. Where does it show on the page?"
+      - prompt: "You put a valid meta description inside the head. Where does it show in the page body?"
         choices:
           - "Nowhere: the head is not displayed"
           - "Only when printed"
           - "At the very top of the page, above the body's content"
         answer: 0
-        explain: "Unlike the body, the head's content is not displayed on the page; it holds metadata about the document."
+        explain: "A valid meta description holds document metadata and is not displayed as body content by default. This does not describe arbitrary invalid text between head tags."
       - prompt: "Why write a description meta that names what the page is about?"
         choices:
           - "It replaces the title text in the browser's tab"
-          - "It may rank higher in relevant searches"
+          - "It may supply a summary in a search-result snippet"
           - "It shows as the first paragraph of the page's content"
         answer: 1
-        explain: "A description with relevant keywords has the potential to make the page appear higher in relevant searches."
+        explain: "A short, accurate meta description may be used in the snippet shown in search results."
 
   - id: page-title
     kind: concept
@@ -447,7 +447,7 @@ nodes:
     region: semantic-html
     tier: road
     requires: [head-and-metadata]
-    says: Two titles, two jobs. The title names the whole document, in the tab, the bookmark and the search result. The h1 heads the content on the page.
+    says: The document title names the page in the tab, the bookmark and the search result. A main h1 heading names the content shown in the body.
     cites:
       - webpage-metadata#h1-on-page
       - webpage-metadata#title-metadata
@@ -593,10 +593,12 @@ nodes:
     region: semantic-html
     tier: road
     requires: [document-skeleton, attributes]
-    says: Name the language on the opening html tag. Search engines index you better, and a screen reader knows how to say "six". A phrase in another language gets its own lang.
+    says: Name the language on the opening html tag so a screen reader can use the appropriate pronunciation. A phrase in another language normally gets its own lang; some terms and proper names are exceptions.
     cites:
       - webpage-metadata#lang
       - webpage-metadata#lang-parts
+      - el-html#lang
+      - wcag-understandable#language-parts
     check:
       - prompt: Where is the page language usually set?
         choices:
@@ -611,7 +613,7 @@ nodes:
           - The same word can be said differently in two languages
           - It doesn't; they detect it
         answer: 1
-        explain: MDN's example is "six", which exists in both French and English but is pronounced differently.
+        explain: Declaring the page language helps screen readers choose the appropriate pronunciation instead of falling back to the operating system's language.
       - prompt: A Japanese phrase sits in an English page. What marks it?
         choices:
           - <span lang="ja">…</span>
@@ -626,13 +628,13 @@ nodes:
           - "<meta lang=\"en-US\">"
         answer: 0
         explain: "The lang attribute goes on the opening html tag."
-      - prompt: "What does a search engine gain when the page language is set?"
+      - prompt: "What does a screen reader gain when the page language is declared?"
         choices:
-          - "Nothing, since search engines ignore the lang attribute"
-          - "Correct language-specific results"
+          - "A guaranteed translation into another language"
+          - "Information for choosing the appropriate pronunciation"
           - "It translates the page for every visitor automatically"
         answer: 1
-        explain: "A page whose language is set is indexed more effectively, for example appearing correctly in language-specific results."
+        explain: "Declaring the page language helps assistive technology choose the appropriate pronunciation."
 
   - id: viewport-meta
     kind: concept
@@ -646,6 +648,7 @@ nodes:
       - meta-viewport#narrow-screens
       - meta-viewport#recommended
       - meta-viewport#no-zoom
+      - wcag-perceivable#resize-text
     check:
       - prompt: What does <meta name="viewport" content="width=device-width"> do?
         choices:
@@ -667,12 +670,12 @@ nodes:
           - It stops the page from responding when the phone is rotated
           - Browsers treat it as an error and drop the whole viewport meta
         answer: 0
-        explain: Disabling zoom prevents people with low vision from reading the page. WCAG requires at least 2x scaling.
-      - prompt: "A site's media queries begin at 480px, but phones draw it in a 980px virtual viewport. What happens?"
+        explain: Disabling zoom can prevent people with low vision from reading. The resize-text guideline calls for the page to remain readable and usable when text size is doubled.
+      - prompt: "A site's max-width:480px media queries target widths of 480px and below, but the phone uses a 980px virtual viewport. What happens?"
         choices:
           - "The media queries apply twice"
           - "The phone switches to 480px by itself"
-          - "The media queries never apply"
+          - "Those max-width:480px queries do not apply at 980px"
         answer: 2
         explain: "With a 980px virtual viewport, media queries that kick in at 640px or 480px or less are never used."
       - prompt: "How are several viewport settings written in the content attribute?"

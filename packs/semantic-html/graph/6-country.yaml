@@ -789,12 +789,13 @@ nodes:
     region: semantic-html
     tier: country
     requires: [document-language]
-    says: The lang on html holds one language tag for most of the page, and it makes even the title be spoken right. Where a part is in another language, tag that part too.
+    says: The lang on html holds one language tag for most of the page, and it makes even the title be spoken right. Normally tag a part written in another language; proper names and language-independent technical terms can be exceptions.
     cites:
       - el-html#lang
       - el-html#head-announced
       - attr-lang#summary
       - attr-lang#wcag-parts
+      - wcag-understandable#language-parts
     check:
       - prompt: Without a lang on <html>, what do screen readers typically do?
         choices:
@@ -809,7 +810,7 @@ nodes:
           - Mark that part with its own lang
           - Nothing; the page lang covers it
         answer: 1
-        explain: WCAG Success Criterion 3.1.2 requires the language of each part in another language to be specified.
+        explain: This French quotation should have its own lang. WCAG 3.1.2 normally requires language changes to be identified, with exceptions including proper names and language-independent technical terms.
       - prompt: "The html element has a valid lang. What else is announced properly as a result?"
         choices:
           - "Only the text inside the body"

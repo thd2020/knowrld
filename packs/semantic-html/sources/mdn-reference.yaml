@@ -910,6 +910,76 @@ sources:
         lines:
           - 39
           - 39
+  - id: meta-name
+    title: <meta name> HTML attribute
+    url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/name
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/html/reference/elements/meta/name/index.md
+    excerpts:
+      - id: description
+        text: |-
+          - `description`
+            - : A short and accurate summary of the content of the page usually referred to as a "meta description".
+              Search engines like Google use this metadata to adjust [the appearance of a webpage in search](https://developers.google.com/search/docs/appearance/snippet#meta-descriptions) results.
+        verbatim: true
+        lines:
+          - 45
+          - 47
+      - id: keywords
+        text: |-
+          - `keywords`
+            - : Words relevant to the page's content separated by commas.
+        verbatim: true
+        lines:
+          - 50
+          - 51
+  - id: wcag-perceivable
+    title: Perceivable
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Perceivable
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/accessibility/guides/understanding_wcag/perceivable/index.md
+    excerpts:
+      - id: resize-text
+        text: |2-
+                  The page should be readable and usable when the text size is doubled.
+                  This means that designs should be responsive, so that when the text size
+                  is increased, the content is still accessible.
+                </td>
+        verbatim: true
+        lines:
+          - 443
+          - 446
+  - id: wcag-understandable
+    title: Understandable
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Understandable
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/accessibility/guides/understanding_wcag/understandable/index.md
+    excerpts:
+      - id: language-parts
+        text: |2-
+                  <p>
+                    In cases where the content of a page includes words or phrases that
+                    are in a different language to the primary language, use the
+                    <a href="/en-US/docs/Web/HTML/Reference/Global_attributes/lang">lang</a> attribute on an element wrapped
+                    around the term in question (e.g., a {{htmlelement("span")}}
+                    if no semantic element is available) to set an appropriate language
+                    for it.
+                  </p>
+                  <p>
+                    You don't need to set a different language for words or phrases that
+                    are the same regardless of language (for example proper names,
+                    technical terms that aren't part of a specific language).
+                  </p>
+        verbatim: true
+        lines:
+          - 48
+          - 60
   - id: el-html
     title: <html> HTML document root element
     url: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/html

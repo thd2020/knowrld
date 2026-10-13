@@ -465,12 +465,10 @@ sources:
             …
           </html>
           ```
-
-          This is useful in many ways. Your HTML document will be indexed more effectively by search engines if its language is set (allowing it to appear correctly in language-specific results, for example), and it is useful to people with visual impairments using screen readers (for example, the word "six" exists in both French and English, but is pronounced differently.)
         verbatim: true
         lines:
           - 296
-          - 304
+          - 302
       - id: lang-parts
         text: |-
           You can also set subsections of your document to be recognized as different languages. For example, we could set our Japanese language section to be recognized as Japanese, like so:

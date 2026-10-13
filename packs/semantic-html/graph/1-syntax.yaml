@@ -200,7 +200,7 @@ nodes:
     region: semantic-html
     tier: road
     requires: [attributes, character-references]
-    says: Always quote a value. Without quotes a space ends it, and the rest turns into stray attributes. Pick single or double quotes, never mix them, and write &quot; for a quote of the same kind inside.
+    says: Always quote a value. Without quotes a space ends it, and the rest turns into stray attributes. Use matching single or double quotes around each value. Inside double quotes, write &quot; for a literal double quote, or use single quotes inside them.
     cites:
       - basic-html-syntax#unquoted-values
       - basic-html-syntax#always-quote

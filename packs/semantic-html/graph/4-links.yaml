@@ -6,12 +6,12 @@ nodes:
     region: semantic-html
     tier: road
     requires: [attributes]
-    says: Every resource on the web has an address, its URL. Wrap text, a heading or an image in an a element, point href at the address, and the web is a web. Put nothing vital in a link's title; only a mouse ever reveals it.
+    says: Every resource on the web has an address, its URL. Wrap text, a heading or an image in an a element, point href at the address, and the web is a web. Put essential information in accessible page text; support for a link's title is inconsistent on touch, keyboards and assistive technology.
     cites:
       - creating-links#url
       - creating-links#anchor
       - creating-links#block-links
-      - creating-links#title-hover-only
+      - attr-title#accessibility-support
     check:
       - prompt: Which attribute of <a> holds the address the link points to?
         choices: ["src", "href", "title"]
@@ -26,11 +26,11 @@ nodes:
         explain: Almost any content can be made into a link, even block-level elements such as a heading.
       - prompt: Why shouldn't vital information live only in a link's title?
         choices:
-          - It shows only on mouse hover
+          - Access through touch, keyboards and assistive technology is inconsistent
           - Browsers never display it at all
           - Search engines penalize it
         answer: 0
-        explain: A title is only revealed on mouse hover, so keyboard and touchscreen users have trouble reaching it. Put important information in the text.
+        explain: Browsers and assistive technology expose title inconsistently. Do not rely on it for essential information; put that information in accessible page text.
       - prompt: "You want the words \"the Mozilla homepage\" to link to https://www.mozilla.org/en-US/. What do you write?"
         choices:
           - "<a href=\"https://www.mozilla.org/en-US/\">the Mozilla homepage</a>"
@@ -52,42 +52,43 @@ nodes:
     region: semantic-html
     tier: road
     requires: [hyperlinks]
-    says: A relative path is directions from here. A file name for a neighbour, a folder name to go down, two dots to climb up. Start with a slash and the path starts at the site's root instead, so moving the linking file won't break it.
+    says: In the illustrated site with no base element, relative paths resolve from the document address. A file name reaches a neighbour, a folder name goes down and two dots go up. A leading slash uses this host’s root; a different base URL can change the host.
     cites:
       - creating-links#same-directory
       - creating-links#subdirectory
       - creating-links#up-a-directory
       - creating-links#root-relative
+      - el-base#document-base
     check:
-      - prompt: From projects/index.html, which path reaches pdfs/project-brief.pdf?
+      - prompt: In the illustrated site with no base element, from projects/index.html, which path reaches pdfs/project-brief.pdf?
         choices: ["projects/pdfs/project-brief.pdf", "pdfs/project-brief.pdf", "../pdfs/project-brief.pdf"]
         answer: 2
         explain: Two dots go up a directory level; then the path goes down into pdfs.
-      - prompt: What does a slash at the start of a path mean?
+      - prompt: In the illustrated site with no base element, what does a slash at the start of a path mean?
         choices:
           - Start from the current folder
           - Start at the root directory of the site
           - Go to another website with that name
         answer: 1
-        explain: A leading slash makes the path start in the site's root directory, so moving the linking file does not break the link.
-      - prompt: In the top-level index.html, which path reaches contacts.html in the same folder?
+        explain: With no base element and the same host, a leading slash resolves from that host’s root. Moving the linking file within that host does not change this destination.
+      - prompt: In the illustrated site with no base element, in the top-level index.html, which path reaches contacts.html in the same folder?
         choices: ["contacts.html", "../contacts.html", "index.html/contacts.html"]
         answer: 0
         explain: A file in the same directory is reached by its file name alone, or with ./ in front.
-      - prompt: "In the top-level index.html, which path reaches projects/index.html?"
+      - prompt: "In the illustrated site with no base element, in the top-level index.html, which path reaches projects/index.html?"
         choices:
           - "index.html#projects, a fragment of this page"
           - "../projects/index.html"
           - "projects/index.html"
         answer: 2
         explain: "To go down into a directory, write the directory's name, a forward slash, then the file's name."
-      - prompt: "The link ../pdfs/project-brief.pdf sits in projects/index.html. You move projects/index.html deeper into another folder. What happens?"
+      - prompt: "With no base element in the illustrated site, ../pdfs/project-brief.pdf sits in projects/index.html. You move the page deeper without changing the link. What can happen?"
         choices:
-          - "The link breaks, since it is relative to the moved file"
+          - "It can break because it resolves from the moved document address"
           - "The browser finds it anyway"
           - "The link still works, because relative paths follow the file"
         answer: 0
-        explain: "With relative URLs, moving either the linking file or the linked file to a different location breaks the link."
+        explain: "With no base element, moving the page to a different directory changes this relative URL’s resolution and can break the link. Preserved routes or redirects can keep an old address working."
 
   - id: absolute-urls
     kind: concept
@@ -145,20 +146,21 @@ nodes:
     region: semantic-html
     tier: road
     requires: [relative-paths]
-    says: Give an element an id and it becomes a place to link to. Add a hash and the id to a path, or use the hash alone to jump within this page. An id must be unique in the whole document, or the link has nowhere certain to land.
+    says: Give an element an id to make it a fragment destination. With no base element, a hash alone can link within this document; with a base, it resolves against that URL. Duplicate IDs violate document-wide uniqueness.
     cites:
       - creating-links#fragment
       - creating-links#fragment-hash
       - creating-links#fragment-same-page
+      - el-base#fragment-resolution
       - attr-id#unique
     check:
-      - prompt: What does href="#mailing_address" link to?
+      - prompt: With no base element, what does href="#mailing_address" link to?
         choices:
           - A file named mailing_address
           - The element with id="mailing_address" in this page
           - An email address stored in the site
         answer: 1
-        explain: A document fragment reference on its own links to another part of the current document.
+        explain: With no base element, this fragment-only reference links within the current document. A base URL can make it resolve against a different document instead.
       - prompt: What turns an element into a fragment you can link to?
         choices: ["A class attribute", "An id attribute", "A heading level"]
         answer: 1
@@ -240,14 +242,17 @@ nodes:
     says: If a link downloads, streams or opens a new tab, say so in its text. Opening new tabs is a choice with costs, so make it on purpose. Nobody likes a door that leads somewhere unexpected.
     cites:
       - creating-links#signposts
-      - creating-links#download
+      - el-a#download-filename
+      - el-a#download-limits
+      - el-a#download-headers
       - creating-links#new-tab
+      - el-a#target
       - accessible-html#new-tab-indicator
     check:
-      - prompt: Which attribute gives a downloaded file a default save name?
+      - prompt: For a same-origin link, which attribute can suggest the downloaded file’s save name?
         choices: ["target", "rel", "download"]
         answer: 2
-        explain: The download attribute provides a default save filename for a resource to be downloaded.
+        explain: For a same-origin resource, download can suggest a filename. It also applies to blob and data URLs; browser settings and response headers affect the result.
       - prompt: A link opens in a new tab. What should it also have?
         choices:
           - A cue in its text or an icon saying so
@@ -269,13 +274,13 @@ nodes:
           - "Click here"
         answer: 0
         explain: "If a link downloads a resource, say so in the text. People on low bandwidth can avoid multi-megabyte files."
-      - prompt: "Which attribute and value open a link in a new tab?"
+      - prompt: "Which attribute and value request a new browsing context, usually a tab or window?"
         choices:
           - "download=\"_blank\""
           - "target=\"_blank\""
           - "rel=\"new-tab\""
         answer: 1
-        explain: "Opening a link in a new tab is done by setting the target attribute to \"_blank\"."
+        explain: "target=\"_blank\" requests a new browsing context, usually a tab but configurable as a window."
 
   - id: email-links
     kind: concept
@@ -378,24 +383,26 @@ nodes:
     region: semantic-html
     tier: country
     requires: [link-signposts, email-links]
-    says: target names where a link opens, _self by default, _blank for a new tab, which now also cuts the opener as noopener does. download works for same-origin URLs and for blob and data URLs. And tel dials a number where the device can.
+    says: target names the browsing context. With no base target, _self is the default; _blank requests a new context, usually a tab or window, and also cuts opener access as noopener does. download works for same-origin URLs and for blob and data URLs. And tel dials a number where the device can.
     cites:
       - el-a#download-limits
+      - el-a#download-headers
       - el-a#target
+      - el-base#default-target
       - el-a#target-noopener
       - el-a#tel
     check:
-      - prompt: A link to a PDF on another origin has a download attribute. What happens?
+      - prompt: An HTTP or HTTPS link to a PDF on another origin has a download attribute. What happens to that attribute?
         choices:
-          - Nothing special; download works only for same-origin URLs
+          - The cross-origin HTTP(S) link’s download attribute is ignored
           - The file is always saved under the name you gave it
           - The browser blocks the link
         answer: 0
-        explain: download only works for same-origin URLs, or the blob and data schemes.
-      - prompt: Where does a link open by default?
+        explain: download applies to same-origin URLs and the blob and data schemes. It is ignored for this cross-origin HTTP(S) link, but the server response can still cause a download.
+      - prompt: With no target on the link and no base target, which browsing context is the default?
         choices: ["_blank", "_self", "_top"]
         answer: 1
-        explain: _self, the current browsing context, is the default target.
+        explain: Without a link target or base target, _self means the current browsing context.
       - prompt: Which href dials a phone number?
         choices: ["phone:+1-800-555-0123", "tel:+1(800)555-0123", "call://18005550123"]
         answer: 1

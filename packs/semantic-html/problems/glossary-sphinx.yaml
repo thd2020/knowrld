@@ -1,6 +1,6 @@
 id: glossary-sphinx
 statement: |
-  The Glossary Sphinx asks riddles in terms and meanings, and the herbalists' glossary has lost its shape: terms and definitions run together as bold lines and paragraphs, so nothing ties a term to what it means.
+  The Glossary Sphinx asks riddles in terms and meanings, and the herbalists' glossary has lost its shape: terms and definitions run together as bold lines and paragraphs, so the markup lacks description-list relationships between terms and descriptions.
 
   Mark the glossary up as a description list, with each term and each description in its own element:
 
@@ -187,7 +187,7 @@ fixtures:
             essence.
                   In herbalism,
       fails: [descriptions, decoction]
-      because: Two meanings run together in one description cannot be told apart.
+      because: This exercise requires the two meanings in separate dd elements after the one term.
     - name: a bulleted list with bold terms
       html: |
         <!doctype html>
@@ -204,10 +204,10 @@ fixtures:
           </body>
         </html>
       fails: [one-dl, terms, descriptions]
-      because: A list of bold lines does not tie each term to its description.
+      because: This exercise requires description-list markup for the term-description relationships.
     - name: a description marked up as another term
       edits:
         - find: <dd>A remedy made by steeping herbs in alcohol for several weeks.</dd>
           replace: <dt>A remedy made by steeping herbs in alcohol for several weeks.</dt>
       fails: [terms, descriptions, tincture]
-      because: A description in a dt is announced as a term, so Tincture is left without a meaning.
+      because: The description is marked as a term rather than a description; this exercise requires it in a dd after Tincture.

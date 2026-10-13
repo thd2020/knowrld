@@ -1,10 +1,10 @@
 id: wall-golem
 statement: |
-  The Wall-of-Text Golem is a recipe with no structure. The cook of the Mill Kitchen pressed Enter between the lines, but the browser ignores line breaks in the source and shows one solid block. A reader skimming for the ingredients, a search engine weighing the headings, and a screen reader user asking for the list of headings all hit the same wall.
+  The Wall-of-Text Golem is an English recipe without structural markup. Under default body whitespace styling, its source line breaks collapse and it appears as one continuous block; the source whitespace remains in the DOM. A reader cannot skim section headings, and a screen reader cannot offer heading-list navigation without heading elements.
 
   Give the recipe the structure its text already has. It has a name, an introduction, three parts (**Ingredients**, **Method** and **Storing it**), a set of ingredients you can gather in any order, steps you must follow in order, and advice on storing it. Read the method closely: its last two lines are not steps of their own.
 
-  Leave no text lying loose in the body.
+  For this exercise, leave no text lying loose in the body.
 starter:
   html: |
     <!doctype html>
@@ -230,7 +230,7 @@ fixtures:
         - { find: <h2>Method</h2>, replace: <h1>Method</h1> }
         - { find: <h2>Storing it</h2>, replace: <h1>Storing it</h1> }
       fails: [one-h1, subheadings]
-      because: The subheadings sit below the recipe's name; a page should have one h1.
+      because: This exercise requires one main h1 for the recipe's name and h2 elements for its parts.
     - name: the method as numbered lines with line breaks
       edits:
         - find: |-
@@ -244,7 +244,7 @@ fixtures:
                   3. Put everything except the water into a food processor.</p>
                 <ol start="4">
       fails: [method, method-order, nested]
-      because: Line breaks and typed numbers look like a list but are not one to a screen reader.
+      because: Typed numbers and br elements do not provide the ol/li list markup required for this method.
     - name: the ingredients as an ordered list
       edits:
         - { find: "<ul>\n      <li>1 tin", replace: "<ol>\n      <li>1 tin" }
@@ -256,4 +256,4 @@ fixtures:
         - find: <p>A smooth dip for travellers, ready in ten minutes and good for three days on the road.</p>
           replace: A smooth dip for travellers, ready in ten minutes and good for three days on the road.
       fails: [no-loose-text]
-      because: Text outside any element has no role; it is not a paragraph.
+      because: This exercise requires the introduction in a p element; loose body text does not meet that requirement.

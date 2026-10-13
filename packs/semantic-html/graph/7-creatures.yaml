@@ -44,6 +44,12 @@ nodes:
       - lists#unordered
       - lists#nesting
       - lists#nesting-example
+      - headings-and-paragraphs#paragraph
+      - lists#ordered
+      - el-headings#headings-list
+      - css-whitespace#dom-preservation
+      - css-whitespace#default-display
+      - css-whitespace#collapse-summary
 
   - id: false-herald
     kind: problem

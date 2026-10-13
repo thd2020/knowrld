@@ -377,7 +377,7 @@ nodes:
     region: semantic-html
     tier: country
     requires: [link-signposts, email-links]
-    says: target names where a link opens, _self by default, _blank for a new tab, which now also cuts the opener as noopener does. download only works for same-origin files. And tel dials a number where the device can.
+    says: target names where a link opens, _self by default, _blank for a new tab, which now also cuts the opener as noopener does. download works for same-origin URLs and for blob and data URLs. And tel dials a number where the device can.
     cites:
       - el-a#download-limits
       - el-a#target

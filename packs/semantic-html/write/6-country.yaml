@@ -593,7 +593,7 @@ tasks:
         - name: breaks for a gap
           html: "<p>The road ends here.<br /><br />Beyond lies the marsh.</p>"
           fails: [paragraphs, break, no-br]
-          because: Paragraphs go in p and gaps come from CSS; br elements make separate paragraphs a screen reader may not announce.
+          because: Paragraphs go in p and gaps come from CSS; br elements do not create paragraph elements or supply paragraph semantics.
 
   - id: hours-title
     concept: title-quality

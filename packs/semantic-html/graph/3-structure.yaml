@@ -48,19 +48,20 @@ nodes:
     region: semantic-html
     tier: road
     requires: [page-regions]
-    says: main once, for what is unique to this page. article for a piece that stands alone. section for one part or theme, opened by a heading. aside for the related, not the central.
+    says: At most one main without hidden, for what is unique to this page. article for a piece that stands alone. section for one part or theme, opened by a heading. aside for the related, not the central.
     cites:
       - structuring-documents#main-article-section-aside
       - el-section#summary
+      - el-main#only-one
     check:
       - prompt: A single blog post that makes sense on its own belongs in which element?
         choices: ["<section>", "<aside>", "<article>"]
         answer: 2
         explain: article encloses a block of related content that makes sense on its own without the rest of the page.
-      - prompt: How many <main> elements should a page use?
+      - prompt: How many main elements without hidden should this simple page use?
         choices: ["One per article", "One", "As many as needed"]
         answer: 1
-        explain: Use main only once per page, for the content unique to that page.
+        explain: Use one main without hidden for the page’s unique content. The language rule permits at most one main lacking hidden.
       - prompt: A mini map is one part of the page's functionality. Which element fits it?
         choices:
           - <section>, opened with a heading
@@ -75,13 +76,13 @@ nodes:
           - "<aside>"
         answer: 2
         explain: "aside contains content indirectly related to the main content, such as glossary entries, an author biography or related links."
-      - prompt: "Where should <main> be placed?"
+      - prompt: "Where does MDN recommend placing main for this simple page?"
         choices:
           - "Directly inside <body>, and ideally not nested in other elements"
           - "Inside the header, after the site's logo and title"
           - "Inside each article"
         answer: 0
-        explain: "Use main only once per page and put it directly inside body; ideally it is not nested in other elements."
+        explain: "MDN recommends placing the simple page’s main directly inside body, ideally without other wrappers. This is placement advice; at most one main may lack hidden."
 
   - id: header-nav-footer
     kind: concept
@@ -136,7 +137,7 @@ nodes:
     region: semantic-html
     tier: road
     requires: [sectioning-elements, attributes]
-    says: When no element fits, div wraps a block and span wraps a phrase, each named with a class. They carry no meaning, so they are the last choice, not the first.
+    says: When no element fits, div wraps a block and span wraps a phrase, a class can provide a styling or script hook. They carry no meaning, so they are the last choice, not the first.
     cites:
       - structuring-documents#non-semantic
       - structuring-documents#span
@@ -170,14 +171,14 @@ nodes:
           - "<span class=\"editor-note\">"
           - "<aside>"
         answer: 1
-        explain: "span is an inline non-semantic element for content you do not want to give any specific meaning; a class labels it."
+        explain: "span is an inline non-semantic element for content you do not want to give any specific meaning; a class can provide a styling or script hook."
       - prompt: "Why give a div or span a class?"
         choices:
           - "So the browser treats it as a section with a heading"
           - "So it gets meaning for screen readers and search engines"
           - "So it can be targeted easily"
         answer: 2
-        explain: "Use div and span preferably with a suitable class attribute, a label so they can be easily targeted. They still carry no meaning."
+        explain: "Use div and span preferably with a suitable class attribute, a styling or script hook so they can be easily targeted, not a required attribute or an accessible name. They still carry no meaning."
 
   - id: breaks-and-rules
     kind: concept
@@ -188,6 +189,7 @@ nodes:
     says: br breaks a line where the lines themselves matter, in an address or a poem. hr marks a change of topic or scene; the line it draws is incidental.
     cites:
       - structuring-documents#br
+      - el-br#summary
       - structuring-documents#hr
     check:
       - prompt: Which content needs <br>?
@@ -196,7 +198,7 @@ nodes:
           - The end of every sentence
           - The lines of a postal address or poem
         answer: 2
-        explain: br is the only way to force a rigid structure of fixed short lines, such as a postal address or a poem.
+        explain: br supplies a meaningful line break inside a paragraph, such as a line in a postal address or poem.
       - prompt: What does <hr> mean?
         choices:
           - A thematic change, such as a new scene

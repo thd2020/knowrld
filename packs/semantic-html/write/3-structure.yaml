@@ -115,7 +115,7 @@ tasks:
   - id: mill-aside
     concept: sectioning-elements
     prompt: "Write the page's main content, a paragraph “The mill has turned since 1702.”, and beside it a box of related notes, “The river also feeds the tannery.”, that is only indirectly related to it."
-    cites: [structuring-documents#main-article-section-aside]
+    cites: [structuring-documents#main-article-section-aside, el-main#only-one]
     solution:
       html: |
         <main>
@@ -142,7 +142,7 @@ tasks:
         - name: the note as a second main
           html: "<main><p>The mill has turned since 1702.</p></main><main><p>The river also feeds the tannery.</p></main>"
           fails: [aside, one-main]
-          because: A page has one main; content only indirectly related to it, like a sidebar, is an aside.
+          because: This task has two mains without hidden; at most one is allowed. The indirectly related note belongs in an aside.
 
   - id: kettle-header
     concept: header-nav-footer
@@ -307,7 +307,7 @@ tasks:
   - id: letter-address
     concept: breaks-and-rules
     prompt: "Write the address on the letter as one paragraph with each part on its own short line: “Wren Thatcher”, “The Old Mill”, “River Road”."
-    cites: [structuring-documents#br]
+    cites: [structuring-documents#br, el-br#summary]
     solution:
       html: |
         <p>Wren Thatcher<br>The Old Mill<br>River Road</p>

@@ -198,13 +198,14 @@ nodes:
     region: semantic-html
     tier: country
     requires: [header-footer-context, main-element, nav-element, choosing-sections]
-    says: Landmarks are places a screen reader can jump to. A body-level header is the banner, nav is navigation, main is main, and a body-level footer is contentinfo. Aside is complementary unless it is unnamed and nested in sectioning content, where its role is generic. A section is a region only once it has a name.
+    says: At body level, header is banner and footer is contentinfo. Nav and main are landmarks. Aside is complementary unless unnamed inside sectioning content, where it is generic. Section needs an accessible name to be a region; form needs one to be a form landmark. Landmarks support direct navigation.
     cites:
       - role-landmark#description
       - role-landmark#html-elements
       - role-region#section-named
       - role-contentinfo#one-per-page
       - el-aside#usage
+      - role-form#named-form
     check:
       - prompt: Which element gives the complementary landmark?
         choices: ["<aside>", "<section>", "<footer>"]

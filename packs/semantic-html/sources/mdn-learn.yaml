@@ -1284,8 +1284,6 @@ sources:
           - 251
       - id: br
         text: |-
-          `<br>` creates a line break in a paragraph; it is the only way to force a rigid structure in a situation where you want a series of fixed short lines, such as in a postal address or a poem. For example:
-
           ```html
           <p>
             There once was a man named O'Dell<br />
@@ -1296,7 +1294,7 @@ sources:
           ```
         verbatim: true
         lines:
-          - 262
+          - 264
           - 271
       - id: hr
         text: |-

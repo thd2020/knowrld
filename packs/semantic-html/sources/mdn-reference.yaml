@@ -1619,6 +1619,30 @@ sources:
         lines:
           - 21
           - 32
+  - id: role-form
+    title: "ARIA: form role"
+    url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/form_role
+    publisher: MDN contributors
+    license: CC-BY-SA-2.5+
+    retrieved: 2026-09-29
+    raw: https://raw.githubusercontent.com/mdn/content/dd70ed064388b0fac4338321f727c8840a508b64/files/en-us/web/accessibility/aria/reference/roles/form_role/index.md
+    excerpts:
+      - id: summary
+        text: The `form` role can be used to identify a group of elements on a page that provide equivalent functionality to an HTML form. The form is not exposed as a landmark region unless it has an [accessible name](/en-US/docs/Glossary/Accessible_name).
+        verbatim: true
+        lines:
+          - 12
+          - 12
+      - id: named-form
+        text: |-
+          > [!NOTE]
+          > Using the {{HTMLElement('form')}} element will automatically communicate a section of content as a `form` landmark, if it is provided an accessible name. Developers should always prefer using the correct semantic HTML element over using ARIA.
+
+          Use the HTML {{HTMLElement('form')}} element if possible. The `<form>` element defines a `form` landmark when it has an accessible name (e.g., [`aria-labelledby`](/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-labelledby), [`aria-label`](/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-label) or [`title`](/en-US/docs/Web/HTML/Reference/Global_attributes/title)). Make sure to have a unique label on each form in a document to help users understand the purpose of the form. This label should be visible to all users, not just assistive technology users. Use the `search` landmark instead of the `form` landmark when the form is used for search functionality.
+        verbatim: true
+        lines:
+          - 30
+          - 33
   - id: role-contentinfo
     title: "ARIA: contentinfo role"
     url: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/contentinfo_role

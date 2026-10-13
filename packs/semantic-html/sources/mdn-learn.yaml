@@ -163,12 +163,10 @@ sources:
           ```html-nolint example-bad live-sample___bad-no-quotes
           <a href=https://www.mozilla.org/ title=The Mozilla homepage>favorite website</a>
           ```
-
-          Because quotes are not included around the `title` attribute value, the browser interprets it as three attributes: a `title` attribute with the value `The`, and two Boolean attributes — `Mozilla` and `homepage`. Obviously, this is not what we intended! If you're using a device with a mouse pointer, you can try hovering over the link to view the title tooltip (it will give you "The" rather than the intended "The Mozilla homepage").
         verbatim: true
         lines:
           - 232
-          - 246
+          - 244
       - id: always-quote
         text: Always include quotes around attribute values. It avoids errors and unintended behavior, and results in more readable code.
         verbatim: true

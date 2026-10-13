@@ -110,6 +110,8 @@ nodes:
     cites:
       - basic-html-syntax#void
       - basic-html-syntax#void-slash
+      - css-whitespace#default-display
+      - css-whitespace#collapse-summary
     check:
       - prompt: What makes an element void?
         choices:
@@ -138,7 +140,7 @@ nodes:
           - "<br>, a single tag with no closing tag and no content"
           - "<br>…</br>"
         answer: 1
-        explain: "The br element inserts a line break. It is void, so it has no closing tag; a blank line in the source collapses to one space."
+        explain: "The br element inserts a line break and has no closing tag. A source newline between English words normally displays as a space under default paragraph CSS; it does not supply br's explicit line break."
       - prompt: "Can a void element hold text or other elements?"
         choices:
           - "Yes, between its single tag and a closing tag added after it"
@@ -179,7 +181,7 @@ nodes:
           - '<p "note"=class>'
           - '<p class="note">'
         answer: 2
-        explain: An attribute needs a space between it and the element name, then its name, an equals sign and a quoted value.
+        explain: For the illustrated class attribute, put a space after the element name, then class, an equals sign and a quoted value. Boolean attributes such as disabled can be written with their name alone.
       - prompt: "An element has two attributes. How are they separated?"
         choices:
           - "With a space between them"
@@ -211,10 +213,10 @@ nodes:
       - prompt: In <a href=https://www.mozilla.org/ title=The Mozilla homepage>, what is the link's title?
         choices:
           - '"The Mozilla homepage", read as one value'
-          - '"The", followed by two boolean attributes'
+          - '"The", followed by two extra empty-valued attributes'
           - Nothing; the browser drops the whole title
         answer: 1
-        explain: Without quotes, the browser reads a title of "The" and two boolean attributes, Mozilla and homepage.
+        explain: Without quotes, the browser reads title="The" and two extra attributes, mozilla and homepage, with empty values. Those unrecognized attributes are not defined HTML boolean attributes such as disabled.
       - prompt: Which attribute is written correctly?
         choices:
           - title="Isn't this fun?"

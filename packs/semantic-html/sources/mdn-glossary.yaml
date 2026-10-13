@@ -76,11 +76,3 @@ sources:
         lines:
           - 8
           - 8
-      - id: technical
-        text: |-
-          - Technical
-            - : Tag the content using semantic {{Glossary("HTML")}}. When exploring the website, crawlers should only find the content you want indexed.
-        verbatim: true
-        lines:
-          - 16
-          - 17

@@ -53,11 +53,19 @@ nodes:
     region: semantic-html
     tier: road
     requires: [headings]
-    says: Without structure a page is one grey wall. Readers skim headings, screen readers list them, CSS needs elements to grip, and search engines weigh them. Being found, SEO, starts with tagging content in semantic HTML.
+    says: Under default body whitespace styling, unmarked English text with source line breaks appears as one block. Headings and paragraphs identify its structure; readers can skim headings and screen readers can list them. Semantic elements give content meaningful roles. SEO means improving visibility in search results.
     cites:
       - headings-and-paragraphs#why-structure
       - glossary-seo#definition
-      - glossary-seo#technical
+      - el-headings#headings-list
+      - accessible-html#screen-reader-navigation
+      - css-whitespace#dom-preservation
+      - css-whitespace#default-display
+      - css-whitespace#collapse-setting
+      - css-whitespace#collapse-summary
+      - glossary-semantics#definition
+      - glossary-semantics#ask-yourself
+      - headings-and-paragraphs#h1-semantic
     check:
       - prompt: How do screen readers help their users find information quickly?
         choices:
@@ -65,35 +73,35 @@ nodes:
           - They read the title aloud, then stop
           - They read the headings out as an outline of the document
         answer: 2
-        explain: Screen readers can read out the headings as an outline. Without headings, users must listen to the whole document.
-      - prompt: How do headings affect search?
+        explain: Screen readers can list headings by level and let users jump between them. Without headings, that heading-navigation aid is unavailable.
+      - prompt: What does a semantic heading identify?
         choices:
-          - Search engines treat heading text as important keywords
-          - Search engines skip over headings
-          - Only the title counts; headings are ignored for search
+          - The role of its text as a heading
+          - A requirement to hide its text from users
+          - A guarantee of the top search ranking
         answer: 0
-        explain: Search engines consider the contents of headings as important keywords. Without headings a page performs poorly for SEO.
-      - prompt: A shop wants its pages to be found in search. Which habit helps most?
+        explain: A heading element gives its text a heading role. Choose elements that describe the content.
+      - prompt: A shop is choosing markup for its page content. Which habit identifies the content’s roles?
         choices:
           - Repeating the shop's name in text hidden with CSS
           - Adding a long keywords meta element to every page
           - Marking content up with fitting semantic elements
         answer: 2
-        explain: Technical SEO means tagging the content with semantic HTML, so crawlers find the content you want indexed.
-      - prompt: "A recipe's text is split only by pressing Enter, with no elements. How does it look in the browser?"
+        explain: Semantic elements describe the purpose or role of content. Choose elements that fit the data.
+      - prompt: "Under default body whitespace styling, an English recipe has only source line breaks and no structural elements. How does it look?"
         choices:
           - "As a numbered list"
           - "As neat paragraphs, one per line break you typed"
           - "As one big chunk of text"
         answer: 2
-        explain: "With no elements to give it structure, the browser does not know what is a heading or a paragraph, and shows one big chunk."
-      - prompt: "A page has no headings. What does a screen reader user have to do?"
+        explain: "Default whitespace styling collapses those source breaks, so this unmarked recipe appears as one block. The DOM still preserves the source whitespace."
+      - prompt: "Which navigation aid is unavailable on a page without headings?"
         choices:
-          - "Listen to the whole page read out loud"
-          - "Nothing different, since screen readers make their own headings"
-          - "Switch the screen reader to read only the links instead"
+          - "Jumps between headings or a list of headings"
+          - "Reading paragraph text"
+          - "Following links"
         answer: 0
-        explain: "Screen readers read out the headings as an outline; without headings their users are forced to listen to the whole document."
+        explain: "Without headings, a screen reader cannot offer heading jumps or a heading list for that page."
 
   - id: semantics
     kind: concept

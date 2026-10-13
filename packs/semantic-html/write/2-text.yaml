@@ -69,8 +69,8 @@ tasks:
 
   - id: grey-wall
     concept: why-structure
-    prompt: This notice is one grey paragraph that a screen reader can only read from start to end. Give it a structure people can skim, without changing the words.
-    cites: [headings-and-paragraphs#why-structure, glossary-seo#technical]
+    prompt: This notice is one paragraph without headings. Give it a structure people can skim and navigate by headings, without changing the words.
+    cites: [headings-and-paragraphs#why-structure, accessible-html#screen-reader-navigation]
     starter:
       html: |
         <p>Healing herbs. Yarrow. Stops a cut from bleeding. Comfrey. Helps a broken bone knit.</p>
@@ -109,8 +109,8 @@ tasks:
 
   - id: labels-to-headings
     concept: why-structure
-    prompt: A screen reader user asks for this page's headings and hears that there are none. Make the two labels real headings under the page's existing title.
-    cites: [headings-and-paragraphs#why-structure, glossary-seo#definition]
+    prompt: The page already has an h1 title. Make Opening hours and Prices subsection headings one level below it, keeping the hours and prices as paragraphs.
+    cites: [accessible-html#screen-reader-navigation, headings-and-paragraphs#hierarchy-rules]
     starter:
       html: |
         <h1>The bakery</h1>

@@ -8,7 +8,7 @@ nodes:
     region: semantic-html
     tier: country
     requires: [screen-reader-structure]
-    says: A screen reader user jumps heading to heading to learn the land. Skip a rank and they stop to wonder what went missing. Resize with CSS, never by changing the rank. And one h1 per page; an h1 in every section was never good practice and is now non-conforming.
+    says: A screen reader user jumps heading to heading to learn the land. Skip a rank and they stop to wonder what went missing. Resize with CSS, never by changing the rank. MDN recommends one main h1 per page and appropriate heading levels for subsections; this book follows that recommendation.
     cites:
       - el-headings#usage
       - el-headings#single-h1
@@ -29,13 +29,13 @@ nodes:
           - The page stops rendering at the h4 and shows an error
         answer: 1
         explain: Skipping levels confuses people who move from heading to heading and are left wondering where the missing heading is.
-      - prompt: Each <section> of a page opens with its own <h1>, as older tutorials taught. What about today?
+      - prompt: What heading practice does this book recommend for a page's sections?
         choices:
-          - Non-conforming; use one h1 and nest the levels
-          - Required, so each section has a top heading
-          - Fine, since browsers compute the outline
+          - Prefer one main h1 and use appropriate levels for subsections
+          - Require an h1 at the start of every section
+          - Choose heading ranks only for their default font sizes
         answer: 0
-        explain: Nested h1 elements in sectioning elements were allowed in older versions of HTML, but never best practice, and are now non-conforming.
+        explain: This book follows MDN’s recommendation to use one main h1 and appropriate subsection levels.
       - prompt: "What can a user agent build from a page's headings automatically?"
         choices:
           - "A table of contents"
@@ -49,7 +49,7 @@ nodes:
           - "Allowed, though one h1 is best practice"
           - "Yes, and two is the recommended number for a page"
         answer: 1
-        explain: "Multiple h1 elements are allowed if not nested, but a page should generally have a single h1 that describes its content."
+        explain: "MDN allows this case but recommends a single h1 describing the page content."
 
   - id: header-footer-context
     kind: concept

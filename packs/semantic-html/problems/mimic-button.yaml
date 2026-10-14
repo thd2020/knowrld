@@ -1,6 +1,6 @@
 id: mimic-button
 statement: |
-  The Mimic lurks in the Lantern Shop, dressed up as buttons. A shape that looks like a button is really a div, and a "link" goes nowhere. A mouse can still click them, but a keyboard can't reach them. A screen reader can't tell what they are. And a link to `#` breaks opening in a new tab, bookmarking and copying.
+  The Mimic disguises action controls as divs, spans and links. Unadorned divs and spans lack native button keyboard behavior. The real anchor is normally reachable as a link, but its fragment destination does not represent the intended action. Use native button semantics for these action-only controls.
 
   Unmask it. The three controls on the storm lantern's page, **Add to basket**, **Zoom in** and **Show details**, each do something on this page; none of them goes anywhere. Keep each one calling the same function, with a label that makes sense read alone. And every page of the shop repeats its header and menu, so keyboard users need a way straight past them to the main content.
 path: /lanterns/storm-lantern.html
@@ -112,8 +112,8 @@ grader:
       attr: { name: onclick, matches: '^\s*(addToBasket|zoomIn|showDetails)\s*\(\s*\)\s*;?\s*(return\s+false\s*;?\s*)?$' }
       concepts: [native-controls]
     - id: keyboard-reachable
-      says: No link or button is taken out of the keyboard's reach with a negative tabindex, inert, aria-hidden or a disabled fieldset (a duplicate link hidden from both, as in a card, is fine)
-      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *, fieldset[disabled] *):not(a[href]:not([href^="#"])[aria-hidden="true"][tabindex^="-"])'
+      says: Required controls remain in sequential keyboard navigation and exposed to assistive technology; aria-hidden affects exposure, not keyboard focus (the declared duplicate-link exception remains)
+      selector: ':is(a[href], button, input, select, textarea):is([tabindex^="-"], [inert], [inert] *, [aria-hidden="true"], [aria-hidden="true"] *, :disabled):not(a[href]:not([href^="#"])[aria-hidden="true"][tabindex^="-"])'
       count: { max: 0 }
       concepts: [native-controls, skip-links]
     - id: buttons-enabled
@@ -186,6 +186,10 @@ fixtures:
       edits:
         - find: <img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard">
           replace: <a href="/lanterns/storm-lantern.html" aria-hidden="true" tabindex="-1"><img src="/images/storm-lantern.jpg" alt="A brass lantern with a glass chimney and a wire guard"></a>
+    - name: the enabled basket button in the first legend of a disabled fieldset
+      edits:
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <fieldset disabled><legend><button type="button" onclick="addToBasket()">Add to basket</button></legend></fieldset>
   fail:
     - name: a div given a button role and a tabindex
       edits:
@@ -204,7 +208,7 @@ fixtures:
         - find: <button type="button" onclick="zoomIn()">Zoom in</button>
           replace: <a href="javascript:void(0)" onclick="zoomIn()">Zoom in</a>
       fails: [no-fake-links, zoom, same-actions]
-      because: '"javascript:" is not a URL anyone can open, bookmark or copy.'
+      because: A javascript pseudo-link is not a suitable navigable destination for this action.
     - name: the skip link after the menu
       edits:
         - find: <a href="#main-content">Skip to main content</a>
@@ -254,4 +258,26 @@ fixtures:
         - { find: '<button type="button" onclick="addToBasket()">', replace: '<fieldset disabled><button type="button" onclick="addToBasket()">' }
         - { find: 'Add to basket</button>', replace: 'Add to basket</button></fieldset>' }
       fails: [keyboard-reachable]
-      because: A disabled fieldset disables every control in it; nobody can press the button.
+      because: This control is disabled by its fieldset. Controls in the first legend can remain enabled; this button is outside that exception.
+
+    - name: the basket button in a second legend
+      edits:
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <fieldset disabled><legend>Group</legend><legend><button type="button" onclick="addToBasket()">Add to basket</button></legend></fieldset>
+      fails:
+        - keyboard-reachable
+      because: The first-legend exception does not remove the other effective disabledness affecting this control.
+    - name: the basket button in a disabled inner fieldset inside the first legend
+      edits:
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <fieldset disabled><legend><fieldset disabled><button type="button" onclick="addToBasket()">Add to basket</button></fieldset></legend></fieldset>
+      fails:
+        - keyboard-reachable
+      because: The first-legend exception does not remove the other effective disabledness affecting this control.
+    - name: the inner first legend under a disabled outer fieldset
+      edits:
+        - find: <button type="button" onclick="addToBasket()">Add to basket</button>
+          replace: <fieldset disabled><legend>Outer</legend><fieldset disabled><legend><button type="button" onclick="addToBasket()">Add to basket</button></legend></fieldset></fieldset>
+      fails:
+        - keyboard-reachable
+      because: The first-legend exception does not remove the other effective disabledness affecting this control.

@@ -362,7 +362,7 @@ fixtures:
           replace: |-
             </ul>
       fails: [one-main, main-landmark, related]
-      because: A page has one main; the related links are complementary, not main content.
+      because: This task requires one main and this variant has two unhidden mains; the related links belong in the appropriate complementary region.
     - name: the whole page inside the article
       edits:
         - { find: <main>, replace: <article class="page"><main> }

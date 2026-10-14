@@ -155,13 +155,16 @@ nodes:
     region: semantic-html
     tier: country
     requires: [landmarks, source-order]
-    intent: Replace a page of nested divs with header, nav, one main, article, sections with headings, aside and footer in a sensible source order, so every landmark is present once, keeping div only where no element fits.
+    intent: Replace a page of nested divs with header, nav, one main, article, sections with headings, aside and footer in a sensible source order, with one banner, one main without hidden and one global footer for this simple page, allowing multiple named navigation or complementary regions, keeping div only where no element fits.
     problem: div-soup-slime
     cites:
       - structuring-documents#section-tags
       - structuring-documents#main-article-section-aside
       - structuring-documents#div-warning
       - role-landmark#html-elements
+      - el-main#only-one
+      - role-contentinfo#one-per-page
+      - el-aside#usage
 
   - id: lost-signpost
     kind: problem
@@ -198,10 +201,15 @@ nodes:
     region: semantic-html
     tier: country
     requires: [links-vs-buttons, skip-links, main-element, accessibility-tree]
-    intent: Replace div and href="#" fake buttons with real buttons and add a skip link to an id on main as the first thing in body.
+    intent: Replace unadorned fake controls and action-only pseudo-links with native buttons. Add an early usable skip link to main before repeated focusable controls.
     problem: mimic-button
     cites:
       - accessible-html#div-buttons
+      - role-button#native-keys
+      - el-fieldset#disabled
+      - css-disabled#summary
+      - aria-hidden#exposure
+      - attr-tabindex#focusability
       - accessible-html#fake-button-links
       - accessible-html#skip-link
       - el-main#skip-target

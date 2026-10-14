@@ -148,7 +148,7 @@ tasks:
   - id: finding-the-mill
     concept: semantic-html-accessibility
     prompt: "Write a short guide a screen reader can navigate: a heading, “Finding the mill”, followed by its three steps in order: “Follow the river.”, “Cross the stone bridge.”, “Turn left at the oak.”"
-    cites: [accessible-html#posh, accessible-html#other-benefits]
+    cites: [accessible-html#posh, accessible-html#other-benefits, accessible-html#text-structure, accessible-html#screen-reader-navigation]
     solution:
       html: |
         <h2>Finding the mill</h2>
@@ -205,12 +205,12 @@ tasks:
         - name: the heading fixed, the breaks kept
           html: "<h1>Ferry rules</h1><p>Keep your hands inside the boat.<br><br>Pay the ferryman before you board.</p>"
           fails: [paragraphs, no-breaks]
-          because: A screen reader moves by headings and paragraphs; line breaks give it one long block instead.
+          because: Line breaks do not replace semantic paragraph structure. This task requires the two rules in separate p elements.
 
   - id: fair-questions
     concept: screen-reader-structure
     prompt: Screen reader users list this page's headings to find a question and hear only the page title. Make each question a heading under it, and leave the answers as they are.
-    cites: [accessible-html#screen-reader-navigation, accessible-html#text-structure]
+    cites: [accessible-html#screen-reader-navigation, accessible-html#text-structure, headings-and-paragraphs#hierarchy-rules]
     starter:
       html: |
         <h1>Questions about the fair</h1>
@@ -300,7 +300,7 @@ tasks:
         - name: dashes and short days
           html: "<p>Open 9am–5pm, Mon–Fri.</p>"
           fails: [days, no-dashes]
-          because: Screen readers stumble on dashes and shortened words; write ranges as from 9am to 5pm and days in full.
+          because: Expanded ranges and full day names reduce ambiguity; write ranges as from 9am to 5pm and days in full.
 
   - id: credits-last
     concept: source-order
@@ -421,7 +421,7 @@ tasks:
 
   - id: bell-not-link
     concept: links-vs-buttons
-    prompt: This link goes nowhere; it only runs a script that rings the bell. Use the element that is meant for actions.
+    prompt: This control is intended only to ring the bell, not navigate. Use the element that is meant for actions.
     cites: [accessible-html#fake-button-links, accessible-html#keyboard-default]
     starter:
       html: |
@@ -505,7 +505,7 @@ tasks:
 
   - id: skip-first
     concept: skip-links
-    prompt: The skip link sits after the menu, so keyboard users have already tabbed through everything it should let them skip. Move it to where it does its job.
+    prompt: For this placement exercise, put the skip link as the first body element, before the repeated menu controls.
     cites: [el-a#skip-link, accessible-html#skip-link]
     starter:
       html: |
@@ -529,12 +529,12 @@ tasks:
         - name: inside the header, after the title
           html: '<header><h1>Maps of the Vale</h1><a href="#main">Skip to main content</a></header><nav><a href="/">Home</a> <a href="/maps.html">Maps</a></nav><main id="main"><p>Choose a map below.</p></main>'
           fails: [first]
-          because: A skip link goes as close as possible to the opening body tag, so it is the first thing a keyboard reaches.
+          because: This exercise requires the link as the first body element; this variant puts it inside the header. The earlier nonfocusable title is not itself a Tab stop.
 
   - id: leaf-icon
     concept: text-alternatives
-    prompt: "Write the heading “Herbs of the Vale” with the decorative icon “leaf.png” in front of it. The icon adds nothing a reader needs, so screen readers should pass over it."
-    cites: [accessible-html#empty-alt]
+    prompt: "Write the heading “Herbs of the Vale” with the decorative icon “leaf.png” in front of it. The icon adds nothing a reader needs, give this ordinary noninteractive decorative image an empty alt without overriding ARIA."
+    cites: [el-img#decorative-alt, el-img#role-empty-alt, role-presentation#focus-exception, role-presentation#aria-exception]
     solution:
       html: |
         <h2><img src="leaf.png" alt=""> Herbs of the Vale</h2>
@@ -544,7 +544,7 @@ tasks:
         selector: 'img[src="leaf.png"]'
         attr: { name: alt, equals: "" }
       - id: name
-        says: The heading is announced as just its words
+        says: The decorative icon has empty alt before the heading text
         selector: 'h1, h2, h3'
         name: { matches: '^\s*Herbs of the Vale\s*$' }
     fixtures:

@@ -275,4 +275,4 @@ fixtures:
       edits:
         - { find: '<li><a href="routes.html">Routes</a></li>', replace: '<li><a href="#top">Timetables</a></li><li><a href="routes.html">Routes</a></li>' }
       fails: [no-self-link, no-self-label]
-      because: A link to this page, even to its top, reloads where the reader already is; remove it or mark it as the current page.
+      because: This top-fragment link navigates within the current page. For this menu task, remove the redundant link or mark it as the current page.

@@ -32,8 +32,8 @@ tasks:
 
   - id: swallowed-paragraph
     concept: permissive-parsing
-    prompt: Half of this page has vanished, though the browser reports no error. Find what swallowed it and fix it.
-    cites: [debugging-html#permissive, debugging-html#error-types]
+    prompt: The paragraphs on this page have vanished, though the browser reports no error. Find what swallowed it and fix it.
+    cites: [debugging-html#permissive, debugging-html#error-types, debugging-html#messages]
     starter:
       html: |
         <p class="note>Bring water.</p>
@@ -61,7 +61,7 @@ tasks:
   - id: stray-items
     concept: html-validator
     prompt: "The validator reports: Element li not allowed as child of element body. Fix the markup so that the breads are a proper list."
-    cites: [debugging-html#validator, debugging-html#line-numbers]
+    cites: [debugging-html#validator, debugging-html#line-numbers, el-li#parent]
     starter:
       html: |
         <p>Our breads:</p>
@@ -88,7 +88,7 @@ tasks:
         - name: the items wrapped in a div
           html: "<p>Our breads:</p><div><li>Rye</li><li>Spelt</li></div>"
           fails: [in-a-list]
-          because: A list item must be the child of a list, ul or ol; the validator names the element and where it sits.
+          because: A list item must be the child of ul, ol or menu; the validator names the element and where it sits.
 
   - id: duplicate-ids
     concept: html-validator

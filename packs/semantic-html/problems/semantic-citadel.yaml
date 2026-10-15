@@ -1,0 +1,1221 @@
+id: semantic-citadel
+statement: |
+  The Semantic Citadel is the last gate of the region: a small site of two pages that has fallen into ruin. Rebuild it room by room. Each stage of the siege opens only when the one before it stands.
+
+  **The home page** (`/index.html`) belongs to the Citadel's birdwatching society. It is MDN's bird watching challenge page.
+
+  - Its heading carries the dove logo, `images/dove.png`, with empty alt text, since the heading's words already name the site.
+  - Its welcome text is the main article. A sidebar holds the four favourite photos under their heading.
+  - Its credits sit in the page's footer.
+  - The photographer's notes name the birds in `images/birds/`. Picture 1 is a robin on a fence post, 2 a blue tit on a feeder, 3 a grey heron in the shallows and 4 a kingfisher on a branch. Each thumbnail (`favorite-bird-1_th.jpg` and so on) links to its full-sized picture (`favorite-bird-1.jpg`), and its alt text says which bird the link opens.
+
+  **The letter page** (`/letter.html`) is MDN's letter challenge: Dr Eleanor Gaye's reply to Eileen Dover. Mark it up as the brief asks, with these changes:
+
+  - The page is in US English. Its head holds the character set, a viewport setting, the author and the title *Awesome science application correspondence*. The style element is already in place.
+  - The letter is the page's main content. Its headings are one top level heading, the "Re:" line, and three second level headings.
+  - The sender's address is the letter's contact information. The recipient's address may go in an `address` too, as MDN's brief says. Strictly, `address` is only for the contact details of the document or article it sits in, so a paragraph with line breaks is the better choice.
+  - The names of the sender and the recipient, and the labels *Tel* and *Email*, are strong. The first address and the first date carry the class `sender-column`. The four dates are machine-readable. The five abbreviations PhD, HTML, CSS, BCE and Esq. are expanded, in the text or in a title. There are six sub- and superscripts. At least two other words carry emphasis or importance. The motto is a quotation with its citation.
+  - The semester dates, the subjects (in order of priority) and the dances (with their definitions) are lists.
+
+  **Both pages** share one site:
+
+  - Their titles put the page first and the site after: *… – The Citadel*.
+  - Each page is framed by a header at the top, holding the menu or followed straight after by it, and a footer at the bottom.
+  - The menu is the same on both pages: *Home, Get started, Photos, Gear, Forum, Letters*. It links to `index.html`, `get-started.html`, `photos.html`, `gear.html`, `forum.html` and `letter.html`, which all exist now. On each page, the link to that page itself is removed or marked as the current page.
+  - The first focusable thing on each page is a link that skips to the `main` element.
+
+  The last stage is an accessibility audit: axe-core rules run on both pages, and each one names what it tests.
+pages:
+  - id: home
+    path: /index.html
+    title: Birdwatching home page
+    starter:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Birdwatching</title>
+            <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300%7CCinzel+Decorative:700" rel="stylesheet">
+            <link href="style.css" rel="stylesheet">
+          </head>
+          <body>
+            <h1>Birdwatching</h1>
+            Home Get started Photos Gear Forum Letters
+            <h2>Welcome</h2>
+            <p>
+              Welcome to our fake birdwatching site. If this were a real site, it
+              would be the ideal place to come to learn more about birdwatching,
+              whether you are a beginner looking to learn how to get into birding, or
+              an expert wanting to share ideas, tips, and photos with other
+              like-minded people.
+            </p>
+            <p>
+              So don't waste time! Get what you need, then turn off that computer and
+              get out into the great outdoors!
+            </p>
+            <h2>Favorite photos</h2>
+            <!-- Link images here. -->
+            <p>
+              This fake website example is CC0 — any part of this code may be reused
+              in any way you wish. Original example written by Chris Mills, 2016.
+            </p>
+            <p>
+              <a href="http://game-icons.net/lorc/originals/dove.html">Dove icon</a>
+              by Lorc.
+            </p>
+          </body>
+        </html>
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width">
+            <title>Birdwatching – The Citadel</title>
+            <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300%7CCinzel+Decorative:700" rel="stylesheet">
+            <link href="style.css" rel="stylesheet">
+          </head>
+          <body>
+            <a href="#main">Skip to main content</a>
+            <header>
+              <h1><img src="images/dove.png" alt=""> Birdwatching</h1>
+              <nav>
+                <ul>
+                  <li><a href="index.html" aria-current="page">Home</a></li>
+                  <li><a href="get-started.html">Get started</a></li>
+                  <li><a href="photos.html">Photos</a></li>
+                  <li><a href="gear.html">Gear</a></li>
+                  <li><a href="forum.html">Forum</a></li>
+                  <li><a href="letter.html">Letters</a></li>
+                </ul>
+              </nav>
+            </header>
+            <main id="main">
+              <article>
+                <h2>Welcome</h2>
+                <p>
+                  Welcome to our fake birdwatching site. If this were a real site, it
+                  would be the ideal place to come to learn more about birdwatching,
+                  whether you are a beginner looking to learn how to get into birding, or
+                  an expert wanting to share ideas, tips, and photos with other
+                  like-minded people.
+                </p>
+                <p>
+                  So don't waste time! Get what you need, then turn off that computer and
+                  get out into the great outdoors!
+                </p>
+              </article>
+              <aside>
+                <h2>Favorite photos</h2>
+                <a href="images/birds/favorite-bird-1.jpg"><img src="images/birds/favorite-bird-1_th.jpg" alt="A robin on a fence post"></a>
+                <a href="images/birds/favorite-bird-2.jpg"><img src="images/birds/favorite-bird-2_th.jpg" alt="A blue tit on a feeder"></a>
+                <a href="images/birds/favorite-bird-3.jpg"><img src="images/birds/favorite-bird-3_th.jpg" alt="A grey heron in the shallows"></a>
+                <a href="images/birds/favorite-bird-4.jpg"><img src="images/birds/favorite-bird-4_th.jpg" alt="A kingfisher on a branch"></a>
+              </aside>
+            </main>
+            <footer>
+              <p>
+                This fake website example is CC0 — any part of this code may be reused
+                in any way you wish. Original example written by Chris Mills, 2016.
+              </p>
+              <p>
+                <a href="http://game-icons.net/lorc/originals/dove.html">Dove icon</a>
+                by Lorc.
+              </p>
+            </footer>
+          </body>
+        </html>
+  - id: letter
+    path: /letter.html
+    title: The letter to Eileen Dover
+    starter:
+      html: |
+        <style>
+          body {
+            font: 1.2em / 1.5 system-ui;
+          }
+          .sender-column {
+            text-align: right;
+          }
+          h1 {
+            font-size: 1.5em;
+          }
+          h2 {
+            font-size: 1.3em;
+          }
+        </style>
+
+        Home Get started Photos Gear Forum Letters
+
+        Dr. Eleanor Gaye
+        Awesome Science faculty
+        University of Awesome
+        Bobtown, CA 99999,
+        USA
+        Tel: 123-456-7890
+        Email: no_reply@example.com
+
+        20 January 2016
+
+        Miss Eileen Dover
+        4321 Cliff Top Edge
+        Dover, CT9 XXX
+        UK
+
+        Re: Eileen Dover university application
+
+        Dear Eileen,
+
+        Thank you for your recent application to join us at the University of
+        Awesome's science faculty to study as part of your
+        PhD (Doctor of Philosophy) next year. I will answer your
+        questions one by one, in the following sections.
+
+        Starting dates
+
+        We are happy to accommodate you starting your study with us at any time,
+        however it would suit us better if you could start at the beginning of a
+        semester; the start dates for each one are as follows:
+
+        First semester: 9 September 2016
+        Second semester: 15 January 2017
+        Third semester: 2 May 2017
+
+        Please let me know if this is ok, and if so which start date you would
+        prefer.
+
+        Subjects of study
+
+        At the Awesome Science Faculty, we have a pretty open-minded research
+        facility — as long as the subjects fall somewhere in the realm of science
+        and technology. You seem like an intelligent, dedicated researcher, and
+        just the kind of person we'd like to have on our team. Saying that, of the
+        ideas you submitted we were most intrigued by are as follows, in order of
+        priority:
+
+        Turning H2O into wine, and the health benefits of Resveratrol
+        (C14H12O3).
+        Measuring the effect on performance of funk bass players at temperatures
+        exceeding 30°C (86°F), when the audience size exponentially increases
+        (effect of 3 × 103 increasing to 3 × 104).
+        HTML, Hypertext Markup Language, and CSS,
+        Cascading Style Sheets, constructs for representing musical scores.
+
+        So please can you provide more information on each of these subjects,
+        including how long you'd expect the research to take, required staff and
+        other resources, and anything else you think we'd need to know? Thanks.
+
+        Exotic dance moves
+
+        Yes, you are right! As part of my post-doctorate work, I
+        did study exotic tribal dances. To answer your question, my
+        favorite dances are as follows, with definitions:
+
+        Polynesian chicken dance
+            A little known but very influential dance dating back as far as
+            300 BCE, a whole village would
+            dance around in a circle like chickens, to encourage their livestock to
+            be "fruitful".
+        Icelandic brownian shuffle
+            Before the Icelanders developed fire as a means of getting warm, they
+            used to practice this dance, which involved huddling close together in a
+            circle on the floor, and shuffling their bodies around in imperceptibly
+            tiny, very rapid movements. One of my fellow students used to say that
+            he thought this dance inspired modern styles such as Twerking.
+        Arctic robot dance
+            An interesting example of historic misinformation, English explorers in
+            the 1960s believed to have discovered a new dance style characterized by
+            "robotic", stilted movements, being practiced by inhabitants of Northern
+            Alaska and Canada. Later on however it was discovered that they were
+            just moving like this because they were really cold.
+
+        Yours sincerely,
+
+        Dr Eleanor Gaye
+
+        University of Awesome motto: Be awesome to each other. --
+        The memoirs of Bill S Preston, Esq.
+
+        This letter is kept in the archive of the Citadel.
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en-US">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width">
+            <meta name="author" content="Dr. Eleanor Gaye">
+            <title>Awesome science application correspondence – The Citadel</title>
+            <style>
+              body {
+                font: 1.2em / 1.5 system-ui;
+              }
+              .sender-column {
+                text-align: right;
+              }
+              h1 {
+                font-size: 1.5em;
+              }
+              h2 {
+                font-size: 1.3em;
+              }
+            </style>
+          </head>
+          <body>
+            <a href="#main">Skip to main content</a>
+            <header>
+              <nav>
+                <ul>
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="get-started.html">Get started</a></li>
+                  <li><a href="photos.html">Photos</a></li>
+                  <li><a href="gear.html">Gear</a></li>
+                  <li><a href="forum.html">Forum</a></li>
+                  <li><a href="letter.html" aria-current="page">Letters</a></li>
+                </ul>
+              </nav>
+            </header>
+            <main id="main">
+              <article>
+                <address class="sender-column">
+                  <strong>Dr. Eleanor Gaye</strong><br>
+                  Awesome Science faculty<br>
+                  University of Awesome<br>
+                  Bobtown, CA 99999,<br>
+                  USA<br>
+                  <strong>Tel</strong>: 123-456-7890<br>
+                  <strong>Email</strong>: no_reply@example.com
+                </address>
+                <p class="sender-column"><time datetime="2016-01-20">20 January 2016</time></p>
+                <p>
+                  <strong>Miss Eileen Dover</strong><br>
+                  4321 Cliff Top Edge<br>
+                  Dover, CT9 XXX<br>
+                  UK
+                </p>
+                <h1>Re: Eileen Dover university application</h1>
+                <p>Dear Eileen,</p>
+                <p>
+                  Thank you for your recent application to join us at the University of
+                  Awesome's science faculty to study as part of your
+                  <abbr>PhD</abbr> (Doctor of Philosophy) next year. I will answer your
+                  questions one by one, in the following sections.
+                </p>
+                <h2>Starting dates</h2>
+                <p>
+                  We are happy to accommodate you starting your study with us at any time,
+                  however it would suit us better if you could start at the beginning of a
+                  semester; the start dates for each one are as follows:
+                </p>
+                <ul>
+                  <li>First semester: <time datetime="2016-09-09">9 September 2016</time></li>
+                  <li>Second semester: <time datetime="2017-01-15">15 January 2017</time></li>
+                  <li>Third semester: <time datetime="2017-05-02">2 May 2017</time></li>
+                </ul>
+                <p>
+                  Please let me know if this is ok, and if so which start date you would
+                  prefer.
+                </p>
+                <h2>Subjects of study</h2>
+                <p>
+                  At the Awesome Science Faculty, we have a pretty open-minded research
+                  facility — as long as the subjects fall somewhere in the realm of science
+                  and technology. You seem like an intelligent, dedicated researcher, and
+                  just the kind of person we'd like to have on our team. Saying that, of the
+                  ideas you submitted we were most intrigued by are as follows, in order of
+                  priority:
+                </p>
+                <ol>
+                  <li>
+                    Turning H<sub>2</sub>O into wine, and the health benefits of Resveratrol
+                    (C<sub>14</sub>H<sub>12</sub>O<sub>3</sub>).
+                  </li>
+                  <li>
+                    Measuring the effect on performance of funk bass players at temperatures
+                    exceeding 30°C (86°F), when the audience size exponentially increases
+                    (effect of 3 × 10<sup>3</sup> increasing to 3 × 10<sup>4</sup>).
+                  </li>
+                  <li>
+                    <abbr>HTML</abbr>, Hypertext Markup Language, and <abbr>CSS</abbr>,
+                    Cascading Style Sheets, constructs for representing musical scores.
+                  </li>
+                </ol>
+                <p>
+                  So please can you provide more information on each of these subjects,
+                  including how long you'd expect the research to take, required staff and
+                  other resources, and anything else you think we'd need to know? Thanks.
+                </p>
+                <h2>Exotic dance moves</h2>
+                <p>
+                  Yes, you are right! As part of my post-doctorate work, I
+                  <em>did</em> study exotic tribal dances. To answer your question, my
+                  favorite dances are as follows, with definitions:
+                </p>
+                <dl>
+                  <dt>Polynesian chicken dance</dt>
+                  <dd>
+                    A little known but <em>very</em> influential dance dating back as far as
+                    300 <abbr title="Before Common Era">BCE</abbr>, a whole village would
+                    dance around in a circle like chickens, to encourage their livestock to
+                    be "fruitful".
+                  </dd>
+                  <dt>Icelandic brownian shuffle</dt>
+                  <dd>
+                    Before the Icelanders developed fire as a means of getting warm, they
+                    used to practice this dance, which involved huddling close together in a
+                    circle on the floor, and shuffling their bodies around in imperceptibly
+                    tiny, very rapid movements. One of my fellow students used to say that
+                    he thought this dance inspired modern styles such as Twerking.
+                  </dd>
+                  <dt>Arctic robot dance</dt>
+                  <dd>
+                    An interesting example of historic misinformation, English explorers in
+                    the 1960s believed to have discovered a new dance style characterized by
+                    "robotic", stilted movements, being practiced by inhabitants of Northern
+                    Alaska and Canada. Later on however it was discovered that they were
+                    just moving like this because they were really cold.
+                  </dd>
+                </dl>
+                <p>Yours sincerely,</p>
+                <p>Dr Eleanor Gaye</p>
+                <p>
+                  University of Awesome motto: <q>Be awesome to each other.</q> --
+                  <cite>The memoirs of Bill S Preston, <abbr title="Esquire">Esq.</abbr></cite>
+                </p>
+              </article>
+            </main>
+            <footer>
+              <p>This letter is kept in the archive of the Citadel.</p>
+            </footer>
+          </body>
+        </html>
+files:
+  - path: /style.css
+  - path: /get-started.html
+  - path: /photos.html
+  - path: /gear.html
+  - path: /forum.html
+  - path: /images/dove.png
+  - path: /images/birds/favorite-bird-1.jpg
+  - path: /images/birds/favorite-bird-1_th.jpg
+  - path: /images/birds/favorite-bird-2.jpg
+  - path: /images/birds/favorite-bird-2_th.jpg
+  - path: /images/birds/favorite-bird-3.jpg
+  - path: /images/birds/favorite-bird-3_th.jpg
+  - path: /images/birds/favorite-bird-4.jpg
+  - path: /images/birds/favorite-bird-4_th.jpg
+grader:
+  type: dom
+  stages:
+    - id: skeleton
+      title: The skeleton
+      says: Both pages stand on a full skeleton, with the metadata the browser, search engines and phones need.
+      checks:
+        - id: doctype
+          says: Each page starts with <!doctype html>
+          doctype: true
+          concepts: [document-skeleton]
+        - id: lang-home
+          says: The home page declares that it is in English
+          pages: [home]
+          selector: html
+          attr: { name: lang, matches: '^en(-[a-z]{2})?$' }
+          concepts: [document-language]
+        - id: lang-letter
+          says: The letter declares that it is in US English
+          pages: [letter]
+          selector: html
+          attr: { name: lang, matches: '^en-US$' }
+          concepts: [document-language, language-tags]
+        - id: charset
+          says: Each page declares the UTF-8 character set once, before its title
+          selector: 'head meta[charset]'
+          count: { min: 1, max: 1 }
+          attr: { name: charset, matches: '^utf-8$' }
+          precedes: title
+          concepts: [character-encoding]
+        - id: viewport
+          says: Each page sets its viewport to the device's width
+          selector: 'head meta[name="viewport" i]'
+          attr: { name: content, matches: 'width\s*=\s*device-width' }
+          concepts: [viewport-meta]
+        - id: author
+          says: The letter names its author in its metadata
+          pages: [letter]
+          selector: 'head meta[name="author" i]'
+          attr: { name: content, matches: 'Eleanor\s+Gaye' }
+          concepts: [head-and-metadata]
+        - id: title-home
+          says: The home page's title puts the page first and the site after
+          pages: [home]
+          selector: 'head title'
+          text: { matches: '^\s*(?!The Citadel)\S.*\S\s*\W\s*The Citadel\s*$' }
+          concepts: [page-title, title-quality]
+        - id: title-letter
+          says: The letter's title puts the given text first and the site after
+          pages: [letter]
+          selector: 'head title'
+          text: { matches: '^\s*Awesome science application correspondence\b.*\S.*\bThe Citadel\s*$' }
+          concepts: [page-title, title-quality]
+        - id: titles-unique
+          says: The two pages have different titles
+          selector: 'head title'
+          pooled: true
+          count: { min: 2 }
+          unique: text
+          concepts: [title-quality]
+        - id: letter-style
+          says: The letter's style element stays in its head
+          pages: [letter]
+          selector: 'head style'
+          text: { matches: '\.sender-column' }
+          concepts: [head-resources]
+        - id: stylesheet
+          says: The home page still loads its stylesheet
+          pages: [home]
+          selector: 'head link[rel~="stylesheet" i][href$="style.css"]'
+          resolves: true
+          concepts: [head-resources]
+    - id: structure
+      title: Landmarks and outline
+      says: Each page has one banner, one main and one footer, and a heading outline that never skips a level. The letter's text is marked up for what it is.
+      checks:
+        - id: banner
+          says: Each page has one header at the top level of the body
+          role: banner
+          count: { min: 1, max: 1 }
+          concepts: [header-nav-footer, header-footer-context]
+        - id: menu-in-header
+          says: The menu is a nav inside the page's header
+          selector: 'header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav'
+          count: { min: 1 }
+          concepts: [header-nav-footer, nav-element]
+        - id: one-main
+          says: Each page has exactly one main element
+          role: main
+          count: { min: 1, max: 1 }
+          concepts: [main-element, page-regions]
+        - id: contentinfo
+          says: Each page has one footer at the top level of the body
+          role: contentinfo
+          count: { min: 1, max: 1 }
+          concepts: [header-nav-footer, header-footer-context]
+        - id: order
+          says: The header comes before main, and main before the footer
+          selector: main
+          precedes: 'footer:not(:is(article, aside, main, nav, section) footer)'
+          concepts: [source-order]
+        - id: header-first
+          says: The header comes before the main content
+          selector: 'header:not(:is(article, aside, main, nav, section) header)'
+          precedes: main
+          concepts: [source-order]
+        - id: native-elements
+          says: Landmarks, headings and buttons are their own HTML elements, not other elements given their ARIA roles
+          selector: ':not(header)[role~="banner"], :not(footer)[role~="contentinfo"], :not(main)[role~="main"], :not(nav)[role~="navigation"], :not(aside)[role~="complementary"], :not(h1, h2, h3, h4, h5, h6)[role~="heading"], :not(button)[role~="button"]'
+          count: { max: 0 }
+          concepts: [landmarks, semantic-html-accessibility]
+        - id: one-h1
+          says: Each page has one top level heading
+          selector: h1
+          count: { min: 1, max: 1 }
+          concepts: [headings, heading-navigation]
+        - id: outline
+          says: Each page's headings start at level 1 and never skip a level
+          selector: body
+          outline: { start: 1 }
+          concepts: [headings, heading-navigation]
+        - id: loose-text
+          says: No text lies loose in the body or its regions
+          selector: 'body, header, nav, main, article, aside, footer, section, div'
+          every: true
+          text: { own: true, not: '\S' }
+          concepts: [why-structure, page-regions]
+        - id: home-h1
+          says: The home page's heading reads Birdwatching and holds the dove logo
+          pages: [home]
+          selector: 'header:not(:is(article, aside, main, nav, section) header) h1:has(img[src$="dove.png"])'
+          name: { matches: '^\s*Birdwatching\s*$' }
+          concepts: [headings, text-alternatives]
+        - id: logo-alt
+          says: The logo has empty alt text, since the heading already names the site
+          pages: [home]
+          selector: 'h1 img'
+          every: true
+          attr: { name: alt, equals: '' }
+          concepts: [text-alternatives]
+        - id: home-article
+          says: The welcome text is the main article
+          pages: [home]
+          selector: 'main article'
+          text: { matches: 'Welcome to our fake birdwatching site[\s\S]*great outdoors' }
+          concepts: [sectioning-elements, choosing-sections]
+        - id: home-aside
+          says: The favourite photos are a sidebar, in main or beside it, under their heading
+          pages: [home]
+          selector: 'main aside, aside:not(:is(article, aside, main, nav, section) aside)'
+          count: { min: 1, max: 1 }
+          text: { matches: 'Favou?rite photos' }
+          concepts: [sectioning-elements, choosing-sections]
+        - id: home-credits
+          says: The credits sit in the page's footer
+          pages: [home]
+          role: contentinfo
+          text: { matches: 'CC0[\s\S]*Lorc' }
+          concepts: [header-nav-footer]
+        - id: letter-in-main
+          says: The letter is the main content
+          pages: [letter]
+          selector: main
+          text: { matches: 'Eleanor Gaye[\s\S]*Dear Eileen[\s\S]*Bill S Preston' }
+          concepts: [main-element]
+        - id: letter-h1
+          says: The letter's top level heading is the "Re:" line
+          pages: [letter]
+          selector: h1
+          text: { matches: '^\s*Re:\s*Eileen Dover university application\s*$' }
+          concepts: [headings]
+        - id: letter-h2
+          says: The letter has three second level headings, one for each section
+          pages: [letter]
+          selector: 'main h2'
+          count: { min: 3, max: 3 }
+          every: true
+          text: { matches: '^\s*(Starting dates|Subjects of study|Exotic dance moves)\s*$' }
+          concepts: [headings]
+        - id: sender-address
+          says: The sender's address is the letter's contact information, one line per line, with the class sender-column
+          pages: [letter]
+          selector: 'address'
+          first: true
+          attr: { name: class, matches: '(^|\s)sender-column(\s|$)' }
+          text: { matches: '^\s*Dr\.? Eleanor Gaye[\s\S]*no_reply@example\.com\s*$' }
+          concepts: [contact-address]
+        - id: sender-lines
+          says: Each line of the sender's address is on its own line, not in its own paragraph
+          pages: [letter]
+          selector: 'address.sender-column br'
+          count: { min: 6 }
+          concepts: [contact-address, breaks-with-meaning]
+        - id: address-before-heading
+          says: The sender's address and the date come before the "Re:" heading, as in a letter
+          pages: [letter]
+          selector: 'address.sender-column'
+          precedes: h1
+          concepts: [source-order]
+        - id: recipient
+          says: The recipient's address has its lines broken, in an address or a paragraph
+          pages: [letter]
+          selector: ':is(address, p):not(.sender-column):has(br ~ br ~ br)'
+          text: { matches: '^\s*Miss Eileen Dover[\s\S]*Cliff Top Edge[\s\S]*UK\s*$' }
+          concepts: [contact-address, breaks-with-meaning]
+        - id: names-strong
+          says: The names of the sender and the recipient are marked with strong importance
+          pages: [letter]
+          selector: strong
+          count: { min: 2 }
+          text: { matches: '^\s*(Dr\.? Eleanor Gaye|Miss Eileen Dover)\s*$' }
+          concepts: [emphasis-and-importance]
+        - id: recipient-strong
+          says: The recipient's name is marked with strong importance
+          pages: [letter]
+          selector: strong
+          text: { matches: '^\s*Miss Eileen Dover\s*$' }
+          concepts: [emphasis-and-importance]
+        - id: sender-strong
+          says: The sender's name is marked with strong importance
+          pages: [letter]
+          selector: 'address strong'
+          text: { matches: '^\s*Dr\.? Eleanor Gaye\s*$' }
+          concepts: [emphasis-and-importance]
+        - id: labels
+          says: The labels Tel and Email are marked as keywords
+          pages: [letter]
+          selector: 'address :is(strong, b)'
+          count: { min: 2 }
+          text: { matches: '^\s*(Tel|Email)\s*:?\s*$' }
+          concepts: [strong-and-b]
+        - id: first-date
+          says: The first date is machine-readable and carries the class sender-column
+          pages: [letter]
+          selector: time
+          first: true
+          attr: { name: datetime, matches: '^2016-01-20$' }
+          concepts: [times-and-dates]
+        - id: first-date-column
+          says: The first date, or its paragraph, has the class sender-column
+          pages: [letter]
+          selector: 'time.sender-column, .sender-column > time'
+          attr: { name: datetime, matches: '^2016-01-20$' }
+          concepts: [times-and-dates]
+        - id: dates
+          says: The four dates are machine-readable
+          pages: [letter]
+          selector: 'time[datetime="2016-01-20"], time[datetime="2016-09-09"], time[datetime="2017-01-15"], time[datetime="2017-05-02"]'
+          count: { min: 4, max: 4 }
+          every: true
+          datetime: true
+          concepts: [times-and-dates, time-datetime]
+        - id: abbr-phd
+          says: PhD is marked up as an abbreviation
+          pages: [letter]
+          selector: abbr
+          text: { matches: '^\s*PhD\s*$' }
+          concepts: [abbreviations]
+        - id: abbr-html-css
+          says: HTML and CSS are marked up as abbreviations
+          pages: [letter]
+          selector: abbr
+          count: { min: 2 }
+          text: { matches: '^\s*(HTML|CSS)\s*$' }
+          concepts: [abbreviations]
+        - id: bce-marked
+          says: BCE is marked up as an abbreviation
+          pages: [letter]
+          selector: abbr
+          text: { matches: '^\s*BCE\s*$' }
+          concepts: [abbreviations]
+        - id: abbr-bce
+          says: BCE is expanded, in a title or in the text straight after it
+          pages: [letter]
+          selector: 'abbr:not([title*="common era" i])'
+          count: { min: 0 }
+          every: true
+          text: { following: true, matches: '^(?!\s*BCE\b)|^\s*BCE\W{0,6}(that is,?\s*|i\.?\s*e\.?,?\s*)?before (the )?common era' }
+          concepts: [abbreviations, abbr-expansion]
+        - id: esq-marked
+          says: Esq. is marked up as an abbreviation
+          pages: [letter]
+          selector: abbr
+          text: { matches: '^\s*Esq\.?\s*$' }
+          concepts: [abbreviations]
+        - id: abbr-esq
+          says: Esq. is expanded, in a title or in the text straight after it
+          pages: [letter]
+          selector: 'abbr:not([title*="esquire" i])'
+          count: { min: 0 }
+          every: true
+          text: { following: true, matches: '^(?!\s*Esq\b)|^\s*Esq\.?\W{0,6}(that is,?\s*)?esquire' }
+          concepts: [abbreviations, abbr-expansion]
+        - id: subscripts
+          says: The four subscripts in the chemical formulae are marked up
+          pages: [letter]
+          selector: sub
+          count: { min: 4, max: 4 }
+          every: true
+          text: { matches: '^\s*(2|14|12|3)\s*$' }
+          concepts: [superscript-subscript]
+        - id: superscripts
+          says: The powers of ten are superscripts
+          pages: [letter]
+          selector: sup
+          count: { min: 2, max: 2 }
+          every: true
+          text: { matches: '^\s*[34]\s*$' }
+          concepts: [superscript-subscript]
+        - id: other-emphasis
+          says: At least two other words carry emphasis or importance
+          pages: [letter]
+          selector: ':is(em, strong, b, i):not(address *, :is(address, p):has(br) > strong:first-child)'
+          count: { min: 2 }
+          concepts: [emphasis-and-importance]
+        - id: motto
+          says: The motto is a quotation
+          pages: [letter]
+          selector: 'q, blockquote'
+          text: { matches: 'Be awesome to each other' }
+          concepts: [quotations]
+        - id: motto-cite
+          says: The book the motto comes from is a citation
+          pages: [letter]
+          selector: cite
+          text: { matches: 'memoirs of Bill S Preston' }
+          concepts: [quotations, quote-attribution]
+        - id: semesters
+          says: The semester dates are a list
+          pages: [letter]
+          selector: ':is(ul, ol) > li:has(time)'
+          count: { min: 3 }
+          every: true
+          text: { matches: 'semester' }
+          concepts: [lists]
+        - id: subjects
+          says: The subjects are an ordered list, in order of priority
+          pages: [letter]
+          selector: 'ol:has(> li ~ li ~ li)'
+          text: { matches: 'wine[\s\S]*funk bass[\s\S]*musical scores' }
+          concepts: [lists, list-rules]
+        - id: subjects-items
+          says: Every item of the subjects list holds a subject
+          pages: [letter]
+          selector: 'ol > li'
+          count: { min: 3 }
+          every: true
+          text: { matches: '\w' }
+          concepts: [lists, list-rules]
+        - id: dances
+          says: The dances and their definitions are a description list
+          pages: [letter]
+          selector: 'dl:has(> dt ~ dt ~ dt)'
+          text: { matches: 'Polynesian chicken dance[\s\S]*Icelandic brownian shuffle[\s\S]*Arctic robot dance' }
+          concepts: [description-lists]
+        - id: dance-definitions
+          says: Each dance has its definition as a description
+          pages: [letter]
+          selector: 'dl > dd'
+          count: { min: 3 }
+          every: true
+          text: { matches: '\w' }
+          concepts: [description-lists]
+    - id: links
+      title: Roads between the rooms
+      says: The pages share one menu of working links, each page skips straight to its main content, and every link says where it goes.
+      checks:
+        - id: menu-list
+          says: The menu is a list of the site's six pages
+          selector: ':is(header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav) :is(ul, ol) > li'
+          count: { min: 6, max: 6 }
+          concepts: [navigation-menus, lists]
+        - id: menu-links
+          says: Every menu link leads to a page of the site
+          selector: 'nav a'
+          count: { min: 5 }
+          every: true
+          resolves: true
+          concepts: [navigation-menus, relative-paths]
+        - id: menu-to-letter
+          says: The home page's menu leads to the letter
+          pages: [home]
+          selector: 'nav a'
+          name: { matches: '^\s*Letters?\s*$' }
+          resolves: { page: letter }
+          concepts: [navigation-menus]
+        - id: menu-to-home
+          says: The letter's menu leads to the home page
+          pages: [letter]
+          selector: 'nav a'
+          name: { matches: '^\s*Home\s*$' }
+          resolves: { page: home }
+          concepts: [navigation-menus]
+        - id: menu-same
+          says: The menu offers the same pages, in the same order, on both pages
+          selector: ':is(header:not(:is(article, aside, main, nav, section) header) nav, header:not(:is(article, aside, main, nav, section) header) + nav) :is(ul, ol)'
+          pooled: true
+          count: { min: 2, max: 2 }
+          every: true
+          text: { matches: '^\s*Home\s+Get started\s+Photos\s+Gear\s+Forum\s+Letters?\s*$' }
+          concepts: [navigation-menus, information-architecture]
+        - id: home-no-self-link
+          says: On the home page, the menu does not offer a working link to the home page, unless it is marked as the current page
+          pages: [home]
+          selector: 'nav a:is([href=""], [href="#"], [href="/"], [href="./"], [href$="index.html"]):not([aria-current="page"])'
+          count: { max: 0 }
+          concepts: [navigation-menus]
+        - id: letter-no-self-link
+          says: On the letter, the menu does not offer a working link to the letter, unless it is marked as the current page
+          pages: [letter]
+          selector: 'nav a:is([href=""], [href="#"], [href$="letter.html"]):not([aria-current="page"])'
+          count: { max: 0 }
+          concepts: [navigation-menus]
+        - id: skip-link
+          says: The first focusable thing on each page skips to main
+          selector: 'body :is(a[href], button, input, select, textarea, [tabindex])'
+          first: true
+          name: { matches: 'skip|jump|main|content' }
+          resolves: { to: main }
+          concepts: [skip-links, document-fragments]
+        - id: main-id
+          says: Main has an id for the skip link to target
+          selector: main
+          attr: { name: id, matches: '\S' }
+          concepts: [main-element, skip-links]
+        - id: unique-ids
+          says: No id is used twice on a page
+          selector: '[id]'
+          count: { min: 0 }
+          unique: id
+          concepts: [document-fragments]
+        - id: thumbnails
+          says: Four thumbnails in the sidebar each link to a full-sized picture
+          pages: [home]
+          selector: 'aside a[href]:has(img[src*="_th."])'
+          count: { min: 4, max: 4 }
+          every: true
+          attr: { name: href, matches: 'favorite-bird-[1-4]\.jpg$' }
+          resolves: true
+          concepts: [hyperlinks, relative-paths]
+        - id: thumbnail-alt
+          says: Each thumbnail's alt text says which bird its link opens
+          pages: [home]
+          selector: 'aside a[href] img'
+          count: { min: 4 }
+          every: true
+          attr: { name: alt, matches: '\b(robin|blue ?tit|heron|kingfisher)\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-1-alt
+          says: The thumbnail linking to picture 1 names the robin
+          pages: [home]
+          selector: 'a[href$="favorite-bird-1.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\brobin\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-2-alt
+          says: The thumbnail linking to picture 2 names the blue tit
+          pages: [home]
+          selector: 'a[href$="favorite-bird-2.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bblue ?tit\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-3-alt
+          says: The thumbnail linking to picture 3 names the heron
+          pages: [home]
+          selector: 'a[href$="favorite-bird-3.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bheron\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-4-alt
+          says: The thumbnail linking to picture 4 names the kingfisher
+          pages: [home]
+          selector: 'a[href$="favorite-bird-4.jpg"] img'
+          every: true
+          attr: { name: alt, matches: '\bkingfisher\b' }
+          concepts: [text-alternatives]
+        - id: thumbnail-alt-distinct
+          says: No two thumbnails share alt text
+          pages: [home]
+          selector: 'aside a[href] img'
+          unique: alt
+          concepts: [text-alternatives, link-text]
+        - id: thumbnail-alt-plain
+          says: No alt text is a file name or a bare "photo"
+          pages: [home]
+          selector: 'aside a[href] img'
+          every: true
+          name: { not: '\.(jpe?g|png)\b|favorite-bird|^\W*(image|photo|picture|thumbnail|link)\W*$' }
+          concepts: [text-alternatives]
+        - id: link-text
+          says: Every link's text makes sense on its own
+          selector: 'a[href]'
+          every: true
+          name: { matches: '\w', not: '^\W*(click here|here|link|more|read more)\W*$' }
+          concepts: [link-text]
+    - id: audit
+      title: The audit
+      says: An accessibility audit with axe-core finds nothing wrong on either page.
+      checks:
+        - id: axe-regions
+          says: All content sits inside a landmark
+          axe: [region]
+          concepts: [landmarks, source-order]
+        - id: axe-main
+          says: Each page has one main landmark
+          axe: [landmark-one-main, landmark-no-duplicate-main]
+          concepts: [main-element]
+        - id: axe-landmarks
+          says: Landmarks are unique, with one banner and one content-info region
+          axe: [landmark-unique, landmark-no-duplicate-banner, landmark-no-duplicate-contentinfo]
+          concepts: [landmarks, nav-element]
+        - id: axe-top-level
+          says: The banner and content-info landmarks are not nested in other landmarks
+          axe: [landmark-banner-is-top-level, landmark-contentinfo-is-top-level]
+          concepts: [header-footer-context]
+        - id: axe-headings
+          says: Each page has a top level heading and its heading levels go down one at a time
+          axe: [heading-order, page-has-heading-one]
+          concepts: [heading-navigation, headings]
+        - id: axe-images
+          says: Every image has alt text
+          axe: [image-alt]
+          concepts: [text-alternatives]
+        - id: axe-link-names
+          says: Every link has a name
+          axe: [link-name]
+          concepts: [link-text, text-alternatives]
+        - id: axe-buttons
+          says: Every button has a name
+          axe: [button-name]
+          concepts: [links-vs-buttons]
+        - id: axe-language
+          says: Each page has a valid language
+          axe: [html-has-lang, html-lang-valid, valid-lang]
+          concepts: [document-language, language-tags]
+        - id: axe-title
+          says: Each page has a title
+          axe: [document-title]
+          concepts: [page-title]
+        - id: axe-viewport
+          says: The viewport lets readers zoom
+          axe: [meta-viewport]
+          concepts: [viewport-meta]
+        - id: axe-bypass
+          says: Readers can skip the repeated content
+          axe: [bypass]
+          concepts: [skip-links]
+        - id: axe-lists
+          says: Lists hold only list items, and description lists only terms and descriptions
+          axe: [list, listitem, definition-list, dlitem]
+          concepts: [lists, list-rules, description-lists]
+        - id: axe-wcag
+          says: The rest of axe-core's WCAG 2 A and AA rules pass (colour contrast is left to the CSS region)
+          axe:
+            - area-alt
+            - aria-allowed-attr
+            - aria-braille-equivalent
+            - aria-command-name
+            - aria-conditional-attr
+            - aria-deprecated-role
+            - aria-hidden-body
+            - aria-hidden-focus
+            - aria-input-field-name
+            - aria-meter-name
+            - aria-progressbar-name
+            - aria-prohibited-attr
+            - aria-required-attr
+            - aria-required-children
+            - aria-required-parent
+            - aria-roles
+            - aria-tab-name
+            - aria-toggle-field-name
+            - aria-tooltip-name
+            - aria-valid-attr-value
+            - aria-valid-attr
+            - blink
+            - duplicate-id-aria
+            - form-field-multiple-labels
+            - frame-focusable-content
+            - frame-title-unique
+            - frame-title
+            - html-xml-lang-mismatch
+            - input-button-name
+            - input-image-alt
+            - label
+            - link-in-text-block
+            - marquee
+            - meta-refresh
+            - nested-interactive
+            - no-autoplay-audio
+            - object-alt
+            - role-img-alt
+            - scrollable-region-focusable
+            - select-name
+            - server-side-image-map
+            - summary-name
+            - svg-img-alt
+            - td-headers-attr
+            - th-has-data-cells
+            - video-caption
+          concepts: [semantic-html-accessibility, accessibility-tree]
+fixtures:
+  pass:
+    - name: the recipient in an address as MDN's brief has it, b for the labels, a blockquote for the motto
+      pages:
+        letter:
+          edits:
+            - find: |-
+                <p>
+                      <strong>Miss Eileen Dover</strong><br>
+                      4321 Cliff Top Edge<br>
+                      Dover, CT9 XXX<br>
+                      UK
+                    </p>
+              replace: |-
+                <address>
+                      <strong>Miss Eileen Dover</strong><br>
+                      4321 Cliff Top Edge<br>
+                      Dover, CT9 XXX<br>
+                      UK
+                    </address>
+            - { find: <strong>Tel</strong>, replace: <b>Tel</b> }
+            - { find: <strong>Email</strong>, replace: <b>Email</b> }
+            - find: |-
+                <p>
+                      University of Awesome motto: <q>Be awesome to each other.</q> --
+                      <cite>The memoirs of Bill S Preston, <abbr title="Esquire">Esq.</abbr></cite>
+                    </p>
+              replace: |-
+                <p>University of Awesome motto:</p>
+                    <blockquote>
+                      <p>Be awesome to each other.</p>
+                    </blockquote>
+                    <p><cite>The memoirs of Bill S Preston, <abbr title="Esquire">Esq.</abbr></cite></p>
+    - name: the current page left out of the menu as plain text, the skip link inside the header, sections in the letter
+      pages:
+        home:
+          edits:
+            - { find: '<li><a href="index.html" aria-current="page">Home</a></li>', replace: '<li>Home</li>' }
+            - { find: '<a href="#main">Skip to main content</a>', replace: '' }
+            - { find: '<header>', replace: "<header>\n      <a href=\"#main\">Skip to main content</a>" }
+        letter:
+          edits:
+            - { find: '<li><a href="letter.html" aria-current="page">Letters</a></li>', replace: '<li>Letters</li>' }
+            - { find: '<h2>Starting dates</h2>', replace: "<section>\n<h2>Starting dates</h2>" }
+            - { find: '<h2>Subjects of study</h2>', replace: "</section>\n<section>\n<h2>Subjects of study</h2>" }
+            - { find: '<h2>Exotic dance moves</h2>', replace: "</section>\n<section>\n<h2>Exotic dance moves</h2>" }
+            - { find: '<p>Yours sincerely,</p>', replace: "</section>\n<p>Yours sincerely,</p>" }
+    - name: the class on the date itself, abbreviations with titles everywhere, the thumbnails in a list, root-relative links
+      pages:
+        home:
+          edits:
+            - find: <a href="images/birds/favorite-bird-1.jpg"><img src="images/birds/favorite-bird-1_th.jpg" alt="A robin on a fence post"></a>
+              replace: <ul><li><a href="/images/birds/favorite-bird-1.jpg"><img src="/images/birds/favorite-bird-1_th.jpg" alt="Robin on a fence post"></a></li>
+            - find: <a href="images/birds/favorite-bird-2.jpg"><img src="images/birds/favorite-bird-2_th.jpg" alt="A blue tit on a feeder"></a>
+              replace: <li><a href="/images/birds/favorite-bird-2.jpg"><img src="/images/birds/favorite-bird-2_th.jpg" alt="Blue tit on a feeder"></a></li>
+            - find: <a href="images/birds/favorite-bird-3.jpg"><img src="images/birds/favorite-bird-3_th.jpg" alt="A grey heron in the shallows"></a>
+              replace: <li><a href="/images/birds/favorite-bird-3.jpg"><img src="/images/birds/favorite-bird-3_th.jpg" alt="Grey heron fishing in the shallows"></a></li>
+            - find: <a href="images/birds/favorite-bird-4.jpg"><img src="images/birds/favorite-bird-4_th.jpg" alt="A kingfisher on a branch"></a>
+              replace: <li><a href="/images/birds/favorite-bird-4.jpg"><img src="/images/birds/favorite-bird-4_th.jpg" alt="Kingfisher on a branch"></a></li></ul>
+            - { find: '<a href="letter.html">Letters</a>', replace: '<a href="/letter.html">Letters</a>' }
+        letter:
+          edits:
+            - find: <p class="sender-column"><time datetime="2016-01-20">20 January 2016</time></p>
+              replace: <p><time class="sender-column" datetime="2016-01-20">20 January 2016</time></p>
+            - { find: <abbr>PhD</abbr>, replace: <abbr title="Doctor of Philosophy">PhD</abbr> }
+            - { find: <abbr>HTML</abbr>, replace: <abbr title="Hypertext Markup Language">HTML</abbr> }
+            - { find: <abbr>CSS</abbr>, replace: <abbr title="Cascading Style Sheets">CSS</abbr> }
+            - { find: '<a href="index.html">Home</a>', replace: '<a href="/">Home</a>' }
+    - name: both pages wrapped in a page-width div, the home title led by "Home", BCE and Esq. expanded in the text
+      pages:
+        home:
+          edits:
+            - { find: "<body>", replace: "<body><div class=\"page-width\">" }
+            - { find: "</body>", replace: "</div></body>" }
+            - { find: "<title>Birdwatching – The Citadel</title>", replace: "<title>Home – The Citadel</title>" }
+        letter:
+          edits:
+            - { find: "<body>", replace: "<body><div class=\"page-width\">" }
+            - { find: "</body>", replace: "</div></body>" }
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr> (Before Common Era)" }
+            - { find: '<abbr title="Esquire">Esq.</abbr>', replace: "<abbr>Esq.</abbr> (Esquire)" }
+    - name: a site-map nav in each footer, and the menu straight after the header
+      pages:
+        home:
+          edits:
+            - { find: "<footer>", replace: "<footer><nav aria-label=\"Site map\"><ul><li><a href=\"gear.html\">Gear</a></li></ul></nav>" }
+        letter:
+          edits:
+            - { find: "<footer>", replace: "<footer><nav aria-label=\"Site map\"><ul><li><a href=\"gear.html\">Gear</a></li></ul></nav>" }
+    - name: BCE's expansion in italics after it
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr> (<i>before the Common Era</i>)" }
+  fail:
+    - name: the header inside main on the home page
+      pages:
+        home:
+          edits:
+            - { find: '<main id="main">', replace: '' }
+            - { find: '<header>', replace: "<main id=\"main\">\n<header>" }
+      fails: [banner, menu-in-header, header-first]
+      because: A header inside main is not the page's banner, so the page loses its top landmark, and the skip link no longer skips the menu.
+    - name: a heading level skipped in the letter
+      pages:
+        letter:
+          edits:
+            - { find: <h2>Starting dates</h2>, replace: <h3>Starting dates</h3> }
+      fails: [outline, letter-h2, axe-headings]
+      because: The letter's sections are second level; jumping from h1 to h3 breaks the outline screen reader users navigate by.
+    - name: the menu left as dummy links to "#"
+      pages:
+        home:
+          edits:
+            - { find: '<a href="get-started.html">', replace: '<a href="#">' }
+            - { find: '<a href="photos.html">', replace: '<a href="#">' }
+      fails: [menu-links]
+      because: The Citadel's other rooms exist now, so the menu must lead to them.
+    - name: thumbnails with empty alt text
+      pages:
+        home:
+          edits:
+            - { find: alt="A robin on a fence post", replace: alt="" }
+      fails: [thumbnail-alt, axe-link-names, link-text]
+      because: The image is all the link holds, so without alt text the link has no name at all.
+    - name: the letter's language left out
+      pages:
+        letter:
+          edits: [{ find: <html lang="en-US">, replace: <html> }]
+      fails: [lang-letter, axe-language]
+      because: Without a lang attribute, screen readers guess which language to read the letter in.
+    - name: both pages titled the same
+      pages:
+        letter:
+          edits:
+            - find: <title>Awesome science application correspondence – The Citadel</title>
+              replace: <title>Birdwatching – The Citadel</title>
+      fails: [title-letter, titles-unique]
+      because: A title names its own page; two pages with one title look alike in tabs, bookmarks and search results.
+    - name: no skip link on the letter
+      pages:
+        letter:
+          edits: [{ find: <a href="#main">Skip to main content</a>, replace: '' }]
+      fails: [skip-link]
+      because: Keyboard users would have to tab through the whole menu on every page.
+    - name: the recipient's address split into paragraphs
+      pages:
+        letter:
+          edits:
+            - find: |-
+                <p>
+                      <strong>Miss Eileen Dover</strong><br>
+                      4321 Cliff Top Edge<br>
+                      Dover, CT9 XXX<br>
+                      UK
+                    </p>
+              replace: |-
+                <p><strong>Miss Eileen Dover</strong></p>
+                    <p>4321 Cliff Top Edge</p>
+                    <p>Dover, CT9 XXX</p>
+                    <p>UK</p>
+      fails: [recipient]
+      because: Each line of an address sits on a new line, not in a new paragraph.
+    - name: the subjects as an unordered list
+      pages:
+        letter:
+          edits:
+            - { find: "<ol>\n", replace: "<ul>\n" }
+            - { find: "</ol>", replace: "</ul>" }
+      fails: [subjects]
+      because: The subjects come in order of priority, so the order matters and the list is ordered.
+    - name: the thumbnails' alt texts name the wrong birds
+      pages:
+        home:
+          edits:
+            - { find: 'alt="A blue tit on a feeder"', replace: 'alt="A robin, second view"' }
+            - { find: 'alt="A grey heron in the shallows"', replace: 'alt="A robin, third view"' }
+      fails: [thumbnail-2-alt, thumbnail-3-alt]
+      because: Alt text on a linked image says where the link goes, so it must name the bird that picture shows.
+    - name: the letter's header and footer as divs with ARIA roles
+      pages:
+        letter:
+          edits:
+            - { find: "<header>", replace: "<div role=\"banner\">" }
+            - { find: "</header>", replace: "</div>" }
+            - { find: "<footer>", replace: "<div role=\"contentinfo\">" }
+            - { find: "</footer>", replace: "</div>" }
+      fails: [menu-in-header, header-first, native-elements]
+      because: Every landmark role has its own HTML element, and the region teaches the element, not the role.
+    - name: BCE and Esq. left unexpanded inside spans
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <span><abbr>BCE</abbr></span>" }
+            - { find: '<abbr title="Esquire">Esq.</abbr>', replace: "<span><abbr>Esq.</abbr></span>" }
+      fails: [abbr-bce, abbr-esq]
+      because: Wrapping an abbreviation in a span expands nothing; the expansion has to be in a title or in the text beside it.
+    - name: an empty item padding the subjects list
+      pages:
+        letter:
+          edits:
+            - { find: "Turning H<sub>2</sub>O into wine", replace: "</li><li>Turning H<sub>2</sub>O into wine" }
+      fails: [subjects-items]
+      because: Each item of a list is one of the things listed; an empty item lists nothing.
+    - name: BCE left bare, its expansion dropped into another paragraph
+      pages:
+        letter:
+          edits:
+            - { find: '300 <abbr title="Before Common Era">BCE</abbr>', replace: "300 <abbr>BCE</abbr>" }
+            - { find: "<abbr>PhD</abbr>", replace: "<abbr>PhD</abbr> (before the Common Era)" }
+      fails: [abbr-bce]
+      because: An expansion explains the abbreviation it stands beside, not one in another paragraph.

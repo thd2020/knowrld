@@ -1,0 +1,433 @@
+# Writing tasks for the road, part 3: page structure.
+tasks:
+  - id: smithy-regions
+    concept: page-regions
+    prompt: "Write the three regions of the smithy's page: an introduction holding its name, “The Hollow Oak Smithy”, as the top heading; the content unique to this page, a paragraph “Horseshoes made while you wait.”; and a closing region with “© The Hollow Oak Smithy”."
+    cites: [structuring-documents#common-components, structuring-documents#section-tags]
+    solution:
+      html: |
+        <header>
+          <h1>The Hollow Oak Smithy</h1>
+        </header>
+        <main>
+          <p>Horseshoes made while you wait.</p>
+        </main>
+        <footer>
+          <p>© The Hollow Oak Smithy</p>
+        </footer>
+    checks:
+      - id: header
+        says: The name is a heading inside the page's header
+        selector: 'header h1'
+        text: { matches: 'Hollow Oak Smithy' }
+      - id: main
+        says: The page's own content is in main
+        selector: main
+        count: { min: 1, max: 1 }
+        text: { matches: 'Horseshoes' }
+      - id: footer
+        says: The copyright line is in the footer
+        selector: footer
+        text: { matches: '©' }
+    fixtures:
+      fail:
+        - name: divs with class names
+          html: '<div class="header"><h1>The Hollow Oak Smithy</h1></div><div class="main"><p>Horseshoes made while you wait.</p></div><div class="footer"><p>© The Hollow Oak Smithy</p></div>'
+          fails: [header, main, footer]
+          because: A class name means nothing to a screen reader; header, main and footer say what each region is.
+
+  - id: nameless-content
+    concept: page-regions
+    prompt: The page's own content sits in a nameless div between the header and the footer. Give it the element that says it is this page's main content.
+    cites: [structuring-documents#functionality, structuring-documents#section-tags]
+    starter:
+      html: |
+        <header><h1>The Hollow Oak Smithy</h1></header>
+        <div>
+          <h2>Horseshoes</h2>
+          <p>Made while you wait.</p>
+        </div>
+        <footer><p>© The Hollow Oak Smithy</p></footer>
+    solution:
+      html: |
+        <header><h1>The Hollow Oak Smithy</h1></header>
+        <main>
+          <h2>Horseshoes</h2>
+          <p>Made while you wait.</p>
+        </main>
+        <footer><p>© The Hollow Oak Smithy</p></footer>
+    checks:
+      - id: main
+        says: The horseshoe content is the page's main content
+        selector: main
+        count: { min: 1, max: 1 }
+        text: { matches: 'Horseshoes' }
+      - id: outside
+        says: The header and footer stay outside it
+        selector: 'main :is(header, footer)'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the div given a main class
+          edits: [{ find: "<main>", replace: '<div class="main">' }, { find: "</main>", replace: "</div>" }]
+          fails: [main]
+          because: The main element marks a page's own content; a class is invisible to assistive technology.
+
+  - id: two-recipes
+    concept: sectioning-elements
+    prompt: "The page holds two recipes, each of which would make sense on its own if another site shared it: “Barley soup” (“Simmer barley with leeks.”) and “Oat cakes” (“Bake oats with honey.”). Write them, each with its heading, inside the page's main content."
+    cites: [structuring-documents#main-article-section-aside, el-section#summary]
+    solution:
+      html: |
+        <main>
+          <article>
+            <h2>Barley soup</h2>
+            <p>Simmer barley with leeks.</p>
+          </article>
+          <article>
+            <h2>Oat cakes</h2>
+            <p>Bake oats with honey.</p>
+          </article>
+        </main>
+    checks:
+      - id: articles
+        says: Each recipe is an article
+        selector: 'main article'
+        count: { min: 2, max: 2 }
+      - id: headed
+        says: Each article has its heading
+        selector: article
+        every: true
+        count: { min: 2 }
+        within: main
+        text: { matches: '(Barley soup|Oat cakes)' }
+      - id: headings
+        says: The recipe names are headings
+        selector: 'article :is(h2, h3)'
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: sections instead of articles
+          html: "<main><section><h2>Barley soup</h2><p>Simmer barley with leeks.</p></section><section><h2>Oat cakes</h2><p>Bake oats with honey.</p></section></main>"
+          fails: [articles, headed]
+          because: Content that stands on its own, and could be shared elsewhere, is an article; a section is a part of something larger.
+
+  - id: mill-aside
+    concept: sectioning-elements
+    prompt: "Write the page's main content, a paragraph “The mill has turned since 1702.”, and beside it a box of related notes, “The river also feeds the tannery.”, that is only indirectly related to it."
+    cites: [structuring-documents#main-article-section-aside, el-main#only-one]
+    solution:
+      html: |
+        <main>
+          <p>The mill has turned since 1702.</p>
+          <aside>
+            <p>The river also feeds the tannery.</p>
+          </aside>
+        </main>
+    checks:
+      - id: main
+        says: The mill paragraph is in main
+        selector: main
+        text: { matches: 'The mill has turned' }
+      - id: aside
+        says: The related note is an aside
+        selector: aside
+        text: { matches: 'tannery' }
+      - id: one-main
+        says: There is one main
+        selector: main
+        count: { max: 1 }
+    fixtures:
+      fail:
+        - name: the note as a second main
+          html: "<main><p>The mill has turned since 1702.</p></main><main><p>The river also feeds the tannery.</p></main>"
+          fails: [aside, one-main]
+          because: This task has two mains without hidden; at most one is allowed. The indirectly related note belongs in an aside.
+
+  - id: kettle-header
+    concept: header-nav-footer
+    prompt: "These lines are the top, content and bottom of the Copper Kettle's page. Mark up its introductory header, which includes the site's main navigation, its main content and its footer."
+    cites: [structuring-documents#header-nav-footer, el-nav#summary]
+    starter:
+      html: |
+        <h1>The Copper Kettle</h1>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/menu.html">Menu</a></li>
+        </ul>
+        <p>Soup of the day: leek.</p>
+        <p>© The Copper Kettle</p>
+    solution:
+      html: |
+        <header>
+          <h1>The Copper Kettle</h1>
+          <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/menu.html">Menu</a></li>
+            </ul>
+          </nav>
+        </header>
+        <main>
+          <p>Soup of the day: leek.</p>
+        </main>
+        <footer>
+          <p>© The Copper Kettle</p>
+        </footer>
+    checks:
+      - id: header
+        says: The name is in the header
+        selector: 'header h1'
+        text: { matches: 'Copper Kettle' }
+      - id: nav
+        says: The menu is a nav holding both links
+        selector: 'nav a'
+        count: { min: 2, max: 2 }
+      - id: main
+        says: The soup is the main content
+        selector: main
+        text: { matches: 'Soup of the day' }
+      - id: footer
+        says: The copyright line is the footer
+        selector: footer
+        text: { matches: '©' }
+    fixtures:
+      pass:
+        - name: the nav after the header
+          html: '<header><h1>The Copper Kettle</h1></header><nav><ul><li><a href="/">Home</a></li><li><a href="/menu.html">Menu</a></li></ul></nav><main><p>Soup of the day: leek.</p></main><footer><p>© The Copper Kettle</p></footer>'
+      fail:
+        - name: the menu left as a plain list
+          html: '<header><h1>The Copper Kettle</h1><ul><li><a href="/">Home</a></li><li><a href="/menu.html">Menu</a></li></ul></header><main><p>Soup of the day: leek.</p></main><footer><p>© The Copper Kettle</p></footer>'
+          fails: [nav]
+          because: The site's main navigation links go in a nav, so screen reader users can find them as a landmark.
+
+  - id: shared-footer
+    concept: header-nav-footer
+    prompt: "Write the closing region that ends every page of the site: “© The Copper Kettle” and, on its own line below, “Open daily from noon.”"
+    cites: [structuring-documents#header-nav-footer]
+    solution:
+      html: |
+        <footer>
+          <p>© The Copper Kettle</p>
+          <p>Open daily from noon.</p>
+        </footer>
+    checks:
+      - id: footer
+        says: Both lines are in a footer
+        selector: footer
+        text: { matches: '©[\s\S]*Open daily from noon' }
+    fixtures:
+      fail:
+        - name: a header at the bottom
+          html: "<header><p>© The Copper Kettle</p><p>Open daily from noon.</p></header>"
+          fails: [footer]
+          because: The region that closes the page, with its copyright and small print, is the footer.
+
+  - id: pet-name
+    concept: non-semantic-wrappers
+    prompt: "Write “The cat's name is Ember.” and wrap “Ember” so the stylesheet can colour it with the class “pet-name”. Nothing about the word has a special meaning."
+    cites: [structuring-documents#non-semantic, structuring-documents#span]
+    solution:
+      html: |
+        <p>The cat's name is <span class="pet-name">Ember</span>.</p>
+    checks:
+      - id: hook
+        says: Ember is wrapped in a span with the class
+        selector: span.pet-name
+        text: { matches: '^\s*Ember\s*$' }
+      - id: no-meaning
+        says: No element claims a meaning the word does not have
+        selector: 'p :is(strong, em, b, i, mark)'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: a strong as a style hook
+          html: '<p>The cat''s name is <strong class="pet-name">Ember</strong>.</p>'
+          fails: [hook, no-meaning]
+          because: When nothing about a word's meaning fits an element, the style hook is a span, which adds no meaning.
+
+  - id: card-wrapper
+    concept: non-semantic-wrappers
+    prompt: "Group these two paragraphs in one block with the class “card” so the stylesheet can draw a box around them. They have no shared meaning beyond that."
+    cites: [structuring-documents#div, structuring-documents#non-semantic]
+    starter:
+      html: |
+        <p>Open dawn to dusk.</p>
+        <p>Two copper a loaf.</p>
+    solution:
+      html: |
+        <div class="card">
+          <p>Open dawn to dusk.</p>
+          <p>Two copper a loaf.</p>
+        </div>
+    checks:
+      - id: card
+        says: Both paragraphs are inside a div with the class card
+        selector: 'div.card > p'
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: a span around the paragraphs
+          html: '<span class="card"><p>Open dawn to dusk.</p><p>Two copper a loaf.</p></span>'
+          fails: [card]
+          because: A span is inline; a block of content with no better element is wrapped in a div.
+
+  - id: div-menu
+    concept: non-semantic-wrappers
+    prompt: This page wraps everything in divs. Replace the div that holds the site's main navigation links with the element made for it.
+    cites: [structuring-documents#div-warning, el-nav#summary]
+    starter:
+      html: |
+        <div class="menu">
+          <a href="/">Home</a>
+          <a href="/tales.html">Tales</a>
+        </div>
+    solution:
+      html: |
+        <nav class="menu">
+          <a href="/">Home</a>
+          <a href="/tales.html">Tales</a>
+        </nav>
+    checks:
+      - id: nav
+        says: The links are in a nav
+        selector: 'nav a'
+        count: { min: 2, max: 2 }
+      - id: no-div
+        says: No div is left around them
+        selector: 'div a'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: a div with a navigation role name as class
+          html: '<div class="nav"><a href="/">Home</a><a href="/tales.html">Tales</a></div>'
+          fails: [nav, no-div]
+          because: Divs carry no meaning and clutter the page; a block of main navigation links is a nav.
+
+  - id: letter-address
+    concept: breaks-and-rules
+    prompt: "Write the address on the letter as one paragraph with each part on its own short line: “Wren Thatcher”, “The Old Mill”, “River Road”."
+    cites: [structuring-documents#br, el-br#summary]
+    solution:
+      html: |
+        <p>Wren Thatcher<br>The Old Mill<br>River Road</p>
+    checks:
+      - id: one
+        says: The address is one paragraph
+        selector: p
+        count: { min: 1, max: 1 }
+        text: { matches: 'Wren Thatcher.*Old Mill.*River Road' }
+      - id: lines
+        says: Line breaks separate its three lines
+        selector: 'p br'
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: three paragraphs
+          html: "<p>Wren Thatcher</p><p>The Old Mill</p><p>River Road</p>"
+          fails: [one, lines]
+          because: The lines of an address are one unit with fixed short lines; br breaks the line inside one paragraph.
+
+  - id: scene-change
+    concept: breaks-and-rules
+    prompt: "Write two paragraphs of a story, “The lamps went out.” and “Morning came grey and cold.”, with a thematic break between them, where the scene changes."
+    cites: [structuring-documents#hr]
+    solution:
+      html: |
+        <p>The lamps went out.</p>
+        <hr>
+        <p>Morning came grey and cold.</p>
+    checks:
+      - id: break
+        says: A thematic break separates the two paragraphs
+        selector: p
+        text: { matches: 'lamps went out' }
+        next: [{ is: hr }, { is: p, text: { matches: 'Morning came' } }]
+    fixtures:
+      fail:
+        - name: empty lines instead
+          html: "<p>The lamps went out.</p><br><br><p>Morning came grey and cold.</p>"
+          fails: [break]
+          because: A change of topic or scene is a thematic break, hr; blank lines carry no meaning.
+
+  - id: every-page
+    concept: information-architecture
+    prompt: "The bakery's sitemap has three pages: “Home” (/), “Breads” (“/breads.html”) and “Visit” (“/visit.html”). Write the parts every page shares: a header with the name “The Rye Loaf”, a navigation menu to the three pages, and a footer with “© The Rye Loaf”."
+    cites: [structuring-documents#common-to-every-page, structuring-documents#sitemap]
+    solution:
+      html: |
+        <header>
+          <h1>The Rye Loaf</h1>
+          <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/breads.html">Breads</a></li>
+              <li><a href="/visit.html">Visit</a></li>
+            </ul>
+          </nav>
+        </header>
+        <footer><p>© The Rye Loaf</p></footer>
+    checks:
+      - id: name
+        says: The bakery's name is in the header
+        selector: header
+        text: { matches: 'The Rye Loaf' }
+      - id: menu
+        says: The menu links to all three pages
+        selector: 'nav a[href]'
+        count: { min: 3, max: 3 }
+      - id: pages
+        says: Each menu link goes to one of the site's pages
+        selector: 'nav a[href]'
+        every: true
+        attr: { name: href, matches: '^(/|/breads\.html|/visit\.html)$' }
+      - id: footer
+        says: The footer carries the copyright line
+        selector: footer
+        text: { matches: '©' }
+    fixtures:
+      fail:
+        - name: the menu without the home page
+          html: '<header><h1>The Rye Loaf</h1><nav><ul><li><a href="/breads.html">Breads</a></li><li><a href="/visit.html">Visit</a></li></ul></nav></header><footer><p>© The Rye Loaf</p></footer>'
+          fails: [menu]
+          because: The navigation menu is common to every page and leads to each page of the sitemap, the home page included.
+
+  - id: sort-the-goods
+    concept: information-architecture
+    prompt: "Sort the bakery's goods into two groups, as a list of groups each with its own list: “Breads” (“rye”, “spelt”) and “Cakes” (“honey cake”, “plum tart”)."
+    cites: [structuring-documents#sort-into-groups]
+    solution:
+      html: |
+        <ul>
+          <li>Breads
+            <ul>
+              <li>rye</li>
+              <li>spelt</li>
+            </ul>
+          </li>
+          <li>Cakes
+            <ul>
+              <li>honey cake</li>
+              <li>plum tart</li>
+            </ul>
+          </li>
+        </ul>
+    checks:
+      - id: groups
+        says: There are two groups
+        selector: ':is(ul, ol):not(li *) > li'
+        count: { min: 2, max: 2 }
+      - id: breads
+        says: Rye and spelt are in the Breads group
+        selector: 'li'
+        text: { matches: '^\s*Breads\s+rye\s+spelt\s*$' }
+      - id: cakes
+        says: Honey cake and plum tart are in the Cakes group
+        selector: 'li'
+        text: { matches: '^\s*Cakes\s+honey cake\s+plum tart\s*$' }
+    fixtures:
+      fail:
+        - name: one flat list
+          html: "<ul><li>Breads</li><li>rye</li><li>spelt</li><li>Cakes</li><li>honey cake</li><li>plum tart</li></ul>"
+          fails: [groups, breads, cakes]
+          because: Items that belong together are grouped, with each group's items in a list nested under it.

@@ -8,6 +8,8 @@ my-pack/
   sources/*.yaml   official sources and the excerpts cut from them
   graph/*.yaml     nodes: concepts, problems and projects
   problems/*.yaml  what a problem asks, its starter code, a reference solution and its checks
+  write/*.yaml     optional: short writing tasks the concepts' characters set
+  fog.yaml         optional: pages around the region, listed but not taught
 ```
 
 ## Manifest
@@ -22,9 +24,58 @@ Each source records its title, URL, publisher, SPDX licence, retrieval date and,
 
 Every node belongs to a region, lists the nodes it requires, and cites at least one excerpt as `source-id#excerpt-id`. Each node is carried by an inhabitant of the world. A concept is taught by a character, who says one line in their own voice, quotes the cited excerpts, and asks retrieval questions. A problem is a creature that the player defeats by solving it. A project is a boss, and each region should end in one.
 
+A node may carry an optional `tier`: `road` for the region's core curriculum pages, `country` for the reference pages one link away from them. Packs without tiers treat every node as road.
+
+A problem or project node may carry a one-line `intent` and `planned: true`. A planned node whose problem file does not exist yet gives a warning instead of an error, so a graph can be drafted before its graders are written. Once the problem file exists, drop `planned`.
+
+## Fog
+
+`fog.yaml` lists pages a region names but does not quote, drawn as fog at its edge. Each entry has the page's `slug`, `title`, `url`, `region` and a `tier`: `country` for a page one link from the road that belongs to the region but has no excerpt, `wilderness` for a page further out. A wilderness page may name its `home`, the later region it belongs to (for example `forms` or `tables`). Fog pages have no characters and no excerpts; they only mark what lies around the taught ground.
+
 ## Problems
 
-A problem gives a statement, starter code, a reference solution and a grader. Graders are declarative, so a pack carries data and never code. A DOM check selects elements with a CSS selector and asserts one or more of: a count range, an attribute that is present, equal to a value or matching a pattern, text that matches or must not match a pattern, a computed style, placement inside an ancestor, or the document's doctype. With `every: true` the assertion must hold for every selected element. The reference solution must pass every check and the starter code must fail at least one.
+A problem gives a statement, starter code, a reference solution and a grader. Graders are declarative, so a pack carries data and never code. The reference solution must pass every check and the starter code must fail at least one.
+
+### Checks
+
+A DOM check first selects elements, then asserts something about them.
+
+- **Selecting.** `selector` is a CSS selector. `within` keeps elements inside an ancestor matching another selector. `role` keeps elements whose computed ARIA role (implicit, as HTML-AAM maps it, or explicit) is the given one; a check with `role` and no selector selects every element with that role, which is how a check counts landmarks. `first` keeps only the first match in document order. `count` bounds how many are selected (default: at least one).
+- **Asserting on the selection.** `unique` names an attribute (or `text`) whose values must all differ, for example `unique: id` on `[id]`.
+- **Asserting on elements.** These must hold for one selected element, or for every one with `every: true`:
+  - `attr`: an attribute is present, absent, equal to a value or matching a pattern;
+  - `text`: the text matches or must not match a pattern (`own: true` looks only at the element's own text nodes, to find loose text); text never includes script, style, template or noscript contents);
+  - `rendered: true` keeps only rendered elements, and `text` then reads rendered text only. Rendering is judged from the DOM alone: the `hidden` attribute, the body of a closed `details`, and computed `display: none`, `visibility: hidden`, `opacity: 0` and `font-size: 0` hide content. The grader knows no layout, so text moved off-screen, clipped to nothing, covered, or coloured like its background still counts as rendered;
+  - `text.following: true` appends the text that follows the element inside its parent, to test what comes right after it;
+  - `under`: the element is a heading whose parent in the outline, the nearest earlier heading element (h1 to h6) of a higher rank, has an accessible name matching the pattern;
+  - `name`: the accessible name, as a screen reader would announce it (aria-labelledby, aria-label, alt, content, title), matches or must not match;
+  - `style`: a computed style;
+  - `datetime`: the element's machine-readable date or time (its `datetime` attribute, or its text when it has none) is valid under the HTML standard's date and time microsyntaxes;
+  - `outline`: the headings inside the element never skip a level going down, and with `start` the first is at that level;
+  - `next`: the siblings that follow, in order, each matching `is` and `text`; whitespace and comments are skipped but text is not, unlike CSS sibling combinators. A last step with `absent: true` says what must not follow;
+  - `precedes`: the element comes before every element matching a selector, in document order;
+  - `resolves`: the element's `href` leads to a page or file of the problem's site and its fragment to an existing id there. `resolves: { page }` also requires a particular page, and `resolves: { to }` requires the fragment's element to match a selector.
+- **Asserting on the document.** `doctype: true` requires `<!doctype html>`. `axe` lists axe-core rule ids that must report no violations. The pack only names the rules: the engine that hosts the grader runs axe-core and hands the findings to the grader, and a host that cannot run them reports the check as not passed.
+
+Patterns are case-insensitive regular expressions. `concepts` may list the graph nodes a check assesses, for feedback and review scheduling; the validator checks that they exist.
+
+### Sites, pages and stages
+
+Links are graded against a site. A single-page problem's page sits at `path` (default `/index.html`), and `files` lists the site's other files, with the fragment ids inside any page the player does not edit, so that `resolves` can tell a working link from a broken one.
+
+A multi-page problem lists `pages` instead of `starter` and `solution`: each page has an id, a `path`, a title, a starter and a solution, and they are graded together as one site. A check runs on every page unless `pages` limits it, and passes only if it passes on each. With `pooled: true` it selects across the pages at once, for example to require unique titles site-wide.
+
+A grader has either `checks` or `stages`. A stage has an id, a title, a line saying what it asks, and its own checks; a project falls when every stage passes.
+
+### Fixtures
+
+`fixtures.pass` lists other correct answers and `fixtures.fail` lists plausible wrong ones, so tests can show that a grader accepts any valid answer and rejects the mistakes it is meant to catch. A fixture is a full page (`html`), or the reference solution with `edits` (each `find` must occur in it); in a multi-page problem, `pages` overrides some pages. A wrong fixture names the check ids it must fail in `fails` and says why in `because`. Fixtures are test data and are never shipped to players.
+
+A wrong fixture's `because` is also the teaching line for the checks it fails: an engine may show it to a player whose answer fails one of those checks (`becauseLines` picks, for each check, the fixture that fails it while failing the fewest others). Write it as a sentence a learner can act on.
+
+## Writing tasks
+
+`write/*.yaml` lists `tasks`, each set by one concept's character. A task has an `id`, the `concept` it belongs to, a `prompt` that states the goal (what the page must do, never a checklist of the answer), the excerpts that teach it in `cites`, a reference `solution`, `checks` and optional `fixtures`, exactly as a one-page problem has. The editor starts blank unless the task gives a `starter`, for example a few lines to fix. Tasks are graded as a one-page problem (`taskProblem`), so the same rules hold: the solution passes every check, the starter (blank or given) fails at least one, and each wrong fixture fails the checks it names. An engine can draw a different task, or a different retrieval question, each time it tests a concept, so a retry or a review measures the idea and not a remembered answer.
 
 ## Licence classes
 

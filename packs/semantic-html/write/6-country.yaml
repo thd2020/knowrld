@@ -1,0 +1,878 @@
+# Writing tasks for the country: the element references beyond the road (one or two per concept).
+# Written from the cited excerpts only. Text the player must type is quoted in each prompt.
+tasks:
+  - id: harbour-guide-outline
+    concept: heading-navigation
+    prompt: "Write only the headings of a guide: “Harbour guide” at the top; under it “Getting there” and “Where to eat”; and under “Where to eat”, a section called “Fish stalls”."
+    cites: [el-headings#usage, el-headings#skip-levels, el-headings#single-h1]
+    solution:
+      html: |
+        <h1>Harbour guide</h1>
+        <h2>Getting there</h2>
+        <h2>Where to eat</h2>
+        <h3>Fish stalls</h3>
+    checks:
+      - id: one-h1
+        says: “Harbour guide” is the one top-level heading
+        selector: h1
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*Harbour guide\s*$' }
+      - id: chapters
+        says: “Getting there” and “Where to eat” are one level down
+        selector: h2
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*(Getting there|Where to eat)\s*$' }
+      - id: stalls
+        says: “Fish stalls” sits under “Where to eat”
+        selector: 'h1, h2, h3, h4, h5, h6'
+        text: { matches: '^\s*Fish stalls\s*$' }
+        under: { matches: '^\s*Where to eat\s*$' }
+      - id: no-skips
+        says: No heading level is skipped
+        selector: body
+        outline: { start: 1 }
+    fixtures:
+      fail:
+        - name: the section two levels down
+          html: "<h1>Harbour guide</h1><h2>Getting there</h2><h2>Where to eat</h2><h4>Fish stalls</h4>"
+          fails: [no-skips]
+          because: People jumping from heading to heading wonder where the missing level went; go down one level at a time.
+        - name: an h1 for every part
+          html: "<h1>Harbour guide</h1><h1>Getting there</h1><h1>Where to eat</h1><h2>Fish stalls</h2>"
+          fails: [one-h1, chapters]
+          because: A page should have a single h1 that describes its content; its parts are headings one level below.
+
+  - id: bridge-article
+    concept: header-footer-context
+    prompt: "Write one article. It opens with a header holding the heading “The bridge reopens”, then the paragraph “Carts may cross again.”, and it ends with a footer whose address names the author, “Wren, the ferryman”."
+    cites: [el-header#banner-or-section, el-footer#summary, el-footer#usage]
+    solution:
+      html: |
+        <article>
+          <header>
+            <h2>The bridge reopens</h2>
+          </header>
+          <p>Carts may cross again.</p>
+          <footer>
+            <address>Wren, the ferryman</address>
+          </footer>
+        </article>
+    checks:
+      - id: own-header
+        says: The article's own header holds its heading
+        selector: 'article > header'
+        text: { matches: 'The bridge reopens' }
+      - id: no-banner
+        says: The header introduces only the article, so the page has no banner
+        role: banner
+        count: { max: 0 }
+      - id: author
+        says: The article's footer holds the author in an address
+        selector: 'article > footer address'
+        text: { matches: 'Wren' }
+      - id: body
+        says: The paragraph is in the article
+        selector: 'article p'
+        text: { matches: 'Carts may cross again' }
+    fixtures:
+      fail:
+        - name: the header outside the article
+          html: "<header><h2>The bridge reopens</h2></header><article><p>Carts may cross again.</p><footer><address>Wren, the ferryman</address></footer></article>"
+          fails: [own-header, no-banner]
+          because: A header at the top level is the banner of the whole site; inside the article it introduces only the article.
+        - name: the author in a plain paragraph
+          html: "<article><header><h2>The bridge reopens</h2></header><p>Carts may cross again.</p><footer><p>Wren, the ferryman</p></footer></article>"
+          fails: [author]
+          because: Information about the author goes in an address element, which can sit in the footer.
+
+  - id: bakery-main
+    concept: main-element
+    prompt: "Write a page body: a header with the heading “Harbour Bakery”; one main with the heading “Today's loaves” and the paragraph “Rye and spelt, from dawn.”; and a footer with “© Harbour Bakery”."
+    cites: [el-main#only-one, el-main#unique-content, el-main#landmark]
+    solution:
+      html: |
+        <header>
+          <h1>Harbour Bakery</h1>
+        </header>
+        <main>
+          <h2>Today's loaves</h2>
+          <p>Rye and spelt, from dawn.</p>
+        </main>
+        <footer>
+          <p>© Harbour Bakery</p>
+        </footer>
+    checks:
+      - id: one-main
+        says: There is exactly one main
+        selector: main
+        count: { min: 1, max: 1 }
+      - id: unique
+        says: The main holds what is unique to this page
+        selector: main
+        text: { matches: "Today.s loaves[\\s\\S]*Rye and spelt" }
+      - id: repeated-out
+        says: The header and footer, repeated on every page, stay out of main
+        selector: 'main header, main footer'
+        count: { max: 0 }
+      - id: both
+        says: The page has its header and its footer
+        selector: 'header, footer'
+        count: { min: 2 }
+    fixtures:
+      fail:
+        - name: everything inside main
+          html: "<main><header><h1>Harbour Bakery</h1></header><h2>Today's loaves</h2><p>Rye and spelt, from dawn.</p><footer><p>© Harbour Bakery</p></footer></main>"
+          fails: [repeated-out]
+          because: Content repeated across pages, such as the site's logo and copyright, should not be inside main.
+        - name: two mains
+          html: "<header><h1>Harbour Bakery</h1></header><main><h2>Today's loaves</h2></main><main><p>Rye and spelt, from dawn.</p></main><footer><p>© Harbour Bakery</p></footer>"
+          fails: [one-main]
+          because: A document must not have more than one visible main.
+
+  - id: two-navs
+    concept: nav-element
+    prompt: "Write two navigation blocks, each named by its own heading. The first is “Primary navigation”, with links “Home” to / and “Menu” to /menu.html. The second is “Footer navigation”, with a link “Contact” to /contact.html."
+    cites: [el-nav#usage, el-headings#labeled-sections, el-headings#labeled-sections-example]
+    solution:
+      html: |
+        <nav aria-labelledby="primary-navigation">
+          <h2 id="primary-navigation">Primary navigation</h2>
+          <a href="/">Home</a>
+          <a href="/menu.html">Menu</a>
+        </nav>
+        <nav aria-labelledby="footer-navigation">
+          <h2 id="footer-navigation">Footer navigation</h2>
+          <a href="/contact.html">Contact</a>
+        </nav>
+    checks:
+      - id: two
+        says: There are two nav elements
+        selector: nav
+        count: { min: 2, max: 2 }
+      - id: named
+        says: Each nav is named by its heading
+        selector: nav
+        every: true
+        name: { matches: '^\s*(Primary|Footer) navigation\s*$' }
+      - id: different
+        says: The two names differ
+        selector: 'nav h2, nav h3'
+        unique: text
+        count: { min: 2 }
+      - id: links
+        says: The links are in their blocks
+        selector: 'nav a[href="/contact.html"]'
+        text: { matches: 'Contact' }
+    fixtures:
+      fail:
+        - name: headings but no labels
+          html: "<nav><h2>Primary navigation</h2><a href=\"/\">Home</a><a href=\"/menu.html\">Menu</a></nav><nav><h2>Footer navigation</h2><a href=\"/contact.html\">Contact</a></nav>"
+          fails: [named]
+          because: aria-labelledby, pointing at the heading's id, gives each nav its name; without it a screen reader user must explore each one to tell them apart.
+
+  - id: bakery-landmarks
+    concept: landmarks
+    prompt: "Mark up a page so a screen reader can jump to each part: a header with “Harbour Bakery”; a nav with a link “Menu” to /menu.html; a main with the heading “Today's loaves”; an aside with the heading “Opening hours”; and a footer with “© Harbour Bakery”. Use the elements, not ARIA roles."
+    cites: [role-landmark#description, role-landmark#html-elements, role-contentinfo#one-per-page]
+    solution:
+      html: |
+        <header>
+          <p>Harbour Bakery</p>
+        </header>
+        <nav>
+          <a href="/menu.html">Menu</a>
+        </nav>
+        <main>
+          <h1>Today's loaves</h1>
+          <aside>
+            <h2>Opening hours</h2>
+          </aside>
+        </main>
+        <footer>
+          <p>© Harbour Bakery</p>
+        </footer>
+    checks:
+      - id: banner
+        says: The header is the page's banner
+        role: banner
+        count: { min: 1, max: 1 }
+      - id: navigation
+        says: The nav is a navigation landmark
+        role: navigation
+        count: { min: 1 }
+      - id: main
+        says: The main is the main landmark
+        role: main
+        count: { min: 1, max: 1 }
+      - id: complementary
+        says: The aside is complementary
+        role: complementary
+        count: { min: 1 }
+      - id: contentinfo
+        says: The footer is the one contentinfo
+        role: contentinfo
+        count: { min: 1, max: 1 }
+      - id: no-roles
+        says: The elements carry the roles themselves, with no role attributes
+        selector: '[role]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: divs with classes
+          html: "<div class=\"header\"><p>Harbour Bakery</p></div><div class=\"nav\"><a href=\"/menu.html\">Menu</a></div><div class=\"main\"><h1>Today's loaves</h1></div><div class=\"aside\"><h2>Opening hours</h2></div><div class=\"footer\"><p>© Harbour Bakery</p></div>"
+          fails: [banner, navigation, main, complementary, contentinfo]
+          because: Class names mean nothing to a screen reader; the sectioning elements create the landmarks it jumps between.
+        - name: roles on divs
+          html: "<div role=\"banner\"><p>Harbour Bakery</p></div><div role=\"navigation\"><a href=\"/menu.html\">Menu</a></div><div role=\"main\"><h1>Today's loaves</h1></div><div role=\"complementary\"><h2>Opening hours</h2></div><div role=\"contentinfo\"><p>© Harbour Bakery</p></div>"
+          fails: [no-roles]
+          because: Every landmark role has its own HTML element; prefer the element over ARIA.
+
+  - id: post-with-comment
+    concept: choosing-sections
+    prompt: "Write a blog post as an article with the heading “Winter bread” and the paragraph “Rye keeps longest.” Inside it, write one reader's comment, itself an article, with the heading “A reader writes” and the paragraph “Spelt keeps well too.”"
+    cites: [el-article#usage, el-section#alternatives]
+    solution:
+      html: |
+        <article>
+          <h2>Winter bread</h2>
+          <p>Rye keeps longest.</p>
+          <article>
+            <h3>A reader writes</h3>
+            <p>Spelt keeps well too.</p>
+          </article>
+        </article>
+    checks:
+      - id: post
+        says: The post is an article opened by its heading
+        selector: 'article > h1, article > h2, article > h3'
+        text: { matches: 'Winter bread' }
+      - id: comment
+        says: The comment is an article nested in the post
+        selector: 'article article'
+        count: { min: 1, max: 1 }
+        text: { matches: 'Spelt keeps well too' }
+      - id: comment-heading
+        says: The comment has its own heading
+        selector: 'article article > h2, article article > h3, article article > h4'
+        text: { matches: 'A reader writes' }
+    fixtures:
+      fail:
+        - name: the comment in a section
+          html: "<article><h2>Winter bread</h2><p>Rye keeps longest.</p><section><h3>A reader writes</h3><p>Spelt keeps well too.</p></section></article>"
+          fails: [comment, comment-heading]
+          because: A comment makes sense on its own; nested in the post's article, it is an article related to the post.
+        - name: the comment after the post
+          html: "<article><h2>Winter bread</h2><p>Rye keeps longest.</p></article><article><h3>A reader writes</h3><p>Spelt keeps well too.</p></article>"
+          fails: [comment]
+          because: Nesting the comment inside the post's article is what says the comment belongs to that post.
+
+  - id: grey-gull
+    concept: em-and-i
+    prompt: "Write one paragraph: “They sailed on the Grey Gull, though I told them not to.” The ship's name, “Grey Gull”, is set off from the prose; the word “told” is stressed."
+    cites: [el-em#i-vs-em, el-i#uses]
+    solution:
+      html: |
+        <p>They sailed on the <i>Grey Gull</i>, though I <em>told</em> them not to.</p>
+    checks:
+      - id: ship
+        says: The ship's name is set off with i
+        selector: i
+        text: { matches: '^\s*Grey Gull\s*$' }
+      - id: stress
+        says: The stressed word is in em
+        selector: em
+        text: { matches: '^\s*told\s*$' }
+      - id: sentence
+        says: The sentence is all there
+        selector: p
+        text: { matches: 'They sailed on the Grey Gull, though I told them not to' }
+    fixtures:
+      fail:
+        - name: both in em
+          html: "<p>They sailed on the <em>Grey Gull</em>, though I <em>told</em> them not to.</p>"
+          fails: [ship]
+          because: A ship's name is not stressed; it is text set off from the normal prose, which is what i is for.
+        - name: both in i
+          html: "<p>They sailed on the <i>Grey Gull</i>, though I <i>told</i> them not to.</p>"
+          fails: [stress]
+          because: Stress that changes what a sentence means is em; i carries no stress.
+
+  - id: lantern-review
+    concept: strong-and-b
+    prompt: "Write a review paragraph: “The Lantern 3 lights the whole road. Warning: never leave it burning indoors.” The product name “Lantern 3” should draw the eye without being more important; “Warning:” is important."
+    cites: [el-strong#b-vs-strong, el-b#uses]
+    solution:
+      html: |
+        <p>The <b>Lantern 3</b> lights the whole road. <strong>Warning:</strong> never leave it burning indoors.</p>
+    checks:
+      - id: product
+        says: The product name is in b
+        selector: b
+        text: { matches: '^\s*Lantern 3\s*$' }
+      - id: warning
+        says: The warning is strong
+        selector: strong
+        text: { matches: 'Warning' }
+      - id: not-important
+        says: The product name is not marked as important
+        selector: strong
+        every: true
+        text: { not: 'Lantern' }
+    fixtures:
+      fail:
+        - name: swapped
+          html: "<p>The <strong>Lantern 3</strong> lights the whole road. <b>Warning:</b> never leave it burning indoors.</p>"
+          fails: [product, warning, not-important]
+          because: strong is for content of greater importance; b only draws attention, as to a product name in a review.
+
+  - id: misspelt-mat
+    concept: u-annotation
+    prompt: "A teacher marks a pupil's line, “The cat sat on the matt.” Write the line as a paragraph, with only the misspelt word “matt” marked as annotated."
+    cites: [el-u#restored, el-u#use-cases]
+    solution:
+      html: |
+        <p>The cat sat on the <u>matt</u>.</p>
+    checks:
+      - id: marked
+        says: The misspelt word is in u
+        selector: u
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*matt\s*$' }
+      - id: line
+        says: The line is all there
+        selector: p
+        text: { matches: 'The cat sat on the matt' }
+    fixtures:
+      fail:
+        - name: struck out
+          html: "<p>The cat sat on the <s>matt</s>.</p>"
+          fails: [marked]
+          because: A spelling error is annotated with u; s says something is no longer accurate.
+        - name: the whole line underlined
+          html: "<p><u>The cat sat on the matt.</u></p>"
+          fails: [marked]
+          because: Only the misspelt word carries the annotation.
+
+  - id: sundial
+    concept: inline-semantics
+    prompt: "Write two paragraphs. The first, “A sundial is a clock that reads the sun.”, defines a term: mark “sundial” as that term. The second, “Was 5 silver, now 3 silver.”, has “Was 5 silver” struck out as no longer accurate."
+    cites: [el-dfn#summary, el-s#summary]
+    solution:
+      html: |
+        <p>A <dfn>sundial</dfn> is a clock that reads the sun.</p>
+        <p><s>Was 5 silver</s>, now 3 silver.</p>
+    checks:
+      - id: term
+        says: The defined term is in dfn
+        selector: dfn
+        text: { matches: '^\s*sundial\s*$' }
+      - id: old-price
+        says: The old price is in s
+        selector: s
+        text: { matches: 'Was 5 silver' }
+      - id: new-price
+        says: The new price is not struck out
+        selector: s
+        every: true
+        text: { not: 'now 3' }
+    fixtures:
+      fail:
+        - name: the term in italics
+          html: "<p>A <i>sundial</i> is a clock that reads the sun.</p><p><s>Was 5 silver</s>, now 3 silver.</p>"
+          fails: [term]
+          because: dfn marks the term that the sentence around it defines.
+        - name: the price as a deletion
+          html: "<p>A <dfn>sundial</dfn> is a clock that reads the sun.</p><p><del>Was 5 silver</del>, now 3 silver.</p>"
+          fails: [old-price]
+          because: del and ins record edits to the document; a price that no longer applies is s.
+
+  - id: lamplighters-abbr
+    concept: abbr-expansion
+    prompt: "Write the paragraph “The Guild of Lamplighters (GoL) meets at dusk.” Mark “GoL” as an abbreviation. The expansion is already in the text, so give it no title."
+    cites: [el-abbr#expand-first, el-abbr#title-if-needed]
+    solution:
+      html: |
+        <p>The Guild of Lamplighters (<abbr>GoL</abbr>) meets at dusk.</p>
+    checks:
+      - id: abbr
+        says: GoL is marked as an abbreviation
+        selector: abbr
+        text: { matches: '^\s*GoL\s*$' }
+      - id: expanded
+        says: The expansion is in the text, on first use
+        selector: p
+        text: { matches: 'Guild of Lamplighters' }
+      - id: no-title
+        says: The abbreviation has no title, since the text expands it
+        selector: abbr
+        every: true
+        attr: { name: title, present: false }
+    fixtures:
+      fail:
+        - name: a title as well
+          html: "<p>The Guild of Lamplighters (<abbr title=\"Guild of Lamplighters\">GoL</abbr>) meets at dusk.</p>"
+          fails: [no-title]
+          because: Only include a title if expanding the abbreviation in the text is not possible.
+        - name: no abbr
+          html: "<p>The Guild of Lamplighters (GoL) meets at dusk.</p>"
+          fails: [abbr]
+          because: The abbr element marks up the abbreviation, beside its expansion in the text.
+
+  - id: fair-opens
+    concept: time-datetime
+    prompt: "Write the paragraph “The fair opens on 3 May 2027 at 10:00.” Mark “3 May 2027 at 10:00” as one time element that software can read."
+    cites: [el-time#summary, el-time#datetime-value, el-time#date-forms, el-time#time-forms, el-time#local-date-time]
+    solution:
+      html: |
+        <p>The fair opens on <time datetime="2027-05-03T10:00">3 May 2027 at 10:00</time>.</p>
+    checks:
+      - id: time
+        says: The date and time are in a time element
+        selector: time
+        count: { min: 1, max: 1 }
+        text: { matches: '3 May 2027' }
+      - id: valid
+        says: Its value is a valid date and time
+        selector: time
+        datetime: true
+      - id: right-value
+        says: The value names 3 May 2027 at 10:00
+        selector: time
+        attr: { name: datetime, matches: '^2027-05-03[T ]10:00' }
+    fixtures:
+      fail:
+        - name: the date as people write it
+          html: "<p>The fair opens on <time datetime=\"3 May 2027 10:00\">3 May 2027 at 10:00</time>.</p>"
+          fails: [valid, right-value]
+          because: The datetime attribute holds the machine-readable form, year-month-day, then T or a space and a 24-hour time.
+        - name: no datetime attribute
+          html: "<p>The fair opens on <time>3 May 2027 at 10:00</time>.</p>"
+          fails: [valid, right-value]
+          because: Without datetime, the text itself must be the machine-readable value, and 3 May 2027 at 10:00 is not.
+
+  - id: almanac-quote
+    concept: quote-attribution
+    prompt: "Quote the line “Light the lamps before the fog comes.” as a block quotation from “https://example.com/almanac”, and after the quotation credit “The Lamplighter's Almanac”, marked as the title of the work."
+    cites: [el-blockquote#summary, el-blockquote#attribution-outside, el-cite#summary]
+    solution:
+      html: |
+        <blockquote cite="https://example.com/almanac">
+          <p>Light the lamps before the fog comes.</p>
+        </blockquote>
+        <p>From <cite>The Lamplighter's Almanac</cite>.</p>
+    checks:
+      - id: quote
+        says: The line is in a blockquote
+        selector: blockquote
+        text: { matches: 'Light the lamps before the fog comes' }
+      - id: source-url
+        says: The blockquote's cite attribute holds the source's URL
+        selector: blockquote
+        attr: { name: cite, equals: 'https://example.com/almanac' }
+      - id: title
+        says: The work's title is in a cite element
+        selector: cite
+        text: { matches: "Lamplighter.s Almanac" }
+      - id: outside
+        says: The credit is outside the blockquote
+        selector: 'blockquote cite'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the credit inside the quotation
+          html: "<blockquote cite=\"https://example.com/almanac\"><p>Light the lamps before the fog comes.</p><p>From <cite>The Lamplighter's Almanac</cite>.</p></blockquote>"
+          fails: [outside]
+          because: Attribution for a quotation must be placed outside the blockquote element.
+        - name: the URL in the text only
+          html: "<blockquote><p>Light the lamps before the fog comes.</p></blockquote><p>From <cite>The Lamplighter's Almanac</cite>, https://example.com/almanac.</p>"
+          fails: [source-url]
+          because: The source's URL goes in the blockquote's cite attribute.
+
+  - id: shared-description
+    concept: list-rules
+    prompt: "Write a glossary in which two spellings share one description: the terms “colour” and “color”, both described as “The hue of a thing.”"
+    cites: [el-dt#several-terms]
+    solution:
+      html: |
+        <dl>
+          <dt>colour</dt>
+          <dt>color</dt>
+          <dd>The hue of a thing.</dd>
+        </dl>
+    checks:
+      - id: terms
+        says: Both spellings are terms
+        selector: 'dl dt'
+        count: { min: 2, max: 2 }
+      - id: one-description
+        says: One description serves both
+        selector: 'dl dd'
+        count: { min: 1, max: 1 }
+        text: { matches: 'The hue of a thing' }
+      - id: in-a-row
+        says: The two terms come in a row, then the description
+        selector: dt
+        first: true
+        next: [{ is: dt }, { is: dd }]
+    fixtures:
+      fail:
+        - name: the description written twice
+          html: "<dl><dt>colour</dt><dd>The hue of a thing.</dd><dt>color</dt><dd>The hue of a thing.</dd></dl>"
+          fails: [one-description, in-a-row]
+          because: Several dt elements in a row are all defined by the dd that follows them.
+        - name: a bulleted list
+          html: "<ul><li>colour, color: The hue of a thing.</li></ul>"
+          fails: [terms, one-description]
+          because: Terms and their descriptions are a description list, dl with dt and dd.
+
+  - id: countdown
+    concept: list-attributes
+    prompt: "Write a countdown list numbered 3, 2, 1, in this order: “Light the fuse”, “Step back”, “Cover your ears”."
+    cites: [el-ol#reversed-start]
+    solution:
+      html: |
+        <ol reversed>
+          <li>Light the fuse</li>
+          <li>Step back</li>
+          <li>Cover your ears</li>
+        </ol>
+    checks:
+      - id: ordered
+        says: The steps are an ordered list of three
+        selector: 'ol > li'
+        count: { min: 3, max: 3 }
+      - id: reversed
+        says: The list counts down
+        selector: ol
+        attr: { name: reversed, present: true }
+      - id: order
+        says: The steps come in the order given
+        selector: li
+        first: true
+        text: { matches: 'Light the fuse' }
+    fixtures:
+      pass:
+        - name: reversed with a start
+          html: "<ol reversed start=\"3\"><li>Light the fuse</li><li>Step back</li><li>Cover your ears</li></ol>"
+      fail:
+        - name: numbered upwards
+          html: "<ol><li>Light the fuse</li><li>Step back</li><li>Cover your ears</li></ol>"
+          fails: [reversed]
+          because: The reversed attribute numbers the items from high to low.
+        - name: the items turned round instead
+          html: "<ol><li>Cover your ears</li><li>Step back</li><li>Light the fuse</li></ol>"
+          fails: [reversed, order]
+          because: Changing the order changes the meaning; keep the steps in order and let reversed count down.
+
+  - id: marsh-break
+    concept: breaks-with-meaning
+    prompt: "Write two paragraphs, “The road ends here.” and “Beyond lies the marsh.”, with a thematic break between them. Use no br."
+    cites: [el-hr#summary, el-br#not-margins]
+    solution:
+      html: |
+        <p>The road ends here.</p>
+        <hr />
+        <p>Beyond lies the marsh.</p>
+    checks:
+      - id: paragraphs
+        says: Each part is its own paragraph
+        selector: p
+        count: { min: 2, max: 2 }
+      - id: break
+        says: A thematic break sits between them
+        selector: p
+        first: true
+        next: [{ is: hr }, { is: p, text: { matches: 'marsh' } }]
+      - id: no-br
+        says: No br is used for spacing
+        selector: br
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: breaks for a gap
+          html: "<p>The road ends here.<br /><br />Beyond lies the marsh.</p>"
+          fails: [paragraphs, break, no-br]
+          because: Paragraphs go in p and gaps come from CSS; br elements do not create paragraph elements or supply paragraph semantics.
+
+  - id: hours-title
+    concept: title-quality
+    prompt: "Write a complete page whose title names the page first and the site after: “Opening hours - Harbour Bakery”. The body holds the heading “Opening hours”."
+    cites: [el-title#assistive, el-title#guidelines]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <title>Opening hours - Harbour Bakery</title>
+          </head>
+          <body>
+            <h1>Opening hours</h1>
+          </body>
+        </html>
+    checks:
+      - id: doctype
+        says: The page starts with a doctype
+        doctype: true
+      - id: title
+        says: The title names the page first, then the site
+        selector: title
+        text: { matches: '^\s*Opening hours\s*[-–—|:]\s*Harbour Bakery\s*$' }
+      - id: heading
+        says: The body has the heading
+        selector: h1
+        text: { matches: 'Opening hours' }
+    fixtures:
+      fail:
+        - name: the site name first
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Harbour Bakery - Opening hours</title></head><body><h1>Opening hours</h1></body></html>"
+          fails: [title]
+          because: A screen reader announces the title first; put the page's purpose before the site's name.
+        - name: a keyword blob
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>bakery hours open bread harbour</title></head><body><h1>Opening hours</h1></body></html>"
+          fails: [title]
+          because: A title that is a list of words can lower the page's place in search results.
+
+  - id: harbour-songs
+    concept: language-tags
+    prompt: "Write a complete English page (lang “en”) titled “Harbour songs”. Its body holds a paragraph: “The sailors sing Il était un petit navire.” Mark the French words “Il était un petit navire” as French (“fr”)."
+    cites: [el-html#lang, attr-lang#wcag-parts]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <title>Harbour songs</title>
+          </head>
+          <body>
+            <p>The sailors sing <span lang="fr">Il était un petit navire</span>.</p>
+          </body>
+        </html>
+    checks:
+      - id: page-lang
+        says: The html element names the page's language, English
+        selector: html
+        attr: { name: lang, matches: '^en\b' }
+      - id: part-lang
+        says: The French words are marked as French
+        selector: 'body [lang]'
+        attr: { name: lang, matches: '^fr\b' }
+        text: { matches: 'petit navire' }
+      - id: title
+        says: The title is there
+        selector: title
+        text: { matches: 'Harbour songs' }
+    fixtures:
+      fail:
+        - name: the language on the body only
+          html: "<!doctype html><html><head><meta charset=\"utf-8\" /><title>Harbour songs</title></head><body lang=\"en\"><p>The sailors sing <span lang=\"fr\">Il était un petit navire</span>.</p></body></html>"
+          fails: [page-lang]
+          because: The lang on html also makes the head's title be announced properly.
+        - name: the French left unmarked
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Harbour songs</title></head><body><p>The sailors sing Il était un petit navire.</p></body></html>"
+          fails: [part-lang]
+          because: Parts of a page in another language need their own lang.
+
+  - id: escaped-pre
+    concept: code-family
+    prompt: "Show the code “<p>Hello</p>” in a pre block, so the reader sees the tags as text."
+    cites: [el-pre#escape, el-pre#contains]
+    solution:
+      html: |
+        <pre><code>&lt;p&gt;Hello&lt;/p&gt;</code></pre>
+    checks:
+      - id: shown
+        says: The pre shows the tags as text
+        selector: pre
+        text: { matches: '<p>\s*Hello\s*</p>' }
+      - id: not-parsed
+        says: No paragraph was made inside the pre
+        selector: 'pre p'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the tags left unescaped
+          html: "<pre><p>Hello</p></pre>"
+          fails: [shown, not-parsed]
+          because: The text in a pre is still parsed as HTML; write the < as &lt; to keep it as text.
+
+  - id: ping-harbour
+    concept: code-family
+    prompt: "Show a terminal exchange in a pre: the user types “ping harbour” and the system answers “harbour is awake”. Mark the typed part as user input and the answer as program output."
+    cites: [el-pre#contains, el-kbd#nesting]
+    solution:
+      html: |
+        <pre>$ <kbd>ping harbour</kbd>
+        <samp>harbour is awake</samp></pre>
+    checks:
+      - id: input
+        says: The typed command is in kbd
+        selector: 'pre kbd'
+        text: { matches: 'ping harbour' }
+      - id: output
+        says: The answer is in samp
+        selector: 'pre samp'
+        text: { matches: 'harbour is awake' }
+      - id: not-swapped
+        says: The answer is not marked as input
+        selector: 'pre kbd'
+        every: true
+        text: { not: 'awake' }
+    fixtures:
+      fail:
+        - name: both as code
+          html: "<pre><code>$ ping harbour\nharbour is awake</code></pre>"
+          fails: [input, output]
+          because: pre commonly holds code, samp and kbd, for code, output and input; typed input is kbd and output samp.
+
+  - id: named-controls
+    concept: accessibility-tree
+    prompt: "Write a button whose accessible name is “Save draft”, and a link to /drafts.html whose accessible name is “All drafts”."
+    cites: [glossary-accessibility-tree#name, glossary-accessibility-tree#role]
+    solution:
+      html: |
+        <button type="button">Save draft</button>
+        <a href="/drafts.html">All drafts</a>
+    checks:
+      - id: button
+        says: A button is named Save draft
+        role: button
+        name: { matches: '^\s*Save draft\s*$' }
+      - id: link
+        says: A link is named All drafts
+        role: link
+        name: { matches: '^\s*All drafts\s*$' }
+    fixtures:
+      fail:
+        - name: a div for the button
+          html: "<div class=\"button\">Save draft</div><a href=\"/drafts.html\">All drafts</a>"
+          fails: [button]
+          because: The role says what a thing is; a div has no button role in the accessibility tree.
+        - name: a vague link
+          html: "<button type=\"button\">Save draft</button><p>All drafts: <a href=\"/drafts.html\">here</a></p>"
+          fails: [link]
+          because: A link's name is its text; "here" is what a screen reader would announce.
+
+  - id: bakery-head
+    concept: meta-kinds
+    prompt: "Write a complete page whose head has a charset declaration for “utf-8”, the document title “Harbour Bakery”, and document-level metadata naming the author, “Wren”."
+    cites: [el-meta#summary, el-meta#kinds]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <title>Harbour Bakery</title>
+            <meta name="author" content="Wren" />
+          </head>
+          <body>
+            <h1>Harbour Bakery</h1>
+          </body>
+        </html>
+    checks:
+      - id: charset
+        says: A meta declares the charset utf-8
+        selector: 'head meta[charset]'
+        attr: { name: charset, matches: '^utf-8$' }
+      - id: title
+        says: The title element holds the title
+        selector: 'head title'
+        text: { matches: '^\s*Harbour Bakery\s*$' }
+      - id: author
+        says: A name meta gives the author
+        selector: 'head meta[name="author"]'
+        attr: { name: content, matches: '^\s*Wren\s*$' }
+    fixtures:
+      fail:
+        - name: the title as a meta
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><meta name=\"title\" content=\"Harbour Bakery\" /><meta name=\"author\" content=\"Wren\" /></head><body><h1>Harbour Bakery</h1></body></html>"
+          fails: [title]
+          because: meta holds metadata no other element can; the title has its own element.
+        - name: the author in the body
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Harbour Bakery</title></head><body><h1>Harbour Bakery</h1><p>Author: Wren</p></body></html>"
+          fails: [author]
+          because: Document-level metadata is a meta with name, here name="author" with the author in content.
+
+  - id: map-viewport
+    concept: viewport-meta
+    prompt: "Write a complete page titled “Harbour map” whose head tells phones to fit the page to the device's width, without stopping people from zooming."
+    cites: [meta-viewport#recommended, meta-viewport#no-zoom]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width" />
+            <title>Harbour map</title>
+          </head>
+          <body>
+            <h1>Harbour map</h1>
+          </body>
+        </html>
+    checks:
+      - id: viewport
+        says: A viewport meta sets the width to the device's width
+        selector: 'meta[name="viewport"]'
+        attr: { name: content, matches: 'width\s*=\s*device-width' }
+      - id: zoom
+        says: Zooming is not switched off
+        selector: 'meta[name="viewport"]'
+        every: true
+        attr: { name: content, matches: '^(?![\s\S]*user-scalable\s*=\s*(no|0))(?![\s\S]*maximum-scale\s*=\s*1(\.0*)?\b)' }
+      - id: title
+        says: The title is there
+        selector: title
+        text: { matches: 'Harbour map' }
+    fixtures:
+      pass:
+        - name: with an initial scale
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /><title>Harbour map</title></head><body><h1>Harbour map</h1></body></html>"
+      fail:
+        - name: zooming switched off
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /><title>Harbour map</title></head><body><h1>Harbour map</h1></body></html>"
+          fails: [zoom]
+          because: Setting user-scalable to no stops people with low vision from zooming to read.
+        - name: no viewport meta
+          html: "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Harbour map</title></head><body><h1>Harbour map</h1></body></html>"
+          fails: [viewport]
+          because: Without a viewport meta, a phone may draw the page on a wide virtual screen and shrink it.
+
+  - id: office-links
+    concept: anchor-attributes
+    prompt: "Write two links. “Call the harbour office” dials +44 1234 567890. “Download the tide table (PDF)” downloads /tide-table.pdf under the file name “tides.pdf”."
+    cites: [el-a#tel, el-a#download-limits]
+    solution:
+      html: |
+        <a href="tel:+441234567890">Call the harbour office</a>
+        <a href="/tide-table.pdf" download="tides.pdf">Download the tide table (PDF)</a>
+    checks:
+      - id: tel
+        says: The first link dials the number
+        selector: 'a[href^="tel:"]'
+        text: { matches: 'Call the harbour office' }
+        attr: { name: href, matches: '^tel:\+?44[\s.()-]*1234[\s.()-]*567890$' }
+      - id: download
+        says: The second link downloads the tide table as tides.pdf
+        selector: 'a[href="/tide-table.pdf"]'
+        attr: { name: download, equals: 'tides.pdf' }
+      - id: download-text
+        says: Its text says what will happen
+        selector: 'a[download]'
+        text: { matches: 'Download the tide table \(PDF\)' }
+    fixtures:
+      pass:
+        - name: the number with dots
+          html: "<a href=\"tel:+44.1234.567890\">Call the harbour office</a><a href=\"/tide-table.pdf\" download=\"tides.pdf\">Download the tide table (PDF)</a>"
+      fail:
+        - name: the number as a plain href
+          html: "<a href=\"+441234567890\">Call the harbour office</a><a href=\"/tide-table.pdf\" download=\"tides.pdf\">Download the tide table (PDF)</a>"
+          fails: [tel]
+          because: A tel URL is what lets a phone dial the number.
+        - name: no download attribute
+          html: "<a href=\"tel:+441234567890\">Call the harbour office</a><a href=\"/tide-table.pdf\">Download the tide table (PDF)</a>"
+          fails: [download, download-text]
+          because: The download attribute asks the browser to save the file, under the name it gives.

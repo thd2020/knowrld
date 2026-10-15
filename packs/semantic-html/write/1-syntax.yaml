@@ -1,0 +1,795 @@
+# Writing tasks for the road, part 1: HTML syntax and the document head. Each keeper sets two or
+# three short tasks, from a blank editor unless a starter is given; the game draws a different one
+# on a retry or a review. Prompts state the goal, not the markup.
+tasks:
+  - id: inn-sign
+    concept: html-elements
+    prompt: "The inn's sign should read “The Sleeping Fox” as the page's top-level heading, with the paragraph “Rooms for the night, two silver” below it."
+    cites: [basic-html-syntax#opening-tag, basic-html-syntax#closing-tag, basic-html-syntax#what-is-html]
+    solution:
+      html: |
+        <h1>The Sleeping Fox</h1>
+        <p>Rooms for the night, two silver.</p>
+    checks:
+      - id: heading
+        says: The top-level heading reads The Sleeping Fox, and nothing more
+        selector: h1
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*The Sleeping Fox\s*$' }
+      - id: paragraph
+        says: The price is a paragraph of its own, outside the heading
+        selector: 'h1 ~ p:not(h1 *), h1 ~ * p:not(h1 *), *:has(h1) ~ p:not(h1 *), *:has(h1) ~ * p:not(h1 *)'
+        text: { matches: 'Rooms for the night, two silver' }
+    fixtures:
+      pass:
+        - name: tags in capitals
+          html: "<H1>The Sleeping Fox</H1><P>Rooms for the night, two silver.</P>"
+      fail:
+        - name: the heading's closing tag without its slash
+          html: "<h1>The Sleeping Fox<h1>\n<p>Rooms for the night, two silver.</p>"
+          fails: [heading, paragraph]
+          because: A closing tag repeats the element's name after a forward slash; without the slash it opens another heading instead of ending this one.
+
+  - id: crier-notice
+    concept: html-elements
+    prompt: "The market crier has two announcements, each a paragraph of its own: “Fresh bread at dawn.” and “Apples by the basket.”"
+    cites: [basic-html-syntax#what-is-html, basic-html-syntax#opening-tag, basic-html-syntax#closing-tag]
+    solution:
+      html: |
+        <p>Fresh bread at dawn.</p>
+        <p>Apples by the basket.</p>
+    checks:
+      - id: two-paragraphs
+        says: There are two paragraphs
+        selector: p
+        count: { min: 2, max: 2 }
+      - id: bread
+        says: One paragraph is the bread, alone
+        selector: p
+        text: { matches: '^\s*Fresh bread at dawn\.?\s*$' }
+      - id: apples
+        says: The other is the apples, alone
+        selector: p
+        text: { matches: '^\s*Apples by the basket\.?\s*$' }
+    fixtures:
+      fail:
+        - name: both announcements in one paragraph
+          html: "<p>Fresh bread at dawn. Apples by the basket.</p>"
+          fails: [two-paragraphs, bread, apples]
+          because: Each paragraph is its own p element, with an opening tag where it starts and a closing tag where it ends.
+
+  - id: hungry-dragon
+    concept: nesting-elements
+    prompt: "Write the paragraph “The dragon is very hungry.” so that only the word “very” is marked as strongly important."
+    cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap]
+    solution:
+      html: |
+        <p>The dragon is <strong>very</strong> hungry.</p>
+    checks:
+      - id: sentence
+        says: The paragraph reads The dragon is very hungry.
+        selector: p
+        text: { matches: '^\s*The dragon is very hungry\.?\s*$' }
+      - id: very
+        says: Only very is strong, inside the paragraph
+        selector: 'p strong'
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*very\s*$' }
+    fixtures:
+      fail:
+        - name: overlapping tags
+          html: "<p>The dragon is <strong>very hungry.</p></strong>"
+          fails: [very]
+          because: Elements must open and close inside each other; the strong opened inside the paragraph has to close before the paragraph does.
+
+  - id: new-bakery
+    concept: nesting-elements
+    prompt: "A heading on the bakery's page reads “Our new bakery”, with the word “new” stressed."
+    cites: [basic-html-syntax#nesting-right, basic-html-syntax#nesting-overlap, el-em#stress-emphasis, headings-and-paragraphs#six-levels]
+    solution:
+      html: |
+        <h2>Our <em>new</em> bakery</h2>
+    checks:
+      - id: heading
+        says: A heading reads Our new bakery
+        selector: 'h1, h2, h3, h4, h5, h6'
+        text: { matches: '^\s*Our new bakery\s*$' }
+      - id: stressed
+        says: The word new is stressed, inside the heading
+        selector: ':is(h1, h2, h3, h4, h5, h6) em'
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*new\s*$' }
+    fixtures:
+      fail:
+        - name: the stress closed after the heading
+          html: "<h2>Our <em>new bakery</h2></em>"
+          fails: [stressed]
+          because: The em that opens inside the heading must close inside it, before the heading's own closing tag.
+
+  - id: sleeping-fox-picture
+    concept: void-elements
+    prompt: "Put the picture “fox.png” on the page, described for anyone who cannot see it as “A red fox asleep in the hay”."
+    cites: [basic-html-syntax#void, basic-html-syntax#void-slash, el-img#summary, el-img#src-example, el-img#alt-text, el-img#void-content]
+    solution:
+      html: |
+        <img src="fox.png" alt="A red fox asleep in the hay">
+    checks:
+      - id: image
+        says: The page shows fox.png
+        selector: 'img[src="fox.png"]'
+        count: { min: 1, max: 1 }
+      - id: alt
+        says: The picture is described in its alt attribute
+        selector: 'img[src="fox.png"]'
+        attr: { name: alt, matches: 'red fox asleep in the hay' }
+    fixtures:
+      pass:
+        - name: the trailing-slash style
+          html: '<img src="fox.png" alt="A red fox asleep in the hay" />'
+      fail:
+        - name: the description as content, with a closing tag
+          html: '<img src="fox.png">A red fox asleep in the hay</img>'
+          fails: [alt]
+          because: An img is a void element, a single tag that holds no content; what describes the picture goes in its alt attribute.
+
+  - id: two-portraits
+    concept: void-elements
+    prompt: "In one paragraph, include two pictures: “owl.png”, a barn owl on a post, and “hare.png”, a hare in the long grass. Describe each for someone who cannot see it."
+    cites: [basic-html-syntax#void, el-img#summary, el-img#src-example, el-img#alt-text, el-img#void-content]
+    solution:
+      html: |
+        <p><img src="owl.png" alt="A barn owl on a post"> <img src="hare.png" alt="A hare in the long grass"></p>
+    checks:
+      - id: owl
+        says: The owl is shown and described
+        selector: 'p:has(img[src="hare.png"]) img[src="owl.png"]'
+        attr: { name: alt, matches: 'owl' }
+      - id: hare
+        says: The hare is shown and described
+        selector: 'p:has(img[src="owl.png"]) img[src="hare.png"]'
+        attr: { name: alt, matches: 'hare' }
+      - id: same-paragraph
+        says: Both portraits are in one paragraph
+        selector: 'p:has(img[src="owl.png"]):has(img[src="hare.png"])'
+        count: { min: 1, max: 1 }
+    fixtures:
+      fail:
+        - name: the owl without a description
+          html: '<p><img src="owl.png"> <img src="hare.png" alt="A hare in the long grass"></p>'
+          fails: [owl]
+          because: Each img is a void element. This task requires the requested text alternative in its alt attribute.
+
+  - id: dry-well
+    concept: attributes
+    prompt: "Write the paragraph “The well is dry.” and give it the class “warning”, so the stylesheet can find it."
+    cites: [basic-html-syntax#attributes, basic-html-syntax#attribute-parts]
+    solution:
+      html: |
+        <p class="warning">The well is dry.</p>
+    checks:
+      - id: warning
+        says: The paragraph has the class warning
+        selector: p.warning
+        text: { matches: 'The well is dry' }
+    fixtures:
+      fail:
+        - name: the class written as content
+          html: '<p>class="warning" The well is dry.</p>'
+          fails: [warning]
+          because: An attribute goes inside the opening tag, after the element's name and a space; it is not part of the content.
+        - name: no space before the attribute
+          html: '<pclass="warning">The well is dry.</p>'
+          fails: [warning]
+          because: An attribute needs a space between it and the element's name.
+
+  - id: locked-field
+    concept: attributes
+    prompt: Write a text field the player cannot type in, because the gate is locked. Use the attribute that needs no value.
+    cites: [basic-html-syntax#boolean]
+    solution:
+      html: |
+        <input type="text" disabled>
+    checks:
+      - id: disabled
+        says: A text field is disabled
+        selector: 'input[disabled]:is([type="text" i], :not([type]))'
+    fixtures:
+      pass:
+        - name: the value repeated, and no type
+          html: '<input disabled="disabled">'
+      fail:
+        - name: a field that is not disabled
+          html: '<input type="text">'
+          fails: [disabled]
+          because: A Boolean attribute such as disabled switches its feature on just by being present in the opening tag.
+
+  - id: miller-well
+    concept: attribute-quotes
+    prompt: "Show the picture “well.png” with the alternative text “The miller's well”, apostrophe and all."
+    cites: [basic-html-syntax#quotes-inside, basic-html-syntax#quote-styles]
+    solution:
+      html: |
+        <img src="well.png" alt="The miller's well">
+    checks:
+      - id: alt
+        says: The alt text survives whole, apostrophe included
+        selector: 'img[src="well.png"]'
+        attr: { name: alt, matches: "^The miller's well$" }
+    fixtures:
+      pass:
+        - name: a character reference inside single quotes
+          html: "<img src='well.png' alt='The miller&apos;s well'>"
+      fail:
+        - name: the apostrophe inside single quotes
+          html: "<img src='well.png' alt='The miller's well'>"
+          fails: [alt]
+          because: A value in single quotes ends at the next single quote; a value that holds an apostrophe goes in double quotes.
+
+  - id: two-classes
+    concept: attribute-quotes
+    prompt: "Give the paragraph “Closed on feast days.” two classes at once: “notice” and “small”."
+    cites: [basic-html-syntax#unquoted-values, basic-html-syntax#always-quote]
+    solution:
+      html: |
+        <p class="notice small">Closed on feast days.</p>
+    checks:
+      - id: both
+        says: The paragraph has both classes
+        selector: p.notice.small
+        text: { matches: 'Closed on feast days' }
+    fixtures:
+      fail:
+        - name: the value unquoted
+          html: '<p class=notice small>Closed on feast days.</p>'
+          fails: [both]
+          because: Without quotes the value ends at the first space, so small becomes a separate attribute; always quote attribute values.
+
+  - id: bridge-news
+    concept: document-skeleton
+    prompt: "From a blank editor, write a complete HTML page titled “Bridge news”. Its only content is the paragraph “The bridge is open again.”"
+    cites: [basic-html-syntax#doctype, basic-html-syntax#html-root, basic-html-syntax#head, basic-html-syntax#body]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Bridge news</title>
+          </head>
+          <body>
+            <p>The bridge is open again.</p>
+          </body>
+        </html>
+    checks:
+      - id: doctype
+        says: The page starts with the doctype
+        doctype: true
+      - id: title
+        says: The head titles the page Bridge news
+        selector: 'head > title'
+        text: { matches: '^\s*Bridge news\s*$' }
+      - id: content
+        says: The body holds the paragraph
+        selector: 'body p'
+        text: { matches: 'The bridge is open again' }
+    fixtures:
+      fail:
+        - name: no doctype
+          html: "<html><head><title>Bridge news</title></head><body><p>The bridge is open again.</p></body></html>"
+          fails: [doctype]
+          because: Without <!doctype html> at the top, browsers render the page in an old compatibility mode.
+        - name: the title written in the body
+          html: "<!doctype html><html><head></head><body><title>Bridge news</title><p>The bridge is open again.</p></body></html>"
+          fails: [title]
+          because: The title is information about the page, so it belongs in the head, not with the content in the body.
+
+  - id: lantern-festival
+    concept: document-skeleton
+    prompt: "From a blank editor, write a complete page for the lantern festival: titled “Lantern festival”, with a top-level heading “Lantern festival” and the paragraph “Bring a lantern to the square at dusk.”"
+    cites: [basic-html-syntax#doctype, basic-html-syntax#head, basic-html-syntax#body]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Lantern festival</title>
+          </head>
+          <body>
+            <h1>Lantern festival</h1>
+            <p>Bring a lantern to the square at dusk.</p>
+          </body>
+        </html>
+    checks:
+      - id: doctype
+        says: The page starts with the doctype
+        doctype: true
+      - id: title
+        says: The page is titled Lantern festival
+        selector: 'head > title'
+        text: { matches: '^\s*Lantern festival\s*$' }
+      - id: heading
+        says: The body opens with the heading
+        selector: 'body h1'
+        text: { matches: '^\s*Lantern festival\s*$' }
+      - id: paragraph
+        says: The body holds the paragraph
+        selector: 'body p'
+        text: { matches: 'Bring a lantern' }
+    fixtures:
+      fail:
+        - name: the heading in the head
+          html: "<!doctype html><html><head><title>Lantern festival</title></head><body><p>Bring a lantern to the square at dusk.</p></body></html>"
+          fails: [heading]
+          because: Everything the reader sees goes in the body; the head holds only information about the page.
+
+  - id: scribe-note
+    concept: whitespace-and-comments
+    prompt: "Write the paragraph “The fair opens at noon.” and, above it, leave the next scribe the note “check the date with the mayor”, where the browser will not show it."
+    cites: [basic-html-syntax#comments]
+    solution:
+      html: |
+        <!-- check the date with the mayor -->
+        <p>The fair opens at noon.</p>
+    checks:
+      - id: paragraph
+        says: The paragraph is on the page
+        selector: p
+        text: { matches: 'The fair opens at noon' }
+      - id: hidden
+        says: The note is not part of the page's content
+        selector: html
+        text: { not: 'check the date' }
+    fixtures:
+      fail:
+        - name: the note in a paragraph
+          html: "<p>check the date with the mayor</p>\n<p>The fair opens at noon.</p>"
+          fails: [hidden]
+          because: Browsers ignore what sits between <!-- and -->, so a comment is the place for a note to other authors.
+
+  - id: comment-out
+    concept: whitespace-and-comments
+    prompt: The harvest notice is out of date. Hide it from the page without deleting it, so it can come back next year.
+    cites: [basic-html-syntax#comments]
+    starter:
+      html: |
+        <p>Open every day.</p>
+        <p>Closed for the harvest.</p>
+    solution:
+      html: |
+        <p>Open every day.</p>
+        <!-- <p>Closed for the harvest.</p> -->
+    checks:
+      - id: open
+        says: The opening notice still shows
+        selector: p
+        text: { matches: 'Open every day' }
+      - id: harvest
+        says: The harvest notice no longer shows
+        selector: html
+        text: { not: 'harvest' }
+    fixtures:
+      fail:
+        - name: the notice deleted along with the opening hours
+          html: ""
+          fails: [open]
+          because: A comment hides only what lies between <!-- and -->; the rest of the page still shows.
+
+  - id: angle-brackets
+    concept: character-references
+    prompt: "Write a paragraph that shows, as text on the page: “Use <b> to draw the eye.”"
+    cites: [basic-html-syntax#special-chars, basic-html-syntax#character-references, basic-html-syntax#reference-example]
+    solution:
+      html: |
+        <p>Use &lt;b&gt; to draw the eye.</p>
+    checks:
+      - id: shown
+        says: The paragraph shows the tag as text
+        selector: p
+        text: { matches: 'Use <b> to draw the eye' }
+      - id: no-element
+        says: The browser did not read it as a b element
+        selector: b
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the tag written as it is
+          html: "<p>Use <b> to draw the eye.</p>"
+          fails: [shown, no-element]
+          because: A < starts a tag, so text that shows angle brackets uses the references &lt; and &gt;.
+
+  - id: show-a-reference
+    concept: character-references
+    prompt: "Write a paragraph that shows, exactly as printed here: “Type &lt; for a less-than sign.”"
+    cites: [basic-html-syntax#character-references, basic-html-syntax#special-chars]
+    solution:
+      html: |
+        <p>Type &amp;lt; for a less-than sign.</p>
+    checks:
+      - id: shown
+        says: The page shows the code &lt; itself
+        selector: p
+        text: { matches: 'Type &lt; for a less-than sign' }
+    fixtures:
+      fail:
+        - name: the reference written once
+          html: "<p>Type &lt; for a less-than sign.</p>"
+          fails: [shown]
+          because: "&lt; is turned into < by the browser; to show the code itself, its ampersand needs a reference too: &amp;."
+
+  - id: ferry-description
+    concept: head-and-metadata
+    prompt: "Give this page the description search engines show under its title: “Opening hours and fares of the Hollow Oak ferry.”"
+    cites: [webpage-metadata#name-content, webpage-metadata#description-seo]
+    solution:
+      html: |
+        <head>
+          <meta name="description" content="Opening hours and fares of the Hollow Oak ferry.">
+        </head>
+    checks:
+      - id: description
+        says: The head carries a description with that text
+        selector: 'head > meta[name="description" i]'
+        attr: { name: content, matches: 'Opening hours and fares of the Hollow Oak ferry' }
+      - id: not-shown
+        says: The description is not shown on the page
+        selector: body
+        text: { not: 'Opening hours and fares' }
+    fixtures:
+      fail:
+        - name: the description as a paragraph
+          html: "<p>Opening hours and fares of the Hollow Oak ferry.</p>"
+          fails: [description, not-shown]
+          because: A page's description is metadata, a meta element in the head with name="description" and the text in content.
+
+  - id: drop-keywords
+    concept: head-and-metadata
+    prompt: This head carries a meta element that search engines have ignored for years. Remove it, and keep what they do use.
+    cites: [webpage-metadata#keywords-ignored, webpage-metadata#description-seo]
+    starter:
+      html: |
+        <head>
+          <meta charset="utf-8">
+          <meta name="keywords" content="ferry, river, boat, hollow oak">
+          <meta name="description" content="Timetable of the Hollow Oak ferry.">
+          <title>Ferry timetable</title>
+        </head>
+    solution:
+      html: |
+        <head>
+          <meta charset="utf-8">
+          <meta name="description" content="Timetable of the Hollow Oak ferry.">
+          <title>Ferry timetable</title>
+        </head>
+    checks:
+      - id: no-keywords
+        says: No keywords meta element is left
+        selector: 'meta[name="keywords" i]'
+        count: { max: 0 }
+      - id: description
+        says: The description stays
+        selector: 'meta[name="description" i]'
+        attr: { name: content, matches: 'Timetable' }
+    fixtures:
+      fail:
+        - name: the description removed instead
+          edits: [{ find: '<meta name="description" content="Timetable of the Hollow Oak ferry.">', replace: '<meta name="keywords" content="ferry">' }]
+          fails: [no-keywords, description]
+          because: Search engines ignore the keywords meta element, since spammers filled it with keywords; the description still shows in results.
+
+  - id: bookmark-name
+    concept: page-title
+    prompt: "When someone bookmarks this page, the bookmark should read “Ferry times – Hollow Oak”."
+    cites: [webpage-metadata#title-metadata, webpage-metadata#title-bookmark]
+    solution:
+      html: |
+        <title>Ferry times – Hollow Oak</title>
+    checks:
+      - id: title
+        says: The document's title reads Ferry times – Hollow Oak
+        selector: 'head > title'
+        text: { matches: '^\s*Ferry times\s*[–—-]\s*Hollow Oak\s*$' }
+    fixtures:
+      fail:
+        - name: a heading instead of a title
+          html: "<h1>Ferry times – Hollow Oak</h1>"
+          fails: [title]
+          because: A heading shows on the page; the bookmark name, the tab and search results come from the title element in the head.
+
+  - id: tab-and-heading
+    concept: page-title
+    prompt: "Write a page whose browser tab reads “Recipes”, while the big heading on the page itself reads “Grandmother's recipes”."
+    cites: [webpage-metadata#h1-on-page, webpage-metadata#title-metadata]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Recipes</title>
+          </head>
+          <body>
+            <h1>Grandmother's recipes</h1>
+          </body>
+        </html>
+    checks:
+      - id: title
+        says: The title reads Recipes
+        selector: 'head > title'
+        text: { matches: '^\s*Recipes\s*$' }
+      - id: heading
+        says: The page's top heading reads Grandmother's recipes
+        selector: 'body h1'
+        text: { matches: "^\\s*Grandmother['’]s recipes\\s*$" }
+    fixtures:
+      fail:
+        - name: the same text in both
+          html: "<title>Grandmother's recipes</title><h1>Grandmother's recipes</h1>"
+          fails: [title]
+          because: The title names the whole document for tabs and bookmarks; the h1 is the content's heading, and the two can differ.
+
+  - id: cafe-head
+    concept: character-encoding
+    prompt: "Write the head of the Café du Pont's page: it must tell the browser the page is UTF-8 before anything else, and title the page “Café du Pont”."
+    cites: [webpage-metadata#charset, el-meta#charset]
+    solution:
+      html: |
+        <head>
+          <meta charset="utf-8">
+          <title>Café du Pont</title>
+        </head>
+    checks:
+      - id: charset
+        says: The head declares UTF-8
+        selector: 'head > meta[charset]'
+        attr: { name: charset, matches: '^utf-8$' }
+      - id: first
+        says: The declaration comes first in the head
+        selector: 'head > :first-child'
+        attr: { name: charset, present: true }
+      - id: title
+        says: The page is titled Café du Pont
+        selector: 'head > title'
+        text: { matches: '^\s*Café du Pont\s*$' }
+    fixtures:
+      fail:
+        - name: the title before the declaration
+          html: '<head><title>Café du Pont</title><meta charset="utf-8"></head>'
+          fails: [first]
+          because: The browser must know the encoding before it reads any text, so the charset declaration comes first in the head.
+        - name: an old encoding
+          html: '<head><meta charset="iso-8859-1"><title>Café du Pont</title></head>'
+          fails: [charset]
+          because: UTF-8 covers the characters of nearly every human language; other encodings garble some of them.
+
+  - id: crepes-page
+    concept: character-encoding
+    prompt: "From a blank editor, write a complete page in UTF-8, titled “Crêpes”, with the paragraph “Crêpes every Sunday.”"
+    cites: [basic-html-syntax#charset, webpage-metadata#charset, basic-html-syntax#doctype, basic-html-syntax#body]
+    solution:
+      html: |
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Crêpes</title>
+          </head>
+          <body>
+            <p>Crêpes every Sunday.</p>
+          </body>
+        </html>
+    checks:
+      - id: doctype
+        says: The page starts with the doctype
+        doctype: true
+      - id: charset
+        says: The head declares UTF-8 first
+        selector: 'head > meta[charset]:first-child'
+        attr: { name: charset, matches: '^utf-8$' }
+      - id: title
+        says: The page is titled Crêpes
+        selector: 'head > title'
+        text: { matches: '^\s*Crêpes\s*$' }
+      - id: paragraph
+        says: The body holds the paragraph
+        selector: 'body p'
+        text: { matches: 'Crêpes every Sunday' }
+    fixtures:
+      fail:
+        - name: no encoding declared
+          html: "<!doctype html><html><head><title>Crêpes</title></head><body><p>Crêpes every Sunday.</p></body></html>"
+          fails: [charset]
+          because: Without <meta charset="utf-8"> a browser may guess another encoding and garble letters such as ê.
+
+  - id: wait-for-the-page
+    concept: head-resources
+    prompt: "In the head, load the external classic JavaScript script “map.js” so that it runs only once the HTML has been parsed, without moving it to the end of the body. Follow the recommended JavaScript markup and omit the type attribute."
+    cites: [webpage-metadata#script-defer, el-script#defer-scope, el-script#type-classic, el-script#data-block]
+    solution:
+      html: |
+        <head>
+          <script src="map.js" defer></script>
+        </head>
+    checks:
+      - id: in-head
+        says: The head loads map.js
+        selector: 'head > script[src="map.js"]'
+      - id: deferred
+        says: The script waits until the page has been parsed
+        selector: 'head > script[src="map.js"]'
+        attr: { name: defer, present: true }
+      - id: no-async
+        says: async does not override deferred execution
+        selector: 'head > script[src="map.js"][async]'
+        count: { max: 0 }
+      - id: classic
+        says: The JavaScript script omits the type attribute
+        selector: 'head > script[src="map.js"][type]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: a data block instead of executable JavaScript
+          html: '<head><script src="map.js" type="application/json" defer></script></head>'
+          fails: [classic]
+          because: This type creates a nonexecuting data block. Omit type for the requested classic JavaScript script.
+        - name: a module instead of the requested classic script
+          html: '<head><script src="map.js" type="module" defer></script></head>'
+          fails: [classic]
+          because: Module scripts defer by default, but this exercise asks for an external classic script.
+        - name: async overrides defer
+          html: '<head><script src="map.js" defer async></script></head>'
+          fails: [no-async]
+          because: When an external classic script has both async and defer, async takes precedence, so execution need not wait for HTML parsing.
+        - name: the script without defer
+          html: '<head><script src="map.js"></script></head>'
+          fails: [deferred]
+          because: Without defer or async, this external classic script executes when the parser reaches it. defer delays execution until HTML parsing finishes.
+        - name: the code inside the element instead of a src
+          html: '<head><script defer>map.js</script></head>'
+          fails: [in-head, deferred]
+          because: A script element points at the file to load with its src attribute.
+
+  - id: style-and-icon
+    concept: head-resources
+    prompt: "Make this page use the stylesheet “village.css” and show the icon “fox.ico” in its browser tab."
+    cites: [webpage-metadata#link-stylesheet, webpage-metadata#favicon-link]
+    solution:
+      html: |
+        <head>
+          <link rel="stylesheet" href="village.css">
+          <link rel="icon" href="fox.ico">
+        </head>
+    checks:
+      - id: stylesheet
+        says: The head links village.css as a stylesheet
+        selector: 'head > link[rel~="stylesheet" i]'
+        attr: { name: href, equals: village.css }
+      - id: icon
+        says: The head links fox.ico as the icon
+        selector: 'head > link[rel~="icon" i]'
+        attr: { name: href, equals: fox.ico }
+    fixtures:
+      pass:
+        - name: the icon with its type
+          html: '<link rel="icon" href="fox.ico" type="image/x-icon"><link href="village.css" rel="stylesheet">'
+      fail:
+        - name: the stylesheet with a src
+          html: '<head><link rel="stylesheet" src="village.css"><link rel="icon" href="fox.ico"></head>'
+          fails: [stylesheet]
+          because: A link element names its file in href; rel says what the file is to the page.
+
+  - id: two-scripts-wait
+    concept: head-resources
+    prompt: "Load the external classic JavaScript scripts “lanterns.js” and “weather.js” from the head. They must execute in that declaration order, and neither may run before HTML parsing finishes. Follow the recommended JavaScript markup and omit both type attributes."
+    cites: [webpage-metadata#script-defer, el-script#defer-scope, el-script#type-classic, el-script#data-block]
+    solution:
+      html: |
+        <head>
+          <script src="lanterns.js" defer></script>
+          <script src="weather.js" defer></script>
+        </head>
+    checks:
+      - id: both
+        says: The head loads both scripts
+        selector: 'head > script[src]'
+        count: { min: 2 }
+      - id: wait
+        says: Every script in the head waits for the page
+        selector: 'head > script[src]'
+        every: true
+        attr: { name: defer, present: true }
+      - id: order
+        says: lanterns.js comes before weather.js
+        selector: 'script[src="lanterns.js"]'
+        precedes: 'script[src="weather.js"]'
+      - id: no-async
+        says: Neither script uses async
+        selector: 'head > script[src][async]'
+        count: { max: 0 }
+      - id: classic
+        says: Both JavaScript scripts omit the type attribute
+        selector: 'head > script[src][type]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: data blocks instead of executable JavaScript
+          html: '<head><script src="lanterns.js" type="application/json" defer></script><script src="weather.js" type="application/json" defer></script></head>'
+          fails: [classic]
+          because: These type values create nonexecuting data blocks. Omit type for the requested classic JavaScript scripts.
+        - name: modules instead of the requested classic scripts
+          html: '<head><script src="lanterns.js" type="module" defer></script><script src="weather.js" type="module" defer></script></head>'
+          fails: [classic]
+          because: Module scripts defer by default, but these requested scripts are classic scripts.
+        - name: async overrides deferred order
+          html: '<head><script src="lanterns.js" defer async></script><script src="weather.js" defer></script></head>'
+          fails: [no-async]
+          because: async overrides defer on the first script, so the required parsing boundary and declaration order are not guaranteed.
+        - name: only the first deferred
+          html: '<head><script src="lanterns.js" defer></script><script src="weather.js"></script></head>'
+          fails: [wait]
+          because: Each script element needs its own defer; one script waiting does not make the next one wait.
+
+  - id: british-page
+    concept: document-language
+    prompt: "Begin a page written in British English: the root element, and inside it the paragraph “Colour the lanterns gold.”"
+    cites: [webpage-metadata#lang]
+    solution:
+      html: |
+        <html lang="en-GB">
+          <body>
+            <p>Colour the lanterns gold.</p>
+          </body>
+        </html>
+    checks:
+      - id: lang
+        says: The root element says the page is in British English
+        selector: html
+        attr: { name: lang, matches: '^en-gb$' }
+      - id: paragraph
+        says: The paragraph is on the page
+        selector: p
+        text: { matches: 'Colour the lanterns gold' }
+    fixtures:
+      fail:
+        - name: the language on the paragraph only
+          html: '<html><body><p lang="en-GB">Colour the lanterns gold.</p></body></html>'
+          fails: [lang]
+          because: The language of the whole page is set with lang on the html element, the root.
+
+  - id: japanese-greeting
+    concept: document-language
+    prompt: "This English page quotes a traveller's Japanese greeting, “こんにちは”. Mark that part so screen readers and search engines know it is Japanese."
+    cites: [webpage-metadata#lang-parts, webpage-metadata#lang]
+    starter:
+      html: |
+        <html lang="en">
+          <body>
+            <p>The traveller said こんにちは and bowed.</p>
+          </body>
+        </html>
+    solution:
+      html: |
+        <html lang="en">
+          <body>
+            <p>The traveller said <span lang="ja">こんにちは</span> and bowed.</p>
+          </body>
+        </html>
+    checks:
+      - id: japanese
+        says: The greeting alone is marked as Japanese
+        selector: '[lang]'
+        attr: { name: lang, matches: '^ja(-|$)' }
+        text: { matches: '^\s*こんにちは\s*$' }
+      - id: english
+        says: The page is still in English
+        selector: html
+        attr: { name: lang, matches: '^en' }
+    fixtures:
+      pass:
+        - name: idiomatic text with a regional tag
+          edits: [{ find: '<span lang="ja">こんにちは</span>', replace: '<i lang="ja-JP">こんにちは</i>' }]
+      fail:
+        - name: the whole paragraph marked as Japanese
+          edits: [{ find: '<p>The traveller said <span lang="ja">こんにちは</span> and bowed.</p>', replace: '<p lang="ja">The traveller said こんにちは and bowed.</p>' }]
+          fails: [japanese]
+          because: Only the greeting is Japanese; marking the whole sentence would have it read with Japanese pronunciation.

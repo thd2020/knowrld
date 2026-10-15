@@ -1,0 +1,759 @@
+# Writing tasks for the road, part 2: text semantics.
+tasks:
+  - id: herbal-outline
+    concept: headings
+    prompt: "Write the headings of a herbal, with no other text: the book's title, “Herbal of the Vale”; its two chapters, “Roots” and “Leaves”; and within “Roots”, a section called “Mandrake”."
+    cites: [headings-and-paragraphs#six-levels, headings-and-paragraphs#story-example, headings-and-paragraphs#hierarchy-rules]
+    solution:
+      html: |
+        <h1>Herbal of the Vale</h1>
+        <h2>Roots</h2>
+        <h3>Mandrake</h3>
+        <h2>Leaves</h2>
+    checks:
+      - id: title
+        says: The book's title is the single top-level heading
+        selector: h1
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*Herbal of the Vale\s*$' }
+      - id: chapters
+        says: Roots and Leaves are the chapters, one level down
+        selector: h2
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*(Roots|Leaves)\s*$' }
+      - id: section
+        says: Mandrake is a section of Roots
+        selector: 'h1, h2, h3, h4, h5, h6'
+        text: { matches: '^\s*Mandrake\s*$' }
+        under: { matches: '^\s*Roots\s*$' }
+      - id: no-skips
+        says: No heading level is skipped
+        selector: body
+        outline: { start: 1 }
+    fixtures:
+      fail:
+        - name: the section two levels down
+          html: "<h1>Herbal of the Vale</h1><h2>Roots</h2><h4>Mandrake</h4><h2>Leaves</h2>"
+          fails: [no-skips]
+          because: Each heading sits one level below the one it belongs to; jumping from h2 to h4 leaves a gap in the outline.
+        - name: Mandrake after Leaves
+          html: "<h1>Herbal of the Vale</h1><h2>Roots</h2><h2>Leaves</h2><h3>Mandrake</h3>"
+          fails: [section]
+          because: A section belongs to the nearest heading above it of a higher level, so Mandrake must come under Roots.
+
+  - id: joining-the-guild
+    concept: headings
+    prompt: "Write one part of the guild's page: a second-level heading, “Joining the guild”, followed by two paragraphs: “Bring a letter from your master.” and “Pay one silver at the door.”"
+    cites: [headings-and-paragraphs#paragraph, headings-and-paragraphs#six-levels]
+    solution:
+      html: |
+        <h2>Joining the guild</h2>
+        <p>Bring a letter from your master.</p>
+        <p>Pay one silver at the door.</p>
+    checks:
+      - id: heading
+        says: A second-level heading reads Joining the guild
+        selector: h2
+        text: { matches: '^\s*Joining the guild\s*$' }
+      - id: paragraphs
+        says: Two paragraphs follow it
+        selector: h2
+        next: [{ is: p, text: { matches: 'letter' } }, { is: p, text: { matches: 'one silver' } }]
+    fixtures:
+      fail:
+        - name: a bold paragraph instead of a heading
+          html: "<p><b>Joining the guild</b></p><p>Bring a letter from your master.</p><p>Pay one silver at the door.</p>"
+          fails: [heading, paragraphs]
+          because: Bold text in a paragraph is still a paragraph; a heading needs a heading element of the right level.
+
+  - id: grey-wall
+    concept: why-structure
+    prompt: This notice is one paragraph without headings. Give it a structure people can skim and navigate by headings, without changing the words.
+    cites: [headings-and-paragraphs#why-structure, accessible-html#screen-reader-navigation]
+    starter:
+      html: |
+        <p>Healing herbs. Yarrow. Stops a cut from bleeding. Comfrey. Helps a broken bone knit.</p>
+    solution:
+      html: |
+        <h1>Healing herbs</h1>
+        <h2>Yarrow</h2>
+        <p>Stops a cut from bleeding.</p>
+        <h2>Comfrey</h2>
+        <p>Helps a broken bone knit.</p>
+    checks:
+      - id: title
+        says: Healing herbs is the top-level heading
+        selector: h1
+        text: { matches: '^\s*Healing herbs\.?\s*$' }
+      - id: herbs
+        says: Each herb has a heading of its own, one level down
+        selector: h2
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*(Yarrow|Comfrey)\.?\s*$' }
+      - id: text
+        says: What each herb does is a paragraph
+        selector: p
+        count: { min: 2 }
+      - id: no-skips
+        says: The outline starts at h1 and skips no level
+        selector: body
+        outline: { start: 1 }
+    fixtures:
+      fail:
+        - name: bold names in one paragraph
+          html: "<p><b>Healing herbs.</b> <b>Yarrow.</b> Stops a cut from bleeding. <b>Comfrey.</b> Helps a broken bone knit.</p>"
+          fails: [title, herbs]
+          because: Screen readers and search engines find a page's outline in its heading elements; bold text gives them nothing to list.
+
+  - id: labels-to-headings
+    concept: why-structure
+    prompt: The page already has an h1 title. Make Opening hours and Prices subsection headings one level below it, keeping the hours and prices as paragraphs.
+    cites: [accessible-html#screen-reader-navigation, headings-and-paragraphs#hierarchy-rules]
+    starter:
+      html: |
+        <h1>The bakery</h1>
+        <p><b>Opening hours</b></p>
+        <p>Dawn to dusk.</p>
+        <p><b>Prices</b></p>
+        <p>Two copper a loaf.</p>
+    solution:
+      html: |
+        <h1>The bakery</h1>
+        <h2>Opening hours</h2>
+        <p>Dawn to dusk.</p>
+        <h2>Prices</h2>
+        <p>Two copper a loaf.</p>
+    checks:
+      - id: headings
+        says: Opening hours and Prices are headings
+        selector: 'h2, h3, h4, h5, h6'
+        count: { min: 2 }
+        every: true
+        text: { matches: '^\s*(Opening hours|Prices)\s*$' }
+      - id: no-skips
+        says: They sit one level below the title
+        selector: body
+        outline: { start: 1 }
+      - id: content
+        says: The hours and prices stay paragraphs
+        selector: p
+        count: { min: 2, max: 2 }
+    fixtures:
+      fail:
+        - name: the labels as third-level headings
+          edits:
+            - { find: "<h2>Opening hours</h2>", replace: "<h3>Opening hours</h3>" }
+            - { find: "<h2>Prices</h2>", replace: "<h3>Prices</h3>" }
+          fails: [no-skips]
+          because: Under an h1 the next level is h2; skipping a level breaks the outline a screen reader reads out.
+
+  - id: span-title
+    concept: semantics
+    prompt: This span only looks like the page's title. Make it the real top-level heading, and leave how it looks to the stylesheet.
+    cites: [headings-and-paragraphs#h1-semantic, headings-and-paragraphs#span-no-semantics]
+    starter:
+      html: |
+        <span style="font-size: 32px; font-weight: bold; display: block">The Lost Lantern</span>
+        <p>A tale told by the river folk.</p>
+    solution:
+      html: |
+        <h1>The Lost Lantern</h1>
+        <p>A tale told by the river folk.</p>
+    checks:
+      - id: heading
+        says: The Lost Lantern is the top-level heading
+        selector: h1
+        text: { matches: '^\s*The Lost Lantern\s*$' }
+      - id: no-fake
+        says: No styled span is left pretending to be a heading
+        selector: 'span[style]'
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the span kept inside the heading
+          html: '<h1><span style="font-size: 32px">The Lost Lantern</span></h1><p>A tale told by the river folk.</p>'
+          fails: [no-fake]
+          because: The heading element gives the title its meaning; its looks belong in the stylesheet, not in a styled span.
+        - name: a bigger span
+          html: '<span style="font-size: 48px; font-weight: bold; display: block">The Lost Lantern</span><p>A tale told by the river folk.</p>'
+          fails: [heading]
+          because: A span has no meaning, however large; only a heading element is read as a heading.
+
+  - id: faked-paragraphs
+    concept: semantics
+    prompt: These two paragraphs are faked with one div and blank lines. Mark them up as what they are.
+    cites: [glossary-semantics#definition, glossary-semantics#ask-yourself]
+    starter:
+      html: |
+        <div>The ferry leaves at noon.<br><br>Tickets are sold on board.</div>
+    solution:
+      html: |
+        <p>The ferry leaves at noon.</p>
+        <p>Tickets are sold on board.</p>
+    checks:
+      - id: paragraphs
+        says: Each paragraph is a p element
+        selector: p
+        count: { min: 2, max: 2 }
+      - id: no-breaks
+        says: No line breaks fake the gap between them
+        selector: br
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: one paragraph with breaks
+          html: "<p>The ferry leaves at noon.<br><br>Tickets are sold on board.</p>"
+          fails: [paragraphs, no-breaks]
+          because: Ask what the content is; two paragraphs are two p elements, and the gap between them is the stylesheet's job.
+
+  - id: deadly-mushroom
+    concept: emphasis-and-importance
+    prompt: "Mark up the warning “Keep away from the black mushroom: even one bite is deadly.” All of “even one bite is deadly” is important, and within it the word one is stressed."
+    cites: [emphasis-and-importance#nest-strong-em, emphasis-and-importance#em, emphasis-and-importance#strong, el-strong#b-vs-strong, el-em#i-vs-em, el-b#uses]
+    solution:
+      html: |
+        <p>Keep away from the black mushroom: <strong>even <em>one</em> bite is deadly</strong>.</p>
+    checks:
+      - id: important
+        says: Even one bite is deadly is marked as important
+        selector: strong
+        text: { matches: '^\s*even one bite is deadly\.?\s*$' }
+      - id: stressed
+        says: One is stressed, inside the important words
+        selector: 'strong em'
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*one\s*$' }
+    fixtures:
+      fail:
+        - name: bold and italic tags
+          html: "<p>Keep away from the black mushroom: <b>even <i>one</i> bite is deadly</b>.</p>"
+          fails: [important, stressed]
+          because: b and i do not express the requested importance and stress; strong carries importance and em carries stress.
+        - name: stress beside the important words, not inside
+          html: "<p>Keep away from the black mushroom: even <em>one</em> <strong>bite is deadly</strong>.</p>"
+          fails: [important, stressed]
+          because: The stressed word is part of the warning, so the em goes inside the strong.
+
+  - id: whose-cheese
+    concept: emphasis-and-importance
+    prompt: "Write “I did not take the cheese.” twice, as two paragraphs that mean different things: in the first, I is the stressed word; in the second, “cheese” is."
+    cites: [emphasis-and-importance#em]
+    solution:
+      html: |
+        <p><em>I</em> did not take the cheese.</p>
+        <p>I did not take the <em>cheese</em>.</p>
+    checks:
+      - id: two
+        says: There are two paragraphs, each with one stressed word
+        selector: 'p em'
+        count: { min: 2, max: 2 }
+      - id: first
+        says: In one, I is stressed
+        selector: 'p em'
+        text: { matches: '^\s*I\s*$' }
+      - id: second
+        says: In the other, cheese is stressed
+        selector: 'p em'
+        text: { matches: '^\s*cheese\s*$' }
+    fixtures:
+      fail:
+        - name: importance instead of stress
+          html: "<p><strong>I</strong> did not take the cheese.</p><p>I did not take the <strong>cheese</strong>.</p>"
+          fails: [two, first, second]
+          because: Stress that changes what a sentence means is em; strong marks importance, not where the voice falls.
+
+  - id: hedgehog-name
+    concept: presentational-elements
+    prompt: "Write “The hedgehog, Erinaceus europaeus, sleeps all winter.” Set the species name apart from the prose, as books traditionally do, without stressing it."
+    cites: [emphasis-and-importance#i-b-u-meanings, emphasis-and-importance#best-rule]
+    solution:
+      html: |
+        <p>The hedgehog, <i>Erinaceus europaeus</i>, sleeps all winter.</p>
+    checks:
+      - id: species
+        says: The species name is set off with i
+        selector: 'p i'
+        text: { matches: '^\s*Erinaceus europaeus\s*$' }
+      - id: no-stress
+        says: Nothing is stressed
+        selector: em
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the name stressed
+          html: "<p>The hedgehog, <em>Erinaceus europaeus</em>, sleeps all winter.</p>"
+          fails: [species, no-stress]
+          because: A taxonomic name is set apart, not stressed; i conveys what italics traditionally mean, such as a species name.
+
+  - id: cake-names
+    concept: presentational-elements
+    prompt: "Write “Our Honey Cake and Plum Tart sell out by noon.” and draw the reader's eye to the two cake names, without claiming they are more important than the rest."
+    cites: [emphasis-and-importance#i-b-u-meanings, emphasis-and-importance#best-rule]
+    solution:
+      html: |
+        <p>Our <b>Honey Cake</b> and <b>Plum Tart</b> sell out by noon.</p>
+    checks:
+      - id: names
+        says: Both names are marked for attention
+        selector: 'p b'
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*(Honey Cake|Plum Tart)\s*$' }
+      - id: no-importance
+        says: Nothing is marked as important
+        selector: strong
+        count: { max: 0 }
+    fixtures:
+      fail:
+        - name: the names as strong
+          html: "<p>Our <strong>Honey Cake</strong> and <strong>Plum Tart</strong> sell out by noon.</p>"
+          fails: [names, no-importance]
+          because: Product names only need attention; b draws the eye, while strong says the words matter more than the rest.
+
+  - id: potion-recipe
+    concept: lists
+    prompt: "Write the potion recipe as two lists: what you need, in no particular order (“nettle”, “honey”, “river water”), and the method, in order (“Boil the water.”, “Add the nettle.”, “Stir in the honey.”)."
+    cites: [lists#unordered, lists#ordered]
+    solution:
+      html: |
+        <ul>
+          <li>nettle</li>
+          <li>honey</li>
+          <li>river water</li>
+        </ul>
+        <ol>
+          <li>Boil the water.</li>
+          <li>Add the nettle.</li>
+          <li>Stir in the honey.</li>
+        </ol>
+    checks:
+      - id: ingredients
+        says: The ingredients are an unordered list of three
+        selector: 'ul > li'
+        count: { min: 3, max: 3 }
+      - id: method
+        says: The method is an ordered list of three steps
+        selector: 'ol > li'
+        count: { min: 3, max: 3 }
+      - id: first-step
+        says: The method starts by boiling the water
+        selector: 'ol > li'
+        first: true
+        text: { matches: 'boil' }
+    fixtures:
+      fail:
+        - name: the method as bullets
+          html: "<ul><li>nettle</li><li>honey</li><li>river water</li></ul><ul><li>Boil the water.</li><li>Add the nettle.</li><li>Stir in the honey.</li></ul>"
+          fails: [ingredients, method]
+          because: When the order of the items matters, as in a method, the list is ordered, an ol.
+
+  - id: route-to-the-tower
+    concept: lists
+    prompt: "Write the route to the tower as numbered steps: cross the bridge; take the left fork; climb the hill. Taking the left fork has two points of its own: pass the well, and keep the river on your right."
+    cites: [lists#ordered, lists#nesting, lists#nesting-example]
+    solution:
+      html: |
+        <ol>
+          <li>Cross the bridge.</li>
+          <li>Take the left fork.
+            <ul>
+              <li>Pass the well.</li>
+              <li>Keep the river on your right.</li>
+            </ul>
+          </li>
+          <li>Climb the hill.</li>
+        </ol>
+    checks:
+      - id: steps
+        says: Three numbered steps
+        selector: 'ol:not(li *) > li'
+        count: { min: 3, max: 3 }
+      - id: nested
+        says: The two points sit in a list inside the left-fork step
+        selector: 'ol > li > :is(ul, ol) > li'
+        count: { min: 2, max: 2 }
+        within: 'li'
+      - id: right-step
+        says: They belong to the left-fork step
+        selector: ':is(ul, ol) > li'
+        text: { matches: 'well' }
+        within: 'li:nth-child(2)'
+    fixtures:
+      fail:
+        - name: the points as steps of their own
+          html: "<ol><li>Cross the bridge.</li><li>Take the left fork.</li><li>Pass the well.</li><li>Keep the river on your right.</li><li>Climb the hill.</li></ol>"
+          fails: [steps, nested]
+          because: Sub-points go in a list nested inside the item they belong to, so they read as part of that step.
+
+  - id: herb-terms
+    concept: description-lists
+    prompt: "Write a glossary of two terms and their meanings: “Tincture”, herbs steeped in strong spirit; “Poultice”, a warm paste laid on the skin."
+    cites: [lists#description-purpose, lists#dl-dt-dd, lists#dl-example]
+    solution:
+      html: |
+        <dl>
+          <dt>Tincture</dt>
+          <dd>Herbs steeped in strong spirit.</dd>
+          <dt>Poultice</dt>
+          <dd>A warm paste laid on the skin.</dd>
+        </dl>
+    checks:
+      - id: terms
+        says: The two terms are dt elements in a description list
+        selector: 'dl dt'
+        count: { min: 2, max: 2 }
+      - id: tincture
+        says: Tincture is followed by its description
+        selector: dt
+        text: { matches: '^\s*Tincture\s*$' }
+        next: [{ is: dd, text: { matches: 'spirit' } }]
+      - id: poultice
+        says: Poultice is followed by its description
+        selector: dt
+        text: { matches: '^\s*Poultice\s*$' }
+        next: [{ is: dd, text: { matches: 'paste' } }]
+    fixtures:
+      fail:
+        - name: a bullet list with bold terms
+          html: "<ul><li><b>Tincture</b>: herbs steeped in strong spirit.</li><li><b>Poultice</b>: a warm paste laid on the skin.</li></ul>"
+          fails: [terms, tincture, poultice]
+          because: Terms and their descriptions are a description list, dl, with each term in dt and its description in dd.
+
+  - id: ember-two-meanings
+    concept: description-lists
+    prompt: "In the village glossary, “Ember” has two meanings: a glowing piece of coal, and the name of the innkeeper's cat. Write the entry."
+    cites: [lists#multiple-descriptions, lists#dl-dt-dd]
+    solution:
+      html: |
+        <dl>
+          <dt>Ember</dt>
+          <dd>A glowing piece of coal.</dd>
+          <dd>The name of the innkeeper's cat.</dd>
+        </dl>
+    checks:
+      - id: term
+        says: Ember is the one term
+        selector: 'dl dt'
+        count: { min: 1, max: 1 }
+        text: { matches: '^\s*Ember\s*$' }
+      - id: meanings
+        says: Two descriptions follow it
+        selector: dt
+        next: [{ is: dd, text: { matches: 'coal' } }, { is: dd, text: { matches: 'cat' } }]
+    fixtures:
+      fail:
+        - name: the term written twice
+          html: "<dl><dt>Ember</dt><dd>A glowing piece of coal.</dd><dt>Ember</dt><dd>The name of the innkeeper's cat.</dd></dl>"
+          fails: [term]
+          because: One term may have several descriptions; each is its own dd after the single dt.
+
+  - id: mayors-words
+    concept: quotations
+    prompt: "The notice board quotes the mayor's harvest speech at length: “We gather what the year has given, and we share it.” The speech is published at “/speeches/harvest.html”. Quote it as a block, recording where it comes from."
+    cites: [advanced-text-features#blockquote]
+    solution:
+      html: |
+        <blockquote cite="/speeches/harvest.html">
+          <p>We gather what the year has given, and we share it.</p>
+        </blockquote>
+    checks:
+      - id: block
+        says: The speech is a block quotation
+        selector: blockquote
+        text: { matches: 'We gather what the year has given' }
+      - id: source
+        says: The blockquote records its source page
+        selector: blockquote
+        attr: { name: cite, equals: /speeches/harvest.html }
+    fixtures:
+      fail:
+        - name: the source as a link attribute
+          html: '<blockquote href="/speeches/harvest.html"><p>We gather what the year has given, and we share it.</p></blockquote>'
+          fails: [source]
+          because: A quotation's source address goes in its cite attribute.
+
+  - id: millers-saying
+    concept: quotations
+    prompt: "Write the sentence “The Miller's Almanac says Slow wheels grind fine flour.” with the saying as an inline quotation that records its source, “https://example.org/almanac”, and with the book's title, “The Miller's Almanac”, credited on the page."
+    cites: [advanced-text-features#inline-q, advanced-text-features#cite-element, advanced-text-features#cite-attribute-hidden]
+    solution:
+      html: |
+        <p><cite>The Miller's Almanac</cite> says <q cite="https://example.org/almanac">Slow wheels grind fine flour.</q></p>
+    checks:
+      - id: inline
+        says: The saying is an inline quotation
+        selector: 'p q'
+        text: { matches: 'Slow wheels grind fine flour' }
+      - id: source
+        says: It records its source address
+        selector: q
+        attr: { name: cite, equals: 'https://example.org/almanac' }
+      - id: title
+        says: The book's title is credited with cite
+        selector: cite
+        text: { matches: "Miller['’]s Almanac" }
+    fixtures:
+      fail:
+        - name: the title only in the attribute
+          html: '<p>The almanac says <q cite="https://example.org/almanac">Slow wheels grind fine flour.</q></p>'
+          fails: [title]
+          because: Browsers do not show the cite attribute, so the source's title also goes on the page, in a cite element.
+
+  - id: guild-abbreviation
+    concept: abbreviations
+    prompt: "Write “The GV council meets on Monday.” GV stands for “Guild of the Vale”; keep the sentence short, but make the expansion available to readers."
+    cites: [advanced-text-features#abbr, advanced-text-features#abbr-title, advanced-text-features#acronym-obsolete]
+    solution:
+      html: |
+        <p>The <abbr title="Guild of the Vale">GV</abbr> council meets on Monday.</p>
+    checks:
+      - id: abbr
+        says: GV is marked as an abbreviation
+        selector: abbr
+        text: { matches: '^\s*GV\s*$' }
+      - id: expansion
+        says: Its expansion is in the title attribute
+        selector: abbr
+        attr: { name: title, matches: '^Guild of the Vale$' }
+    fixtures:
+      fail:
+        - name: the obsolete acronym element
+          html: '<p>The <acronym title="Guild of the Vale">GV</acronym> council meets on Monday.</p>'
+          fails: [abbr, expansion]
+          because: acronym was removed from HTML; abbr marks both abbreviations and acronyms.
+
+  - id: ferry-company
+    concept: abbreviations
+    prompt: "Write two sentences: “The Hollow Oak Ferry Company (HOFC) runs the river crossing.” and “The HOFC sails at noon.” Spell the name out in the text where it first appears, and mark the abbreviation each time."
+    cites: [advanced-text-features#abbr-choices, advanced-text-features#abbr]
+    solution:
+      html: |
+        <p>The Hollow Oak Ferry Company (<abbr>HOFC</abbr>) runs the river crossing.</p>
+        <p>The <abbr title="Hollow Oak Ferry Company">HOFC</abbr> sails at noon.</p>
+    checks:
+      - id: spelled-out
+        says: The name is spelled out in the text on first mention
+        selector: p
+        first: true
+        text: { matches: 'Hollow Oak Ferry Company \(\s*HOFC\s*\)' }
+      - id: marked
+        says: HOFC is marked as an abbreviation both times
+        selector: abbr
+        count: { min: 2 }
+        every: true
+        text: { matches: '^\s*HOFC\s*$' }
+    fixtures:
+      fail:
+        - name: the expansion only in a title
+          html: '<p>The <abbr title="Hollow Oak Ferry Company">HOFC</abbr> runs the river crossing.</p><p>The <abbr title="Hollow Oak Ferry Company">HOFC</abbr> sails at noon.</p>'
+          fails: [spelled-out]
+          because: A title is hidden from many readers; spelling the name out in the text on first mention serves everyone.
+
+  - id: page-author
+    concept: contact-address
+    prompt: "End the page with its author's contact details: “Written by Wren Thatcher, at the Old Mill, River Road.”"
+    cites: [advanced-text-features#address, el-address#usage]
+    solution:
+      html: |
+        <address>Written by Wren Thatcher, at the Old Mill, River Road.</address>
+    checks:
+      - id: contact
+        says: The contact details are in an address element
+        selector: address
+        text: { matches: 'Wren Thatcher' }
+    fixtures:
+      fail:
+        - name: a plain paragraph
+          html: "<p>Written by Wren Thatcher, at the Old Mill, River Road.</p>"
+          fails: [contact]
+          because: The page's contact details belong in an address element.
+
+  - id: which-address
+    concept: contact-address
+    prompt: One of these two address elements is not contact information for the page. Fix it.
+    cites: [advanced-text-features#address-scope, el-address#usage]
+    starter:
+      html: |
+        <address>The fair is held at the Old Mill, River Road.</address>
+        <address>Questions? Write to Wren Thatcher, Old Mill, River Road.</address>
+    solution:
+      html: |
+        <p>The fair is held at the Old Mill, River Road.</p>
+        <address>Questions? Write to Wren Thatcher, Old Mill, River Road.</address>
+    checks:
+      - id: only-contact
+        says: Only the contact details are an address
+        selector: address
+        count: { min: 1, max: 1 }
+        text: { matches: 'Wren Thatcher' }
+      - id: venue
+        says: The fair's venue stays on the page as ordinary text
+        selector: 'p'
+        text: { matches: 'The fair is held' }
+    fixtures:
+      fail:
+        - name: the contact details unmarked
+          html: "<address>The fair is held at the Old Mill, River Road.</address><p>Questions? Write to Wren Thatcher, Old Mill, River Road.</p>"
+          fails: [only-contact, venue]
+          because: address is for the contact details of the page or article, not for any address the text happens to mention.
+
+  - id: rust-formula
+    concept: superscript-subscript
+    prompt: "Show the formula Fe2O3, with the 2 and the 3 as subscripts."
+    cites: [advanced-text-features#sup-sub, el-sub#formula-uses]
+    solution:
+      html: |
+        <p>The formula is Fe<sub>2</sub>O<sub>3</sub>.</p>
+    checks:
+      - id: subscripts
+        says: The 2 and the 3 are subscripts
+        selector: 'p sub'
+        count: { min: 2, max: 2 }
+        every: true
+        text: { matches: '^\s*[23]\s*$' }
+    fixtures:
+      fail:
+        - name: superscripts
+          html: "<p>The formula is Fe<sup>2</sup>O<sup>3</sup>.</p>"
+          fails: [subscripts]
+          because: The counts in a chemical formula sit below the line, so they are sub, not sup.
+
+  - id: square-and-date
+    concept: superscript-subscript
+    prompt: "Write “The field is x2 paces across, and the fair was on the 1st of May.” with the 2 as an exponent and the “st” raised."
+    cites: [advanced-text-features#sup-sub, el-sup#uses]
+    solution:
+      html: |
+        <p>The field is x<sup>2</sup> paces across, and the fair was on the 1<sup>st</sup> of May.</p>
+    checks:
+      - id: exponent
+        says: The exponent is a superscript
+        selector: sup
+        text: { matches: '^\s*2\s*$' }
+      - id: ordinal
+        says: The st of 1st is a superscript
+        selector: sup
+        text: { matches: '^\s*st\s*$' }
+    fixtures:
+      fail:
+        - name: the raised text styled instead
+          html: '<p>The field is x<span style="vertical-align: super">2</span> paces across, and the fair was on the 1<span style="vertical-align: super">st</span> of May.</p>'
+          fails: [exponent, ordinal]
+          because: An exponent and an ordinal's ending are part of their meaning, so they are marked with sup rather than styled.
+
+  - id: save-keys
+    concept: computer-code
+    prompt: "Write “Press Ctrl + S and the editor replies Saved.” Mark what the player types on the keyboard and what the program prints."
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples, advanced-text-features#code-other-elements, el-code#summary, el-pre#whitespace, css-whitespace#dom-preservation, css-whitespace#default-display, css-whitespace#collapse-summary]
+    solution:
+      html: |
+        <p>Press <kbd>Ctrl</kbd> + <kbd>S</kbd> and the editor replies <samp>Saved</samp>.</p>
+    checks:
+      - id: keys
+        says: The keys are marked as keyboard input
+        selector: kbd
+        text: { matches: 'Ctrl' }
+      - id: output
+        says: The reply is marked as program output
+        selector: samp
+        text: { matches: '^\s*Saved\.?\s*$' }
+    fixtures:
+      pass:
+        - name: the combination in one kbd
+          html: "<p>Press <kbd>Ctrl + S</kbd> and the editor replies <samp>Saved</samp>.</p>"
+      fail:
+        - name: everything as code
+          html: "<p>Press <code>Ctrl + S</code> and the editor replies <code>Saved</code>.</p>"
+          fails: [keys, output]
+          because: code is generic; keyboard input is kbd and a program's output is samp.
+
+  - id: code-block
+    concept: computer-code
+    prompt: "Under default pre styling, show this line of JavaScript as a block of code, preserving the displayed spacing: let lantern   = 'lit';"
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-examples, advanced-text-features#code-other-elements, el-code#summary, el-pre#whitespace, css-whitespace#dom-preservation, css-whitespace#default-display, css-whitespace#collapse-summary]
+    solution:
+      html: |
+        <pre><code>let lantern   = 'lit';</code></pre>
+    checks:
+      - id: block
+        says: The code is preformatted, so its spacing survives
+        selector: 'pre code, pre'
+        text: { matches: 'let lantern\s{3}= .lit.;' }
+      - id: code
+        says: It is marked as code
+        selector: 'pre code'
+    fixtures:
+      fail:
+        - name: code without pre
+          html: "<p><code>let lantern   = 'lit';</code></p>"
+          fails: [block, code]
+          because: Default CSS styling collapses whitespace in this paragraph/code example. Use pre’s default styling to preserve its spacing, with code inside it; source whitespace remains in the DOM.
+
+  - id: area-variables
+    concept: computer-code
+    prompt: "Write “The area is w × h, where w is the width and h the height.” Mark “w” and “h” as variables each time they appear."
+    cites: [advanced-text-features#code-elements, advanced-text-features#code-other-elements, el-code#summary]
+    solution:
+      html: |
+        <p>The area is <var>w</var> × <var>h</var>, where <var>w</var> is the width and <var>h</var> the height.</p>
+    checks:
+      - id: vars
+        says: Each w and h is a var
+        selector: var
+        count: { min: 4, max: 4 }
+        every: true
+        text: { matches: '^\s*[wh]\s*$' }
+    fixtures:
+      fail:
+        - name: italics instead
+          html: "<p>The area is <i>w</i> × <i>h</i>, where <i>w</i> is the width and <i>h</i> the height.</p>"
+          fails: [vars]
+          because: A variable's name, in maths or code, is marked with var.
+
+  - id: festival-day
+    concept: times-and-dates
+    prompt: "Write “The lantern festival is on 21 June 2027.” so that machines can read the date."
+    cites: [advanced-text-features#time, advanced-text-features#time-why]
+    solution:
+      html: |
+        <p>The lantern festival is on <time datetime="2027-06-21">21 June 2027</time>.</p>
+    checks:
+      - id: date
+        says: The date is a time element with a machine-readable date
+        selector: time
+        attr: { name: datetime, matches: '^2027-06-21$' }
+      - id: valid
+        says: Its value is a valid date
+        selector: time
+        datetime: true
+    fixtures:
+      fail:
+        - name: the date in day-month order
+          html: '<p>The lantern festival is on <time datetime="21-06-2027">21 June 2027</time>.</p>'
+          fails: [date, valid]
+          because: The machine-readable form is year, month, day, so 21 June 2027 is 2027-06-21.
+
+  - id: gates-close
+    concept: times-and-dates
+    prompt: "Write “The gates close at 9.30pm on 1 November 2027.” so that machines can read the date and the time together."
+    cites: [advanced-text-features#time-formats, advanced-text-features#time, el-time#date-forms, el-time#time-forms, el-time#local-date-time]
+    solution:
+      html: |
+        <p>The gates close at <time datetime="2027-11-01T21:30">9.30pm on 1 November 2027</time>.</p>
+    checks:
+      - id: when
+        says: The date and time are one machine-readable value
+        selector: time
+        attr: { name: datetime, matches: '^2027-11-01[T ]21:30' }
+      - id: valid
+        says: Its value is a valid date and time
+        selector: time
+        datetime: true
+    fixtures:
+      fail:
+        - name: a twelve-hour time
+          html: '<p>The gates close at <time datetime="2027-11-01T9:30pm">9.30pm on 1 November 2027</time>.</p>'
+          fails: [when, valid]
+          because: Machine-readable times use the 24-hour clock with two-digit hours, so 9.30pm is 21:30.

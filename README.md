@@ -6,7 +6,8 @@ knowrld is a role-playing game in which every world teaches one field to profess
 - a validator that rejects a pack when a node cites no source, a problem has no grader, the prerequisite graph has a cycle, or a source's licence does not allow its excerpts in the pack,
 - a grader that checks a player's HTML and CSS against a problem's declarative checks,
 - the `knowrld-pack` command line tool,
-- a sample pack, Web Basics, built on the MDN Curriculum.
+- a sample pack, Web Basics, built on the MDN Curriculum,
+- Semantic HTML, a one-region pack at full depth built on MDN Learn, with road and country tiers and a fogged wilderness list.
 
 The game itself is developed separately.
 
@@ -38,4 +39,4 @@ npm test
 
 ## Licences
 
-The code in this repository is licensed under the [Apache License 2.0](LICENSE). The Web Basics pack's text is licensed separately under CC BY-SA 4.0 because it quotes MDN Web Docs; see [packs/web-basics/LICENSE.md](packs/web-basics/LICENSE.md).
+The code in this repository is licensed under the [Apache License 2.0](LICENSE). The Web Basics and Semantic HTML packs' text is licensed separately under CC BY-SA 4.0 because it quotes MDN Web Docs; see [packs/web-basics/LICENSE.md](packs/web-basics/LICENSE.md) and [packs/semantic-html/LICENSE.md](packs/semantic-html/LICENSE.md).

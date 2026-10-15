@@ -1,0 +1,687 @@
+# Road, part 1: the syntax and the head of a document (Learn: Basic HTML syntax, Web page metadata),
+# with the viewport from the meta reference as country.
+# Each concept's `says` is the only game-written line; the cited excerpts are MDN's own words.
+# Checks are written so that every key follows from the cited excerpts; the client shuffles choices at render time.
+# Why each prerequisite edge exists is recorded in docs/semantic-html/edge-justifications.md in the engine repo.
+nodes:
+  - id: html-elements
+    kind: concept
+    title: Elements and tags
+    region: semantic-html
+    tier: road
+    says: An ordinary non-void element has an opening tag, its content, and a closing tag with a slash before the name. Void elements have no closing tag. Learn to recognise the pieces of an ordinary element first.
+    cites:
+      - basic-html-syntax#what-is-html
+      - basic-html-syntax#opening-tag
+      - basic-html-syntax#closing-tag
+      - basic-html-syntax#tags-case
+      - basic-html-syntax#void
+    check:
+      - prompt: For an element whose end tag is required, what marks where it ends?
+        choices:
+          - The next opening tag, which ends the one before it
+          - A blank line after the element's content
+          - "A closing tag: the element name after a forward slash"
+        answer: 2
+        explain: The closing tag is the opening tag with a forward slash before the element name. Leaving out a required end tag is an error; void elements have no end tag.
+      - prompt: Does <TITLE> work the same as <title>?
+        choices:
+          - No; the browser ignores any tag written in uppercase letters
+          - Only inside the head, where letter case is never checked
+          - Yes, though writing tags in lowercase is best practice
+        answer: 2
+        explain: Tags are not case-sensitive, but writing them all in lowercase is recommended for consistency and readability.
+      - prompt: "In <p>My cat is very grumpy</p>, which part is the opening tag?"
+        choices:
+          - "<p>, the name in angle brackets"
+          - "The text between"
+          - "</p>"
+        answer: 0
+        explain: "The opening tag is the element's name wrapped in angle brackets. It marks where the element begins to take effect."
+      - prompt: "You want \"My cat is very grumpy\" to be the page's top-level heading. What do you write?"
+        choices:
+          - "<h1>My cat is very grumpy<h1>, the same tag twice"
+          - "<h1>My cat is very grumpy</h1>"
+          - "<p>My cat is very grumpy</p> at the top of the body"
+        answer: 1
+        explain: "Enclosing the text in h1 tags makes it a top-level heading; the closing tag needs its slash."
+      - prompt: "What can happen if you forget a required closing tag?"
+        choices:
+          - "The browser always drops the element"
+          - "The browser always reconstructs your intended structure"
+          - "The page can behave unexpectedly"
+        answer: 2
+        explain: "A closing tag marks the end of an element. Omitting a required closing tag is a beginner mistake that can produce unexpected results."
+
+  - id: nesting-elements
+    kind: concept
+    title: Nesting elements
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: Elements live inside one another like boxes in boxes. The last one you opened is the first one you close. Never let two boxes overlap.
+    cites:
+      - basic-html-syntax#nesting-right
+      - basic-html-syntax#nesting-overlap
+    check:
+      - prompt: Which line is nested correctly?
+        choices:
+          - "<p>My cat is <strong>very grumpy.</p></strong>"
+          - "<strong><p>My cat is very</strong> grumpy.</p>"
+          - "<p>My cat is <strong>very</strong> grumpy.</p>"
+        answer: 2
+        explain: The strong element opened inside the paragraph must close before the paragraph closes. When tags overlap, the browser has to guess.
+      - prompt: In <p>My cat is <strong>very</strong> grumpy.</p>, which element must close first?
+        choices:
+          - strong, because it was opened last
+          - p, because it was opened first
+          - Either one; closing tags can come in any order
+        answer: 0
+        explain: For proper nesting you open p, then strong, and close strong before you close p.
+      - prompt: "You open <p>, then <strong>. Which closing tags come next, in order?"
+        choices:
+          - "</strong> then </p>"
+          - "Only </p>; it closes both"
+          - "</p> then </strong>"
+        answer: 0
+        explain: "For proper nesting you close strong first, then close p."
+      - prompt: "The tags in <p>My cat is <strong>very grumpy.</p></strong> overlap. What does the browser have to do?"
+        choices:
+          - "Read it exactly as written, since overlapping tags are allowed"
+          - "Guess at your intent, with unexpected results"
+          - "Refuse to show the page"
+        answer: 1
+        explain: "Because the elements overlap, the browser has to guess at your intent, and that guessing can give unexpected results."
+      - prompt: "In <p>My cat is <strong>very</strong> grumpy.</p>, which words are part of the paragraph?"
+        choices:
+          - "Only \"My cat is\" and \"grumpy.\", around the strong element"
+          - "Only \"very\""
+          - "All of \"My cat is very grumpy.\""
+        answer: 2
+        explain: "The whole sentence is the paragraph; \"very\" is additionally marked as having strong importance."
+
+  - id: void-elements
+    kind: concept
+    title: Void elements
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: Some elements hold nothing. A single tag that inserts or embeds a thing, such as a line break, and no closing tag at all.
+    cites:
+      - basic-html-syntax#void
+      - basic-html-syntax#void-slash
+      - css-whitespace#default-display
+      - css-whitespace#collapse-summary
+    check:
+      - prompt: What makes an element void?
+        choices:
+          - "It holds nothing: one tag, no content, no closing tag"
+          - It carries no attributes at all
+          - It is hidden from view until a script shows it
+        answer: 0
+        explain: Void elements consist of a single tag and cannot contain other HTML content, like <br>.
+      - prompt: Is the slash in <br /> required?
+        choices:
+          - Yes; otherwise the line never breaks
+          - No; it is another markup style, not wrong, just not needed
+          - Only when the br sits inside a heading element
+        answer: 1
+        explain: The closing slash on a void element is a different style of markup. It isn't wrong, but it is not needed.
+      - prompt: "How many paragraphs does <p>This is a single paragraph, but we are going to <br />break it onto two lines.</p> make?"
+        choices:
+          - "Two, one on each side of the br"
+          - "One, broken onto two lines"
+          - "None, since br ends the paragraph early"
+        answer: 1
+        explain: "The br element inserts a line break into a line of text; the text stays a single paragraph."
+      - prompt: "You want a line of a paragraph to break onto two lines. What goes at the break?"
+        choices:
+          - "A blank line in the source"
+          - "<br>, a single tag with no closing tag and no content"
+          - "<br>…</br>"
+        answer: 1
+        explain: "The br element inserts a line break and has no closing tag. A source newline between English words normally displays as a space under default paragraph CSS; it does not supply br's explicit line break."
+      - prompt: "Can a void element hold text or other elements?"
+        choices:
+          - "Yes, between its single tag and a closing tag added after it"
+          - "Only plain text"
+          - "No, it cannot contain other HTML content"
+        answer: 2
+        explain: "Void elements are \"elements that cannot contain other HTML content\"."
+
+  - id: attributes
+    kind: concept
+    title: Attributes
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: An attribute tells more about an element without being its content. A space, a name, an equals sign, a value in quotes. A boolean attribute needs only its name, and being there is enough to switch it on.
+    cites:
+      - basic-html-syntax#attributes
+      - basic-html-syntax#attribute-parts
+      - basic-html-syntax#boolean
+    check:
+      - prompt: What does an attribute hold?
+        choices:
+          - The words the element shows on the page, written inside its tag
+          - A child element, written inside the opening tag instead of after it
+          - Extra information about the element that is not part of its content
+        answer: 2
+        explain: Attributes contain extra information about the element that isn't part of its content, such as a class to target it with CSS.
+      - prompt: An input is written with disabled="false". Is it disabled?
+        choices:
+          - No; the value false switches it off
+          - Yes; a boolean attribute is true whenever it is present
+          - Only in browsers that read the attribute's value
+        answer: 1
+        explain: When a boolean attribute is added, its value is true whatever value it is given. To enable the input, leave disabled out.
+      - prompt: Which opening tag is written correctly?
+        choices:
+          - '<pclass="note">'
+          - '<p "note"=class>'
+          - '<p class="note">'
+        answer: 2
+        explain: For the illustrated class attribute, put a space after the element name, then class, an equals sign and a quoted value. Boolean attributes such as disabled can be written with their name alone.
+      - prompt: "An element has two attributes. How are they separated?"
+        choices:
+          - "With a space between them"
+          - "With a semicolon between them"
+          - "With a comma between them"
+        answer: 0
+        explain: "An attribute needs a space between it and the element name, and several attributes are separated by spaces too."
+      - prompt: "Which input is disabled?"
+        choices:
+          - "<input type=\"text\" enabled=\"enabled\" />"
+          - "<input type=\"text\" disabled />"
+          - "<input id=\"first-input\" type=\"text\" />"
+        answer: 1
+        explain: "disabled is a boolean attribute. Written with no value it is still present, so its value is true."
+
+  - id: attribute-quotes
+    kind: concept
+    title: Quoting attribute values
+    region: semantic-html
+    tier: road
+    requires: [attributes, character-references]
+    says: Always quote a value. Without quotes a space ends it, and the rest turns into stray attributes. Use matching single or double quotes around each value. Inside double quotes, write &quot; for a literal double quote, or use single quotes inside them.
+    cites:
+      - basic-html-syntax#unquoted-values
+      - basic-html-syntax#always-quote
+      - basic-html-syntax#quote-styles
+      - basic-html-syntax#quotes-inside
+    check:
+      - prompt: In <a href=https://www.mozilla.org/ title=The Mozilla homepage>, what is the link's title?
+        choices:
+          - '"The Mozilla homepage", read as one value'
+          - '"The", followed by two extra empty-valued attributes'
+          - Nothing; the browser drops the whole title
+        answer: 1
+        explain: Without quotes, the browser reads title="The" and two extra attributes, mozilla and homepage, with empty values. Those unrecognized attributes are not defined HTML boolean attributes such as disabled.
+      - prompt: Which attribute is written correctly?
+        choices:
+          - title="Isn't this fun?"
+          - href="https://www.example.com'
+          - title="An "interesting" reference"
+        answer: 0
+        explain: One kind of quote may sit inside the other. Mixing them, or nesting the same kind unescaped, leaves the value unfinished or broken.
+      - prompt: How do you put a double quote inside a double-quoted value?
+        choices:
+          - Put a backslash before it
+          - Write it as &quot;
+          - Type it twice, as ""
+        answer: 1
+        explain: To use a quote mark inside quotes of the same type, use a character reference such as &quot;.
+      - prompt: "Which is the safe way to write a title with spaces in it?"
+        choices:
+          - "title=The_Mozilla_homepage"
+          - "title=The Mozilla homepage, as plain words"
+          - "title=\"The Mozilla homepage\""
+        answer: 2
+        explain: "Without quotes a space ends the value. Always include quotes around attribute values."
+      - prompt: "What is wrong with <a href=\"https://www.example.com'>?"
+        choices:
+          - "It mixes a double and a single quote, so the value never ends"
+          - "Single quotes are not allowed"
+          - "Nothing at all; either quote mark may close the value"
+        answer: 0
+        explain: "Mixing quotes leads to errors, because as far as the browser is concerned the href value has not been finished."
+
+  - id: document-skeleton
+    kind: concept
+    title: The document skeleton
+    region: semantic-html
+    tier: road
+    requires: [nesting-elements, void-elements]
+    says: Every page wears the same frame. The doctype first, then html around everything, a head for the browser and a body for the reader.
+    cites:
+      - basic-html-syntax#doctype
+      - basic-html-syntax#html-root
+      - basic-html-syntax#head
+      - basic-html-syntax#body
+    check:
+      - prompt: Where does the content that users see belong?
+        choices:
+          - In the head, next to the title
+          - Before the doctype, so it loads first
+          - In the body
+        answer: 2
+        explain: The body contains all the content that displays on the page. The head holds information about the page that users do not see.
+      - prompt: Which order is right for a minimal page?
+        choices:
+          - <!doctype html>, then <html> holding <head> and <body>
+          - <html>, then <!doctype html> inside <head>, then <body>
+          - <head>, then <!doctype html>, then <html> holding <body>
+        answer: 0
+        explain: The doctype goes at the top of every page. The html root element wraps everything else, the head first and then the body.
+      - prompt: "Which element wraps all the content on the page and is called the root element?"
+        choices:
+          - "<head>"
+          - "<html>"
+          - "<body>"
+        answer: 1
+        explain: "The html element wraps all the content on the page; it is sometimes known as the root element."
+      - prompt: "Where do a page description for search results and the character set go?"
+        choices:
+          - "In the body"
+          - "Before the doctype"
+          - "In the head"
+        answer: 2
+        explain: "The head holds information about the page that is not part of the content users see, such as a description and character set declarations."
+      - prompt: "Which doctype should open a modern page?"
+        choices:
+          - "<!doctype html>, the shortest valid doctype"
+          - "The long XHTML 1.0 Transitional doctype"
+          - "None; the doctype is a historical artifact"
+        answer: 0
+        explain: "The doctype is a historical artifact that still has to be there for everything else to work, and <!doctype html> is the shortest valid one."
+
+  - id: whitespace-and-comments
+    kind: concept
+    title: Whitespace and comments
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: Indent for your own eyes. Ordinary paragraph spaces and newlines remain in the DOM; default CSS usually collapses them for display. A comment between <!-- and --> is invisible on the rendered page, but anyone who opens the source can still read it.
+    cites:
+      - basic-html-syntax#comments
+      - css-whitespace#dom-preservation
+      - css-whitespace#default-display
+      - css-whitespace#collapse-setting
+      - css-whitespace#collapse-summary
+      - el-pre#whitespace
+    check:
+      - prompt: With default paragraph styling, you type five spaces between two words. What renders?
+        choices:
+          - Five spaces, exactly as typed
+          - No space; the words run together
+          - One space
+        answer: 2
+        explain: The DOM retains those spaces. Default CSS whitespace processing collapses the run to one displayed space.
+      - prompt: What does the browser do with an HTML comment?
+        choices:
+          - Shows it in small grey text
+          - Ignores it, so it is invisible on the page
+          - Reports it in the console as a warning
+        answer: 1
+        explain: Browsers ignore comments, so they are invisible to the user. They are notes in the code for whoever reads it.
+      - prompt: "With default paragraph styling, you put several spaces and a newline between two English words. How does that whitespace display?"
+        choices:
+          - "The indentation becomes a margin on the left of each element"
+          - "Each run of it becomes a single space"
+          - "Every space and new line shows exactly as written"
+        answer: 1
+        explain: "Default CSS whitespace processing converts the newline and collapses the spaces into one displayed space. The DOM retains the original whitespace."
+      - prompt: "Which element preserves spaces and newlines with the browser's default styling?"
+        choices:
+          - "<strong>"
+          - "<p>"
+          - "<pre>"
+        answer: 2
+        explain: "The browser's default styling for <pre> preserves spaces and newlines. CSS can change whitespace processing on any element."
+      - prompt: "Why leave a comment in your HTML?"
+        choices:
+          - "To explain the code to whoever works on it next"
+          - "To hide the next element"
+          - "To show a short note to readers at that point on the page"
+        answer: 0
+        explain: "Comments are invisible to the user; they are notes in the code that explain how it works, for you later or someone new."
+
+  - id: character-references
+    kind: concept
+    title: Character references
+    region: semantic-html
+    tier: road
+    requires: [html-elements]
+    says: Five characters belong to the language itself. To show a < or an & as text, write its reference, from the ampersand to the semicolon. Every other symbol you can type as it is, once the page is UTF-8.
+    cites:
+      - basic-html-syntax#special-chars
+      - basic-html-syntax#character-references
+      - basic-html-syntax#reference-example
+      - basic-html-syntax#utf8-no-references
+    check:
+      - prompt: How do you show a literal less-than sign in a paragraph?
+        choices: ['\<', "<<", "&lt;"]
+        answer: 2
+        explain: Character references start with an ampersand and end with a semicolon. &lt; stands for "less than".
+      - prompt: 'What goes wrong in <p>In HTML, you define a paragraph using the <p> element.</p>?'
+        choices:
+          - Nothing; the inner <p> is shown as text
+          - The inner <p> starts a new paragraph
+          - The browser refuses to render the page
+        answer: 1
+        explain: The browser reads the second <p> as the start of a new paragraph. Writing &lt;p&gt; shows the angle brackets as text.
+      - prompt: Your page is UTF-8. Do you need a reference to write é or ©?
+        choices:
+          - Yes; every symbol outside plain English letters needs a reference
+          - Only ©, because legal symbols are special characters in HTML
+          - No; modern browsers handle the actual symbols under UTF-8
+        answer: 2
+        explain: Only the special characters of HTML syntax need references. Other symbols are fine as long as the character encoding is UTF-8.
+      - prompt: "Which reference shows a literal ampersand?"
+        choices:
+          - "&apos;"
+          - "&amp;"
+          - "&quot;"
+        answer: 1
+        explain: "The ampersand's reference is &amp; (\"amp\" for ampersand)."
+      - prompt: "How does every character reference begin and end?"
+        choices:
+          - "With quote marks"
+          - "With < and >"
+          - "With & and ;"
+        answer: 2
+        explain: "Each character reference starts with an ampersand and ends with a semicolon."
+
+  - id: head-and-metadata
+    kind: concept
+    title: The head and its metadata
+    region: semantic-html
+    tier: road
+    requires: [document-skeleton, attributes]
+    says: Valid head metadata describes the page for browsers and search engines rather than appearing as body content. Many of its meta elements pair a name with content, such as the author and a description.
+    cites:
+      - webpage-metadata#head-not-displayed
+      - webpage-metadata#name-content
+      - meta-name#description
+      - meta-name#keywords
+    check:
+      - prompt: In <meta name="description" content="...">, what does name say?
+        choices:
+          - The name of the person who wrote the page, for search engines
+          - What kind of information this meta element holds
+          - The file name the page is saved under on the server
+        answer: 1
+        explain: name specifies the type of meta element, what type of information it contains. content holds the actual metadata.
+      - prompt: What does keywords metadata contain?
+        choices:
+          - Words relevant to the page, separated by commas
+          - It was never part of HTML
+          - It only works when it is placed inside the body
+        answer: 0
+        explain: Keywords metadata contains relevant words separated by commas. A description instead gives a short, accurate summary.
+      - prompt: How is the author of a page recorded in the head?
+        choices:
+          - <address name="author">…</address> in the head
+          - <title author="…">
+          - <meta name="author" content="…">
+        answer: 2
+        explain: The author is one of the meta elements with name and content attributes.
+      - prompt: "You put a valid meta description inside the head. Where does it show in the page body?"
+        choices:
+          - "Nowhere: the head is not displayed"
+          - "Only when printed"
+          - "At the very top of the page, above the body's content"
+        answer: 0
+        explain: "A valid meta description holds document metadata and is not displayed as body content by default. This does not describe arbitrary invalid text between head tags."
+      - prompt: "Why write a description meta that names what the page is about?"
+        choices:
+          - "It replaces the title text in the browser's tab"
+          - "It may supply a summary in a search-result snippet"
+          - "It shows as the first paragraph of the page's content"
+        answer: 1
+        explain: "A short, accurate meta description may be used in the snippet shown in search results."
+
+  - id: page-title
+    kind: concept
+    title: The title is not the h1
+    region: semantic-html
+    tier: road
+    requires: [head-and-metadata]
+    says: The document title names the page in the tab, the bookmark and the search result. A main h1 heading names the content shown in the body.
+    cites:
+      - webpage-metadata#h1-on-page
+      - webpage-metadata#title-metadata
+      - webpage-metadata#title-bookmark
+      - webpage-metadata#title-search
+    check:
+      - prompt: Where does the text of <title> appear?
+        choices:
+          - As the largest heading at the top of the page body
+          - In the tab, the suggested bookmark name and search results
+          - Nowhere; only the server reads it
+        answer: 1
+        explain: The title names the tab, fills in the suggested bookmark name and is used in search results.
+      - prompt: Which element marks up the headline readers see on the page?
+        choices: ["<title>", "<head>", "<h1>"]
+        answer: 2
+        explain: The h1 appears on the page and marks up the title of the content. The title element is metadata about the whole document.
+      - prompt: "A news page shows the headline \"Floods close the bridge\". Which element marks up that headline?"
+        choices:
+          - "<meta name=\"description\">"
+          - "<title>"
+          - "<h1>"
+        answer: 2
+        explain: "The h1 appears on the page and marks up the title of the page content, such as a news headline."
+      - prompt: "What does the title element name?"
+        choices:
+          - "The overall HTML document"
+          - "The author of the page"
+          - "The first section of the content"
+        answer: 0
+        explain: "The title is metadata that represents the title of the overall HTML document, not its content."
+      - prompt: "How many h1 elements should a page generally have?"
+        choices:
+          - "None, if it has a title"
+          - "One, to mark up the title of the page's content"
+          - "One for every section that the page contains"
+        answer: 1
+        explain: "The h1 should generally be used once per page, to mark up the title of the page content."
+
+  - id: character-encoding
+    kind: concept
+    title: Character encoding
+    region: semantic-html
+    tier: road
+    requires: [head-and-metadata]
+    says: Tell the browser which letters you write with, and tell it early. Set utf-8, the only valid encoding today, in the first bytes of the file, and nearly any human language can stand on your page.
+    cites:
+      - webpage-metadata#charset
+      - basic-html-syntax#charset
+      - el-meta#charset
+    check:
+      - prompt: Why set <meta charset="utf-8">?
+        choices:
+          - It lets the page display characters from almost any language
+          - It makes the page load faster on slow connections
+          - It is required for CSS to work
+        answer: 0
+        explain: utf-8 includes pretty much any character from any human language, so English and Japanese display correctly on the same page.
+      - prompt: Where must the charset meta element sit?
+        choices:
+          - Within the first 1024 bytes of the document
+          - Anywhere in the head
+          - At the very end of the body
+        answer: 0
+        explain: A meta element that declares the encoding must be located entirely within the first 1024 bytes of the document.
+      - prompt: Which charset values are valid in an HTML document today?
+        choices:
+          - utf-8, iso-8859-1 or any encoding the server names
+          - Only utf-8, in any letter case
+          - Any value, as long as the browser supports it
+        answer: 1
+        explain: The value must be an ASCII case-insensitive match for "utf-8", because UTF-8 is the only valid encoding for HTML5 documents.
+      - prompt: "A page in English and Japanese uses charset ISO-8859-1. What may happen?"
+        choices:
+          - "The browser refuses to load the page at all"
+          - "Both languages display fine in every browser"
+          - "The Japanese text may render wrongly"
+        answer: 2
+        explain: "ISO-8859-1 is the Latin alphabet's character set; with it the page's rendering may appear all messed up."
+      - prompt: "Your browser repairs a wrong encoding on its own. Should you still set utf-8?"
+        choices:
+          - "Yes; other browsers may not repair it"
+          - "Only for Japanese pages"
+          - "No, the browser already handles it for every visitor"
+        answer: 0
+        explain: "Some browsers fix incorrect encodings, but you should still set utf-8 to avoid problems in other browsers."
+
+  - id: head-resources
+    kind: concept
+    title: Linking icons, styles and scripts
+    region: semantic-html
+    tier: road
+    requires: [head-and-metadata]
+    says: From the head you send for help. A link element fetches an icon or a stylesheet. An external classic script with defer and no async runs after HTML parsing; defer does not delay an inline classic script. A script element needs its closing tag.
+    cites:
+      - webpage-metadata#favicon
+      - webpage-metadata#favicon-link
+      - webpage-metadata#link-stylesheet
+      - webpage-metadata#script-defer
+      - el-script#defer-scope
+      - el-script#parallel-download
+      - dom-content-loaded#resource-boundary
+    check:
+      - prompt: Which element adds a favicon?
+        choices:
+          - <link rel="icon" href="/favicon.ico">
+          - <meta name="icon" content="/favicon.ico">
+          - <img rel="favicon" src="/favicon.ico">
+        answer: 0
+        explain: A favicon is added with a link element in the head that references the path to the icon file.
+      - prompt: What does defer do on an external classic script without async?
+        choices:
+          - Runs the script only after the user clicks the page
+          - Executes the script after the HTML has been parsed
+          - Moves the script to the end of the body
+        answer: 1
+        explain: The script can download while HTML parsing continues. defer delays execution until parsing finishes; a queried element must still exist in the document.
+      - prompt: Is <script> a void element?
+        choices:
+          - Yes, write it as a single tag
+          - Only when it has a src
+          - No, it needs a closing tag
+        answer: 2
+        explain: The script element may look like a void element, but it's not, and so needs a closing tag.
+      - prompt: "Which line attaches the stylesheet my-css-file.css?"
+        choices:
+          - "<link rel=\"icon\" href=\"my-css-file.css\" type=\"text/css\" />"
+          - "<link rel=\"stylesheet\" href=\"my-css-file.css\" />"
+          - "<script src=\"my-css-file.css\" defer=\"defer\"></script>"
+        answer: 1
+        explain: "A link element with rel=\"stylesheet\" and an href to the file attaches a stylesheet."
+      - prompt: "Why add defer to an external classic script in the head without async?"
+        choices:
+          - "So the script loads and runs before anything else on the page"
+          - "So it caches longer"
+          - "So it runs after HTML parsing finishes"
+        answer: 2
+        explain: "defer delays execution until HTML parsing finishes. It does not create missing elements or wait for every image and other resource to load."
+
+  - id: document-language
+    kind: concept
+    title: The language of the page
+    region: semantic-html
+    tier: road
+    requires: [document-skeleton, attributes]
+    says: Name the language on the opening html tag so a screen reader can use the appropriate pronunciation. A phrase in another language normally gets its own lang; some terms and proper names are exceptions.
+    cites:
+      - webpage-metadata#lang
+      - webpage-metadata#lang-parts
+      - el-html#lang
+      - wcag-understandable#language-parts
+    check:
+      - prompt: Where is the page language usually set?
+        choices:
+          - A language element placed inside the head, before the title
+          - The lang attribute on the opening <html> tag
+          - The file extension, such as .en.html
+        answer: 1
+        explain: The lang attribute on the opening html tag sets the language of the page.
+      - prompt: Why does the page language matter to a screen reader?
+        choices:
+          - It picks how fast the voice reads
+          - The same word can be said differently in two languages
+          - It doesn't; they detect it
+        answer: 1
+        explain: Declaring the page language helps screen readers choose the appropriate pronunciation instead of falling back to the operating system's language.
+      - prompt: A Japanese phrase sits in an English page. What marks it?
+        choices:
+          - <span lang="ja">…</span>
+          - <span class="ja">…</span>
+          - <ja>…</ja>
+        answer: 0
+        explain: You can set subsections of a document to be recognized as a different language with lang on an element around them.
+      - prompt: "Which opening tag sets the page's language to US English?"
+        choices:
+          - "<html lang=\"en-US\">"
+          - "<head lang=\"en-US\">"
+          - "<meta lang=\"en-US\">"
+        answer: 0
+        explain: "The lang attribute goes on the opening html tag."
+      - prompt: "What does a screen reader gain when the page language is declared?"
+        choices:
+          - "A guaranteed translation into another language"
+          - "Information for choosing the appropriate pronunciation"
+          - "It translates the page for every visitor automatically"
+        answer: 1
+        explain: "Declaring the page language helps assistive technology choose the appropriate pronunciation."
+
+  - id: viewport-meta
+    kind: concept
+    title: The viewport
+    region: semantic-html
+    tier: country
+    requires: [head-and-metadata]
+    says: A phone may draw your page on a wide virtual screen and shrink it. Tell it to fit the device, with a viewport meta of width=device-width. Never switch zooming off; people with low vision need it.
+    cites:
+      - meta-viewport#summary
+      - meta-viewport#narrow-screens
+      - meta-viewport#recommended
+      - meta-viewport#no-zoom
+      - wcag-perceivable#resize-text
+    check:
+      - prompt: What does <meta name="viewport" content="width=device-width"> do?
+        choices:
+          - Makes the page as wide as its widest image
+          - Locks the zoom level so users cannot pinch
+          - Sets the viewport to match the device's width
+        answer: 2
+        explain: This is the recommended setting. It sets the viewport to match the device's width.
+      - prompt: Without a viewport meta, what might a narrow phone do?
+        choices:
+          - Switch the page to a simplified, text-only view
+          - Show the page at full size but hide everything past the screen edge
+          - Render into a wider virtual viewport, then shrink it to fit
+        answer: 2
+        explain: Some narrow screens render pages in a virtual viewport wider than the screen, then shrink the result down to fit.
+      - prompt: Why not set user-scalable=no?
+        choices:
+          - It stops people with low vision from zooming to read
+          - It stops the page from responding when the phone is rotated
+          - Browsers treat it as an error and drop the whole viewport meta
+        answer: 0
+        explain: Disabling zoom can prevent people with low vision from reading. The resize-text guideline calls for the page to remain readable and usable when text size is doubled.
+      - prompt: "A site's max-width:480px media queries target widths of 480px and below, but the phone uses a 980px virtual viewport. What happens?"
+        choices:
+          - "The media queries apply twice"
+          - "The phone switches to 480px by itself"
+          - "Those max-width:480px queries do not apply at 980px"
+        answer: 2
+        explain: "With a 980px virtual viewport, media queries that kick in at 640px or 480px or less are never used."
+      - prompt: "How are several viewport settings written in the content attribute?"
+        choices:
+          - "As a comma-separated list"
+          - "As separate meta elements, one per setting"
+          - "Separated by semicolons"
+        answer: 0
+        explain: "The viewport behaviours are given in the content attribute as a comma-separated list of one or more values."

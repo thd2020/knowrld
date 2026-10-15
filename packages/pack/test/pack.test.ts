@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { setImmediate } from "node:timers/promises";
 import { JSDOM } from "jsdom";
 import { fileURLToPath } from "node:url";
 import { loadPack, validatePack, excerptConflict, topoOrder } from "../src/index.ts";
@@ -127,12 +128,37 @@ describe("optional tiers, planned problems and fog", () => {
 // computed style are left to the in-browser self-test page (selftest.html). Checks
 // that name axe rules need the engine's accessibility runner, so the engine's own
 // tests (packages/grading) run them; here every other check is exercised.
+const renderedWindows = new Set<JSDOM>();
+function closeRenderedWindows(): void {
+  const errors: unknown[] = [];
+  for (const dom of renderedWindows) {
+    try { dom.window.close(); } catch (error) { errors.push(error); }
+    finally { renderedWindows.delete(dom); }
+  }
+  if (errors.length) throw new AggregateError(errors, "Test window cleanup failed");
+}
+afterEach(async () => {
+  try { closeRenderedWindows(); }
+  finally {
+    // Allow queued jsdom load callbacks to finish before creating the next fixture.
+    await setImmediate();
+  }
+});
 function renderSite(p: ProblemFile, code: Record<string, Code>): GradedPage[] {
-  return problemPages(p).map((pg) => ({ id: pg.id, path: pg.path, doc: new JSDOM(composeDocument(code[pg.id]!.html, code[pg.id]!.css)).window.document }));
+  return problemPages(p).map((pg) => {
+    const dom = new JSDOM(composeDocument(code[pg.id]!.html, code[pg.id]!.css));
+    renderedWindows.add(dom);
+    return { id: pg.id, path: pg.path, doc: dom.window.document };
+  });
 }
 const portable = (c: DomCheck) => !c.style && !c.axe;
 function failing(p: ProblemFile, code: Record<string, Code>): string[] {
-  return gradeSite(renderSite(p, code), allChecks(p).filter(portable), { files: siteFiles(p) }).filter((r) => !r.pass).map((r) => r.id);
+  try {
+    return gradeSite(renderSite(p, code), allChecks(p).filter(portable), { files: siteFiles(p) }).filter((r) => !r.pass).map((r) => r.id);
+  } finally {
+    // This helper also runs during collection, outside per-test cleanup hooks.
+    closeRenderedWindows();
+  }
 }
 
 for (const packName of ["web-basics", "semantic-html"]) {

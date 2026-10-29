@@ -10,7 +10,7 @@ knowrld is a role-playing game in which every world teaches one field to profess
 - Semantic HTML, a one-region pack at full depth built on MDN Learn, with road and country tiers and a fogged wilderness list,
 - realms, which join several packs into one release with one character and one map, specified in [docs/realm-format.md](docs/realm-format.md), with an example in `realms/example-web`.
 
-The game itself is developed separately.
+knowrld is a platform: one account, many worlds by many authors, played in one game. This repository is its creator kit, the formats and tools an author builds a world against; the game itself is developed separately and loads any valid pack or realm.
 
 ## Use it
 

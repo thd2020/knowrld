@@ -1,7 +1,7 @@
 // Realm format v0: two or more packs joined into one release. See docs/realm-format.md.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { excerptConflict } from "./licence.ts";
+import { realmConflict, realmLicenceProblem } from "./licence.ts";
 import { loadPack, readYaml, type Issue, type LoadedPack } from "./load.ts";
 import { RealmManifest, type GraphNode, type RealmWorld } from "./schema.ts";
 import { topoOrder, validatePack } from "./validate.ts";
@@ -91,6 +91,9 @@ export function validateRealm(realm: LoadedRealm): Issue[] {
     worlds.set(id, w);
   }
   issues.push(...(realm.packIssues ?? []));
+  // The realm's own licence must be one the table knows and not link-only; the members are checked against it only then.
+  const realmLicence = realmLicenceProblem(manifest.license);
+  if (realmLicence) err(where, `the realm's licence ${realmLicence}`);
   for (const { world, pack } of realm.worlds) {
     const at = `worlds/${world.pack}`;
     if (!pack) {
@@ -100,7 +103,7 @@ export function validateRealm(realm: LoadedRealm): Issue[] {
     for (const i of validatePack(pack)) issues.push({ ...i, file: `${world.path}/${i.file}` });
     if (pack.manifest.id !== world.pack) err(at, `the pack at ${world.path} is ${pack.manifest.id}, not ${world.pack}`);
     if (pack.manifest.version !== world.version) err(at, `version ${world.version} does not match the pack's version ${pack.manifest.version}`);
-    const conflict = excerptConflict(pack.manifest.license, manifest.license);
+    const conflict = realmLicence ? undefined : realmConflict(pack.manifest.license, manifest.license);
     if (conflict) err(at, `licence ${pack.manifest.license} does not fit the realm's ${manifest.license}: ${conflict}`);
   }
 
@@ -141,8 +144,14 @@ export function validateRealm(realm: LoadedRealm): Issue[] {
     if (g.from.world === g.to.world) err(at, "a gate must join two different worlds");
   }
 
+  // At most one retitle per target. Two add-requires on one target are merged by realmNodes.
+  const retitled = new Set<string>();
   for (const [i, o] of manifest.overrides.entries()) {
     const at = `overrides/${i}`;
+    if (o.op === "retitle") {
+      if (retitled.has(o.target)) err(at, `${o.target} is retitled twice; give it one title`);
+      retitled.add(o.target);
+    }
     if (!o.reason?.trim()) err(at, "an override needs a reason");
     resolves(at, o.target);
     if (o.op === "add-requires") {

@@ -15,8 +15,8 @@ worlds:
     path: ../../packs/web-basics
     place: { x: 0, z: 0, altitude: 0 }
 links:
-  # Class and ID selectors match the class and id attributes. Web Basics teaches the selectors
-  # but has no concept for attributes; Semantic HTML does.
+  # Class and ID selectors match the class and id attributes. Web Basics meets attributes only in
+  # passing, in html-elements; Semantic HTML teaches them in depth, and class and ID selectors need that.
   - node: web-basics/selectors
     requires: [semantic-html/attributes]
 gates:
@@ -29,5 +29,6 @@ overrides:
     target: web-basics/landmarks
     title: Page landmarks, a first look
     reason: >-
-      Semantic HTML has a Landmarks character who teaches them in depth. On one map the two must
-      be told apart, and the Web Basics one is the short introduction.
+      Both worlds teach landmarks. The Web Basics character is a short introduction to header, nav,
+      main and footer, and Semantic HTML's Landmarks teaches every landmark role in depth; on one map
+      the Web Basics one should read as the first look.

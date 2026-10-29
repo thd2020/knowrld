@@ -274,14 +274,15 @@ export type Fixture = z.infer<typeof Fixture>;
 export type WriteTask = z.infer<typeof WriteTask>;
 
 // Realm format v0. A realm joins two or more packs (worlds) into one release; see docs/realm-format.md.
+// Every realm object is strict: an unknown key, such as a misspelled one, is an error, not ignored.
 
 // A node in a realm, named by its world (the pack id) and its id in that pack: "<world>/<node>".
 export const RealmRef = z.string().regex(/^[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/, 'node references are "<world>/<node>"');
 
 // Positions are in metres. x and z are the ground plane; altitude is height above the realm's datum.
-export const Place = z.object({ x: z.number(), z: z.number(), altitude: z.number() });
+export const Place = z.strictObject({ x: z.number(), z: z.number(), altitude: z.number() });
 
-export const RealmWorld = z.object({
+export const RealmWorld = z.strictObject({
   // The pack's id, which is also the world's id in the realm.
   pack: id,
   // The pack's exact manifest version.
@@ -291,20 +292,20 @@ export const RealmWorld = z.object({
   place: Place,
 });
 
-export const RealmLink = z.object({ node: RealmRef, requires: z.array(RealmRef).min(1) });
+export const RealmLink = z.strictObject({ node: RealmRef, requires: z.array(RealmRef).min(1) });
 
-const GateEnd = z.object({ world: id, near: id });
-export const Gate = z.object({ id, from: GateEnd, to: GateEnd });
+const GateEnd = z.strictObject({ world: id, near: id });
+export const Gate = z.strictObject({ id, from: GateEnd, to: GateEnd });
 
 const reason = z.string().trim().min(1, "an override needs a reason");
 export const Override = z.discriminatedUnion("op", [
   // A new title for the node within the realm. The pack keeps its own title.
-  z.object({ op: z.literal("retitle"), target: RealmRef, title: z.string().trim().min(1), reason }),
+  z.strictObject({ op: z.literal("retitle"), target: RealmRef, title: z.string().trim().min(1), reason }),
   // Same-world prerequisites the join makes necessary. Cross-world ones are links.
-  z.object({ op: z.literal("add-requires"), target: RealmRef, requires: z.array(RealmRef).min(1), reason }),
+  z.strictObject({ op: z.literal("add-requires"), target: RealmRef, requires: z.array(RealmRef).min(1), reason }),
 ]);
 
-export const RealmManifest = z.object({
+export const RealmManifest = z.strictObject({
   format: z.literal(0),
   id,
   title: z.string(),

@@ -1,0 +1,33 @@
+format: 0
+id: example-web
+title: Example Web
+summary: >-
+  An example realm. Semantic HTML floats above Web Basics: the player learns markup in depth
+  up high, then glides down to style and lay it out.
+license: CC-BY-SA-4.0
+worlds:
+  - pack: semantic-html
+    version: 0.2.0
+    path: ../../packs/semantic-html
+    place: { x: 0, z: -600, altitude: 120 }
+  - pack: web-basics
+    version: 0.1.0
+    path: ../../packs/web-basics
+    place: { x: 0, z: 0, altitude: 0 }
+links:
+  # Class and ID selectors match the class and id attributes. Web Basics teaches the selectors
+  # but has no concept for attributes; Semantic HTML does.
+  - node: web-basics/selectors
+    requires: [semantic-html/attributes]
+gates:
+  # The way back up: from the selectors' character to the attributes' character.
+  - id: attribute-stair
+    from: { world: web-basics, near: selectors }
+    to: { world: semantic-html, near: attributes }
+overrides:
+  - op: retitle
+    target: web-basics/landmarks
+    title: Page landmarks, a first look
+    reason: >-
+      Semantic HTML has a Landmarks character who teaches them in depth. On one map the two must
+      be told apart, and the Web Basics one is the short introduction.

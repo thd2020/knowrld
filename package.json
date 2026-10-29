@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "workspaces": ["packages/*"],
   "scripts": {
-    "validate": "node packages/pack/src/cli.ts validate packs/web-basics && node packages/pack/src/cli.ts validate packs/semantic-html",
+    "validate": "node packages/pack/src/cli.ts validate packs/web-basics && node packages/pack/src/cli.ts validate packs/semantic-html && node packages/pack/src/cli.ts validate realms/example-web",
     "verify": "node packages/pack/src/cli.ts verify packs/web-basics && node packages/pack/src/cli.ts verify packs/semantic-html",
     "test": "npm test -w @knowrld/pack",
     "typecheck": "tsc -p packages/pack"

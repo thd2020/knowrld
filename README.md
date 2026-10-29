@@ -7,7 +7,8 @@ knowrld is a role-playing game in which every world teaches one field to profess
 - a grader that checks a player's HTML and CSS against a problem's declarative checks,
 - the `knowrld-pack` command line tool,
 - a sample pack, Web Basics, built on the MDN Curriculum,
-- Semantic HTML, a one-region pack at full depth built on MDN Learn, with road and country tiers and a fogged wilderness list.
+- Semantic HTML, a one-region pack at full depth built on MDN Learn, with road and country tiers and a fogged wilderness list,
+- realms, which join several packs into one release with one character and one map, specified in [docs/realm-format.md](docs/realm-format.md), with an example in `realms/example-web`.
 
 The game itself is developed separately.
 
@@ -23,6 +24,12 @@ Check a pack's structure, sources, graders and licences:
 
 ```bash
 npm run validate
+```
+
+This also validates the example realm. To check one pack or one realm, pass its folder; a folder with `realm.yaml` is checked as a realm, along with every pack it joins:
+
+```bash
+node packages/pack/src/cli.ts validate realms/example-web
 ```
 
 Every excerpt in a pack is cut verbatim from a pinned upstream commit and records its line range. This re-fetches each source and confirms the text is still there:

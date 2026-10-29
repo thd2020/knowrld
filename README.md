@@ -38,4 +38,4 @@ npm test
 
 ## Licences
 
-The code in this repository is licensed under the [Apache License 2.0](LICENSE). The Web Basics pack's text is licensed separately under CC BY-SA 4.0 because it quotes MDN Web Docs; see [packs/web-basics/LICENSE.md](packs/web-basics/LICENSE.md).
+The code in this repository is licensed under the [Apache License 2.0](LICENSE). The names knowrld, Holarky and Phevere and their marks are not covered by it; see [TRADEMARKS.md](TRADEMARKS.md). The Web Basics pack's text is licensed separately under CC BY-SA 4.0 because it quotes MDN Web Docs; see [packs/web-basics/LICENSE.md](packs/web-basics/LICENSE.md).

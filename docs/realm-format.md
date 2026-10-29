@@ -81,7 +81,7 @@ Each pack's licence must then fit the realm's licence under the rules packs use 
 - a share-alike pack, CC BY-SA or CC BY-NC-SA, needs the realm's share-alike licence to be the same version or a later one: a CC-BY-SA-4.0 pack fits a CC-BY-SA-4.0 realm but not a CC-BY-SA-2.5 one. A pack licence ending in `+` is compared by the version it names, and so is the realm's;
 - a pack under a link-only licence cannot join a realm.
 
-The check is `realmLicenceProblem(realmLicence)` for the realm, then `realmConflict(packLicence, realmLicence)` for each pack, in `packages/pack/src/licence.ts`. The last two rules apply to realms only; how a pack checks its own sources is unchanged.
+The check is `realmLicenceProblem(realmLicence)` for the realm, then `realmConflict(packLicence, realmLicence)` for each pack, in `packages/pack/src/licence.ts`. Packs check their own sources by the same rules (`containedConflict`), so share-alike is kept whole from a source through its pack to the realm.
 
 ## Validating
 

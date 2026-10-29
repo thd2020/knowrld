@@ -89,3 +89,5 @@ Every licence falls into one of four classes, and the validator refuses excerpts
 | D, link-only | Anything else, including all rights reserved | Paraphrase and link; no verbatim excerpts |
 
 A licence id ending in `+` means "or any later version", as in SPDX.
+
+Share-alike is kept whole: a CC BY-NC-SA source needs a CC BY-NC-SA pack, and a share-alike source needs the pack's share-alike licence to be at least the version the source names (`CC-BY-SA-2.5+` text fits a `CC-BY-SA-4.0` pack; `CC-BY-SA-4.0` text does not fit a `CC-BY-SA-2.5` pack). The pack's own licence must be one the table knows and not link-only. The checks are `packLicenceProblem` and `containedConflict` in `packages/pack/src/licence.ts`.

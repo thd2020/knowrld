@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { setImmediate } from "node:timers/promises";
 import { JSDOM } from "jsdom";
 import { fileURLToPath } from "node:url";
-import { loadPack, validatePack, excerptConflict, topoOrder } from "../src/index.ts";
+import { loadPack, validatePack, excerptConflict, containedConflict, topoOrder } from "../src/index.ts";
 import { composeDocument, gradeSite, type GradedPage } from "../src/dom-grader.ts";
 import { allChecks, becauseLines, fixtureCode, problemPages, siteFiles, solutionCode, starterCode, taskProblem, type Code } from "../src/problem.ts";
 import type { DomCheck, ProblemFile } from "../src/schema.ts";
@@ -29,6 +29,11 @@ describe("licence classes", () => {
   it("treats unknown licences as link-only", () => {
     expect(excerptConflict("LicenseRef-Oracle", "CC-BY-SA-4.0")).toMatch(/link-only/);
   });
+  it("keeps share-alike whole in a pack's excerpts", () => {
+    expect(containedConflict("CC-BY-NC-SA-4.0", "CC-BY-NC-4.0")).toMatch(/BY-NC-SA/);
+    expect(containedConflict("CC-BY-SA-4.0", "CC-BY-SA-2.5")).toMatch(/version 4.0 or later/);
+    expect(containedConflict("CC-BY-SA-2.5+", "CC-BY-SA-4.0")).toBeUndefined();
+  });
   it("lets permissive text in anywhere", () => {
     expect(excerptConflict("Apache-2.0", "CC-BY-SA-4.0")).toBeUndefined();
   });
@@ -37,6 +42,16 @@ describe("licence classes", () => {
 describe("validator", () => {
   it("accepts the web-basics pack with no issues", () => {
     expect(validatePack(loadWebBasics()).filter((i) => i.level === "error")).toEqual([]);
+  });
+
+  it("rejects an unknown or link-only pack licence, and share-alike lost in an excerpt", () => {
+    const unknown = structuredClone(loadWebBasics());
+    unknown.manifest.license = "Proprietary";
+    expect(validatePack(unknown).map((i) => i.message).join("\n")).toMatch(/not a licence the pack format knows/);
+    const older = structuredClone(loadWebBasics());
+    older.manifest.license = "CC-BY-SA-2.5";
+    older.sources[0]!.license = "CC-BY-SA-4.0";
+    expect(validatePack(older).map((i) => i.message).join("\n")).toMatch(/version 4.0 or later/);
   });
 
   it("finds prerequisite cycles", () => {

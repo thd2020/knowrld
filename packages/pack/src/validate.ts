@@ -1,4 +1,4 @@
-import { excerptConflict } from "./licence.ts";
+import { containedConflict, packLicenceProblem } from "./licence.ts";
 import type { Issue, LoadedPack } from "./load.ts";
 import type { ProblemFile } from "./schema.ts";
 import { allChecks, fixtureCode, problemPages, taskProblem } from "./problem.ts";
@@ -87,13 +87,16 @@ export function validatePack(pack: LoadedPack): Issue[] {
   dup("graph", nodes.map((n) => n.id));
   dup("problems", problems.map((p) => p.id));
 
-  // Every source's licence must allow its excerpts in this pack.
+  // The pack's own licence must be known and able to carry excerpts, and every source's licence must
+  // allow its excerpts in this pack, share-alike kept whole.
+  const ownLicence = packLicenceProblem(manifest.license);
+  if (ownLicence) err("pack.yaml", ownLicence);
   const excerpts = new Map<string, { verbatim: boolean }>();
   for (const s of sources) {
     for (const e of s.excerpts) {
       excerpts.set(`${s.id}#${e.id}`, e);
       if (e.verbatim) {
-        const conflict = excerptConflict(s.license, manifest.license);
+        const conflict = ownLicence ? undefined : containedConflict(s.license, manifest.license);
         if (conflict) err(`sources/${s.id}`, `excerpt ${e.id}: ${conflict}`);
       }
     }

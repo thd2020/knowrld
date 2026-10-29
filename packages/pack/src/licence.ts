@@ -56,6 +56,14 @@ export function realmLicenceProblem(realm: string): string | undefined {
   return undefined;
 }
 
+// Returns a reason when a pack cannot use `pack` as its own licence: one the table does not know,
+// or one that is link-only, since a pack carries verbatim excerpts.
+export function packLicenceProblem(pack: string): string | undefined {
+  if (!isKnownLicence(pack)) return `${pack} is not a licence the pack format knows; use an SPDX id from the licence table`;
+  if (parseLicence(pack).cls === "D") return `${pack} is link-only and cannot carry verbatim excerpts`;
+  return undefined;
+}
+
 // The share-alike licences: CC BY-SA and CC BY-NC-SA, with their version.
 const SHARE_ALIKE = /^CC-BY(-NC)?-SA-(\d+(?:\.\d+)?)$/;
 function shareAlike(id: string): { nc: boolean; version: number } | undefined {
@@ -69,14 +77,21 @@ function shareAlike(id: string): { nc: boolean; version: number } | undefined {
 // share-alike licence to be at least the pack's version. The realm's stated version is compared,
 // ignoring any "+". Use realmLicenceProblem first for the realm's own licence.
 export function realmConflict(pack: string, realm: string): string | undefined {
-  const conflict = excerptConflict(pack, realm);
+  return containedConflict(pack, realm, "realm");
+}
+
+// The same rules for any text under `inner` carried whole inside a work under `outer`: a verbatim
+// excerpt in a pack, or a pack in a realm. Share-alike is kept whole (NC-SA needs NC-SA; the outer
+// share-alike version must be at least the inner one).
+export function containedConflict(inner: string, outer: string, container = "pack"): string | undefined {
+  const conflict = excerptConflict(inner, outer);
   if (conflict) return conflict;
-  const p = shareAlike(parseLicence(pack).id);
+  const p = shareAlike(parseLicence(inner).id);
   if (!p) return undefined;
-  const r = shareAlike(parseLicence(realm).id);
-  if (p.nc && !r?.nc) return `${pack} is non-commercial share-alike, so the realm must use a BY-NC-SA licence, not ${realm}`;
+  const r = shareAlike(parseLicence(outer).id);
+  if (p.nc && !r?.nc) return `${inner} is non-commercial share-alike, so the ${container} must use a BY-NC-SA licence, not ${outer}`;
   if (r && r.version < p.version) {
-    return `${pack} is share-alike at version ${p.version.toFixed(1)}, so the realm's licence must be version ${p.version.toFixed(1)} or later, not ${realm}`;
+    return `${inner} is share-alike at version ${p.version.toFixed(1)}, so the ${container}'s licence must be version ${p.version.toFixed(1)} or later, not ${outer}`;
   }
   return undefined;
 }

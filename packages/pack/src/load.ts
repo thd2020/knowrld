@@ -78,3 +78,6 @@ export function loadPack(dir: string): { pack?: LoadedPack; issues: Issue[] } {
   if (!manifest) return { issues };
   return { pack: { dir, manifest, sources, nodes, problems, fog, tasks }, issues };
 }
+
+// Shared with the realm loader.
+export { read as readYaml };

@@ -272,3 +272,53 @@ export type SiteFile = z.infer<typeof SiteFile>;
 export type Stage = z.infer<typeof Stage>;
 export type Fixture = z.infer<typeof Fixture>;
 export type WriteTask = z.infer<typeof WriteTask>;
+
+// Realm format v0. A realm joins two or more packs (worlds) into one release; see docs/realm-format.md.
+
+// A node in a realm, named by its world (the pack id) and its id in that pack: "<world>/<node>".
+export const RealmRef = z.string().regex(/^[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/, 'node references are "<world>/<node>"');
+
+// Positions are in metres. x and z are the ground plane; altitude is height above the realm's datum.
+export const Place = z.object({ x: z.number(), z: z.number(), altitude: z.number() });
+
+export const RealmWorld = z.object({
+  // The pack's id, which is also the world's id in the realm.
+  pack: id,
+  // The pack's exact manifest version.
+  version: z.string().min(1),
+  // The pack folder, relative to the realm folder.
+  path: z.string().min(1).refine((p) => !/^([/\\]|[A-Za-z]:)/.test(p), "path must be relative to the realm folder"),
+  place: Place,
+});
+
+export const RealmLink = z.object({ node: RealmRef, requires: z.array(RealmRef).min(1) });
+
+const GateEnd = z.object({ world: id, near: id });
+export const Gate = z.object({ id, from: GateEnd, to: GateEnd });
+
+const reason = z.string().trim().min(1, "an override needs a reason");
+export const Override = z.discriminatedUnion("op", [
+  // A new title for the node within the realm. The pack keeps its own title.
+  z.object({ op: z.literal("retitle"), target: RealmRef, title: z.string().trim().min(1), reason }),
+  // Same-world prerequisites the join makes necessary. Cross-world ones are links.
+  z.object({ op: z.literal("add-requires"), target: RealmRef, requires: z.array(RealmRef).min(1), reason }),
+]);
+
+export const RealmManifest = z.object({
+  format: z.literal(0),
+  id,
+  title: z.string(),
+  summary: z.string(),
+  // SPDX id of the realm's licence; it must admit every member pack's licence.
+  license: z.string(),
+  worlds: z.array(RealmWorld).min(2, "a realm joins at least two worlds"),
+  links: z.array(RealmLink).default([]),
+  gates: z.array(Gate).default([]),
+  overrides: z.array(Override).default([]),
+});
+
+export type RealmManifest = z.infer<typeof RealmManifest>;
+export type RealmWorld = z.infer<typeof RealmWorld>;
+export type RealmLink = z.infer<typeof RealmLink>;
+export type Gate = z.infer<typeof Gate>;
+export type Override = z.infer<typeof Override>;

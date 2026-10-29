@@ -1,20 +1,34 @@
 #!/usr/bin/env node
 // knowrld-pack validate <dir> | selftest <dir> -o <file> | verify <dir>
+// validate also accepts a realm folder (one with realm.yaml) and checks the realm and every member pack.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { loadPack, type Issue } from "./load.ts";
 import { validatePack } from "./validate.ts";
+import { isRealm, loadRealm, realmNodes, validateRealm } from "./realm.ts";
 import { fixtureCode, problemPages, problemStages, siteFiles } from "./problem.ts";
 
 const [command, dir, ...rest] = process.argv.slice(2);
 if (!command || !dir) {
-  console.error("usage: knowrld-pack validate|selftest|verify <pack-dir> [-o file]");
+  console.error("usage: knowrld-pack validate <pack-or-realm-dir> | selftest|verify <pack-dir> [-o file]");
   process.exit(2);
 }
 
 function report(issues: Issue[]): boolean {
   for (const i of issues) console[i.level === "error" ? "error" : "warn"](`${i.level}: ${i.file}: ${i.message}`);
   return !issues.some((i) => i.level === "error");
+}
+
+if (isRealm(dir)) {
+  if (command !== "validate") {
+    console.error(`${dir} is a realm; ${command} works on one pack, so run it on each member pack`);
+    process.exit(2);
+  }
+  const { realm, issues } = loadRealm(dir);
+  if (!report(realm ? [...issues, ...validateRealm(realm)] : issues) || !realm) process.exit(1);
+  const m = realm.manifest;
+  console.log(`${m.id}: ${m.worlds.length} worlds, ${realmNodes(realm).length} nodes, ${m.links.length} links, ${m.gates.length} gates, ${m.overrides.length} overrides, valid`);
+  process.exit(0);
 }
 
 const { pack, issues } = loadPack(dir);

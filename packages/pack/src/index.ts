@@ -5,3 +5,4 @@ export * from "./licence.ts";
 export * from "./dom-grader.ts";
 export * from "./problem.ts";
 export * from "./realm.ts";
+export * from "./place.ts";

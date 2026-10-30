@@ -2,6 +2,7 @@ import { containedConflict, packLicenceProblem } from "./licence.ts";
 import type { Issue, LoadedPack } from "./load.ts";
 import type { ProblemFile } from "./schema.ts";
 import { allChecks, fixtureCode, problemPages, taskProblem } from "./problem.ts";
+import { placeProblems } from "./place.ts";
 
 function badPattern(re: string | undefined): boolean {
   if (re === undefined) return false;
@@ -158,6 +159,8 @@ export function validatePack(pack: LoadedPack): Issue[] {
 
   dup("fog", fog.map((f) => f.slug));
   for (const f of fog) if (!regionIds.has(f.region)) err("fog.yaml", `${f.slug}: unknown region ${f.region}`);
+
+  if (manifest.place) for (const m of placeProblems(manifest.place)) err("pack.yaml", m);
 
   const final = nodes.find((n) => n.id === manifest.final);
   if (!final) err("pack.yaml", `final boss ${manifest.final} is not a node`);

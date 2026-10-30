@@ -21,3 +21,9 @@ regions:
     title: CSS Layout
     summary: Normal flow and flexbox.
 final: profile-keep
+# Where the world sits in the map of knowledge: ACM CCS 2012, Software and its engineering >
+# Software notations and tools > Context specific languages (markup and style sheet languages
+# together; Semantic HTML sits below it, at Markup languages).
+place:
+  scheme: acm-ccs-2012
+  path: ["10011007", "10011006", "10011050"]

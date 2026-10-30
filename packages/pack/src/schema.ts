@@ -9,6 +9,22 @@ export const Region = z.object({
   summary: z.string(),
 });
 
+// Where a world sits in the map of knowledge: a path of class ids in a published classification,
+// from its top class down. The schemes a place may name, and the shape of their ids:
+//   oecd-ford-2015  OECD Fields of Research and Development (Frascati Manual 2015, Table 2.2):
+//                   a broad field ("1") then a sub-field ("1.2"), at most two levels.
+//   acm-ccs-2012    ACM Computing Classification System 2012: concept ids ("10011007"), as ACM
+//                   writes them in a CCS concept path, at most six levels. A computing world's
+//                   path starts at one of the CCS's thirteen top-level classes.
+// The kit checks the form of a path; an engine that draws the map checks that its classes exist.
+export const PLACE_SCHEMES = ["oecd-ford-2015", "acm-ccs-2012"] as const;
+export const KnowledgePlace = z.strictObject({
+  scheme: z.string(),
+  // Strings. A number here (YAML reads 1.2 as one) is reported by the validator, which asks for quotes:
+  // "1.10" written bare would silently become 1.1.
+  path: z.array(z.union([z.string(), z.number()])).min(1),
+});
+
 export const PackManifest = z.object({
   format: z.literal(0),
   id,
@@ -22,6 +38,8 @@ export const PackManifest = z.object({
   regions: z.array(Region).min(1),
   // The deepest project node; the final boss.
   final: id,
+  // Optional: the world's place in the map of knowledge (see KnowledgePlace above).
+  place: KnowledgePlace.optional(),
 });
 
 export const Excerpt = z.object({

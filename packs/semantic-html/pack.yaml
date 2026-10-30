@@ -15,3 +15,8 @@ regions:
     title: Semantic HTML
     summary: Mark up documents by meaning, from the element and the head to landmarks, links and accessible structure.
 final: semantic-citadel
+# Where the world sits in the map of knowledge: ACM CCS 2012, Software and its engineering >
+# Software notations and tools > Context specific languages > Markup languages.
+place:
+  scheme: acm-ccs-2012
+  path: ["10011007", "10011006", "10011050", "10010512"]

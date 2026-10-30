@@ -14,7 +14,26 @@ my-pack/
 
 ## Manifest
 
-`pack.yaml` names the pack, its version, the SPDX id of its own licence, the external blueprint its structure follows (a curriculum, a certification guide or a standard), its regions in order, and the id of its final project.
+`pack.yaml` names the pack, its version, the SPDX id of its own licence, the external blueprint its structure follows (a curriculum, a certification guide or a standard), its regions in order, the id of its final project and, optionally, its place in the map of knowledge.
+
+### Place
+
+An optional `place` says where the world sits in the map of knowledge, so a game that lists worlds can put it at its true position among the disciplines rather than in a flat list. It names a published classification `scheme` and a `path` of that scheme's class ids, from the top class down to the class the world teaches:
+
+```yaml
+place:
+  scheme: acm-ccs-2012
+  path: ["10011007", "10011006", "10011050", "10010512"]   # Software and its engineering > Software notations and tools > Context specific languages > Markup languages
+```
+
+| Scheme | Classification | Path |
+|---|---|---|
+| `acm-ccs-2012` | ACM Computing Classification System 2012 (dl.acm.org/ccs) | Concept ids as ACM writes them in a CCS concept path (eight digits), from one of its thirteen top-level classes, at most six levels. |
+| `oecd-ford-2015` | OECD Fields of Research and Development, Frascati Manual 2015, Table 2.2 | A broad field (`"1"` to `"6"`) and optionally one of its sub-fields (`"1.2"`). |
+
+Use the most specific class the whole world teaches: a world that spans several sibling classes sits at their parent. Ids are strings; quote them, because YAML reads `1.10` as the number 1.1. The validator reports an unknown scheme, an id of the wrong form, a sub-field outside its field, a repeated id or a path that is too deep. It does not hold the classifications themselves, so it cannot tell whether a well-formed id exists; the engine that draws the map checks that. A computing world names the CCS path alone: the whole CCS lies under the FORD sub-field 1.2, Computer and information sciences.
+
+A realm's `place` (`docs/realm-format.md`) is something else: a world's position in metres in the realm's land.
 
 ## Sources
 

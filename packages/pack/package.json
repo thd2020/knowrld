@@ -27,7 +27,7 @@
   "description": "Pack format, validator and graders for knowrld domain packs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thd2020/knowrld.git",
+    "url": "https://github.com/thd2020/knowrld-kit.git",
     "directory": "packages/pack"
   }
 }
